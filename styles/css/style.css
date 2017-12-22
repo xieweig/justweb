@@ -1,0 +1,224 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+.load-modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100000;
+    background: url("../img/ajax-loader.gif") no-repeat center rgba(239, 239, 239, 0.5);
+}
+
+.display-table-cell {
+    display: table-cell;
+}
+
+.input-group .before-select2 {
+    float: none;
+    vertical-align: middle;
+    border-right: 0;
+}
+
+.width-80 {
+    width: 80px;
+}
+
+.width-full {
+    width: 100%;
+}
+
+.display-flex {
+    display: flex;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.line-height-32 {
+    line-height: 32px;
+}
+
+.clearfix:before {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.k-checkbox-label:before {
+    top: 2px;
+}
+
+.swal2-popup .swal2-title {
+    font-size: 26px;
+}
+
+.swal2-popup .swal2-content {
+    font-size: 16px;
+}
+
+.swal2-popup .swal2-content {
+    word-break: break-all;
+}
+
+hr.gray-line {
+    margin: 10px 0;
+    border-color: #ccc;
+}
+
+/* 弹出层 */
+.uib-modal {
+    padding: 10px;
+}
+
+.uib-modal-title {
+    padding: 10px;
+    margin: 0;
+    height: 52px;
+    line-height: 32px;
+    border-bottom: 1px solid #ccc;
+}
+
+.uib-modal-title .option {
+    float: right;
+}
+
+.uib-modal-title .option .btn {
+    vertical-align: text-top;
+}
+
+.uib-content {
+    padding: 10px;
+}
+
+/* 输入框+select2 */
+/*.input-group .smart-form {*/
+/*display: table-cell;*/
+/*border: 1px solid #ccc;*/
+/*}*/
+
+/*.input-group .smart-form .inline-group {*/
+/*margin: 0;*/
+/*}*/
+
+/*.input-group .smart-form .inline-group .checkbox, .input-group .smart-form .inline-group .radio {*/
+/*line-height: 30px;*/
+/*margin: 0 10px;*/
+/*}*/
+
+/*.input-group .smart-form .checkbox input:checked + i, .input-group .smart-form .radio input:checked + i, .input-group .smart-form .toggle input:checked + i {*/
+/*top: 6px;*/
+/*}*/
+
+/*.input-group .smart-form .checkbox i, .input-group .smart-form .radio i {*/
+/*top: 6px;*/
+/*}*/
+
+/* multipleSelect */
+.multiple-wrap {
+    width: 100%;
+    display: table-cell;
+}
+
+.multiple-wrap .ms-parent .ms-choice.form-control {
+    height: 32px !important;
+}
+
+.multiple-wrap .ms-parent {
+    width: 100% !important;
+}
+
+/* kendoTreeView */
+.k-checkbox:indeterminate + .k-checkbox-label:after {
+    top: 10px;
+}
+
+.k-grid .k-hierarchy-cell .k-icon, .k-scheduler-table .k-icon, .k-treeview .k-icon {
+    margin-top: -.1em;
+}
+
+/* sweetAlert */
+.sweet-alert h2 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+/* kendoUI */
+.k-grid-content {
+    min-height: 100px;
+}
+
+/* datepicker */
+.ui-datepicker {
+    z-index: 9999 !important;
+}
+
+/* 自己的UI */
+.ui-select {
+    display: table-cell;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    height: 32px;
+    line-height: 30px;
+    padding: 0 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.ui-select:before {
+    content: "ˇ";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 32px;
+    font-size: 24px;
+    padding-top: 7px;
+    width: 32px;
+    border-left: 1px solid #ccc;
+    text-align: center;
+}
+
+.tree-select span {
+    margin-right: 10px;
+}
+
+.tree-select span i{
+    margin: 0 3px;
+}
+.tree-select span i:hover{
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+    transition: transform 300ms;
+    cursor: pointer;
+}
+input[type="text"]:disabled{
+    background: #eee !important;
+}

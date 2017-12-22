@@ -1,0 +1,83 @@
+<div class="uib-modal">
+    <h1 class="uib-modal-title">
+        <span>货物新增/修改</span>
+        <span class="option">
+            <input type="button" class="btn btn-primary" value="保存" data-ng-click="saveCargo()">
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10"><span class="input-group-addon">货物条码</span><input type="text" class="form-control" data-ng-disabled="currentCargo.isUpdate" data-ng-model="currentCargo.barCode"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10"><span class="input-group-addon">自定义条码</span><input type="text" class="form-control" data-ng-disabled="currentCargo.isUpdate" data-ng-model="currentCargo.selfBarCode">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10"><span class="input-group-addon">货物编码</span><input type="text" class="form-control" data-ng-disabled="currentCargo.isUpdate" data-ng-model="currentCargo.cargoCode">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10"><span class="input-group-addon">货物商品名称</span><input type="text" class="form-control" data-ng-model="currentCargo.cargoName"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div data-ng-if="!currentCargo.isUpdate" class="input-group margin-bottom-10">
+                    <span class="input-group-addon">所属原料</span>
+                    <span data-select-tree data-select-modal="materialForEdit"></span>
+                </div>
+                <div data-ng-if="currentCargo.isUpdate" class="input-group margin-bottom-10">
+                    <span class="input-group-addon">所属原料</span><input type="text" disabled maxlength="50" class="form-control" data-ng-model="currentCargo.rawMaterialName">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10"><span class="input-group-addon">货物内部名称</span><input type="text" class="form-control" data-ng-model="currentCargo.originalName"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">最小标准单位</span>
+                    <select id="standardUnitCode" smart-select2 class="select2 width-full" data-ng-disabled="currentCargo.isUpdate" data-ng-model="currentCargo.standardUnitCode">
+                        <option value="">请选择</option>
+                        <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">规格</span>
+                    <input type="text" class="form-control before-select2" data-ng-disabled="currentCargo.isUpdate" data-ng-model="currentCargo.number">
+                    <span class="display-table-cell">
+                        <select id="measurementCode" smart-select2 class="select2 width-full" data-ng-disabled="currentCargo.isUpdate" data-ng-model="currentCargo.measurementCode">
+                            <option value="">请选择</option>
+                            <option data-ng-repeat="item in cargoConfigure" data-ng-value="item.value">{{item.text}}</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6" data-ng-if="!currentCargo.isUpdate">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">保质期</span>
+                    <input type="text" class="form-control before-select2" data-ng-change="effectiveTimeChange()" data-ng-model="currentCargo.time">
+                    <span class="display-table-cell">
+                        <select smart-select2 class="select2 width-full" data-ng-change="effectiveTimeChange()" data-ng-model="currentCargo.timeUnit">
+                            <option value="">请选择</option>
+                            <option data-ng-repeat="item in effectiveTimeConfigure" data-ng-value="item.value">{{item.text}}</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">保质期合计(天)</span>
+                    <input type="text" class="form-control" disabled data-ng-model="currentCargo.effectiveTime">
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="input-group margin-bottom-10 width-full">
+                    <span class="input-group-addon" style="width: 100px;">货物说明</span> <textarea class="form-control" rows="3" data-ng-disabled="currentCargo.isUpdate" data-ng-model="currentCargo.memo"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
