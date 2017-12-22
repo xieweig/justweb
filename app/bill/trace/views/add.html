@@ -1,0 +1,81 @@
+<div id="content">
+    <div jarvis-widget id="materialList" data-widget-color="darken" data-widget-editbutton="false">
+        <header>
+            <span class="widget-icon">
+                <i class="fa fa-table"></i>
+            </span>
+            <h2>{{ $state.current.data.title }}</h2>
+        </header>
+        <div>
+            <div class="widget-body no-padding">
+                <div class="widget-body-toolbar">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">货运单号</span>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">发货时间</span>
+                                <input type="text" placeholder="发货时间" class="form-control" data-datepicker data-ng-model="kendoQueryCondition.startTime">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">预计到货时间</span>
+                                <input type="text" placeholder="预计到货时间" class="form-control" data-datepicker data-ng-model="kendoQueryCondition.stardtTime">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">物流公司</span>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">目的地</span>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">运送件数</span>
+                                <input type="text" class="form-control" data-only-number>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">总重量(kg)</span>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group margin-bottom-10 width-full">
+                        <span class="input-group-addon" style="width: 100px;">备注</span>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="padding-10">
+                    <div class="clearfix">
+                        <div class="fr">
+                            <input type="button" class="btn btn-default width-80" value="添加" data-ng-click="showAddModal()">
+                            <input type="button" class="btn btn-default width-80" value="批量删除">
+                        </div>
+                        <p class="line-height-32">运单明细</p>
+                    </div>
+                    <hr class="gray-line no-margin">
+                    <div class="margin-top-10" data-kendo-grids data-options="detailsGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,8 @@
 
 angular.module('app.bill', [
     'ui.router',
-    'app.bill.plan'
+    'app.bill.plan',
+    'app.bill.trace'
 ]).config(function ($stateProvider) {
     $stateProvider
         .state('app.bill', {
