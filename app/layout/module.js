@@ -10,7 +10,12 @@ angular.module('app.layout', ['ui.router'])
                     root: {
                         templateUrl: 'app/layout/layout.tpl.html',
                         controller: function ($scope, $rootScope, MainFactory) {
-
+                            $rootScope.billType = [
+                                { key: '1', value: '1', text: '配送计划' },
+                                { key: '2', value: '2', text: '调剂计划' },
+                                { key: '3', value: '3', text: '退库计划' },
+                                { key: '4', value: '4', text: '退货计划' }
+                            ];
                             // 循环获取导出结果
                             $rootScope.exportToExcel = function (url, params, timeConsuming) {
                                 // timeConsuming为耗时 第一次应该为空

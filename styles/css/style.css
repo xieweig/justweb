@@ -222,3 +222,38 @@ hr.gray-line {
 input[type="text"]:disabled{
     background: #eee !important;
 }
+
+@media (max-width: 1199px) and (min-width: 768px){
+    #main{
+        margin-left: 0;
+    }
+    #left-panel{
+        left: -220px;
+    }
+}
+
+@media (min-width: 768px){
+    .dl-horizontal dt{
+        width: 100px;
+    }
+    .dl-horizontal dd{
+        margin-left: 110px;
+    }
+}
+
+.plan-panel-head{
+    float: left;
+    margin-top: 12px;
+    width: 36px;
+}
+
+.plan-panel-head i{
+    cursor: pointer;
+}
+
+.plan-panel-body{
+    margin-left: 36px;
+    background-color:#fafafa;
+    padding:10px;
+    border:1px solid #ccc;
+}

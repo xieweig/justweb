@@ -6,7 +6,7 @@ angular.module('app.bill.plan', ['ui.router']).config(function ($stateProvider) 
         .state('app.bill.plan', {
             abstract: true,
             data: {
-                title: '货物'
+                title: '总部计划中心'
             }
         })
         .state('app.bill.plan.add', {

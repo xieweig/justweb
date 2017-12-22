@@ -12,106 +12,87 @@
                     <div class="row">
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
-                                <span class="input-group-addon">货物内部名称</span>
-                                <input type="text" class="form-control" data-ng-model="kendoQueryCondition.originalName">
+                                <span class="input-group-addon">计划名称</span>
+                                <input type="text" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
-                                <span class="input-group-addon">自定义条码</span>
-                                <input type="text" class="form-control" data-ng-model="kendoQueryCondition.selfBarCode">
+                                <span class="input-group-addon">计划中心</span>
+                                <input type="text" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">所属原料</span>
-                                <span data-select-tree data-select-modal="materialForSearch"></span>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">货物商品名称</span>
-                                <input type="text" class="form-control" data-ng-model="kendoQueryCondition.cargoName">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">货物条码</span>
-                                <input type="text" class="form-control" data-ng-model="kendoQueryCondition.barCode">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">货物编码</span>
-                                <input type="text" class="form-control" data-ng-model="kendoQueryCondition.cargoCode">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">建档时间</span>
-                                <input type="text" placeholder="开始时间" class="form-control" data-datepicker data-ng-model="kendoQueryCondition.createStartTime">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </span>
-                                <span class="input-group-addon">至</span>
-                                <input type="text" placeholder="结束时间" class="form-control" data-datepicker data-ng-model="kendoQueryCondition.createEndTime">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </span>
+                            <div class="input-group margin-bottom-10">
+                                <span class="input-group-addon">计划类型</span>
+                                <select smart-select2 class="width-full">
+                                    <option value="">请选择</option>
+                                    <option data-ng-repeat="item in billType" data-ng-value="item.key">{{item.text}}</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div data-ng-show="showMoreParams">
-                        <hr class="gray-line">
-                        <div class="row">
-                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                                <div class="input-group">
-                                    <span class="input-group-addon">保质期(天)</span>
-                                    <input type="text" class="form-control" data-ng-model="kendoQueryCondition.effectiveTime">
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                                <div class="input-group">
-                                    <span class="input-group-addon">建档人</span>
-                                    <input type="text" class="form-control" data-ng-model="kendoQueryCondition.operatorCode">
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                                <div class="input-group">
-                                    <span class="input-group-addon">最小标准单位</span>
-                                    <select smart-select2 class="select2 width-full" data-ng-model="kendoQueryCondition.standardUnitCode">
-                                        <option value="">请选择</option>
-                                        <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                                <div class="input-group">
-                                    <span class="input-group-addon">规格</span>
-                                    <input type="text" class="form-control before-select2" data-ng-model="kendoQueryCondition.number">
-                                    <span class="display-table-cell" style="width: 80px;">
-                                        <select smart-select2 class="select2 width-full" data-ng-model="kendoQueryCondition.measurementCode">
-                                            <option value="">请选择</option>
-                                            <option data-ng-repeat="item in cargoConfigure" data-ng-value="item.value">{{item.text}}</option>
-                                        </select>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 text-center">
-                            <input type="button" class="btn btn-primary width-80" value="查询" data-ng-click="search()">
-                            <input type="button" class="btn btn-default" value="更多查询条件" data-ng-click="toggleMoreParams()">
-                        </div>
+                    <div class="input-group margin-bottom-10 width-full">
+                        <span class="input-group-addon" style="width: 100px;">备注</span>
+                        <textarea class="form-control" rows="3" data-ng-model="currentGroup.memo"></textarea>
                     </div>
                 </div>
                 <div class="padding-10">
                     <div class="margin-bottom-10">
-                        <input type="button" class="btn btn-default width-80" value="新增" data-ng-click="addCargo()">
+                        <input type="button" class="btn btn-default width-80" value="添加项目" data-ng-click="addItem()">
                     </div>
-                    <div id="cargoList">
-                        <div data-kendo-grids data-options="cargoList"></div>
+                    <div data-ng-repeat="item in itemMap" class="plan-panel margin-bottom-10">
+                        <div class="plan-panel-head text-center">
+                            <i class="fa" data-ng-class="item.unfurled?'fa-minus':'fa-plus'" data-ng-click="scaling($index)"></i>
+                        </div>
+                        <div class="plan-panel-body">
+                            <div data-ng-hide="item.unfurled">
+                                货物名称:咖啡豆
+                            </div>
+                            <div data-ng-show="item.unfurled">
+
+                                <div class="margin-bottom-10">
+                                    <input type="button" class="btn btn-default width-80" value="添加货物" data-ng-click="addCargo($index)">
+                                    <input type="button" class="btn btn-default fr width-80" value="清空货物" data-ng-click="clearCargo($index)">
+                                </div>
+                                <div class="row">
+                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                        <dt>货物名称</dt>
+                                        <dd data-ng-bind="item.cargo.cargoName"></dd>
+                                    </dl>
+                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                        <dt>货物编码</dt>
+                                        <dd data-ng-bind="item.cargo.cargoCode"></dd>
+                                    </dl>
+                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                        <dt>货物条码</dt>
+                                        <dd data-ng-bind="item.cargo.barCode"></dd>
+                                    </dl>
+                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                        <dt>货物自定义条码</dt>
+                                        <dd data-ng-bind="item.cargo.selfBarCode"></dd>
+                                    </dl>
+                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                        <dt>所属原料</dt>
+                                        <dd data-ng-bind="item.cargo.materialName"></dd>
+                                    </dl>
+                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                        <dt>规格</dt>
+                                        <dd data-ng-bind="item.cargo.number + item.cargo.measurementName"></dd>
+                                    </dl>
+                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                        <dt>分类</dt>
+                                        <dd data-ng-bind="item.cargo.class"></dd>
+                                    </dl>
+                                </div>
+                                <hr class="gary-line">
+                                <div class="margin-bottom-10">
+                                    <input type="button" class="btn btn-default width-80" value="添加站点" data-ng-click="addStation($index)">
+                                    <input type="button" class="btn btn-default fr width-80" value="清空站点" data-ng-click="clearStation($index)">
+                                </div>
+                                <div data-kendo-grids data-options="item.stationGrid"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
