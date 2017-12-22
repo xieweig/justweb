@@ -257,3 +257,13 @@ input[type="text"]:disabled{
     padding:10px;
     border:1px solid #ccc;
 }
+/* kendo设置 */
+.k-state-selected{
+    color: #333; 
+    background-color: inherit;
+    border-color:inherit;
+}
+
+.k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td{
+    background-color: inherit;
+}

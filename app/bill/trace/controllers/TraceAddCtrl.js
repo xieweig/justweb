@@ -3,11 +3,12 @@
 angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal) {
     $scope.detailsMap = [];
     $scope.detailsGrid = {
-        primaryId: 'stationCode',
+        primaryId: 'sn',
         params: $scope.kendoQueryCondition,
         kendoSetting: {
             editable: true,
             autoBind: false,
+            persistSelection: true,
             columns: [
                 { selectable: true },
                 { field: "sn", title: "出库单号", width: 120 },
@@ -53,10 +54,17 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal) {
             return true;
         }
         dataSource.add($scope.currentDetails);
-        if (isNext) {
-            $scope.currentDetails = {};
-        } else {
+        $scope.currentDetails = {};
+        if (!isNext) {
             $scope.addModal.close();
         }
+    }
+
+    /**
+     * 删除
+     */
+    $scope.deleteDetails = function () {
+        var selectIds = $scope.detailsGrid.kendoGrid.selectedKeyNames();
+        alert('将要删除' + selectIds);
     }
 });

@@ -243,8 +243,6 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
             kendoSetting.sortable = kendoSetting.sortable === true;
             // 单列排序
             kendoSetting.pageable = kendoSetting.pageable === true ? kendoPage : false;
-            // 设置一个值，该值指示在进行排序、分页、筛选等操作时选择是否持久。
-            kendoSetting.persistSelection = kendoSetting.persistSelection === true;
 
             // 如果不在timeout里面 modal中的表格会初始化不成功
             $timeout(function () {
