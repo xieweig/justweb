@@ -18,7 +18,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal) {
             pageable: true,
             columns: [
                 { selectable: true },
-                { command: [{ name: 's', text: "查看" }, { name: 'e', text: "修改" }, { name: 't', text: "收货" }], title: "操作", width: 180 },
+                { command: [{ name: 's', text: "查看", click: seeTrace }, { name: 'e', text: "修改", click: editTrace }, { name: 't', text: "收货" }], title: "操作", width: 180 },
                 { field: "sn", title: "物流公司", width: 120 },
                 { field: "inStationName", title: "运单单号", width: 120 },
                 { field: "inStationName", title: "出库站点", width: 120 },
@@ -38,20 +38,34 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal) {
     $scope.addTrace = function () {
         // 初始化参数
         $scope.traceEdit.trace = {};
-        openEditTraceModal();
+        initTraceEdit();
     };
 
     /**
-     * 打开trace编辑窗口
+     * 查看跟踪信息
      */
-    function openEditTraceModal() {
+    function seeTrace(e) {
+        e.preventDefault();
+        getTraceDetails('1', true);
+    };
+
+    /**
+     * 查看跟踪信息
+     */
+    function editTrace(e) {
+        e.preventDefault();
+        getTraceDetails('1');
+    };
+
+    /**
+     * 加载单条数据
+     */
+    function getTraceDetails(id, isRead) {
+        //ApiService.post('/readDetails');
+        // 初始化参数
+        $scope.traceEdit.trace = { sn: 123 };
         initTraceEdit();
-        $scope.traceEditModal = $uibModal.open({
-            templateUrl: 'app/bill/trace/modals/traceEdit.html',
-            scope: $scope,
-            size: 'lg'
-        });
-    }
+    };
 
     /**
      * 初始化
@@ -121,5 +135,11 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal) {
             var selectIds = $scope.traceEdit.detailsGrid.kendoGrid.selectedKeyNames();
             alert('将要删除' + selectIds);
         }
+        // 打开modal
+        $scope.traceEditModal = $uibModal.open({
+            templateUrl: 'app/bill/trace/modals/traceEdit.html',
+            scope: $scope,
+            size: 'lg'
+        });
     }
 });
