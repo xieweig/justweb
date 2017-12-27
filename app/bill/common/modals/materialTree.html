@@ -1,0 +1,63 @@
+<div class="uib-modal" style="min-height: 300px;">
+    <h1 class="uib-modal-title">
+        <span>选择原料{{hasChildren?'':'分组'}}</span>
+        <span class="option">
+            <input type="button" class="btn btn-primary" value="保存" data-ng-click="getSelMaterial()">
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="display-flex">
+            <div class="flex-1">
+                <div class="row" data-ng-if="!hasChildren">
+                    <div class="col-xs-12 col-sm-6 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">原料分类名称</span>
+                            <input type="text" class="form-control" data-ng-model="params.materialGroupName">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">原料分类编码</span>
+                            <input type="text" class="form-control" data-ng-model="params.materialGroupCode">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" data-ng-if="hasChildren">
+                    <div class="col-xs-12 col-sm-6 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">原料名称</span>
+                            <input type="text" class="form-control" data-ng-model="params.materialName">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">原料编码</span>
+                            <input type="text" class="form-control" data-ng-model="params.materialCode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right" style="width: 60px;">
+                <input type="button" class="btn btn-success" value="查询" data-ng-click="filter()">
+            </div>
+        </div>
+        <hr class="gray-line" style="margin-top:0;">
+        <div data-ng-show="!isFilter">
+            <div data-tree-view data-options="treeViewOptions"></div>
+        </div>
+        <div data-ng-show="isFilter">
+            <div data-tree-view data-options="filterTreeView"></div>
+        </div>
+        <!-- <hr class="gray-line">
+        <div class="tree-select">
+            <p>已选择项</p>
+            <div class="display-flex">
+                <span data-ng-repeat="item in selectArray">
+                    {{item.name}}
+                    <i class="fa fa-close" data-ng-click="removeSelect(item.id)"></i>
+                </span>
+            </div>
+        </div> -->
+    </div>
+</div>

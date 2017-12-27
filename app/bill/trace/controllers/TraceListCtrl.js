@@ -50,6 +50,13 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, A
         }
     };
 
+    $scope.outStationParams = {
+        // single: true,
+        callback: function (data) {
+            console.log(data);
+        }
+    };
+
     /**
      * 增加跟踪信息
      */
