@@ -9,60 +9,65 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         { key: '4', value: '4', text: '退货计划' }
     ];
 
+    var stationTypeMap = {};
     // 拼接站点树结构
-    $rootScope.getStationTree = function (stationTtype) {
-        var stationTree = [];
-        // 将大区数组根据code转化为对象
-        var largeAreaObject = _.zipObject(_.map(largeArea, function (item) { return item.value }), largeArea);
-        // 将城市数组根据code转化为对象
-        var cityObject = _.zipObject(_.map(city, function (item) { return item.value }), city);
-        // 将站点排序 然后记录上一次城市ID  城市改变
-        var largeAreaPos = {};
-        var cityPos = {};
-        _.each(station, function (item) {
-            // 如果传入了stationTtype  则需要限制返回站点的类型
-            if (stationTtype !== '' && stationTtype !== undefined && item.siteType !== stationTtype) {
-                return;
-            }
-            var currentStation = { key: item.key, value: item.value, text: item.text, type: 'station' };
-            // 如果区域被禁用  则直接添加
-            if (item.regionStatus === 'DISABLED') {
-                stationTree.push(currentStation);
-                return;
-            }
-            // 判断该站点在结果中有没有对应区域 没有则增加
-            var largeAreaSerial = largeAreaPos[item.regionCode];
-            if (largeAreaSerial === undefined) {
-                // 测试站点存在对应大区没有的情况
-                var largeAreaItem = largeAreaObject[item.regionCode];
-                largeAreaSerial = largeAreaPos[item.regionCode] = stationTree.push({ expanded: true, key: largeAreaItem.key, value: largeAreaItem.value, text: largeAreaItem.text, type: 'largeArea', isNode: true, items: [] }) - 1;
-            }
-            // 获取该站点对应的大区在树中的索引
-            var currentLargeArea = stationTree[largeAreaSerial];
-            currentStation.regionCode = currentLargeArea.value;
-            currentStation.regionName = currentLargeArea.text;
+    $rootScope.getStationTree = function (stationType) {
+        stationType = (!stationType ? 'All' : stationType)
+        if (!stationTypeMap[stationType]) {
+            var stationTree = [];
+            // 将大区数组根据code转化为对象
+            var largeAreaObject = _.zipObject(_.map(largeArea, function (item) { return item.value }), largeArea);
+            // 将城市数组根据code转化为对象
+            var cityObject = _.zipObject(_.map(city, function (item) { return item.value }), city);
+            // 将站点排序 然后记录上一次城市ID  城市改变
+            var largeAreaPos = {};
+            var cityPos = {};
+            _.each(station, function (item) {
+                // 如果传入了stationType  则需要限制返回站点的类型
+                if (stationType !== 'All' && stationType !== undefined && item.siteType !== stationType) {
+                    return;
+                }
+                var currentStation = { key: item.key, value: item.value, text: item.text, type: 'station' };
+                // 如果区域被禁用  则直接添加
+                if (item.regionStatus === 'DISABLED') {
+                    stationTree.push(currentStation);
+                    return;
+                }
+                // 判断该站点在结果中有没有对应区域 没有则增加
+                var largeAreaSerial = largeAreaPos[item.regionCode];
+                if (largeAreaSerial === undefined) {
+                    // 测试站点存在对应大区没有的情况
+                    var largeAreaItem = largeAreaObject[item.regionCode];
+                    largeAreaSerial = largeAreaPos[item.regionCode] = stationTree.push({ expanded: false, key: largeAreaItem.key, value: largeAreaItem.value, text: largeAreaItem.text, type: 'largeArea', isNode: true, items: [] }) - 1;
+                }
+                // 获取该站点对应的大区在树中的索引
+                var currentLargeArea = stationTree[largeAreaSerial];
+                currentStation.regionCode = currentLargeArea.value;
+                currentStation.regionName = currentLargeArea.text;
 
 
-            // 如果城市被禁用  则直接添加
-            if (item.cityStatus === 'DISABLED') {
-                currentLargeArea.items.push(currentStation);
-                return;
-            }
+                // 如果城市被禁用  则直接添加
+                if (item.cityStatus === 'DISABLED') {
+                    currentLargeArea.items.push(currentStation);
+                    return;
+                }
 
-            // 判断该站点在前面的区域中有没有对应城市 没有则增加
-            var citySerial = cityPos[item.cityCode];
-            if (citySerial === undefined) {
-                // 测试站点存在对应大区没有的情况
-                var cityItem = cityObject[item.cityCode];
-                citySerial = cityPos[item.cityCode] = [largeAreaSerial, currentLargeArea.items.push({ expanded: true, key: cityItem.key, value: cityItem.value, text: cityItem.text, type: 'city', isNode: true, items: [] }) - 1];
-            }
-            // 获取该站点对应的城市在对应大于中的索引
-            var currentCity = stationTree[citySerial[0]].items[citySerial[1]];
-            currentStation.cityCode = currentCity.value;
-            currentStation.cityName = currentCity.text;
-            currentCity.items.push(currentStation);
-        });
-        return stationTree;
+                // 判断该站点在前面的区域中有没有对应城市 没有则增加
+                var citySerial = cityPos[item.cityCode];
+                if (citySerial === undefined) {
+                    // 测试站点存在对应大区没有的情况
+                    var cityItem = cityObject[item.cityCode];
+                    citySerial = cityPos[item.cityCode] = [largeAreaSerial, currentLargeArea.items.push({ expanded: false, key: cityItem.key, value: cityItem.value, text: cityItem.text, type: 'city', isNode: true, items: [] }) - 1];
+                }
+                // 获取该站点对应的城市在对应大于中的索引
+                var currentCity = stationTree[citySerial[0]].items[citySerial[1]];
+                currentStation.cityCode = currentCity.value;
+                currentStation.cityName = currentCity.text;
+                currentCity.items.push(currentStation);
+            });
+            stationTypeMap[stationType] = stationTree;
+        }
+        return stationTypeMap[stationType];
     };
 
     // 循环获取导出结果

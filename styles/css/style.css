@@ -267,3 +267,9 @@ input[type="text"]:disabled{
 .k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td{
     background-color: inherit;
 }
+
+.tipsText{
+    display: block;
+    overflow: hidden;
+    height: 30px;
+}

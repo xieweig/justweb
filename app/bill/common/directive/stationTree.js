@@ -3,7 +3,7 @@
 angular.module('app').directive('stationTree', function ($uibModal) {
     return {
         restrict: 'A',
-        template: '{{text}}',
+        template: '<span class="tipsText">{{text}}</span>',
         scope: {
             selectModal: '='
         },
@@ -41,7 +41,7 @@ angular.module('app').directive('stationTree', function ($uibModal) {
                         } else {
                             text = options.modal.name;
                         }
-                        elm.html(text);
+                        elm.find('.tipsText').html(text);
                     }
                     if (_.isFunction(selectModal.callback)) {
                         selectModal.callback(options.modal);

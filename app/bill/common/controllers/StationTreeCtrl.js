@@ -21,9 +21,6 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
     };
     currentOption.checkboxes === false ? $scope.treeViewOptions.checkboxes = false : '';
     currentOption.check ? $scope.treeViewOptions.check = currentOption.check : '';
-    $timeout(function () {
-        $scope.treeViewOptions.treeView.collapse('.k-item');
-    });
 
     // 根据条件筛选
     $scope.filter = function () {
