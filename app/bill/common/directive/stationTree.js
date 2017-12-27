@@ -36,10 +36,10 @@ angular.module('app').directive('stationTree', function ($uibModal) {
                         var text = '';
                         if (_.isArray(options.modal)) {
                             text = _.map(options.modal, function (item) {
-                                return item.name;
+                                return item.stationName;
                             }).join();
                         } else {
-                            text = options.modal.name;
+                            text = options.modal.stationName;
                         }
                         elm.find('.tipsText').html(text);
                     }

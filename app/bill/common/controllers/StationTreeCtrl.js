@@ -69,7 +69,7 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
             if (item.hasChildren) {
                 checkedNodeIds(item.children.view(), checkedNodes);
             } else if (item.checked) {
-                checkedNodes.push({ id: item.key, type: item.type, code: item.value, name: item.text, cityName: item.cityName, cityId: item.cityId, regionId: item.regionId, regionName: item.regionName });
+                checkedNodes.push({ stationId: item.key, type: item.type, stationCode: item.value, stationName: item.text, cityName: item.cityName, cityCode: item.cityCode, regionCode: item.regionCode, regionName: item.regionName });
             }
         }
     }
