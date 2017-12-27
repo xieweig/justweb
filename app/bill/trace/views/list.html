@@ -13,7 +13,7 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">货运单号</span>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" data-ng-model="params.oddNumber">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
@@ -21,13 +21,13 @@
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon">发货时间</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="kendoQueryCondition.startTime">
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.oddNumber">
                                     </div>
                                 </div>
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-left: 0;">至</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="kendoQueryCondition.startTime">
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.oddNumber">
                                     </div>
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">物流公司</span>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" data-ng-model="params.oddNumber">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
@@ -43,13 +43,13 @@
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon">录单时间</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="kendoQueryCondition.startTime">
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.oddNumber">
                                     </div>
                                 </div>
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-left: 0;">至</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="kendoQueryCondition.startTime">
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.oddNumber">
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">入库站点</span>
-                                <select id="standardUnitCode" smart-select2 class="select2 width-full">
+                                <select id="standardUnitCode" smart-select2 class="select2 width-full" data-ng-model="params.oddNumber">
                                     <option value="">请选择</option>
                                     <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
                                 </select>
@@ -66,7 +66,7 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">出库站点</span>
-                                <select id="standardUnitCode" smart-select2 class="select2 width-full">
+                                <select id="standardUnitCode" smart-select2 class="select2 width-full" data-ng-model="params.oddNumber">
                                     <option value="">请选择</option>
                                     <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
                                 </select>
@@ -75,13 +75,13 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">运送件数</span>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" data-ng-model="params.number">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">运单状态</span>
-                                <select id="standardUnitCode" smart-select2 class="select2 width-full">
+                                <select id="standardUnitCode" smart-select2 class="select2 width-full" data-ng-model="params.status">
                                     <option value="">请选择</option>
                                     <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
                                 </select>

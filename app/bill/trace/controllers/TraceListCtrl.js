@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal) {
+angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, ApiService) {
     $scope.params = {};
     // 编辑窗口的对象
     $scope.traceEdit = {};
@@ -13,21 +13,39 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal) {
     $scope.traceGrid = {
         url: '/api/baseInfo/cargo/findByCondition',
         params: $scope.params,
+        dataSource: {
+            data: function () {
+                return [
+                    {
+                        code: 1,
+                        logisticsCompany: '物流公司',
+                        oddNumber: '物流公司',
+                        outboundStation: '出库站点',
+                        inboundStation: '入库站点',
+                        deliveryTime: '发货时间',
+                        recordTime: '录单时间',
+                        recordSingle: '录单人',
+                        number: '运送件数',
+                        status: '运单状态',
+                    }
+                ];
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
             columns: [
                 { selectable: true },
                 { command: [{ name: 's', text: "查看", click: seeTrace }, { name: 'e', text: "修改", click: editTrace }, { name: 't', text: "收货" }], title: "操作", width: 180 },
-                { field: "sn", title: "物流公司", width: 120 },
-                { field: "inStationName", title: "运单单号", width: 120 },
-                { field: "inStationName", title: "出库站点", width: 120 },
-                { field: "inStationName", title: "入库站点", width: 120 },
-                { field: "inStationName", title: "发货时间", width: 120 },
-                { field: "inStationName", title: "录单时间", width: 120 },
-                { field: "inStationName", title: "录单人", width: 120 },
-                { field: "inStationName", title: "运送件数", width: 120 },
-                { field: "inStationName", title: "运单状态", width: 120 }
+                { field: "logisticsCompany", title: "物流公司", width: 120 },
+                { field: "oddNumber", title: "运单单号", width: 120 },
+                { field: "outboundStation", title: "出库站点", width: 120 },
+                { field: "inboundStation", title: "入库站点", width: 120 },
+                { field: "deliveryTime", title: "发货时间", width: 120 },
+                { field: "recordTime", title: "录单时间", width: 120 },
+                { field: "recordSingle", title: "录单人", width: 120 },
+                { field: "number", title: "运送件数", width: 120 },
+                { field: "status", title: "运单状态", width: 120 }
             ]
         }
     };
@@ -46,7 +64,8 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal) {
      */
     function seeTrace(e) {
         e.preventDefault();
-        getTraceDetails('1', true);
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        getTraceDetails(dataItem.code, true);
     };
 
     /**
@@ -54,17 +73,30 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal) {
      */
     function editTrace(e) {
         e.preventDefault();
-        getTraceDetails('1');
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        getTraceDetails(dataItem.code);
     };
 
     /**
      * 加载单条数据
      */
     function getTraceDetails(id, isRead) {
-        //ApiService.post('/readDetails');
-        // 初始化参数
-        $scope.traceEdit.trace = { sn: 123 };
-        initTraceEdit();
+        ApiService.get('/api/baseInfo/configure/findByConfigureType?configureType=CARGO_UNIT&id=' + id).then(function () {
+            // 初始化参数
+            $scope.traceEdit.trace = {
+                code: 1,
+                logisticsCompany: '物流公司',
+                oddNumber: '单号',
+                outboundStation: '出库站点',
+                inboundStation: '入库站点',
+                deliveryTime: '发货时间',
+                recordTime: '录单时间',
+                recordSingle: '录单人',
+                number: '运送件数',
+                status: '运单状态',
+            };
+            initTraceEdit();
+        });
     };
 
     /**
