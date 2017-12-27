@@ -13,9 +13,9 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
     $rootScope.getStationTree = function (stationTtype) {
         var stationTree = [];
         // 将大区数组根据code转化为对象
-        var largeAreaObject = _.zipObject(_.map(largeArea, function (item) { return item.key }), largeArea);
+        var largeAreaObject = _.zipObject(_.map(largeArea, function (item) { return item.value }), largeArea);
         // 将城市数组根据code转化为对象
-        var cityObject = _.zipObject(_.map(city, function (item) { return item.key }), city);
+        var cityObject = _.zipObject(_.map(city, function (item) { return item.value }), city);
         // 将站点排序 然后记录上一次城市ID  城市改变
         var largeAreaPos = {};
         var cityPos = {};
@@ -31,15 +31,15 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
                 return;
             }
             // 判断该站点在结果中有没有对应区域 没有则增加
-            var largeAreaSerial = largeAreaPos[item.regionId];
+            var largeAreaSerial = largeAreaPos[item.regionCode];
             if (largeAreaSerial === undefined) {
                 // 测试站点存在对应大区没有的情况
-                var largeAreaItem = largeAreaObject[item.regionId];
-                largeAreaSerial = largeAreaPos[item.regionId] = stationTree.push({ expanded: true, key: largeAreaItem.key, value: largeAreaItem.value, text: largeAreaItem.text, type: 'largeArea', isNode: true, items: [] }) - 1;
+                var largeAreaItem = largeAreaObject[item.regionCode];
+                largeAreaSerial = largeAreaPos[item.regionCode] = stationTree.push({ expanded: true, key: largeAreaItem.key, value: largeAreaItem.value, text: largeAreaItem.text, type: 'largeArea', isNode: true, items: [] }) - 1;
             }
             // 获取该站点对应的大区在树中的索引
             var currentLargeArea = stationTree[largeAreaSerial];
-            currentStation.regionId = currentLargeArea.key;
+            currentStation.regionCode = currentLargeArea.value;
             currentStation.regionName = currentLargeArea.text;
 
 
@@ -50,15 +50,15 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
             }
 
             // 判断该站点在前面的区域中有没有对应城市 没有则增加
-            var citySerial = cityPos[item.cityId];
+            var citySerial = cityPos[item.cityCode];
             if (citySerial === undefined) {
                 // 测试站点存在对应大区没有的情况
-                var cityItem = cityObject[item.cityId];
-                citySerial = cityPos[item.cityId] = [largeAreaSerial, currentLargeArea.items.push({ expanded: true, key: cityItem.key, value: cityItem.value, text: cityItem.text, type: 'city', isNode: true, items: [] }) - 1];
+                var cityItem = cityObject[item.cityCode];
+                citySerial = cityPos[item.cityCode] = [largeAreaSerial, currentLargeArea.items.push({ expanded: true, key: cityItem.key, value: cityItem.value, text: cityItem.text, type: 'city', isNode: true, items: [] }) - 1];
             }
             // 获取该站点对应的城市在对应大于中的索引
             var currentCity = stationTree[citySerial[0]].items[citySerial[1]];
-            currentStation.cityId = currentCity.key;
+            currentStation.cityCode = currentCity.value;
             currentStation.cityName = currentCity.text;
             currentCity.items.push(currentStation);
         });

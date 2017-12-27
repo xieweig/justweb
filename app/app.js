@@ -101,7 +101,7 @@ var app = angular.module('app', [
 
 app.factory('MainFactory', function () {
     return {
-        host: 'http://192.168.21.56:15001',
+        host: 'http://192.168.21.141:15001',
         downloadUrl: 'http://192.168.21.141:2222/report/',
         exportExcelHost: 'http://192.168.21.141:15005',
         system: 'baseInfo',
@@ -203,13 +203,30 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             return [];
         }, apiServiceError);
     }
-    // 站点
+    // 全部站点
     this.getStation = function (largeAreaType) {
         return ApiService.get('/api/baseInfo/station/findAllUsable').then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.stationReturnDTOs, function (item) {
                     return { key: item.stationId, value: item.stationCode, text: item.stationName, cityId: item.cityId, cityStatus: item.cityLogicStatus, regionId: item.regionId, regionStatus: item.regionLogicStatus, siteType: item.siteType };
                 });
+            } else {
+                swal('请求规格失败', response.message, 'error');
+            }
+            return [];
+        }, apiServiceError);
+    }
+    // 权限站点
+    this.getScopeStation = function (largeAreaType) {
+        return ApiService.get('/oauth/api/oauth/user/findUserManagementScope?userCode=' + $.cookie("userCode"), { hasHost: true }).then(function (response) {
+            if (response.code === '000') {
+                if (response.result.scopeStations) {
+                    // 老基础资料接口
+                    return _.map(response.result.scopeStations, function (item) {
+                        return { key: '', value: item.stationCode, text: item.stationName, cityCode: item.city.cityCode, cityStatus: 'USABLE', regionCode: item.city.largeArea.largeAreaCode, regionStatus: 'USABLE', siteType: item.siteType };
+                    });
+                }
+                return [];
             } else {
                 swal('请求规格失败', response.message, 'error');
             }

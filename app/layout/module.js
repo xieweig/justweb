@@ -17,7 +17,7 @@ angular.module('app.layout', ['ui.router']).config(function ($stateProvider, $ur
                     return Common.getCity();
                 },
                 station: function (Common) {
-                    return Common.getStation();
+                    return Common.getScopeStation();
                 }
             }
         });

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope, options) {
+angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope, $timeout, options) {
     var currentOption = _.cloneDeep(options);
     var stationType = !options.type ? '' : options.type;
     // 用于接下来判断是单选还是多选  返回值会不同
@@ -21,6 +21,9 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
     };
     currentOption.checkboxes === false ? $scope.treeViewOptions.checkboxes = false : '';
     currentOption.check ? $scope.treeViewOptions.check = currentOption.check : '';
+    $timeout(function () {
+        $scope.treeViewOptions.treeView.collapse('.k-item');
+    });
 
     // 根据条件筛选
     $scope.filter = function () {
