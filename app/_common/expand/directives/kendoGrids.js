@@ -148,20 +148,7 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                             }
                         }
                     },
-                    error: function (e) {
-                        var xhr = e.xhr;
-                        if (xhr.status === 403 || xhr.status === 401) {
-                            sweetAlert("提示", "没有该操作权限或登录过期！", "error");
-                        } else {
-                            var response = xhr.responseJSON;
-                            if (response) {
-                                sweetAlert("请求失败", response.error + '\n' + response.exception, "error");
-                            } else {
-                                sweetAlert("请求失败", '网络连接失败', "error");
-                            }
-                        }
-                        hideLoadingModal();
-                    },
+                    error: ajaxError,
                     schema: {
                         type: "json",
                         model: {

@@ -13,17 +13,51 @@ var REGULAR = {
 
 $(function () {
     // 造cookie
-    $.cookie('userCode', 'YGADMIN');
-    $.cookie('userName', '超级管理员');
-    $.cookie('currentStationCode', 'HDQA00');
-    $.cookie('currentStationName', '总部');
-    document.cookie = "userCode=YGADMIN; userName=超级管理员; paymentUrl=/payment; currentStationName=%E9%83%91%E5%B7%9E%E4%B8%87%E8%B1%A1%E5%9F%8E%E5%BA%97_%E5%92%96%E5%95%A1%E9%A6%86; currentStationCode=CGOC01; stationClass=CQ; paymentToken=0D214DCF-ED95-4128-9C7D-D44FD5264ED1; paymentAccountID=97284; merchantCode=0000524695";
+    // $.cookie('userCode', 'YGADMIN');
+    // $.cookie('userName', '超级管理员');
+    // $.cookie('currentStationCode', 'HDQA00');
+    // $.cookie('currentStationName', '总部');
+    // document.cookie = "userCode=YGADMIN; userName=超级管理员; paymentUrl=/payment; currentStationName=%E9%83%91%E5%B7%9E%E4%B8%87%E8%B1%A1%E5%9F%8E%E5%BA%97_%E5%92%96%E5%95%A1%E9%A6%86; currentStationCode=CGOC01; stationClass=CQ; paymentToken=0D214DCF-ED95-4128-9C7D-D44FD5264ED1; paymentAccountID=97284; merchantCode=0000524695";
+
     // moment.js default language
     moment.locale('zh');
-
     angular.bootstrap(document, ['app']);
 
 });
+
+
+
+/**
+ * event - 包含 event 对象
+ * xhr - 包含 XMLHttpRequest 对象
+ * options - 包含 AJAX 请求中使用的选项
+ * exc - 包含 JavaScript exception
+ */
+$(document).ajaxError(function (event, xhr, options, exc) {
+    console.log(arguments);
+    ajaxError(xhr);
+});
+
+// ajax请求和kendo报错处理
+function ajaxError(xhr) {
+    // xhr下面包含xhr  则是kendo报错 
+    if (xhr && xhr.xhr) {
+        xhr = xhr.xhr;
+    }
+    if (!xhr || !xhr.responseJSON) {
+        swal("提示", "网络连接失败", "error");
+    } else if (xhr.status === 403 || xhr.status === 401) {
+        swal("提示", "没有该操作权限或登录过期！", "error");
+    } else {
+        var result = xhr.responseJSON.result || xhr.responseJSON;
+        if (result && result.code === 101) {
+            // location.href = '/login';
+        } else {
+            sweetAlert("提示", "请求失败", "error");
+        }
+    }
+    hideLoadingModal();
+}
 
 // ApiService请求失败的处理
 function apiServiceError(response) {

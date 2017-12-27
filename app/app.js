@@ -101,9 +101,10 @@ var app = angular.module('app', [
 
 app.factory('MainFactory', function () {
     return {
-        host: 'http://192.168.21.141:15001',
+        host: 'http://192.168.21.56:15001',
         downloadUrl: 'http://192.168.21.141:2222/report/',
         exportExcelHost: 'http://192.168.21.141:15005',
+        system: 'baseInfo',
         timeout: 10000,
         headers: function (otherHeader, dataType) {
             var headers = {
