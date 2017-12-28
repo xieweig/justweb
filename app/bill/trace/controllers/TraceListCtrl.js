@@ -35,7 +35,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, A
             pageable: true,
             columns: [
                 { selectable: true },
-                { command: [{ name: 's', text: "查看", click: seeTrace }, { name: 'e', text: "修改", click: editTrace }, { name: 't', text: "收货" }], title: "操作", width: 180 },
+                { command: [{ name: 's', text: "查看", click: seeTrace }, { name: 'e', text: "修改", click: editTrace }, { name: 't', text: "收货" }], title: "操作", width: 220 },
                 { field: "logisticsCompanyName", title: "物流公司", width: 120 },
                 { field: "wayBillCode", title: "运单单号", width: 120 },
                 { field: "outStationCode", title: "出库站点", width: 120 },

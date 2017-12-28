@@ -126,7 +126,11 @@ Possible attributes
 
     <script src="plugin/multipleSelect/multiple-select.js"></script>
 
-    <script src="build/app.js"></script>
+    <script>
+        (function () {
+            document.write('<script src="build/app.js?v=' + (new Date().getTime()) + '"><\/script>');
+        })();
+    </script>
 
 </body>
 

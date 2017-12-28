@@ -221,7 +221,7 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
             // 拖动排序
             kendoSetting.reorderable = kendoSetting.reorderable === true;
             // 调整列大小
-            kendoSetting.resizable = kendoSetting.resizable === true;
+            kendoSetting.resizable = kendoSetting.resizable === undefined ? true : kendoSetting.resizable;
             // 筛选
             kendoSetting.filterable = kendoSetting.filterable === true;
             // 显示列菜单
