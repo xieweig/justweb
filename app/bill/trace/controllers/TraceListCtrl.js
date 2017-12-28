@@ -17,16 +17,15 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, A
             data: function () {
                 return [
                     {
-                        code: 1,
-                        logisticsCompany: '物流公司',
-                        oddNumber: '物流公司',
-                        outboundStation: '出库站点',
-                        inboundStation: '入库站点',
+                        logisticsCompanyName: '物流公司',
+                        wayBillCode: '运单单号',
+                        outStationCode: '出库站点',
+                        inStationCode: '入库站点',
                         deliveryTime: '发货时间',
-                        recordTime: '录单时间',
-                        recordSingle: '录单人',
-                        number: '运送件数',
-                        status: '运单状态',
+                        createTime: '录单时间',
+                        operatorName: '录单人',
+                        amountOfPackages: '运送件数',
+                        outStorageBillCode: '运单状态',
                     }
                 ];
             }
@@ -37,21 +36,21 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, A
             columns: [
                 { selectable: true },
                 { command: [{ name: 's', text: "查看", click: seeTrace }, { name: 'e', text: "修改", click: editTrace }, { name: 't', text: "收货" }], title: "操作", width: 180 },
-                { field: "logisticsCompany", title: "物流公司", width: 120 },
-                { field: "oddNumber", title: "运单单号", width: 120 },
-                { field: "outboundStation", title: "出库站点", width: 120 },
-                { field: "inboundStation", title: "入库站点", width: 120 },
+                { field: "logisticsCompanyName", title: "物流公司", width: 120 },
+                { field: "wayBillCode", title: "运单单号", width: 120 },
+                { field: "outStationCode", title: "出库站点", width: 120 },
+                { field: "inStationCode", title: "入库站点", width: 120 },
                 { field: "deliveryTime", title: "发货时间", width: 120 },
-                { field: "recordTime", title: "录单时间", width: 120 },
-                { field: "recordSingle", title: "录单人", width: 120 },
-                { field: "number", title: "运送件数", width: 120 },
-                { field: "status", title: "运单状态", width: 120 }
+                { field: "createTime", title: "录单时间", width: 120 },
+                { field: "operatorName", title: "录单人", width: 120 },
+                { field: "amountOfPackages", title: "运送件数", width: 120 },
+                { field: "outStorageBillCode", title: "运单状态", width: 120 }
             ]
         }
     };
 
+    // 搜索条件中的出库站点选择
     $scope.outStationParams = {
-        // single: true,
         callback: function (data) {
             $scope.params.inStationCode = _.map(data, function (item) {
                 return item.stationCode;
@@ -59,8 +58,8 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, A
         }
     };
 
+    // 搜索条件中的入库站点选择
     $scope.inStationParams = {
-        // single: true,
         callback: function (data) {
             $scope.params.outStationCode = _.map(data, function (item) {
                 return item.stationCode;
@@ -83,7 +82,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, A
     function seeTrace(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        getTraceDetails(dataItem.code, true);
+        getTraceDetails(dataItem.wayBillCode, true);
     };
 
     /**
@@ -92,7 +91,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, A
     function editTrace(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        getTraceDetails(dataItem.code);
+        getTraceDetails(dataItem.wayBillCode);
     };
 
     /**
