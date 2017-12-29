@@ -210,66 +210,136 @@ hr.gray-line {
     margin-right: 10px;
 }
 
-.tree-select span i{
+.tree-select span i {
     margin: 0 3px;
 }
-.tree-select span i:hover{
+
+.tree-select span i:hover {
     -webkit-transform: scale(1.2);
     transform: scale(1.2);
     transition: transform 300ms;
     cursor: pointer;
 }
-input[type="text"]:disabled{
+
+input[type="text"]:disabled {
     background: #eee !important;
 }
 
-@media (max-width: 1199px) and (min-width: 768px){
-    #main{
+@media (max-width: 1199px) and (min-width: 768px) {
+    #main {
         margin-left: 0;
     }
-    #left-panel{
+
+    #left-panel {
         left: -220px;
     }
 }
 
-@media (min-width: 768px){
-    .dl-horizontal dt{
+@media (min-width: 768px) {
+    .dl-horizontal dt {
         width: 100px;
     }
-    .dl-horizontal dd{
+
+    .dl-horizontal dd {
         margin-left: 110px;
     }
 }
 
-.plan-panel-head{
+.plan-panel-head {
     float: left;
     margin-top: 12px;
     width: 36px;
 }
 
-.plan-panel-head i{
+.plan-panel-head i {
     cursor: pointer;
 }
 
-.plan-panel-body{
+.plan-panel-body {
     margin-left: 36px;
-    background-color:#fafafa;
-    padding:10px;
-    border:1px solid #ccc;
+    background-color: #fafafa;
+    padding: 10px;
+    border: 1px solid #ccc;
 }
+
 /* kendo设置 */
-.k-state-selected{
-    color: #333; 
+.k-state-selected {
+    color: #333;
     background-color: inherit;
-    border-color:inherit;
+    border-color: inherit;
 }
 
-.k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td{
+.k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td {
     background-color: inherit;
 }
 
-.tipsText{
+.tipsText {
     display: block;
     overflow: hidden;
     height: 30px;
+}
+
+.padding-left-0 {
+    padding-left: 0;
+}
+
+.padding-rl-10 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.checkbox-label-fix {
+    width: 100%;
+    padding: 6px 10px;
+    margin-right: 20px;
+    color: #555;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    transition: background-color .3s;
+    -webkit-transition: background-color .3s;
+}
+
+.margin-top-7 {
+    margin-top: 6px;
+}
+
+.margin-bottom-16 {
+    margin-bottom: 16px;
+}
+
+.min-btn-grid tbody .k-button{
+    min-width: 32px;
+}
+
+.view-group .input-group-addon {
+     background-color: inherit;
+     border: 0;
+    text-align: inherit;
+}
+/*.view-group .input-group-addon:nth-child(1) {*/
+    /*padding-right: 0;*/
+/*}*/
+.view-group .input-group-addon>span:nth-child(1) {
+    padding-left: 20px;
+}
+
+.btn-header {
+    float: right;
+    padding-right: 10px;
+    margin-right: 10px;
+    width: 80px;
+}
+
+.custom-header {
+    height: 50px!important;
+    padding: 10px 0 10px 0!important;
+}
+.custom-header > h2 {
+    font-size: 16px!important;
+}
+.info-block > div:nth-child(1){
+    height: 220px;
+}
+.info-block > div:nth-child(1) > div:nth-child(1){
+    height: 190px;
 }

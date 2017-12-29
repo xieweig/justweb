@@ -1,0 +1,109 @@
+<div id="content">
+    <div jarvis-widget data-widget-editbutton="false">
+        <header class="custom-header">
+            <h2>{{ $state.current.data.title }}</h2>
+            <!-- TODO:未完成-->
+            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="search()">
+            <input type="button" class="btn btn-default btn-header" value="查询" data-ng-click="search()">
+        </header>
+
+        <div>
+            <div class="widget-body no-padding">
+                <!--<div class="widget-body-toolbar">-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!-- your contents here -->
+                        <div class="margin-top-10 padding-top-0">
+                            <h5 class="padding-rl-10">
+                                <small>
+                                    查询条件
+                                </small>
+                            </h5>
+                            <!--<br>-->
+
+                            <div class="row padding-rl-10">
+
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">入库单号</span>
+                                        <input type="text" class="form-control" data-ng-model="params.oddNumber">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                                    <div class="display-flex">
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">入库时间</span>
+                                                <input type="text" class="form-control" data-datepicker
+                                                       data-ng-model="params.oddNumber">
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" style="border-left: 0;">至</span>
+                                                <input type="text" class="form-control" data-datepicker
+                                                       data-ng-model="params.oddNumber">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--单据属性-->
+
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">入库站点</span>
+                                        <span data-station-tree data-select-modal="outStationParams"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">出库站点</span>
+                                        <span data-station-tree data-select-modal="outStationParams"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10  margin-top-5">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">单据状态</span>
+                                        <select smart-select2 class="width-full">
+                                            <option value="">全部</option>
+                                            <option value="">已调拨</option>
+                                            <option value="">未调拨</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--</div>-->
+                <hr class="gray-line">
+                <div class="padding-10">
+
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <h5 style="padding-left: 5px;">
+                                <small>
+                                    退库出库单列表
+                                </small>
+
+                            </h5>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-xs-12 text-align-right">
+                            <input type="button" class="btn btn-default width-80" value="添加"
+                                   data-ng-click="addData()">
+                        </div>
+                    </div>
+                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="returnCargoGrid"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

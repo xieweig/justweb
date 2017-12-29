@@ -9,6 +9,15 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         { key: '4', value: '4', text: '退货计划' }
     ];
 
+    $rootScope.outType = [
+        { key: '1', value: '1', text: '正常库' },
+        { key: '2', value: '2', text: '仓储库' },
+        { key: '3', value: '3', text: '进货库' },
+        { key: '4', value: '4', text: '退货库' },
+        { key: '5', value: '5', text: '在途库' },
+        { key: '6', value: '6', text: '预留库' }
+    ];
+
     var stationTypeMap = {};
     // 拼接站点树结构
     $rootScope.getStationTree = function (stationType) {

@@ -1,0 +1,96 @@
+<div id="content">
+    <div jarvis-widget data-widget-editbutton="false">
+        <header class="custom-header">
+            <h2>{{ $state.current.data.title }}</h2>
+            <!-- TODO:未完成-->
+            <input type="button" class="btn btn-default btn-header" value="返回" data-ng-click="search()">
+            <input type="button" class="btn btn-default btn-header" value="导出" data-ng-click="search()">
+        </header>
+
+        <section id="widget-grid">
+            <div class="row info-block">
+                <div class="col-sm-6">
+                    <div class="well margin-top-10  padding-top-0">
+                        <h5>
+                            <small>
+                                退库信息
+                            </small>
+                        </h5>
+
+                        <div class="row">
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">单号</span>
+                                    <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">计划备注</span>
+                                    <textarea type="text" rows="3" class="form-control custom-scroll"
+                                              data-ng-model="params.oddNumber" disabled></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="well margin-top-10 padding-top-0">
+                        <h5>
+                            <small>
+                                退库计划单信息
+                            </small>
+                        </h5>
+                        <div class="row">
+                            <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                                <div class="display-flex">
+                                    <div class="flex-1">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">录单时间</span>
+                                            <input type="text" class="form-control" data-datepicker
+                                                   data-ng-model="params.oddNumber" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">入库站点</span>
+                                    <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
+                                    <!--<span data-station-tree data-select-modal="inStationParams" disabled></span>-->
+                                </div>
+                            </div>
+
+                            <!-- TODO: 修改出库来源 -->
+                            <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">出库站点</span>
+                                    <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
+                                    <!--<span data-station-tree data-select-modal="outStationParams" disabled></span>-->
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <div>
+            <div class="widget-body no-padding">
+                <div class="padding-10">
+                    <div class="text-center"><h3 class="margin-top-0">站点退库计划明细</h3></div>
+                    <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<div id="content">
+    <div jarvis-widget data-widget-editbutton="false">
+        <header class="custom-header">
+            <h2>{{ $state.current.data.title }}</h2>
+            <!-- TODO:未完成-->
+            <input type="button" class="btn btn-default btn-header" value="取消" data-ng-click="search()">
+            <input type="button" class="btn btn-default btn-header" value="调拨" data-ng-click="search()">
+        </header>
+
+        <section id="widget-grid" class="">
+
+            <!-- row -->
+
+            <div class="row">
+
+                <!-- a blank row to get started -->
+                <div class="col-sm-6">
+                    <!-- your contents here -->
+                    <div class="well margin-top-10  padding-top-0">
+                        <h5>
+                            <small>
+                                库位信息
+                            </small>
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">单据属性</span>
+                                    <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">调出库位</span>
+                                    <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">入库库位</span>
+                                        <select smart-select2 class="width-full">
+                                            <option data-ng-repeat="item in outType" data-ng-value="item.key">
+                                                {{item.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <!-- your contents here -->
+                    <div class="well margin-top-10 padding-top-0">
+                        <h5>
+                            <small>
+                                退库计划单信息
+                            </small>
+                        </h5>
+                        <!--<br>-->
+
+                        <div class="row">
+
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">入库时间</span>
+                                    <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">出库站点</span>
+                                    <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">入库站点</span>
+                                    <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <div>
+            <div class="widget-body no-padding">
+                <div class="padding-10">
+                    <div class="text-center">货物明细</div>
+                    <!--<div>-->
+                        <!--<input type="button" class="btn btn-default width-80" value="添加" data-ng-click="addaData()">-->
+                    <!--</div>-->
+                    <hr class="gray-line">
+                    <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
