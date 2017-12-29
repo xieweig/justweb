@@ -44,9 +44,9 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
         } else {
             var selectNode = $scope.treeViewOptions.treeView.select();
             options.modal = {
-                id: selectNode.find('.stationId').val(),
-                value: selectNode.find('.stationCode').val(),
-                name: selectNode.find('.stationName').val(),
+                stationId: selectNode.find('.stationId').val(),
+                stationCode: selectNode.find('.stationCode').val(),
+                stationName: selectNode.find('.stationName').val(),
                 type: selectNode.find('.stationType').val()
             };
             // 判断是否选择了站点
