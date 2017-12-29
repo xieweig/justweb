@@ -5,7 +5,8 @@ angular.module('app.bill', [
     'ui.router',
     'app.bill.plan',
     'app.bill.trace',
-    'app.bill.return'
+    'app.bill.return',
+    'app.bill.procurement'
 ]).config(function ($stateProvider) {
     $stateProvider
         .state('app.bill', {
