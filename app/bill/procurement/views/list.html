@@ -1,0 +1,104 @@
+<div id="content">
+    <div jarvis-widget data-widget-color="darken" data-widget-editbutton="false">
+        <header>
+            <span class="widget-icon">
+                <i class="fa fa-table"></i>
+            </span>
+            <h2>{{ $state.current.data.title }}</h2>
+        </header>
+        <div>
+            <div class="widget-body no-padding">
+                <div class="widget-body-toolbar">
+                    <div style="max-width:1200px;">
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">录单人</span>
+                                    <input type="text" class="form-control" data-ng-model="params.xxx">
+                                </div>
+                            </div>
+                            <div class="col-sm-8 col-xs-12 margin-bottom-10">
+                                <div class="display-flex">
+                                    <div class="flex-1">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">录单时间</span>
+                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" style="border-left: 0;">至</span>
+                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">入库单号</span>
+                                    <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                </div>
+                            </div>
+                            <div class="col-sm-8 col-xs-12 margin-bottom-10">
+                                <div class="display-flex">
+                                    <div class="flex-1">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">入库时间</span>
+                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" style="border-left: 0;">至</span>
+                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">供应商</span>
+                                    <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">提交状态</span>
+                                    <select data-multiple-select>
+                                        <option ng-repeat="status in submitStatus" value="{{status.value}}">
+                                            {{status.text}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">提交状态</span>
+                                    <select data-multiple-select>
+                                        <option ng-repeat="status in auditStatus" value="{{status.value}}">
+                                            {{status.text}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <input type="button" class="btn btn-primary width-80" value="查询" data-ng-click="search()">
+                    </div>
+                </div>
+                <div class="padding-10">
+                    <p>入库单详情</p>
+                    <hr class="gray-line">
+                    <div class="margin-top-10" data-kendo-grids data-options="procurementGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

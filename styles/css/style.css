@@ -142,16 +142,11 @@ hr.gray-line {
 /*}*/
 
 /* multipleSelect */
-.multiple-wrap {
-    width: 100%;
-    display: table-cell;
-}
-
-.multiple-wrap .ms-parent .ms-choice.form-control {
+.ms-parent .ms-choice.form-control {
     height: 32px !important;
 }
 
-.multiple-wrap .ms-parent {
+.ms-parent {
     width: 100% !important;
 }
 
