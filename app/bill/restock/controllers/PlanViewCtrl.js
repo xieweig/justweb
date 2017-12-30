@@ -1,7 +1,12 @@
 'use strict';
 
-angular.module('app').controller('PlanViewCtrl', function ($scope) {
+angular.module('app').controller('PlanViewCtrl', function ($scope, $stateParams, ApiService) {
     $scope.params = {};
+
+    // 预先请求站点退库计划数据
+    ApiService.get('/api/bill/restock/findPlanOne?id=' + $stateParams.planId).then(function () {
+
+    });
 
     $scope.cargoGrid = {
         kendoSetting: {
@@ -33,4 +38,13 @@ angular.module('app').controller('PlanViewCtrl', function ($scope) {
         })
     }, 100)
 
+    // 导出
+    $scope.export = function () {
+        alert('export')
+    }
+
+    // 返回
+    $scope.back = function () {
+        window.history.back()
+    }
 });

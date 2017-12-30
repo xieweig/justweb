@@ -2,8 +2,7 @@
     <div jarvis-widget data-widget-editbutton="false">
         <header class="custom-header">
             <h2>{{ $state.current.data.title }}</h2>
-            <!-- TODO:未完成-->
-            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="search()">
+            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="reset()">
             <input type="button" class="btn btn-default btn-header" value="查询" data-ng-click="search()">
         </header>
 
@@ -11,21 +10,18 @@
             <div class="widget-body no-padding">
                 <div class="widget-body-toolbar">
                     <div class="row">
-
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">计划编码</span>
-                                <input type="text" class="form-control" data-ng-model="params.oddNumber">
+                                <input type="text" class="form-control" data-ng-model="params.planNumber">
                             </div>
                         </div>
-
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">入库站点</span>
-                                <span data-station-tree data-select-modal="outStationParams"></span>
+                                <span data-station-tree data-select-modal="inStationParams"></span>
                             </div>
                         </div>
-
                         <!-- TODO: 修改出库来源 -->
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
@@ -33,33 +29,30 @@
                                 <span data-station-tree data-select-modal="outStationParams"></span>
                             </div>
                         </div>
-
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">录单人</span>
-                                <input type="text" class="form-control" data-ng-model="params.oddNumber">
+                                <input type="text" class="form-control" data-ng-model="params.recordPerson">
                             </div>
                         </div>
-
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
                             <div class="display-flex">
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon">录单时间</span>
                                         <input type="text" class="form-control" data-datepicker
-                                               data-ng-model="params.oddNumber">
+                                               data-ng-model="params.recordStartTime">
                                     </div>
                                 </div>
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-left: 0;">至</span>
                                         <input type="text" class="form-control" data-datepicker
-                                               data-ng-model="params.oddNumber">
+                                               data-ng-model="params.recordEndTime">
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="padding-10">
@@ -73,10 +66,11 @@
                         </div>
                     </div>
                     <hr class="gray-line">
-                    <div class="margin-top-10" data-kendo-grids data-options="stationGrid"></div>
+                    <section id="grid">
+                        <div class="margin-top-10" data-kendo-grids data-options="stationGrid"></div>
+                    </section>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

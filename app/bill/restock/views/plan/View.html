@@ -3,8 +3,8 @@
         <header class="custom-header">
             <h2>{{ $state.current.data.title }}</h2>
             <!-- TODO:未完成-->
-            <input type="button" class="btn btn-default btn-header" value="返回" data-ng-click="search()">
-            <input type="button" class="btn btn-default btn-header" value="导出" data-ng-click="search()">
+            <input type="button" class="btn btn-default btn-header" value="返回" data-ng-click="back()">
+            <input type="button" class="btn btn-default btn-header" value="导出" data-ng-click="export()">
         </header>
 
         <section id="widget-grid">
@@ -12,11 +12,8 @@
                 <div class="col-sm-6">
                     <div class="well margin-top-10  padding-top-0">
                         <h5>
-                            <small>
-                                退库信息
-                            </small>
+                            <small>退库信息</small>
                         </h5>
-
                         <div class="row">
                             <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
                                 <div class="input-group">
@@ -24,7 +21,6 @@
                                     <input type="text" class="form-control" data-ng-model="params.oddNumber" disabled>
                                 </div>
                             </div>
-
                             <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">计划备注</span>
@@ -32,17 +28,13 @@
                                               data-ng-model="params.oddNumber" disabled></textarea>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="well margin-top-10 padding-top-0">
                         <h5>
-                            <small>
-                                退库计划单信息
-                            </small>
+                            <small>退库计划单信息</small>
                         </h5>
                         <div class="row">
                             <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
@@ -56,7 +48,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">入库站点</span>
@@ -64,7 +55,6 @@
                                     <!--<span data-station-tree data-select-modal="inStationParams" disabled></span>-->
                                 </div>
                             </div>
-
                             <!-- TODO: 修改出库来源 -->
                             <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
@@ -73,16 +63,11 @@
                                     <!--<span data-station-tree data-select-modal="outStationParams" disabled></span>-->
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
-
             </div>
-
         </section>
-
         <div>
             <div class="widget-body no-padding">
                 <div class="padding-10">
@@ -91,6 +76,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

@@ -1,7 +1,9 @@
 'use strict';
 
-angular.module('app').controller('returnPlanViewCtrl', function ($scope) {
+angular.module('app').controller('stationPickCtrl', function ($scope, $state, $stateParams) {
     $scope.params = {};
+
+    // console.log($stateParams.pickId)
 
     $scope.cargoGrid = {
         primaryId: 'cg',
@@ -36,6 +38,7 @@ angular.module('app').controller('returnPlanViewCtrl', function ($scope) {
         }
     };
 
+    // 用于测试的添加数据 使用api server
     $scope.addaData = function () {
         var dataSource = $scope.cargoGrid.kendoGrid.dataSource;
         dataSource.add({

@@ -1,40 +1,40 @@
 'use strict';
 
-angular.module('app').controller('outSearchCtrl', function ($scope) {
+angular.module('app').controller('inViewCtrl', function ($scope) {
     $scope.params = {};
     $scope.tmp = 0;
+
+    $scope.returnMaterialGrid = {
+        primaryId: 'code',
+        kendoSetting: {
+            columns: [
+                {field: "materialName", title: "原料名称"},
+                {field: "materialCode", title: "原料编码"},
+                {field: "pickNumber", title: "应拣数量"},
+                {field: "pick", title: "实拣数量"},
+                {field: "progress", title: "完成度"}
+            ]
+        }
+    };
+
 
     $scope.returnCargoGrid = {
         primaryId: 'code',
         kendoSetting: {
-            // selectable: 'multiple, row',
-            autoBind: false,
-            persistSelection: true,
-            editable: true,
-            pageable: true,
             columns: [
-                // {selectable: true},
-                {
-                    command: [{name: 's', text: "查看"}, {name: 'e', text: "修改"}, {name: 't', text: "审核"}],
-                    title: "操作",
-                    width: 153
-                },
-                {field: "billType", title: "单据属性", width: 80},
-                {field: "outStatus", title: "出库状态", width: 70},
-                {field: "inputStatus", title: "提交状态", width: 70},
-                {field: "checkStatus", title: "审核状态", width: 80},
-                {field: "fromCode", title: "来源单号", width: 150},
-                {field: "outCode", title: "出库单号", width: 100},
-                {field: "recordTime", title: "录单时间"},
-                {field: "outTime", title: "出库时间"}
+                {field: "billType", title: "货物名称"},
+                {field: "outStatus", title: "货物编码"},
+                {field: "inputStatus", title: "所属原料"},
+                {field: "standardUnit", title: "标准单位"},
+                {field: "number", title: "规格"},
+                {field: "pickNumber", title: "应拣数量"},
+                {field: "pick", title: "实拣数量"},
+                {field: "standardNum", title: "标准单位数量"}
             ]
         }
     }
-    ;
-
 
     $scope.outStationParams = {
-        // single: true,
         callback: function (data) {
             console.log(data);
         }
@@ -59,12 +59,9 @@ angular.module('app').controller('outSearchCtrl', function ($scope) {
     $scope.deleteData = function () {
         var selectId = $scope.returnCargoGrid.kendoGrid.selectedKeyNames();
         var dataSource = $scope.returnCargoGrid.kendoGrid.dataSource;
-        // console.log(dataSource._total)
         for (var j in selectId) {
             for (var i = 0; i < dataSource._total; i++) {
-                // console.log('id', i, typeof selectId[j], typeof dataSource.at(i).code);
                 if (dataSource.at(i).code.toString() === selectId[j]) {
-                    // console.log('find')
                     dataSource.remove(dataSource.at(i));
                 }
             }
