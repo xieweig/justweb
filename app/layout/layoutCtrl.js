@@ -1,6 +1,13 @@
 'use strict';
 
 angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station) {
+    $rootScope.location = [
+        { key: '1', value: '1', text: '进货库' },
+        { key: '1', value: '1', text: '仓储库' },
+        { key: '1', value: '1', text: '退货库' },
+        { key: '1', value: '1', text: '在途库' },
+        { key: '1', value: '1', text: '预留库' }
+    ];
 
     $rootScope.billType = [
         { key: '1', value: '1', text: '配送计划' },

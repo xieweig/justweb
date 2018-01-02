@@ -18,6 +18,10 @@
  * - CUSTOM STYLES
  */
 
+ textarea{
+     resize: none;
+ }
+
 .load-modal {
     position: fixed;
     left: 0;
@@ -228,6 +232,13 @@ input[type="text"]:disabled {
     #left-panel {
         left: -220px;
     }
+}
+.dl-horizontal{
+    margin-bottom: 0;
+}
+
+.dl-horizontal dd,.dl-horizontal dt{
+    line-height: 24px;
 }
 
 @media (min-width: 768px) {
