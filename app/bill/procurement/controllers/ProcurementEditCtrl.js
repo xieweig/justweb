@@ -4,7 +4,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $state
     // 页面类型 查看or审核
     $scope.type = 'edit';
 
-    $scope.procurementGrid = {
+    window.x = $scope.procurementGrid = {
         primaryId: 'a',
         kendoSetting: {
             editable: 'inline',

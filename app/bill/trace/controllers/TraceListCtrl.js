@@ -97,34 +97,27 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
      * 加载单条数据
      */
     function getTraceDetails(id, isRead) {
-        ApiService.get('/api/baseInfo/configure/findByConfigureType?configureType=CARGO_UNIT&id=' + id).then(function () {
-            // 初始化参数
-            $scope.traceEdit.trace = {
-                wayBillCode: '单号',
-                deliveryTime: '发货时间',
-                planArrivalTime: '预计到货时间',
-                logisticsCompanyName: '物流公司',
-                amountOfPackages: '运送件数',
-                totalWeight: '总重量',
-                memo: '备注',
-                destination: '目的地',
-                editWayBillDetailDTOList: [
-                    { "outStorageBillCode": "21132132165da", "operatorName": "213", "packageType": "ONE_BILL_TO_MANY_PACKAGE", "packageNumbers": ["12", "213", "213"], "totalCount": "12", "totalAmount": "12", "inStationCode": "PEKC03", "outStationCode": "NKGA03", "outStorageTime": "2017-12-13 10:06:16" }
-                ],
-            };
-            initTraceEdit();
-            $scope.traceEdit.traceEditModal.rendered.then(function () {
-                $timeout(function () {
-                    $scope.traceEdit.detailsGrid.kendoGrid.dataSource.data($scope.traceEdit.trace.editWayBillDetailDTOList);
+        ApiService.get('/api/bill/waybill/findOneWayBill?id=' + id).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                // 初始化参数
+                $scope.traceEdit.trace = response.result.wayBill;
+                $scope.traceEdit.trace.isRead = isRead;
+                initTraceEdit(isRead);
+                $scope.traceEdit.traceEditModal.rendered.then(function () {
+                    $timeout(function () {
+                        $scope.traceEdit.detailsGrid.kendoGrid.dataSource.data($scope.traceEdit.trace.editWayBillDetailDTOList);
+                    });
                 });
-            });
+            }
         });
     };
 
     /**
      * 初始化
      */
-    function initTraceEdit() {
+    function initTraceEdit(isRead) {
         $scope.traceEdit.detailsList = [];
         $scope.traceEdit.detailsGrid = {
             primaryId: 'outStorageBillCode',
@@ -133,9 +126,8 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
                 autoBind: false,
                 persistSelection: true,
                 columns: [
-                    { selectable: true },
                     { field: "outStorageBillCode", title: "出库单号", width: 120 },
-                    { field: "packageNumbers.join()", title: "所属包号", width: 120 },
+                    { title: "所属包号", width: 120, template: '#: packageNumbers #' },
                     { field: "outStationCode", title: "出库站点", width: 120 },
                     { field: "inStationCode", title: "入库站点", width: 120 },
                     { field: "outStorageTime", title: "出库时间", width: 150 },
@@ -145,6 +137,9 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
                 ]
             }
         };
+        if (!isRead) {
+            $scope.traceEdit.detailsGrid.kendoSetting.columns.splice(0, 0, { selectable: true });
+        }
 
         /**
          * 打开增加货单明细modal
@@ -175,16 +170,18 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
             single: true,
             button: true,
             callback: function (data) {
-                $scope.traceEdit.currentDetails.outStationCode = data.stationCode;
-                $scope.traceEdit.currentDetails.outStationName = data.stationName;
+                $scope.traceEdit.trace.outStationCode = data.stationCode;
+                $scope.traceEdit.trace.outStationName = data.stationName;
             }
         };
 
         // 搜索条件中的入库站点选择
         $scope.traceEdit.inStationParams = {
             single: true,
+            button: true,
             callback: function (data) {
-                $scope.traceEdit.currentDetails.inStationCode = data.stationCode;
+                $scope.traceEdit.trace.inStationCode = data.stationCode;
+                $scope.traceEdit.trace.inStationName = data.stationName;
             }
         };
 
@@ -196,22 +193,25 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
             // 判断所属包号是否填写完整
             var packageNumbersPass = true;
             // 所属包号
-            $scope.traceEdit.currentDetails.packageNumbers = [];
+            var packageNumbers = [];
             _.find($scope.packageMap, function (item) {
                 if (!item.text) {
                     packageNumbersPass = false;
                 } else {
-                    $scope.traceEdit.currentDetails.packageNumbers.push(item.text);
+                    packageNumbers.push(item.text);
                 }
                 return !item.text;
             });
-            if ($scope.traceEdit.currentDetails.packageNumbers.length === 0) {
+            if (packageNumbers.length === 0) {
                 packageNumbersPass = false;
+            } else {
+                $scope.traceEdit.currentDetails.packageNumbers = packageNumbers.join();
             }
 
             // 假数据
-            $scope.traceEdit.currentDetails = { "operatorName": "213", "packageType": "ONE_BILL_TO_MANY_PACKAGE", "packageNumbers": ["12", "213", "213"], "totalCount": "12", "totalAmount": "12", "inStationCode": "PEKC03", "outStationCode": "NKGA03", "outStorageTime": "2017-12-13 10:06:16" };
-            $scope.traceEdit.currentDetails.outStorageBillCode = generateMixed(10);
+            // $scope.traceEdit.currentDetails = { "operatorName": "213", "packageType": "ONE_BILL_TO_MANY_PACKAGE", "packageNumbers": ["12", "213", "213"], "totalCount": "12", "totalAmount": "12", "inStationCode": "PEKC03", "outStationCode": "NKGA03", "outStorageTime": "2017-12-13 10:06:16" };
+            // $scope.traceEdit.currentDetails.outStorageBillCode = generateMixed(10);
+
             if (!$scope.traceEdit || !$scope.traceEdit.currentDetails) {
                 swal('请输入填写单据详情', '', 'warning');
             } else if (!$scope.traceEdit.currentDetails.outStorageBillCode) {
@@ -226,10 +226,6 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
                 swal('请输入品种数', '', 'warning');
             } else if (!$scope.traceEdit.currentDetails.totalAmount) {
                 swal('请输入货物数', '', 'warning');
-            } else if (!$scope.traceEdit.currentDetails.outStationCode) {
-                swal('请输入出库站点', '', 'warning');
-            } else if (!$scope.traceEdit.currentDetails.inStationCode) {
-                swal('请输入入库站点', '', 'warning');
             } else if (!$scope.traceEdit.currentDetails.outStorageTime) {
                 swal('请输入出库时间', '', 'warning');
             } else {
@@ -265,35 +261,39 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
                 swal('请输入预计到货时间', '', 'warning');
             } else if (!$scope.traceEdit.trace.logisticsCompanyName) {
                 swal('请输入物流公司', '', 'warning');
+            } else if (!$scope.traceEdit.trace.outStationCode && !$scope.traceEdit.trace.outStationName) {
+                swal('请输入出库站点', '', 'warning');
+            } else if (!$scope.traceEdit.trace.inStationCode && !$scope.traceEdit.trace.inStationName) {
+                swal('请输入入库站点', '', 'warning');
             } else if (!$scope.traceEdit.trace.amountOfPackages) {
                 swal('请输入运送件数', '', 'warning');
-            } else if (!$scope.traceEdit.trace.totalWeight) {
-                swal('请输入总重量', '', 'warning');
             } else {
                 // 获取运单明细
-                var inStationCode = '';
                 $scope.traceEdit.trace.editWayBillDetailDTOList = [];
-                var result = _.find($scope.traceEdit.detailsGrid.kendoGrid.dataSource.data(), function (item) {
-                    if (inStationCode === '' || inStationCode === item.inStationCode) {
-                        inStationCode = item.inStationCode;
-                        $scope.traceEdit.trace.editWayBillDetailDTOList.push({
-                            outStorageBillCode: item.outStorageBillCode,
-                            operatorName: item.operatorName,
-                            packageType: item.packageType,
-                            packageNumbers: _.toArray(item.packageNumbers),
-                            totalCount: item.totalCount,
-                            totalAmount: item.totalAmount,
-                            outStationCode: item.outStationCode,
-                            inStationCode: item.inStationCode,
-                            outStorageTime: item.outStorageTime
-                        });
-                        return false;
-                    } else {
+                var repeatMessage = '';
+                _.find($scope.traceEdit.detailsGrid.kendoGrid.dataSource.data(), function (item) {
+                    if (false && item.outStationCode !== '' && ($scope.traceEdit.trace.outStationName !== item.outStationCode && $scope.traceEdit.trace.outStationCode !== item.outStationCode)) {
+                        repeatMessage = '存在出库站点不一致的单据';
+                        return true;
+                    } else if (false && item.inStationCode !== '' && ($scope.traceEdit.trace.inStationName !== item.inStationCode && $scope.traceEdit.trace.inStationCode !== item.inStationCode)) {
+                        repeatMessage = '存在入库站点不一致的单据';
                         return true;
                     }
+                    $scope.traceEdit.trace.editWayBillDetailDTOList.push({
+                        outStorageBillCode: item.outStorageBillCode,
+                        operatorName: item.operatorName,
+                        packageType: item.packageType,
+                        packageNumbers: item.packageNumbers,
+                        totalCount: item.totalCount,
+                        totalAmount: item.totalAmount,
+                        outStationCode: item.outStationCode,
+                        inStationCode: item.inStationCode,
+                        outStorageTime: item.outStorageTime
+                    });
+                    return false;
                 });
-                if (result) {
-                    swal('存在入库站点不一致的单据');
+                if (repeatMessage) {
+                    swal(repeatMessage, '', 'warning');
                 } else {
                     saveTrace($scope.traceEdit.trace);
                 }
@@ -302,9 +302,19 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
 
         // 保存trace
         function saveTrace(trace) {
-            ApiService.post('/api/bill/waybill/createWayBill', trace).then(function (response) {
-                alert(213);
-            }, ApiService);
+            var url = '';
+            if (!trace.billId) {
+                url = '/api/bill/waybill/createWayBill';
+            } else {
+                url = '/api/bill/waybill/updateWayBill';
+            }
+            ApiService.post(url, trace).then(function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    swal('haha ', '', 'success');
+                }
+            }, apiServiceError);
         }
 
         /**
