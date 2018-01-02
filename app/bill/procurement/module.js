@@ -21,4 +21,16 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
                 }
             }
         })
+        .state('app.bill.procurement.edit', {
+            url: '/bill/procurement/list',
+            data: {
+                title: '查询进货入库单'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/procurement/views/list.html',
+                    controller: 'ProcurementListCtrl'
+                }
+            }
+        })
 });
