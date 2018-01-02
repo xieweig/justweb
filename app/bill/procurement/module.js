@@ -23,9 +23,6 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
         })
         .state('app.bill.procurement.look', {
             url: '/bill/procurement/look',
-            params: {
-                type: 'look'
-            },
             data: {
                 title: '查看进货入库单'
             },
@@ -38,9 +35,6 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
         })
         .state('app.bill.procurement.audit', {
             url: '/bill/procurement/audit',
-            params: {
-                type: 'audit'
-            },
             data: {
                 title: '审核进货入库单'
             },
@@ -53,9 +47,6 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
         })
         .state('app.bill.procurement.edit', {
             url: '/bill/procurement/edit',
-            params: {
-                type: 'edit'
-            },
             data: {
                 title: '审核进货入库单'
             },
@@ -63,6 +54,18 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
                 "content@app": {
                     templateUrl: 'app/bill/procurement/views/edit.html',
                     controller: 'ProcurementEditCtrl'
+                }
+            }
+        })
+        .state('app.bill.procurement.add', {
+            url: '/bill/procurement/add',
+            data: {
+                title: '进货录单'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/procurement/views/edit.html',
+                    controller: 'ProcurementAddCtrl'
                 }
             }
         })

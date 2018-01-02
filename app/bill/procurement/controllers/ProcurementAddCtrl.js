@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('app').controller('ProcurementEditCtrl', function ($scope, $stateParams, $uibModal) {
+angular.module('app').controller('ProcurementAddCtrl', function ($scope, $stateParams, $uibModal) {
     // 页面类型 查看or审核
-    $scope.type = 'edit';
+    $scope.type = 'add';
 
     $scope.procurementGrid = {
         primaryId: 'a',
@@ -32,15 +32,6 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $state
             }
         }
     };
-
-    setTimeout(function () {
-        $scope.procurementGrid.kendoGrid.dataSource.data([
-            { xxxxxxxxxx: 1, time: '', a: 1, audit: false, submit: true },
-            { xxxxxxxxxx: 2, time: '', a: 2, audit: false, submit: true },
-            { xxxxxxxxxx: 3, time: '', a: 3, audit: false, submit: true },
-            { xxxxxxxxxx: 4, time: '', a: 4, audit: false, submit: true },
-        ]);
-    }, 100);
 
     // 批量删除
     $scope.batchDelete = function () {

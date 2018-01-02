@@ -10,6 +10,10 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
         { value: 'ONE_BILL_TO_MANY_PACKAGE', text: '一单多包' },
         { value: 'MANY_BILL_TO_ONE_PACKAGE', text: '多单合包' }
     ];
+    $scope.billStatus = [
+        { value: 'IS_RECEIVED', text: '已收货' },
+        { value: 'IS_NOT_RECEIVED', text: '未收货' }
+    ];
 
 
     /**
@@ -19,25 +23,8 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
         $scope.traceGrid.kendoGrid.dataSource.page(1);
     };
     $scope.traceGrid = {
-        url: '/api/baseInfo/cargo/findByCondition',
+        url: '/api/bill/waybill/findWayBillByConditions',
         params: $scope.params,
-        dataSource: {
-            data: function () {
-                return [
-                    {
-                        logisticsCompanyName: '物流公司',
-                        wayBillCode: '运单单号',
-                        outStationCode: '出库站点',
-                        inStationCode: '入库站点',
-                        deliveryTime: '发货时间',
-                        createTime: '录单时间',
-                        operatorName: '录单人',
-                        amountOfPackages: '运送件数',
-                        outStorageBillCode: '运单状态',
-                    }
-                ];
-            }
-        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -46,13 +33,17 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
                 { command: [{ name: 's', text: "查看", click: seeTrace }, { name: 'e', text: "修改", click: editTrace }, { name: 't', text: "收货" }], title: "操作", width: 220 },
                 { field: "logisticsCompanyName", title: "物流公司", width: 120 },
                 { field: "wayBillCode", title: "运单单号", width: 120 },
-                { field: "outStationCode", title: "出库站点", width: 120 },
-                { field: "inStationCode", title: "入库站点", width: 120 },
+                { field: "outStationName", title: "出库站点", width: 120 },
+                { field: "inStationName", title: "入库站点", width: 120 },
                 { field: "deliveryTime", title: "发货时间", width: 120 },
                 { field: "createTime", title: "录单时间", width: 120 },
                 { field: "operatorName", title: "录单人", width: 120 },
                 { field: "amountOfPackages", title: "运送件数", width: 120 },
-                { field: "outStorageBillCode", title: "运单状态", width: 120 }
+                {
+                    field: "outStorageBillCode", title: "运单状态", width: 120, template: function (item) {
+                        return getTextByVal($scope.billStatus, item.receivedStatus);
+                    }
+                }
             ]
         }
     };

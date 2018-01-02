@@ -2,7 +2,7 @@
 
 angular.module('app').controller('ProcurementLookCtrl', function ($scope, $stateParams) {
     // 页面类型 查看or审核
-    $scope.type = $stateParams.type;
+    $scope.type = 'look';
 
     $scope.procurementGrid = {
         kendoSetting: {
