@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station) {
+angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station, scopeStation) {
     $rootScope.location = [
         { key: '1', value: '1', text: '进货库' },
         { key: '1', value: '1', text: '仓储库' },
@@ -25,11 +25,12 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         { key: '6', value: '6', text: '预留库' }
     ];
 
-    var stationTypeMap = {};
+
+    var stationTypeMap = { station: {}, scopeStation: {} };
     // 拼接站点树结构
-    $rootScope.getStationTree = function (stationType) {
-        stationType = (!stationType ? 'All' : stationType)
-        if (!stationTypeMap[stationType]) {
+    $rootScope.getStationTree = function (stationType, isPermissions) {
+        stationType = (!stationType ? 'All' : stationType);
+        if (isPermissions ? !stationTypeMap.scopeStation[stationType] : !stationTypeMap.station[stationType]) {
             var stationTree = [];
             // 将大区数组根据code转化为对象
             var largeAreaObject = _.zipObject(_.map(largeArea, function (item) { return item.value }), largeArea);
@@ -38,7 +39,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
             // 将站点排序 然后记录上一次城市ID  城市改变
             var largeAreaPos = {};
             var cityPos = {};
-            _.each(station, function (item) {
+            _.each((isPermissions ? scopeStation : station), function (item) {
                 // 如果传入了stationType  则需要限制返回站点的类型
                 if (stationType !== 'All' && stationType !== undefined && item.siteType !== stationType) {
                     return;
@@ -54,7 +55,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
                 if (largeAreaSerial === undefined) {
                     // 测试站点存在对应大区没有的情况
                     var largeAreaItem = largeAreaObject[item.regionCode];
-                    largeAreaSerial = largeAreaPos[item.regionCode] = stationTree.push({ expanded: false, key: largeAreaItem.key, value: largeAreaItem.value, text: largeAreaItem.text, type: 'largeArea', isNode: true, items: [] }) - 1;
+                    largeAreaSerial = largeAreaPos[item.regionCode] = stationTree.push({ expanded: true, key: largeAreaItem.key, value: largeAreaItem.value, text: largeAreaItem.text, type: 'largeArea', isNode: true, items: [] }) - 1;
                 }
                 // 获取该站点对应的大区在树中的索引
                 var currentLargeArea = stationTree[largeAreaSerial];
@@ -73,7 +74,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
                 if (citySerial === undefined) {
                     // 测试站点存在对应大区没有的情况
                     var cityItem = cityObject[item.cityCode];
-                    citySerial = cityPos[item.cityCode] = [largeAreaSerial, currentLargeArea.items.push({ expanded: false, key: cityItem.key, value: cityItem.value, text: cityItem.text, type: 'city', isNode: true, items: [] }) - 1];
+                    citySerial = cityPos[item.cityCode] = [largeAreaSerial, currentLargeArea.items.push({ expanded: true, key: cityItem.key, value: cityItem.value, text: cityItem.text, type: 'city', isNode: true, items: [] }) - 1];
                 }
                 // 获取该站点对应的城市在对应大于中的索引
                 var currentCity = stationTree[citySerial[0]].items[citySerial[1]];
@@ -81,9 +82,18 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
                 currentStation.cityName = currentCity.text;
                 currentCity.items.push(currentStation);
             });
-            stationTypeMap[stationType] = stationTree;
+            // 根据权限生成
+            if (isPermissions) {
+                stationTypeMap.scopeStation[stationType] = stationTree;
+            } else {
+                stationTypeMap.station[stationType] = stationTree;
+            }
         }
-        return stationTypeMap[stationType];
+        if (isPermissions) {
+            return stationTypeMap.scopeStation[stationType];
+        } else {
+            return stationTypeMap.station[stationType];
+        }
     };
 
     // 循环获取导出结果

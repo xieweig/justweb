@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
+angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data) {
+    console.log(data);
     $scope.params = {};
     $scope.search = function () {
         $scope.cargoList.kendoGrid.dataSource.page(1);

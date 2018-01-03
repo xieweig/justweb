@@ -46,7 +46,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
                                 return item.receivedStatus === 'IS_NOT_RECEIVED';
                             }
                         }
-                    ], title: "操作", width: 220
+                    ], title: "操作", width: 220, locked: true
                 },
                 { field: "logisticsCompanyName", title: "物流公司", width: 120 },
                 { field: "wayBillCode", title: "运单单号", width: 120 },

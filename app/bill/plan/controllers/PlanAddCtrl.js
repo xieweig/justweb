@@ -2,10 +2,10 @@
 
 angular.module('app').controller('PlanAddCtrl', function ($scope) {
 
-    $('#grid').on('click','.kendo-btn-a',function () {
+    $('#grid').on('click', '.kendo-btn-a', function () {
 
     })
-    
+
     // 项目数组
     $scope.itemMap = [];
     $scope.addItem = function () {
@@ -22,11 +22,13 @@ angular.module('app').controller('PlanAddCtrl', function ($scope) {
                     columns: [
                         { field: "inStationName", title: "调出站点" },
                         { field: "outStationName", title: "调入站点" },
-                        { field: "outStationName", title: "调入站点" ,template:function () {
+                        {
+                            field: "outStationName", title: "调入站点", template: function () {
                                 return '<a class="kendo-btn-a"></a>';
-                            }},
+                            }
+                        },
                         { field: "number", title: "调剂数量(点击修改)", editable: true },
-                        { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 155 }
+                        { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 155, locked: true }
                     ]
                 }
             }
