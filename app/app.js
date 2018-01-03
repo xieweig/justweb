@@ -101,7 +101,7 @@ var app = angular.module('app', [
 
 app.factory('MainFactory', function () {
     return {
-        host: 'http://192.168.21.100:8080',
+        host: 'http://192.168.21.56:15006',
         downloadUrl: 'http://192.168.21.141:2222/report/',
         exportExcelHost: 'http://192.168.21.141:15005',
         system: 'baseInfo',
@@ -164,22 +164,9 @@ app.factory("ApiService", function ($http, $q, MainFactory) {
 
 // 封装$http
 app.service("Common", function ($http, $q, MainFactory, ApiService) {
-    // 根据规格类型查找规格列表
-    this.getConfigure = function (configureType) {
-        return ApiService.get('/api/baseInfo/configure/findByConfigureType?configureType=' + configureType).then(function (response) {
-            if (response.code === '000') {
-                return _.map(response.result.configureReturnDTOs, function (item) {
-                    return { key: item.configureId, value: item.configureCode, text: item.configureName };
-                });
-            } else {
-                swal('请求规格失败', response.message, 'error');
-            }
-            return [];
-        }, apiServiceError);
-    }
     // 获取区域
     this.getLargeArea = function (largeAreaType) {
-        return ApiService.get('/api/baseInfo/largeArea/findByLargeAreaType?largeAreaType=' + largeAreaType).then(function (response) {
+        return ApiService.get('/api/v1/baseInfo/largeArea/findByLargeAreaTypeForApi?largeAreaType=' + largeAreaType).then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.largeAreaReturnDTO, function (item) {
                     return { key: item.largeAreaId, value: item.largeAreaCode, text: item.largeAreaName };
