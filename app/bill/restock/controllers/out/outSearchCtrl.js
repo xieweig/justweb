@@ -2,33 +2,37 @@
 
 angular.module('app').controller('outSearchCtrl', function ($scope, $state) {
     $scope.params = {};
+    $scope.kendoQueryCondition = {};
     $scope.tmp = 0;
 
     $scope.outBillGrid = {
         primaryId: 'code',
+        url: '',
+        params: $scope.kendoQueryCondition,
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
-            editable: true,
+            // editable: true,
             pageable: true,
             columns: [
                 {
                     command: [{name: 's', text: "查看"}, {name: 'e', text: "修改"}, {name: 't', text: "审核"}],
+                    locked: true,
                     title: "操作",
                     width: 153
                 },
-                {field: "billType", title: "单据属性", width: 80},
-                {field: "outStatus", title: "出库状态", width: 70},
-                {field: "inputStatus", title: "提交状态", width: 70},
-                {field: "checkStatus", title: "审核状态", width: 80},
                 {
-                    field: "fromCode", title: "来源单号", width: 150, template: function (data) {
+                    field: "fromCode", locked: true, title: "来源单号", width: 150, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.fromCode + '</a>'
                     }
                 },
-                {field: "outCode", title: "出库单号", width: 100},
-                {field: "recordTime", title: "录单时间"},
-                {field: "outTime", title: "出库时间"}
+                {field: "outCode", locked: true, title: "出库单号", width: 150},
+                {field: "billType", title: "单据属性", width: 150},
+                {field: "outStatus", title: "出库状态", width: 150},
+                {field: "inputStatus", title: "提交状态", width: 150},
+                {field: "checkStatus", title: "审核状态", width: 150},
+                {field: "recordTime", title: "录单时间", width: 150},
+                {field: "outTime", title: "出库时间", width: 150}
             ]
         }
     };
@@ -83,6 +87,6 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state) {
 
     // 查询
     $scope.search = function () {
-
+        console.log($scope.kendoQueryCondition)
     }
 });

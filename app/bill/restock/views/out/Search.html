@@ -19,13 +19,13 @@
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">录单人</span>
-                                        <input type="text" class="form-control" data-ng-model="params.oddNumber">
+                                        <input type="text" class="form-control" data-ng-model="kendoQueryCondition.creatorName">
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">出库单号</span>
-                                        <span data-station-tree data-select-modal="outStationParams"></span>
+                                        <input type="text" class="form-control" data-ng-model="kendoQueryCondition.BillCode">
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
@@ -79,11 +79,11 @@
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
                                     <span class="checkbox-label-fix">提交状态</span>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2">
+                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2" data-ng-model="kendoQueryCondition.submitStatus['unsubmit']">
                                         <span>未提交</span>
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2">
+                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2" data-ng-model="kendoQueryCondition.submitStatus['submit']">
                                         <span>已提交</span>
                                     </label>
                                 </div>

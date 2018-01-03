@@ -51,12 +51,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope) {
             measurementName: 'g/包',
             class: '分类'
         };
-    }
+    };
 
     // 清空货物
     $scope.clearCargo = function (index) {
         $scope.itemMap[index].cargo = {};
-    }
+    };
 
     // 添加站点
     $scope.addStation = function (index) {
@@ -67,8 +67,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope) {
             number: '0'
         };
         $scope.itemMap[index].stationGrid.kendoGrid.dataSource.add(item);
-    }
-
+    };
 
     // 清空站点
     $scope.clearStation = function (index) {

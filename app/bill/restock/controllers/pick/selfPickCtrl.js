@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal, ApiService) {
+angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal, $timeout, ApiService) {
     $scope.params = {};
+    $scope.cargoList = {};
 
     $scope.outType = [
         // {key: '1', value: '1', text: '正常库'},
@@ -84,7 +85,13 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal, Ap
 
     // 重置选项
     $scope.reset = function () {
-        $scope.params = {}
+        $scope.params = {
+            outStationType: '1'
+        };
+        $scope.CargoListGrid.kendoGrid.dataSource.data([]);
+        $timeout(function () {
+            $('#select-out').val('1').trigger('change')
+        }, 100)
     };
 
     // 添加货物
@@ -99,10 +106,28 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal, Ap
 
     function initCargoEdit(data) {
         $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/addCargoBySelf.html',
-            scope: $scope,
+            templateUrl: 'app/bill/common/modals/addCargoWithMaterial.html',
             size: 'lg',
-            controller: 'ModalAddCargoBySelfCtrl'
+            controller: 'AddCargoWithMaterialCtrl',
+            resolve: {
+                cb: function () {
+                    return function (data) {
+                        console.log(data)
+                        $scope.cargoList = data;
+                        var dataSource = $scope.CargoListGrid.kendoGrid.dataSource;
+                        for (var i = 0; i < dataSource._total; i++) {
+                            dataSource.remove(dataSource.at(i))
+                        }
+                        for (var i = 0; i < data.length; i++) {
+                            dataSource.add(data[i])
+                        }
+                        $scope.addModal.close()
+                    }
+                },
+                data: {
+                    cl: $scope.CargoListGrid.kendoGrid.dataSource.data()
+                }
+            }
         });
     }
 

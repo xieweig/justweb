@@ -53,7 +53,7 @@ angular.module('app').controller('ModalAddCargoBySelfCtrl', function ($scope, $t
                 {field: "cargoName", title: "货物名称"},
                 {field: "cargoCode", title: "货物编码"},
                 {field: "rawMaterialId", title: "所属原料"},
-                {field: "standardUnit", title: "标准单位"},
+                {field: "standardUnitCode", title: "标准单位"},
                 {field: "number", title: "规格"},
                 {field: "cargoNumber", title: "货物数量", editable: true,}
             ]

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanSearchCtrl', function ($scope, $state) {
+angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $uibModal) {
     // 查询站点退库计划
     $scope.params = {};
 
@@ -38,7 +38,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state) {
 
     // 选择站点
     $scope.inStationParams = {
-        // single: true,
+        single: true,
         callback: function (data) {
             $scope.params.inStationCode = _.map(data, function (item) {
                 return item.stationCode;
@@ -47,6 +47,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state) {
     };
 
     $scope.outStationParams = {
+        single: true,
         callback: function (data) {
             $scope.params.outStationCode = _.map(data, function (item) {
                 return item.stationCode;
@@ -66,17 +67,23 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state) {
     $('#grid').on('click', '.plan-btn-group', function (e) {
         e.preventDefault();
         var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.planView', {planId: dataItem.stationPlanNum})
+        // $state.go('app.bill.restock.planView', {planId: dataItem.stationPlanNum})
+        $scope.addModal = $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/planView.html',
+            size: 'lg',
+            controller: 'PlanViewModalCtrl',
+            resolve: {
+                data: {
+                    number: dataItem.stationPlanNum
+                }
+            }
+        })
     });
 
     // 重置表格
     $scope.reset = function () {
         $scope.params = {};
-        var dataSource = $scope.stationGrid.kendoGrid.dataSource;
-        var length = dataSource._total;
-        for (var i = 0; i < length; i++) {
-            dataSource.remove(dataSource.at(0))
-        }
+        $scope.stationGrid.kendoGrid.dataSource.data([])
     };
 
 });

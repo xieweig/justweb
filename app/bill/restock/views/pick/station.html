@@ -2,7 +2,7 @@
     <div jarvis-widget data-widget-editbutton="false">
         <header class="custom-header">
             <h2>{{ $state.current.data.title }}</h2>
-            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="save()">
+            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="reset()">
             <input type="button" class="btn btn-default btn-header" value="提交出库单" data-ng-click="submit()"
                    style="width: 100px">
             <input type="button" class="btn btn-default btn-header" value="保存" data-ng-click="save()">
@@ -26,8 +26,8 @@
                             <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">出库库位</span>
-                                    <select smart-select2 class="width-full">
-                                        <!--<option value="">请选择</option>-->
+                                    <select smart-select2 id="select-out" class="width-full">
+                                        <option value="1">正常库</option>
                                         <option data-ng-repeat="item in outType" data-ng-value="item.key">
                                             {{item.text}}
                                         </option>
@@ -100,14 +100,12 @@
 
         <div>
             <div class="widget-body no-padding">
-
                 <div class="tab-pane" id="hr2">
-
                     <ul class="nav nav-tabs" id="tabs">
                         <li class="active">
                             <a href="#iss1" data-toggle="tab">按货物拣货</a>
                         </li>
-                        <li>
+                        <li data-ng-click="change()">
                             <a href="#iss2" data-toggle="tab">按原料拣货</a>
                         </li>
                     </ul>
@@ -116,10 +114,8 @@
                             <div class="padding-10">
                                 <div class="text-center">站点退库计划明细</div>
                                 <div>
-                                    <!--<input type="button" class="btn btn-default width-80" value="添加"-->
-                                           <!--data-ng-click="addaData()">-->
-                                    <input type="text" class="form-control" data-ng-keypress="sendCode($event)" data-ng-model="params.scanCode">
-
+                                    <input type="text" class="form-control" data-ng-keypress="sendCode($event)"
+                                           data-ng-model="params.scanCode">
                                 </div>
                                 <hr class="gray-line">
                                 <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
@@ -127,39 +123,28 @@
                         </div>
                         <div class="tab-pane fade" id="iss2">
                             <div class="padding-10">
-                                <!--<div class="margin-bottom-10">-->
-                                    <!--<input type="button" class="btn btn-default width-80" value="添加项目" data-ng-click="addItem()">-->
-                                <!--</div>-->
                                 <div data-ng-repeat="item in itemMap" class="plan-panel margin-bottom-10">
-                                    <div class="plan-panel-head text-center">
-                                        <i class="fa" data-ng-class="item.unfurled?'fa-minus':'fa-plus'" data-ng-click="scaling($index)"></i>
-                                    </div>
-                                    <div class="plan-panel-body">
-                                        <div data-ng-hide="item.unfurled">
-                                            货物名称:咖啡豆
+                                    <div class="plan-panel-body" style="margin-left: 0;">
+                                        <div class="row">
+                                            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                                <dt>原料名称</dt>
+                                                <dd data-ng-bind="item.material.materialName"></dd>
+                                            </dl>
+                                            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                                <dt>原料总数量</dt>
+                                                <dd data-ng-bind="item.material.materialNumber"></dd>
+                                            </dl>
+                                            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                                <dt>完成度</dt>
+                                                <dd data-ng-bind="item.material.progress"></dd>
+                                            </dl>
                                         </div>
-                                        <div data-ng-show="item.unfurled">
-                                            <div class="row">
-                                                <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                                    <dt>原料名称</dt>
-                                                    <dd data-ng-bind="item.material.materialName"></dd>
-                                                </dl>
-                                                <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                                    <dt>原料总数量</dt>
-                                                    <dd data-ng-bind="item.material.materialNumber"></dd>
-                                                </dl>
-                                                <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                                    <dt>完成度</dt>
-                                                    <dd data-ng-bind="item.material.progress"></dd>
-                                                </dl>
-                                            </div>
-                                            <div class="margin-bottom-10">
-                                                <input type="button" class="btn btn-default width-80" value="添加货物" data-ng-click="addCargo($index)">
-                                            </div>
-                                            <div>
-                                                <div style="display: none">{{ $index }}</div>
-                                                <div data-kendo-grids data-options="item.cargoGrid"></div>
-                                            </div>
+                                        <div class="margin-bottom-10">
+                                            <input type="button" class="btn btn-default width-80" value="添加货物"
+                                                   data-ng-click="addCargo($index)">
+                                        </div>
+                                        <div>
+                                            <div data-kendo-grids data-options="item.cargoGrid"></div>
                                         </div>
                                     </div>
                                 </div>
