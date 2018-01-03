@@ -33,6 +33,8 @@ angular.module('app').controller('ProcurementAddCtrl', function ($scope, $stateP
         }
     };
 
+
+
     // 批量删除
     $scope.batchDelete = function () {
         var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
@@ -54,10 +56,15 @@ angular.module('app').controller('ProcurementAddCtrl', function ($scope, $stateP
     // 弹出增加供应商
     $scope.openAddCargoModal = function () {
         $scope.currentCargo = {};
-        $scope.addCargoModal = $uibModal.open({
-            templateUrl: 'app/bill/procurement/modals/addCargoModal.html',
+        $uibModal.open({
+            templateUrl: 'app/bill/common/modals/addCargoModal.html',
             size: 'lg',
-            scope: $scope
+            controller: 'AddCargoModalCtrl',
+            resolve: {
+                cb: function () {
+                    alert(213);
+                }
+            }
         });
     };
 
