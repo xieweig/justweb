@@ -63,7 +63,7 @@ angular.module('app').controller('ProcurementAddCtrl', function ($scope, $stateP
             resolve: {
                 cb: function () {
                     return function (data) {
-                        alert(213);
+                        console.log(data);
                     }
                 }
             }

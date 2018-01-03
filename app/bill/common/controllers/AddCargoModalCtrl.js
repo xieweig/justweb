@@ -53,6 +53,25 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
         var result = _.map($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
             return { cargoCode: '123' };
         });
+        result = [
+            {
+                "createTime": "2017-12-11",
+                "updateTime": "2017-12-11 10:30:06",
+                "logicStatus": "USABLE",
+                "cargoCode": "cargoCode001",
+                "barCode": "hy1234567891",
+                "selfBarCode": "hy001",
+                "originalName": "1级咖啡豆",
+                "cargoName": "南山1级咖啡豆",
+                "effectiveTime": 160,
+                "measurementCode": "gg001",
+                "standardUnitCode": "dw001",
+                "memo": "-",
+                "number": 0,
+                "rawMaterialId": 111,
+                "cargoType": "CONVENTION"
+            }
+        ];
         cb(result);
     };
 });
