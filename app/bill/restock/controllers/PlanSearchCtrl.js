@@ -12,7 +12,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state) {
     // 初始化计划列表
     $scope.stationGrid = {
         primaryId: 'id',
-        url: 'api/bill/restock/findPlanByCondition',
+        url: 'http://localhost:5000/api/bill/restock/findPlanByCondition',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
@@ -59,7 +59,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         console.log(dataItem);
-        $state.go('app.bill.restock.stationPick', {pickId: dataItem.id})
+        $state.go('app.bill.restock.stationPick', {pickId: dataItem.stationPlanNum})
     }
 
     // 站点计划号跳转
@@ -78,34 +78,5 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state) {
             dataSource.remove(dataSource.at(0))
         }
     };
-
-    // 添加虚拟数据
-    setTimeout(function () {
-        var dataSource = $scope.stationGrid.kendoGrid.dataSource;
-        dataSource.add({
-            id: '123123',
-            completionRate: '100%',
-            stationPlanNum: 'htk001_stk002',
-            recordTime: '2017-04-08',
-            recordPerson: '周强',
-            outStationName: '重庆西城店',
-            inStationName: '重庆物流',
-            quantity: '10',
-            specName: '8',
-            remarks: '无'
-        });
-        dataSource.add({
-            id: '123123',
-            completionRate: '100%',
-            stationPlanNum: 'htk001_stk002',
-            recordTime: '2017-04-08',
-            recordPerson: '周强',
-            outStationName: '重庆西城店',
-            inStationName: '重庆物流',
-            quantity: '10',
-            specName: '8',
-            remarks: '无'
-        })
-    }, 100);
 
 });

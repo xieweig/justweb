@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('ModalPickAddCtrl', function ($scope) {
+angular.module('app').controller('ModalAddCargoByMaterialCtrl', function ($scope) {
     // 拣货的添加货物
     $scope.params = {};
 
@@ -39,13 +39,13 @@ angular.module('app').controller('ModalPickAddCtrl', function ($scope) {
     };
 
     setTimeout(function () {
-        for (var i = 0; i < $scope.CargoListGrid.kendoGrid.dataSource._total; i++)
-            $scope.currentCargoGrid.kendoGrid.dataSource.add($scope.CargoListGrid.kendoGrid.dataSource.at(i))
+        for (var i = 0; i < $scope.itemMap[$scope.index].cargoGrid.kendoGrid.dataSource._total; i++)
+            $scope.currentCargoGrid.kendoGrid.dataSource.add($scope.itemMap[$scope.index].cargoGrid.kendoGrid.dataSource.at(i))
     }, 100)
 
     // 保存货物
     $scope.saveCargo = function () {
-        var data = $scope.CargoListGrid.kendoGrid.dataSource;
+        var data = $scope.itemMap[$scope.index].cargoGrid.kendoGrid.dataSource;
         var dataSource = $scope.currentCargoGrid.kendoGrid.dataSource;
         for (var i = 0; i < data._total; i++) {
             dataSource.remove(data.at(i))
@@ -69,7 +69,7 @@ angular.module('app').controller('ModalPickAddCtrl', function ($scope) {
         }
     };
 
-    // 测试用 之后删除  如果一条直接添加进当前选中货物
+    // 测试用 之后删除  TODO:如果一条直接添加进当前选中货物
     $scope.addSearch = function () {
         $scope.searchGrid.kendoGrid.dataSource.add({
             cargoCode: "货物编码",
@@ -89,7 +89,7 @@ angular.module('app').controller('ModalPickAddCtrl', function ($scope) {
     $scope.addCur = function () {
         $scope.currentCargoGrid.kendoGrid.dataSource.add({
             cargoName: '咖啡豆',
-            cargoCode: '出库成功',
+            cargoCode: 'kf001',
             rawMaterialId: '已提交',
             standerUnit: '审核不通过',
             number: '500毫升/盒',

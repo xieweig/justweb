@@ -1,8 +1,7 @@
 'use strict';
 
-angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal) {
+angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal, ApiService) {
     $scope.params = {};
-    $scope.tmp = 0;
 
     $scope.outType = [
         // {key: '1', value: '1', text: '正常库'},
@@ -14,7 +13,7 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal) {
     ];
 
     $scope.CargoListGrid = {
-        primaryId: 'code',
+        primaryId: 'cargoCode',
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
@@ -40,33 +39,6 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal) {
         }
     };
 
-    $scope.addData = function () {
-        var dataSource = $scope.CargoListGrid.kendoGrid.dataSource;
-        dataSource.add({
-            code: $scope.tmp,
-            cargoName: '咖啡豆',
-            cargoCode: 'hw00' + $scope.tmp.toString(),
-            rawMaterialId: '咖啡豆',
-            cargoNum: 20,
-            standardNum: '500g/包',
-            standardUnit: 20,
-            remarks: '备注'
-        });
-        $scope.tmp++;
-    };
-
-    $scope.deleteData = function () {
-        var selectId = $scope.CargoListGrid.kendoGrid.selectedKeyNames();
-        var dataSource = $scope.CargoListGrid.kendoGrid.dataSource;
-        for (var j in selectId) {
-            for (var i = 0; i < dataSource._total; i++) {
-                if (dataSource.at(i).code.toString() === selectId[j]) {
-                    dataSource.remove(dataSource.at(i));
-                }
-            }
-        }
-    };
-
     // 数据监控，警告库位修改
     $scope.$watch('params.outStationType', function (newVal, oldVal) {
         if (oldVal === undefined || newVal === '1') {
@@ -75,7 +47,6 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal) {
             swal({
                 title: '已将出库库位修改为' + $scope.outType[parseInt(newVal) - 2].text,
                 type: 'warning',
-                // showCancelButton: true,
                 confirmButtonText: '是的'
             }).then(function (res) {
                 if (res.value) {
@@ -89,12 +60,26 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal) {
 
     // 保存出库单
     $scope.save = function () {
-
+        console.log($scope.CargoListGrid.kendoGrid.dataSource.data())
+        console.log($scope.params.memo)
+        // ApiService.post().then(function (response) {
+        //     if (response.code === '000') {
+        //
+        //     } else {
+        //         swal('请求失败', response.message, 'error');
+        //     }
+        // }, apiServiceError)
     };
 
     // 提交出库单
     $scope.submit = function () {
+        ApiService.post().then(function (response) {
+            if (response.code === '000') {
 
+            } else {
+                swal('请求失败', response.message, 'error');
+            }
+        }, apiServiceError)
     };
 
     // 重置选项
@@ -114,11 +99,23 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $uibModal) {
 
     function initCargoEdit(data) {
         $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/pickAdd.html',
+            templateUrl: 'app/bill/restock/modals/addCargoBySelf.html',
             scope: $scope,
             size: 'lg',
-            controller: 'ModalPickAddCtrl'
+            controller: 'ModalAddCargoBySelfCtrl'
         });
     }
+
+    $scope.delCargo = function () {
+        var selectId = $scope.CargoListGrid.kendoGrid.selectedKeyNames();
+        var dataSource = $scope.CargoListGrid.kendoGrid.dataSource;
+        for (var j in selectId) {
+            for (var i = 0; i < dataSource._total; i++) {
+                if (dataSource.at(i).cargoCode.toString() === selectId[j]) {
+                    dataSource.remove(dataSource.at(i));
+                }
+            }
+        }
+    };
 
 });
