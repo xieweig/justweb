@@ -41,11 +41,16 @@
                     <div class="margin-bottom-10">
                         <input type="button" class="btn btn-default width-80" value="添加项目" data-ng-click="addItem()">
                     </div>
+                    <!-- 循环一项货物 -->
                     <div data-ng-repeat="item in itemMap" class="plan-panel margin-bottom-10">
                         <div class="plan-panel-head text-center">
                             <i class="fa" data-ng-class="item.unfurled?'fa-minus':'fa-plus'" data-ng-click="scaling($index)"></i>
                         </div>
                         <div class="plan-panel-body">
+                            <div>
+                                <input type="button" class="btn btn-danger" value="删除该项目" data-ng-click="removeCargo($index)">
+                            </div>
+                            <hr class="gray-line">
                             <div data-ng-hide="item.unfurled">
                                 货物名称:咖啡豆
                             </div>
@@ -91,7 +96,7 @@
                                     <input type="button" class="btn btn-default fr width-80" value="清空站点" data-ng-click="clearStation($index)">
                                 </div>
                                 <div id="grid">
-                                <div data-kendo-grids data-options="item.stationGrid"></div>
+                                    <div data-kendo-grids data-options="item.stationGrid"></div>
                                 </div>
                             </div>
                         </div>

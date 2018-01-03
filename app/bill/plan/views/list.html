@@ -1,0 +1,112 @@
+<div id="content">
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
+            <span class="widget-icon">
+                <i class="fa fa-table"></i>
+            </span>
+            <h2>{{ $state.current.data.title }}</h2>
+            <div class="fr">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="查询" ng-click="search()">
+                <input type="button" class="btn btn-primary fl" value="重置">
+            </div>
+        </header>
+        <div>
+            <div class="widget-body no-padding">
+                <div class="widget-body-toolbar">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">计划编号</span>
+                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">计划名称</span>
+                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">出库站点</span>
+                                <span data-station-tree data-select-modal="outStationParams"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">入库站点</span>
+                                <span data-station-tree data-select-modal="inStationParams"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">货物名称</span>
+                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">货物编码</span>
+                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                            <div class="display-flex">
+                                <div class="flex-1">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">创建时间</span>
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createStartTime">
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="border-left: 0;">至</span>
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createEndTime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">创建人</span>
+                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">提交状态</span>
+                                <select smart-select2 class="select2 width-full" data-ng-model="params.wayBillStatus">
+                                    <option value="">请选择</option>
+                                    <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">审核状态</span>
+                                <select smart-select2 class="select2 width-full" data-ng-model="params.wayBillStatus">
+                                    <option value="">请选择</option>
+                                    <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">计划类型</span>
+                                <select smart-select2 class="select2 width-full" data-ng-model="params.wayBillStatus">
+                                    <option value="">请选择</option>
+                                    <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding-10">
+                    <p>入库单详情</p>
+                    <hr class="gray-line">
+                    <div class="margin-top-10" data-kendo-grids data-options="planList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

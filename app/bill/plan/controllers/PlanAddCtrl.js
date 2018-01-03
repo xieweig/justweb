@@ -39,7 +39,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope) {
     // 伸缩项
     $scope.scaling = function (index) {
         $scope.itemMap[index].unfurled = !$scope.itemMap[index].unfurled;
-    }
+    };
 
     // 添加货物
     $scope.addCargo = function (index) {
@@ -53,6 +53,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope) {
             measurementName: 'g/包',
             class: '分类'
         };
+    };
+
+    // 删除货物
+    $scope.removeCargo = function (index) {
+        $scope.itemMap.splice(index, 1);
     }
 
     // 清空货物
@@ -69,12 +74,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope) {
             number: '0'
         };
         $scope.itemMap[index].stationGrid.kendoGrid.dataSource.add(item);
-    }
+    };
 
 
     // 清空站点
     $scope.clearStation = function (index) {
         var item = $scope.itemMap[index];
         item.stationGrid.kendoGrid.dataSource.data([]);
-    }
+    };
 });
