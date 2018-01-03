@@ -62,7 +62,9 @@ angular.module('app').controller('ProcurementAddCtrl', function ($scope, $stateP
             controller: 'AddCargoModalCtrl',
             resolve: {
                 cb: function () {
-                    alert(213);
+                    return function (data) {
+                        alert(213);
+                    }
                 }
             }
         });

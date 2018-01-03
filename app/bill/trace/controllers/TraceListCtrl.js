@@ -33,7 +33,12 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
                 {
                     command: [
                         { name: 's', text: "查看", click: seeTrace },
-                        { name: 'e', text: "修改", click: editTrace },
+                        {
+                            name: 'e', text: "修改", click: editTrace,
+                            visible: function (item) {
+                                return item.receivedStatus === 'IS_NOT_RECEIVED';
+                            }
+                        },
                         {
                             name: 't', text: "收货",
                             click: receipt,
