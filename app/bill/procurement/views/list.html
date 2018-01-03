@@ -1,10 +1,14 @@
 <div id="content">
-    <div jarvis-widget data-widget-color="darken" data-widget-editbutton="false">
-        <header>
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
             <span class="widget-icon">
                 <i class="fa fa-table"></i>
             </span>
             <h2>{{ $state.current.data.title }}</h2>
+            <div class="fr">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="查询" ng-click="search()">
+                <input type="button" class="btn btn-primary fl" value="重置">
+            </div>
         </header>
         <div>
             <div class="widget-body no-padding">
@@ -88,9 +92,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-center">
-                        <input type="button" class="btn btn-primary width-80" value="查询" data-ng-click="search()">
                     </div>
                 </div>
                 <div class="padding-10">

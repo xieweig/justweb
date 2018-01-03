@@ -1,0 +1,65 @@
+<div class="uib-modal">
+    <h1 class="uib-modal-title">
+        <span>添加货物明细</span>
+        <span class="option">
+            <input type="button" class="btn btn-primary" value="添加" data-ng-click="addCargo()">
+            <input type="button" class="btn btn-primary" value="下一条" data-ng-click="addNextCargo()">
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">货物条码</span>
+                    <input type="text" class="form-control" data-ng-model="traceEdit.currentDetails.outStorageBillCode">
+                    <div class="input-group-btn">
+                        <input class="btn btn-default" type="button" value="查询">
+                    </div>
+                </div>
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">生产日期</span>
+                    <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">货物名称</span>
+                    <input type="text" class="form-control" disabled data-ng-model="traceEdit.currentDetails.totalCount">
+                </div>
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">所属原料</span>
+                    <input type="text" class="form-control" disabled data-ng-model="traceEdit.currentDetails.totalCount">
+                </div>
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">标准单位</span>
+                    <input type="text" class="form-control" disabled data-ng-model="traceEdit.currentDetails.totalCount">
+                </div>
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">规格</span>
+                    <input type="text" class="form-control" disabled data-ng-model="traceEdit.currentDetails.totalCount">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">实收数量</span>
+                    <input type="text" class="form-control" data-only-number data-ng-model="traceEdit.currentDetails.totalCount">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">发货数量</span>
+                    <input type="text" class="form-control" data-only-number data-ng-model="traceEdit.currentDetails.totalCount">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">单位进价</span>
+                    <input type="text" class="form-control" data-confine-money data-ng-model="traceEdit.currentDetails.totalCount">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

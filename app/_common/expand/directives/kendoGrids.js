@@ -80,6 +80,20 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                             return kendo.render(kendo.template('#= count #'), [{ count: rowNumber }]);
                         }
                     });
+                } else if (item.WdatePicker) {
+                    item.editor = function (container, options) {
+                        var input = $("<input class='k-input k-textbox' onchange='' readonly/>");
+                        input.attr("name", options.field);
+                        input.appendTo(container);
+                        input.click(function () {
+                            WdatePicker({
+                                el: this,
+                                dateFmt: item.WdatePicker === true ? 'yyyy-MM-dd HH:mm:ss' : item.WdatePicker,
+                                enableKeyboard: false,
+                                enableInputMask: false
+                            });
+                        });
+                    }
                 } else if (item.field) {
                     // 其他
                     var fieldName = item.field;
