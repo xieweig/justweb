@@ -36,7 +36,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope) {
             columns: [
                 { selectable: true },
                 {
-                    title: "操作", width: 160,
+                    title: "操作", width: 160, locked: true,
                     command: [
                         {
                             name: 't', text: "查看",

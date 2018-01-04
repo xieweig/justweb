@@ -101,7 +101,7 @@ var app = angular.module('app', [
 
 app.factory('MainFactory', function () {
     return {
-        host: 'http://192.168.21.100:8080',
+        host: 'http://192.168.21.56:15006',
         downloadUrl: 'http://192.168.21.141:2222/report/',
         exportExcelHost: 'http://192.168.21.141:15005',
         system: 'baseInfo',
@@ -164,24 +164,11 @@ app.factory("ApiService", function ($http, $q, MainFactory) {
 
 // 封装$http
 app.service("Common", function ($http, $q, MainFactory, ApiService) {
-    // 根据规格类型查找规格列表
-    this.getConfigure = function (configureType) {
-        return ApiService.get('/api/baseInfo/configure/findByConfigureType?configureType=' + configureType).then(function (response) {
-            if (response.code === '000') {
-                return _.map(response.result.configureReturnDTOs, function (item) {
-                    return { key: item.configureId, value: item.configureCode, text: item.configureName };
-                });
-            } else {
-                swal('请求规格失败', response.message, 'error');
-            }
-            return [];
-        }, apiServiceError);
-    }
     // 获取区域
     this.getLargeArea = function (largeAreaType) {
-        return ApiService.get('/api/baseInfo/largeArea/findByLargeAreaType?largeAreaType=' + largeAreaType).then(function (response) {
+        return ApiService.get('/api/v1/baseInfo/largeArea/findByLargeAreaTypeForApi?largeAreaType=' + largeAreaType).then(function (response) {
             if (response.code === '000') {
-                return _.map(response.result.largeAreaReturnDTO, function (item) {
+                return _.map(response.result.largeAreaApiReturnDTOs, function (item) {
                     return { key: item.largeAreaId, value: item.largeAreaCode, text: item.largeAreaName };
                 });
             } else {
@@ -192,7 +179,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     }
     // 城市
     this.getCity = function () {
-        return ApiService.get('/api/baseInfo/city/findAllLogicStatusUsable').then(function (response) {
+        return ApiService.get('/api/v1/baseInfo/city/findAllUsableForApi').then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.cityReturnDTOs, function (item) {
                     return { key: item.cityId, value: item.cityCode, text: item.cityName, regionId: item.regionId, regionCode: item.regionCode };
@@ -205,10 +192,10 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     }
     // 全部站点
     this.getStation = function (largeAreaType) {
-        return ApiService.get('/api/baseInfo/station/findAllUsable').then(function (response) {
+        return ApiService.get('/api/v1/baseInfo/station/findAllUsableForApi').then(function (response) {
             if (response.code === '000') {
-                return _.map(response.result.stationReturnDTOs, function (item) {
-                    return { key: item.stationId, value: item.stationCode, text: item.stationName, cityId: item.cityId, cityStatus: item.cityLogicStatus, regionId: item.regionId, regionStatus: item.regionLogicStatus, siteType: item.siteType };
+                return _.map(response.result.stationApiReturnDTOs, function (item) {
+                    return { key: item.stationId, value: item.stationCode, text: item.stationName, cityId: item.cityId, cityCode: item.cityCode, cityStatus: item.cityLogicStatus, regionId: item.regionId, regionCode: item.regionCode, regionStatus: item.regionLogicStatus, siteType: item.siteType };
                 });
             } else {
                 swal('请求规格失败', response.message, 'error');

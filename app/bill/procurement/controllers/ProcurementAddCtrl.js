@@ -11,9 +11,7 @@ angular.module('app').controller('ProcurementAddCtrl', function ($scope, $stateP
             persistSelection: true,
             columns: [
                 { selectable: true },
-                {
-                    title: "操作", width: 160, command: [{ name: 'edit', text: "编辑" }]
-                },
+                { locked: true, title: "操作", width: 160, command: [{ name: 'edit', text: "编辑" }] },
                 { field: "xxxxxxxxxx", title: "货物名称", width: 120 },
                 { field: "xxxxxxxxxx", title: "货物编码", width: 120 },
                 { field: "xxxxxxxxxx", title: "所属原料", width: 120 },
@@ -65,6 +63,9 @@ angular.module('app').controller('ProcurementAddCtrl', function ($scope, $stateP
                     return function (data) {
                         console.log(data);
                     }
+                },
+                data: {
+                    a: '1'
                 }
             }
         });

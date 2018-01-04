@@ -1,0 +1,52 @@
+<div>
+    <div class="margin-bottom-10">
+        <input type="button" class="btn btn-default width-80" value="添加项目" data-ng-click="addItem('material')">
+    </div>
+    <!-- 循环一项货物 -->
+    <div data-ng-repeat="item in materialMap" class="plan-panel margin-bottom-10">
+        <div class="plan-panel-head text-center">
+            <i class="fa" data-ng-class="item.unfurled?'fa-minus':'fa-plus'" data-ng-click="scaling($index)"></i>
+        </div>
+        <div class="plan-panel-body">
+            <div>
+                <input type="button" class="btn btn-danger" value="删除该项目" data-ng-click="removeCargo('material',$index)">
+            </div>
+            <hr class="gray-line">
+            <div data-ng-hide="item.unfurled">
+                原料名称:咖啡豆
+            </div>
+            <div data-ng-show="item.unfurled">
+                <div class="margin-bottom-10">
+                    <input type="button" class="btn btn-default width-80" value="添加原料" data-ng-click="addCargo(item,'material')">
+                    <input type="button" class="btn btn-default fr width-80" value="清空原料" data-ng-click="clearCargo(item,$index)">
+                </div>
+                <div class="row">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>原料名称</dt>
+                        <dd data-ng-bind="item.material.materialName"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>原料编码</dt>
+                        <dd data-ng-bind="item.material.materialCode"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>所属原料分类</dt>
+                        <dd data-ng-bind="item.material.barCode"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>标准单位</dt>
+                        <dd data-ng-bind="item.material.selfBarCode"></dd>
+                    </dl>
+                </div>
+                <hr class="gary-line no-margin">
+                <div class="margin-bottom-10 margin-top-10">
+                    <input type="button" class="btn btn-default width-80" value="添加站点" data-ng-click="addStation(item,$index)">
+                    <input type="button" class="btn btn-default fr width-80" value="清空站点" data-ng-click="clearStation(item,$index)">
+                </div>
+                <div id="grid">
+                    <div data-kendo-grids data-options="item.stationGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

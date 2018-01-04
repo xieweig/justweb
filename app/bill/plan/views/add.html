@@ -38,61 +38,22 @@
                     </div>
                 </div>
                 <div class="padding-10">
-                    <div class="margin-bottom-10">
-                        <input type="button" class="btn btn-default width-80" value="添加项目" data-ng-click="addItem()">
-                    </div>
-                    <div data-ng-repeat="item in itemMap" class="plan-panel margin-bottom-10">
-                        <div class="plan-panel-head text-center">
-                            <i class="fa" data-ng-class="item.unfurled?'fa-minus':'fa-plus'" data-ng-click="scaling($index)"></i>
-                        </div>
-                        <div class="plan-panel-body">
-                            <div data-ng-hide="item.unfurled">
-                                货物名称:咖啡豆
-                            </div>
-                            <div data-ng-show="item.unfurled">
 
-                                <div class="margin-bottom-10">
-                                    <input type="button" class="btn btn-default width-80" value="添加货物" data-ng-click="addCargo($index)">
-                                    <input type="button" class="btn btn-default fr width-80" value="清空货物" data-ng-click="clearCargo($index)">
-                                </div>
-                                <div class="row">
-                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                        <dt>货物名称</dt>
-                                        <dd data-ng-bind="item.cargo.cargoName"></dd>
-                                    </dl>
-                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                        <dt>货物编码</dt>
-                                        <dd data-ng-bind="item.cargo.cargoCode"></dd>
-                                    </dl>
-                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                        <dt>货物条码</dt>
-                                        <dd data-ng-bind="item.cargo.barCode"></dd>
-                                    </dl>
-                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                        <dt>货物自定义条码</dt>
-                                        <dd data-ng-bind="item.cargo.selfBarCode"></dd>
-                                    </dl>
-                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                        <dt>所属原料</dt>
-                                        <dd data-ng-bind="item.cargo.materialName"></dd>
-                                    </dl>
-                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                        <dt>规格</dt>
-                                        <dd data-ng-bind="item.cargo.number + item.cargo.measurementName"></dd>
-                                    </dl>
-                                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                        <dt>分类</dt>
-                                        <dd data-ng-bind="item.cargo.class"></dd>
-                                    </dl>
-                                </div>
-                                <hr class="gary-line">
-                                <div class="margin-bottom-10">
-                                    <input type="button" class="btn btn-default width-80" value="添加站点" data-ng-click="addStation($index)">
-                                    <input type="button" class="btn btn-default fr width-80" value="清空站点" data-ng-click="clearStation($index)">
-                                </div>
-                                <div id="grid">
-                                <div data-kendo-grids data-options="item.stationGrid"></div>
-                                </div>
+                    <div class="tab-pane">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tabs-1" data-toggle="tab">按货物计划</a>
+                            </li>
+                            <li>
+                                <a href="#tabs-2" data-toggle="tab">按原料计划</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content padding-10">
+                            <div class="tab-pane active" id="tabs-1">
+                                <div data-smart-include="app/bill/plan/modals/consultCargo.html"></div>
+                            </div>
+                            <div class="tab-pane" id="tabs-2">
+                                <div data-smart-include="app/bill/plan/modals/consultMaterial.html"></div>
                             </div>
                         </div>
                     </div>

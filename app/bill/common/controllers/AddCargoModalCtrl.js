@@ -1,16 +1,18 @@
 'use strict';
 
-angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
+angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data) {
+    console.log(data);
     $scope.params = {};
     $scope.search = function () {
         $scope.cargoList.kendoGrid.dataSource.page(1);
     };
     // 条件查询的货物列表
     $scope.cargoList = {
-        url: 'http://192.168.21.191:15001/api/v1/baseInfo/cargo/findByCargoCode',
+        url: 'http://192.168.21.191:15006/api/v1/baseInfo/cargo/findByCargoCode',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
+            pageable: true,
             columns: [
                 { selectable: true },
                 { field: "xxxxxxxxxx", title: "货物编码", width: 120 },
