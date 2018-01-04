@@ -5,7 +5,7 @@
     <!-- 循环一项货物 -->
     <div data-ng-repeat="item in materialMap" class="plan-panel margin-bottom-10">
         <div class="plan-panel-head text-center">
-            <i class="fa" data-ng-class="item.unfurled?'fa-minus':'fa-plus'" data-ng-click="scaling($index)"></i>
+            <i class="fa" data-ng-class="item.unfurled?'fa-minus':'fa-plus'" data-ng-click="scaling(item,$index)"></i>
         </div>
         <div class="plan-panel-body">
             <div>
@@ -17,7 +17,7 @@
             </div>
             <div data-ng-show="item.unfurled">
                 <div class="margin-bottom-10">
-                    <input type="button" class="btn btn-default width-80" value="添加原料" data-ng-click="addCargo(item,'material')">
+                    <input type="button" class="btn btn-default width-80" value="添加原料" data-ng-click="addMaterial(item,'material')">
                     <input type="button" class="btn btn-default fr width-80" value="清空原料" data-ng-click="clearCargo(item,$index)">
                 </div>
                 <div class="row">

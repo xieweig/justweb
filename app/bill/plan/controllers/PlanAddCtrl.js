@@ -4,7 +4,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
     $timeout(function () {
         var isTrigger = false;
         $('.nav-tabs a').click(function () {
-            var _this = this;
+            var $this = $(this);
             if (!isTrigger) {
                 swal({
                     title: '该操作将会清空原有的数据,确定继续?',
@@ -13,7 +13,14 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
                 }).then(function (result) {
                     if (!result.value) {
                         isTrigger = true;
-                        $(_this).parent().siblings().find('a').trigger('click');
+                        $this.parent().siblings().find('a').trigger('click');
+                    } else {
+                        var tabType = $this.attr('tabType');
+                        if (tabType === 'cargo') {
+                            $scope.materialMap = [];
+                        } else if (tabType === 'material') {
+                            $scope.cargoMap = [];
+                        }
                     }
                 });
             } else {
@@ -64,23 +71,45 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
 
     // 添加货物
     $scope.addCargo = function (item, type) {
-        if (type === 'material') {
-            item.material = {
-                materialName: '原料',
-                materialCode: 'CODE001',
-            };
-        } else {
-            item.cargo = {
-                cargoName: '货物',
-                cargoCode: 'CODE001',
-                barCode: '1564646465',
-                selfBarCode: '1564646465',
-                materialName: '咖啡豆',
-                number: '100',
-                measurementName: 'g/包',
-                class: '分类'
-            };
-        }
+        $uibModal.open({
+            templateUrl: 'app/bill/plan/modals/addCargoModal.html',
+            size: 'lg',
+            controller: 'PlanAddCargoCtrl',
+            resolve: {
+                cb: function () {
+                    return function (data) {
+                        item.cargo = {
+                            cargoName: '货物',
+                            cargoCode: 'CODE001',
+                            barCode: '1564646465',
+                            selfBarCode: '1564646465',
+                            materialName: '咖啡豆',
+                            number: '100',
+                            measurementName: 'g/包',
+                            class: '分类'
+                        };
+                    }
+                }
+            }
+        });
+    };
+    // 添加原料
+    $scope.addMaterial = function (item, type) {
+        $uibModal.open({
+            templateUrl: 'app/bill/plan/modals/addMaterialModal.html',
+            size: 'lg',
+            controller: 'PlanAddMaterialCtrl',
+            resolve: {
+                cb: function () {
+                    return function (data) {
+                        item.material = {
+                            materialName: '原料',
+                            materialCode: 'CODE001',
+                        };
+                    }
+                }
+            }
+        });
     };
 
     // 删除货物

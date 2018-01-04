@@ -1,6 +1,6 @@
 <div class="padding-10">
     <div class="margin-bottom-10 clearfix">
-        <input type="button" class="btn btn-default width-80 fr" value="添加项目" data-ng-click="add()">
+        <input type="button" class="btn btn-default width-80 fr" value="取消" data-ng-click="$close()">
         <h3 class="no-margin">哈哈</h3>
     </div>
     <hr class="gray-line">
@@ -115,4 +115,7 @@
     <hr class="gray-line">
     <h3 class="text-center">已选中的站点</h3>
     <div data-kendo-grids data-options="stationGrid"></div>
+    <div class="text-center margin-top-10">
+        <input type="button" class="btn btn-primary"  data-ng-click="add()" value="确定添加">
+    </div>
 </div>
