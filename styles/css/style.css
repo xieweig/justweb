@@ -276,17 +276,6 @@ input[type="text"]:disabled {
     border: 1px solid #ccc;
 }
 
-/* kendo设置 */
-.k-state-selected {
-    color: #333;
-    background-color: inherit;
-    border-color: inherit;
-}
-
-.k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover td {
-    background-color: inherit;
-}
-
 .tipsText {
     display: block;
     overflow: hidden;
@@ -367,4 +356,30 @@ input[type="text"]:disabled {
 .widget-header-wrap{
     padding: 5px !important;
     height: 44px !important;
+}
+
+.k-grid table{
+    width: 100% !important;
+}
+
+.sortable {
+    padding: 10px 0;
+    padding-left: 20px;
+    margin-top: -1px;
+    border: 1px solid #eaeaea;
+}
+
+.sortable:hover{
+    background-color: #1976d2;
+    color: #fff;
+}
+.sortable .handler{
+    float: left;
+    margin-left: -20px;
+    margin-top: -10px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    cursor: move;
 }

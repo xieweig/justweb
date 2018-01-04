@@ -2,6 +2,7 @@
 
 angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope, $timeout, options) {
     var currentOption = _.cloneDeep(options);
+    $scope.sortable = currentOption.sortable;
     var stationType = !options.type ? '' : options.type;
     // 用于接下来判断是单选还是多选  返回值会不同
     var isMultiple = _.isUndefined(currentOption.checkboxes) || currentOption.checkboxes !== false;
@@ -25,6 +26,27 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
         $scope.treeViewOptions.treeView.collapse(".k-item");
     });
 
+    // 拖拽排序
+    if (currentOption.sortable) {
+        $scope.sortableList = [];
+        $scope.treeViewOptions.check = function (e) {
+            console.log(e);
+        };
+        $scope.addSortable = function () {
+            var result = [];
+            checkedNodeIds($scope.treeViewOptions.treeView.dataSource.view(), result);
+            $scope.sortableList = result
+        }
+        $timeout(function () {
+            $("#sortable").kendoSortable({
+                handler: ".handler",
+                hint: function (element) {
+                    return element.clone().addClass("hint");
+                }
+            });
+        });
+    }
+
 
     // 根据条件筛选
     $scope.filter = function () {
@@ -38,30 +60,40 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
 
     // 获取选中的结果
     $scope.getSelResult = function () {
-        if (isMultiple) {
+        if (currentOption.sortable) {
             options.modal = [];
-            checkedNodeIds($scope.treeViewOptions.treeView.dataSource.view(), options.modal);
-            if (options.modal.length === 0) {
-                swal('请选择站点', '', 'warning');
-                return;
-            }
-        } else {
-            var selectNode = $scope.treeViewOptions.treeView.select();
-            options.modal = {
-                stationId: selectNode.find('.stationId').val(),
-                stationCode: selectNode.find('.stationCode').val(),
-                stationName: selectNode.find('.stationName').val(),
-                type: selectNode.find('.stationType').val()
-            };
-            // 判断是否选择了站点
-            if (options.modal.type !== 'station') {
-                swal('请选择站点', '', 'warning');
-                return;
-            }
-        }
-        // 判断有没有回调函数  有则执行
-        if (_.isFunction(options.callback)) {
+            $('#sortable .sortable').each(function (index) {
+                var index = $(this).attr('sortableIndex');
+                var item = $scope.sortableList[index];
+                options.modal.push({ stationId: item.stationId, type: item.type, stationCode: item.stationCode, stationName: item.stationName, cityName: item.cityName, cityCode: item.cityCode, regionCode: item.regionCode, regionName: item.regionName });
+            });
             options.callback(options.modal);
+        } else {
+            if (isMultiple) {
+                options.modal = [];
+                checkedNodeIds($scope.treeViewOptions.treeView.dataSource.view(), options.modal);
+                if (options.modal.length === 0) {
+                    swal('请选择站点', '', 'warning');
+                    return;
+                }
+            } else {
+                var selectNode = $scope.treeViewOptions.treeView.select();
+                options.modal = {
+                    stationId: selectNode.find('.stationId').val(),
+                    stationCode: selectNode.find('.stationCode').val(),
+                    stationName: selectNode.find('.stationName').val(),
+                    type: selectNode.find('.stationType').val()
+                };
+                // 判断是否选择了站点
+                if (options.modal.type !== 'station') {
+                    swal('请选择站点', '', 'warning');
+                    return;
+                }
+            }
+            // 判断有没有回调函数  有则执行
+            if (_.isFunction(options.callback)) {
+                options.callback(options.modal);
+            }
         }
         $scope.$close();
     };

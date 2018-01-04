@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
+angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uibModal) {
     $timeout(function () {
         var isTrigger = false;
         $('.nav-tabs a').click(function () {
@@ -26,7 +26,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
     $('#grid').on('click', '.kendo-btn-a', function () {
 
     })
-   
+
 
     // 项目数组
     $scope.cargoMap = [];
@@ -42,14 +42,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
                     editable: true,
                     autoBind: false,
                     columns: [
-                        { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 155, locked: true },
+                        { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 85, locked: true },
                         { field: "inStationName", title: "调出站点" },
                         { field: "outStationName", title: "调入站点" },
-                        {
-                            field: "outStationName", title: "调入站点", template: function () {
-                                return '<a class="kendo-btn-a"></a>';
-                            }
-                        },
                         { field: "number", title: "调剂数量(点击修改)", editable: true }
                     ]
                 }
@@ -106,19 +101,18 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
     $scope.addStation = function (item, index) {
         $uibModal.open({
             templateUrl: 'app/bill/plan/modals/addStationModal.html',
-            size: 'md',
-            controller: (selectModal.type === 'material' ? 'MaterialTreeCtrl' : 'ProductTreeCtrl'),
+            size: 'lg',
+            controller: 'PlanAddStationCtrl',
             resolve: {
-                options: options,
-                hasChildren: selectModal.hasChildren === true
+                cb: function () {
+                    return function (data) {
+                        _.each(data, function (dataItem) {
+                            item.stationGrid.kendoGrid.dataSource.add(dataItem)
+                        });
+                    }
+                }
             }
         });
-        item.stationGrid.kendoGrid.dataSource.add({
-            stationCode: generateMixed(10),
-            inStationName: '调入站点',
-            outStationName: '调出站点',
-            number: '0'
-        })
     };
     // 清空站点
     $scope.clearStation = function (item, index) {
