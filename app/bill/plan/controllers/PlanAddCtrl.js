@@ -104,6 +104,15 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
 
     // 添加站点
     $scope.addStation = function (item, index) {
+        $uibModal.open({
+            templateUrl: 'app/bill/plan/modals/addStationModal.html',
+            size: 'md',
+            controller: (selectModal.type === 'material' ? 'MaterialTreeCtrl' : 'ProductTreeCtrl'),
+            resolve: {
+                options: options,
+                hasChildren: selectModal.hasChildren === true
+            }
+        });
         item.stationGrid.kendoGrid.dataSource.add({
             stationCode: generateMixed(10),
             inStationName: '调入站点',

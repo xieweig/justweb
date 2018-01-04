@@ -1,0 +1,64 @@
+<div>
+    <div class="margin-bottom-10">
+        <input type="button" class="btn btn-default width-80" value="添加项目" data-ng-click="addItem('cargo')">
+    </div>
+    <!-- 循环一项货物 -->
+    <div data-ng-repeat="item in cargoMap" class="plan-panel margin-bottom-10">
+        <div class="plan-panel-head text-center">
+            <i class="fa" data-ng-class="item.unfurled?'fa-minus':'fa-plus'" data-ng-click="scaling(item,$index)"></i>
+        </div>
+        <div class="plan-panel-body">
+            <div>
+                <input type="button" class="btn btn-danger" value="删除该项目" data-ng-click="removeCargo('cargo',$index)">
+            </div>
+            <hr class="gray-line">
+            <div data-ng-hide="item.unfurled">
+                货物名称:咖啡豆
+            </div>
+            <div data-ng-show="item.unfurled">
+                <div class="margin-bottom-10">
+                    <input type="button" class="btn btn-default width-80" value="添加货物" data-ng-click="addCargo(item,'cargo')">
+                    <input type="button" class="btn btn-default fr width-80" value="清空货物" data-ng-click="clearCargo(item,$index)">
+                </div>
+                <div class="row">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>货物名称</dt>
+                        <dd data-ng-bind="item.cargo.cargoName"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>货物编码</dt>
+                        <dd data-ng-bind="item.cargo.cargoCode"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>货物条码</dt>
+                        <dd data-ng-bind="item.cargo.barCode"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>货物自定义条码</dt>
+                        <dd data-ng-bind="item.cargo.selfBarCode"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>所属原料</dt>
+                        <dd data-ng-bind="item.cargo.materialName"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>规格</dt>
+                        <dd data-ng-bind="item.cargo.number + item.cargo.measurementName"></dd>
+                    </dl>
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                        <dt>分类</dt>
+                        <dd data-ng-bind="item.cargo.class"></dd>
+                    </dl>
+                </div>
+                <hr class="gary-line">
+                <div class="margin-bottom-10">
+                    <input type="button" class="btn btn-default width-80" value="添加站点" data-ng-click="addStation(item,$index)">
+                    <input type="button" class="btn btn-default fr width-80" value="清空站点" data-ng-click="clearStation(item,$index)">
+                </div>
+                <div id="grid">
+                    <div data-kendo-grids data-options="item.stationGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
