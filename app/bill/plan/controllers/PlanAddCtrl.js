@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
+angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uibModal) {
     $timeout(function () {
         var isTrigger = false;
         $('.nav-tabs a').click(function () {
-            var _this = this;
+            var $this = $(this);
             if (!isTrigger) {
                 swal({
                     title: '该操作将会清空原有的数据,确定继续?',
@@ -13,7 +13,14 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
                 }).then(function (result) {
                     if (!result.value) {
                         isTrigger = true;
-                        $(_this).parent().siblings().find('a').trigger('click');
+                        $this.parent().siblings().find('a').trigger('click');
+                    } else {
+                        var tabType = $this.attr('tabType');
+                        if (tabType === 'cargo') {
+                            $scope.materialMap = [];
+                        } else if (tabType === 'material') {
+                            $scope.cargoMap = [];
+                        }
                     }
                 });
             } else {
@@ -26,7 +33,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
     $('#grid').on('click', '.kendo-btn-a', function () {
 
     })
-   
+
 
     // 项目数组
     $scope.cargoMap = [];
@@ -42,14 +49,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
                     editable: true,
                     autoBind: false,
                     columns: [
-                        { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 155, locked: true },
+                        { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 85, locked: true },
                         { field: "inStationName", title: "调出站点" },
                         { field: "outStationName", title: "调入站点" },
-                        {
-                            field: "outStationName", title: "调入站点", template: function () {
-                                return '<a class="kendo-btn-a"></a>';
-                            }
-                        },
                         { field: "number", title: "调剂数量(点击修改)", editable: true }
                     ]
                 }
@@ -69,23 +71,45 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
 
     // 添加货物
     $scope.addCargo = function (item, type) {
-        if (type === 'material') {
-            item.material = {
-                materialName: '原料',
-                materialCode: 'CODE001',
-            };
-        } else {
-            item.cargo = {
-                cargoName: '货物',
-                cargoCode: 'CODE001',
-                barCode: '1564646465',
-                selfBarCode: '1564646465',
-                materialName: '咖啡豆',
-                number: '100',
-                measurementName: 'g/包',
-                class: '分类'
-            };
-        }
+        $uibModal.open({
+            templateUrl: 'app/bill/plan/modals/addCargoModal.html',
+            size: 'lg',
+            controller: 'PlanAddCargoCtrl',
+            resolve: {
+                cb: function () {
+                    return function (data) {
+                        item.cargo = {
+                            cargoName: '货物',
+                            cargoCode: 'CODE001',
+                            barCode: '1564646465',
+                            selfBarCode: '1564646465',
+                            materialName: '咖啡豆',
+                            number: '100',
+                            measurementName: 'g/包',
+                            class: '分类'
+                        };
+                    }
+                }
+            }
+        });
+    };
+    // 添加原料
+    $scope.addMaterial = function (item, type) {
+        $uibModal.open({
+            templateUrl: 'app/bill/plan/modals/addMaterialModal.html',
+            size: 'lg',
+            controller: 'PlanAddMaterialCtrl',
+            resolve: {
+                cb: function () {
+                    return function (data) {
+                        item.material = {
+                            materialName: '原料',
+                            materialCode: 'CODE001',
+                        };
+                    }
+                }
+            }
+        });
     };
 
     // 删除货物
@@ -104,12 +128,20 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
 
     // 添加站点
     $scope.addStation = function (item, index) {
-        item.stationGrid.kendoGrid.dataSource.add({
-            stationCode: generateMixed(10),
-            inStationName: '调入站点',
-            outStationName: '调出站点',
-            number: '0'
-        })
+        $uibModal.open({
+            templateUrl: 'app/bill/plan/modals/addStationModal.html',
+            size: 'lg',
+            controller: 'PlanAddStationCtrl',
+            resolve: {
+                cb: function () {
+                    return function (data) {
+                        _.each(data, function (dataItem) {
+                            item.stationGrid.kendoGrid.dataSource.add(dataItem)
+                        });
+                    }
+                }
+            }
+        });
     };
     // 清空站点
     $scope.clearStation = function (item, index) {

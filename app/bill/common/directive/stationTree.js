@@ -30,6 +30,7 @@ angular.module('app').directive('stationTree', function ($uibModal) {
                 options.onlyCity = selectModal.onlyCity;
                 options.modal = selectModal.modal;
                 options.type = selectModal.type;
+                options.sortable = selectModal.sortable;
                 options.callback = function () {
                     selectModal.modal = options.modal;
                     if (elm.attr('tagName') !== 'INPUT') {
@@ -49,7 +50,7 @@ angular.module('app').directive('stationTree', function ($uibModal) {
                 };
                 $uibModal.open({
                     templateUrl: 'app/bill/common/modals/stationTree.html',
-                    size: 'md',
+                    size: selectModal.sortable ? 'lg' : 'md',
                     controller: 'StationTreeCtrl',
                     resolve: {
                         options: options

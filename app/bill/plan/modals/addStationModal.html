@@ -1,0 +1,121 @@
+<div class="padding-10">
+    <div class="margin-bottom-10 clearfix">
+        <input type="button" class="btn btn-default width-80 fr" value="取消" data-ng-click="$close()">
+        <h3 class="no-margin">哈哈</h3>
+    </div>
+    <hr class="gray-line">
+    <div class="tab-pane">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tabs-1" data-toggle="tab">一站对多站</a>
+            </li>
+            <li>
+                <a href="#tabs-2" data-toggle="tab">多站对一站</a>
+            </li>
+            <li>
+                <a href="#tabs-3" data-toggle="tab">一站对一站</a>
+            </li>
+        </ul>
+        <div class="tab-content padding-10">
+            <div class="tab-pane active" id="tabs-1">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">调出站点</span>
+                            <span data-station-tree data-select-modal="otmOutStationOpt"></span>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>调出站点</dt>
+                            <dd class="ng-binding">
+                                <p class="no-margin">{{otmOutStation.stationName}}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">调入站点</span>
+                            <span data-station-tree data-select-modal="otmInStationOpt"></span>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>调入站点</dt>
+                            <dd class="ng-binding">
+                                <p class="no-margin" data-ng-repeat="item in otmInStation">{{item.stationName}}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="margin-bottom-10 text-center">
+                    <input type="button" class="btn btn-primary width-80" value="添加" data-ng-click="otmAddStation()">
+                </div>
+            </div>
+            <div class="tab-pane" id="tabs-2">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">调出站点</span>
+                            <span data-station-tree data-select-modal="mtoOutStationOpt"></span>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>调出站点</dt>
+                            <dd class="ng-binding">
+                                <p class="no-margin" data-ng-repeat="item in mtoOutStation">{{item.stationName}}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">调入站点</span>
+                            <span data-station-tree data-select-modal="mtoInStationOpt"></span>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>调出站点</dt>
+                            <dd class="ng-binding">
+                                <p class="no-margin">{{mtoInStation.stationName}}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="margin-bottom-10 text-center">
+                    <input type="button" class="btn btn-primary width-80" value="添加" data-ng-click="mtoAddStation()">
+                </div>
+            </div>
+            <div class="tab-pane" id="tabs-3">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">调出站点</span>
+                            <span data-station-tree data-select-modal="otoOutStationOpt"></span>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>调出站点</dt>
+                            <dd class="ng-binding">
+                                <p class="no-margin" data-ng-repeat="item in otoOutStation">{{item.stationName}}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">调入站点</span>
+                            <span data-station-tree data-select-modal="otoInStationOpt"></span>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>调出站点</dt>
+                            <dd class="ng-binding">
+                                <p class="no-margin" data-ng-repeat="item in otoInStation">{{item.stationName}}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="margin-bottom-10 text-center">
+                    <input type="button" class="btn btn-primary width-80" value="添加" data-ng-click="otoAddStation()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="gray-line">
+    <h3 class="text-center">已选中的站点</h3>
+    <div data-kendo-grids data-options="stationGrid"></div>
+    <div class="text-center margin-top-10">
+        <input type="button" class="btn btn-primary"  data-ng-click="add()" value="确定添加">
+    </div>
+</div>
