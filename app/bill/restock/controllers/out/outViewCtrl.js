@@ -3,6 +3,7 @@
 angular.module('app').controller('outViewCtrl', function ($scope) {
     $scope.params = {};
     $scope.tmp = 0;
+    $scope.showMaterial = true;
 
     $scope.returnMaterialGrid = {
         primaryId: 'code',

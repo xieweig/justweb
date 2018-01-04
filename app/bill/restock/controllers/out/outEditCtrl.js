@@ -4,14 +4,9 @@ angular.module('app').controller('outEditCtrl', function ($scope, $uibModal) {
     $scope.params = {};
     $scope.tmp = 0;
 
-    $scope.returnMaterialGrid = {
+    $scope.MaterialGrid = {
         primaryId: 'code',
         kendoSetting: {
-            // selectable: 'multiple, row',
-            // autoBind: false,
-            // persistSelection: true,
-            // editable: true,
-            // pageable: true,
             columns: [
                 {field: "materialName", title: "原料名称"},
                 {field: "materialCode", title: "原料编码"},
@@ -22,15 +17,10 @@ angular.module('app').controller('outEditCtrl', function ($scope, $uibModal) {
         }
     };
 
-
     $scope.returnCargoGrid = {
         primaryId: 'code',
         kendoSetting: {
-            // selectable: 'multiple, row',
             autoBind: false,
-            // persistSelection: true,
-            // editable: true,
-            // pageable: true,
             columns: [
                 {command: [{name: 'select', text: "删除"}], title: "", width: 80},
                 {field: "cargoName", title: "货物名称"},
@@ -92,7 +82,7 @@ angular.module('app').controller('outEditCtrl', function ($scope, $uibModal) {
 
     function initAddModal() {
         $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/return/modals/add.html',
+            templateUrl: 'app/bill/restock/modals/add.html',
             scope: $scope,
             size: 'lg'
         })
@@ -133,7 +123,7 @@ angular.module('app').controller('outEditCtrl', function ($scope, $uibModal) {
     };
 
     $scope.addMaterial = function () {
-        var dataSource = $scope.returnMaterialGrid.kendoGrid.dataSource;
+        var dataSource = $scope.MaterialGrid.kendoGrid.dataSource;
         dataSource.add({
             code: $scope.tmp,
             billType: '退库计划转',

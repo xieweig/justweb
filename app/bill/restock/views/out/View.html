@@ -9,10 +9,8 @@
 
         <div>
             <div class="widget-body no-padding">
-                <!--<div class="widget-body-toolbar">-->
                 <div class="row">
                     <div class="col-sm-12">
-                        <!-- your contents here -->
                         <div class="margin-top-10 padding-top-0">
 
                             <div class="row padding-rl-10">
@@ -20,8 +18,6 @@
                                 <div class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10">
                                     <div class="view-group">
                                         <span class="input-group-addon">单号<span>tkckd005</span></span>
-                                        <!--<span class="input-group-addon">单号</span>-->
-                                        <!--<span class="input-group-addon">tkckd005</span>-->
                                     </div>
                                 </div>
 
@@ -148,32 +144,24 @@
                 <!--</div>-->
                 <hr class="gray-line">
                 <div class="padding-10">
-
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                    <div ng-if="showMaterial">
+                        <div class="row text-align-center">
                             <h5 style="padding-left: 5px;">
-                                <small>
-                                    原料拣货情况
-                                </small>
-
+                                原料拣货情况
                             </h5>
                         </div>
-                        <div class="col-lg-6 col-sm-6 col-xs-12 text-align-right">
-
-                            <input type="button" class="btn btn-default width-80" value="批量删除"
-                                   data-ng-click="deleteData()">
-                            <input type="button" class="btn btn-default width-80" value="添加"
-                                   data-ng-click="addData()">
-                        </div>
-                    </div>
-                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="returnMaterialGrid"></div>
-                    <div class="row text-align-center">
+                        <div class="margin-top-10 min-btn-grid" data-kendo-grids
+                             data-options="returnMaterialGrid"></div>
+                        <div class="row text-align-center">
                             <h5 style="padding-left: 5px;">
-                                    原料拣货情况
+                                货物拣货情况
                             </h5>
+                        </div>
+                        <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="returnCargoGrid"></div>
                     </div>
-                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="returnCargoGrid"></div>
-
+                    <div ng-if="!showMaterial">
+                        <div>1</div>
+                    </div>
                 </div>
             </div>
         </div>

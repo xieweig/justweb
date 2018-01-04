@@ -1,0 +1,76 @@
+<div class="uib-modal">
+    <h1 class="uib-modal-title">
+        <span>查看站点退库计划</span>
+        <span class="option">
+            <input type="button" class="btn btn-primary" value="导出" data-ng-click="export()">
+            <input type="button" class="btn btn-default" value="返回" data-ng-click="$close()">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row info-block">
+            <div class="col-sm-6">
+                <div class="well margin-top-10  padding-top-0">
+                    <h5>
+                        <small>退库信息</small>
+                    </h5>
+                    <div class="row">
+                        <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">单号</span>
+                                <input type="text" class="form-control" data-ng-model="params.billCode" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">计划备注</span>
+                                <textarea type="text" rows="3" class="form-control custom-scroll"
+                                          data-ng-model="params.remarks" disabled></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="well margin-top-10 padding-top-0">
+                    <h5>
+                        <small>退库计划单信息</small>
+                    </h5>
+                    <div class="row">
+                        <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                            <div class="display-flex">
+                                <div class="flex-1">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">录单时间</span>
+                                        <input type="text" class="form-control" data-datepicker
+                                               data-ng-model="params.recordTime" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">入库站点</span>
+                                <input type="text" class="form-control" data-ng-model="params.outStationName" disabled>
+                                <!--<span data-station-tree data-select-modal="inStationParams" disabled></span>-->
+                            </div>
+                        </div>
+                        <!-- TODO: 修改出库来源 -->
+                        <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">出库站点</span>
+                                <input type="text" class="form-control" data-ng-model="params.inStationName" disabled>
+                                <!--<span data-station-tree data-select-modal="outStationParams" disabled></span>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="widget-body no-padding">
+            <div class="padding-10">
+                <div class="text-center"><h3 class="margin-top-0">站点退库计划明细</h3></div>
+                <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
-
     $timeout(function () {
         var isTrigger = false;
         $('.nav-tabs a').click(function () {
@@ -27,6 +26,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
     $('#grid').on('click', '.kendo-btn-a', function () {
 
     })
+   
 
     // 项目数组
     $scope.cargoMap = [];
@@ -95,12 +95,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
         } else {
             $scope.cargoMap.splice(index, 1);
         }
-    }
+    };
 
     // 清空货物
     $scope.clearCargo = function (item, index) {
         item.cargo = {};
-    }
+    };
 
     // 添加站点
     $scope.addStation = function (item, index) {
@@ -118,10 +118,8 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
             inStationName: '调入站点',
             outStationName: '调出站点',
             number: '0'
-        });
+        })
     };
-
-
     // 清空站点
     $scope.clearStation = function (item, index) {
         item.stationGrid.kendoGrid.dataSource.data([]);
