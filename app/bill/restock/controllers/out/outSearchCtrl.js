@@ -1,9 +1,26 @@
 'use strict';
 
-angular.module('app').controller('outSearchCtrl', function ($scope, $state) {
+angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uibModal, ApiService) {
     $scope.params = {};
     $scope.kendoQueryCondition = {};
-    $scope.tmp = 0;
+
+    $scope.submitStatus = [
+        {value: '', text: '已提交'},
+        {value: '', text: '未提交'}
+    ];
+
+    $scope.auditStatus = [
+        {value: '', text: '未审核'},
+        {value: '', text: '审核通过'},
+        {value: '', text: '审核不通过'}
+    ];
+
+    $scope.billAttr = [
+        {value: '', text: '配送计划转'},
+        {value: '', text: '调剂计划转'},
+        {value: '', text: '退货计划转'},
+        {value: '', text: '无计划计划转'}
+    ];
 
     $scope.outBillGrid = {
         primaryId: 'code',
@@ -16,7 +33,21 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state) {
             pageable: true,
             columns: [
                 {
-                    command: [{name: 's', text: "查看"}, {name: 'e', text: "修改"}, {name: 't', text: "审核"}],
+                    command: [
+                        {
+                            name: 's', text: "查看", click: view, visible: function (dataItem) {
+                                return true
+                            }
+                        },
+                        {
+                            name: 'e', text: "修改", click: edit, visible: function (dataItem) {
+                                return true
+                            }
+                        }, {
+                            name: 't', text: "审核", click: check, visible: function (dataItem) {
+                                return true
+                            }
+                        }],
                     locked: true,
                     title: "操作",
                     width: 153
@@ -37,56 +68,89 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state) {
         }
     };
 
-    $scope.outStationParams = {
-        // single: true,
+    // 选择站点
+    $scope.inStationParams = {
         callback: function (data) {
-            console.log(data);
+            $scope.params.inStationCode = _.map(data, function (item) {
+                return item.stationCode;
+            });
         }
     };
 
-    // 测试添加数据
-    setTimeout(function () {
-        var dataSource = $scope.outBillGrid.kendoGrid.dataSource;
-        dataSource.add({
-            code: $scope.tmp,
-            billType: '退库计划转',
-            outStatus: '出库成功',
-            inputStatus: '已提交',
-            checkStatus: '审核不通过',
-            fromCode: 'htk001_stk001',
-            outCode: 'tkckd005',
-            recordTime: '2017-04-15',
-            outTime: '2017-04-27'
-        })
-        $scope.tmp++;
-    }, 100);
-
-    $scope.deleteData = function () {
-        var selectId = $scope.outBillGrid.kendoGrid.selectedKeyNames();
-        var dataSource = $scope.outBillGrid.kendoGrid.dataSource;
-        for (var j in selectId) {
-            for (var i = 0; i < dataSource._total; i++) {
-                if (dataSource.at(i).code.toString() === selectId[j]) {
-                    dataSource.remove(dataSource.at(i));
-                }
-            }
+    $scope.outStationParams = {
+        callback: function (data) {
+            $scope.params.outStationCode = _.map(data, function (item) {
+                return item.stationCode;
+            });
         }
     };
 
-    // 来源单号跳转
+    // 查看
+    function view(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $state.go('app.bill.restock.outView', {outId: dataItem.outCode})
+    }
+
+    // 修改
+    function edit(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $state.go('app.bill.restock.outEdit', {outId: dataItem.outCode})
+    }
+
+    // 审核
+    function check(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $state.go('app.bill.restock.outCheck', {outId: dataItem.outCode})
+    }
+
+    // 来源单号弹窗
     $('#grid').on('click', '.plan-btn-group', function (e) {
         e.preventDefault();
         var dataItem = $scope.outBillGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.outView', {fromId: dataItem.fromCode})
+        // $state.go('app.bill.restock.outView', {fromId: dataItem.fromCode})
+        $scope.addModal = $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/planView.html',
+            size: 'lg',
+            controller: 'PlanViewModalCtrl',
+            resolve: {
+                data: {
+                    number: dataItem.stationPlanNum
+                }
+            }
+        })
     });
 
     // 重置表格
-    $scope.initSearch = function () {
-        $scope.params = {};
-    }
+    $scope.reset = function () {
+        $scope.kendoQueryCondition = {};
+        $scope.outBillGrid.kendoGrid.dataSource.data([])
+    };
 
     // 查询
     $scope.search = function () {
-        console.log($scope.kendoQueryCondition)
+        // console.log($scope.kendoQueryCondition)
+        ApiService.get('http://127.0.0.1:5000/api/bill/restock/out/search', {hasHost: true}).then(function (response) {
+            if (response.code === '000') {
+                _.each(response.result.content, function (item) {
+                    var dataSource = $scope.outBillGrid.kendoGrid.dataSource;
+                    dataSource.add({
+                        billType: item.billType,
+                        outStatus: item.outStatus,
+                        inputStatus: item.inputStatus,
+                        checkStatus: item.checkStatus,
+                        fromCode: item.fromCode,
+                        outCode: item.outCode,
+                        recordTime: item.recordTime,
+                        outTime: item.outTime
+                    })
+                })
+
+            } else {
+                swal('请求失败', response.message, 'error');
+            }
+        }, apiServiceError)
     }
 });

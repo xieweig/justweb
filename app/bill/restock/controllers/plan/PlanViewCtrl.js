@@ -26,7 +26,7 @@ angular.module('app').controller('PlanViewCtrl', function ($scope, $stateParams,
         } else {
             swal('请求失败', response.message, 'error');
         }
-    }, apiServiceError)
+    }, apiServiceError);
 
     // 预先请求站点退库计划数据
     $scope.cargoGrid = {
