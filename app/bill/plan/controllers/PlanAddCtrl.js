@@ -109,7 +109,8 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout) {
             inStationName: '调入站点',
             outStationName: '调出站点',
             number: '0'
-    }
+        })
+    };
     // 清空站点
     $scope.clearStation = function (item, index) {
         item.stationGrid.kendoGrid.dataSource.data([]);
