@@ -19,7 +19,9 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
             pageable: true,
             columns: [
                 {command: [{name: 'select', text: "拣货", click: jumpToPick}], title: "操作", width: 80},
-                {field: "completionRate", title: "完成率", width: 60},
+                {field: "completionRate", title: "完成率", width: 60, template: function (data) {
+                        return '<a href="#" class="rate-btn-group">' + data.completionRate + '</a>';
+                    }},
                 {
                     field: "stationPlanNum", title: "站点计划号", template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.stationPlanNum + '</a>';
@@ -38,7 +40,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
 
     // 选择站点
     $scope.inStationParams = {
-        single: true,
+        // single: true,
         callback: function (data) {
             $scope.params.inStationCode = _.map(data, function (item) {
                 return item.stationCode;
@@ -47,7 +49,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
     };
 
     $scope.outStationParams = {
-        single: true,
+        // single: true,
         callback: function (data) {
             $scope.params.outStationCode = _.map(data, function (item) {
                 return item.stationCode;
@@ -64,7 +66,8 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
     }
 
     // 站点计划号跳转
-    $('#grid').on('click', '.plan-btn-group', function (e) {
+    var grid = $('#grid');
+    grid.on('click', '.plan-btn-group', function (e) {
         e.preventDefault();
         var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
         // $state.go('app.bill.restock.planView', {planId: dataItem.stationPlanNum})
@@ -78,6 +81,12 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
                 }
             }
         })
+    });
+
+    grid.on('click', '.rate-btn-group', function (e) {
+        e.preventDefault();
+        var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
+        $state.go('app.bill.restock.outView', {planId: dataItem.stationPlanNum})
     });
 
     // 重置表格

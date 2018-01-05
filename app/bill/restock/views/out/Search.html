@@ -2,7 +2,9 @@
     <div jarvis-widget data-widget-editbutton="false">
         <header class="custom-header">
             <h2>{{ $state.current.data.title }}</h2>
-            <input type="button" class="btn btn-default btn-header" value="查询" data-ng-click="search()">        </header>
+            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="reset()">
+            <input type="button" class="btn btn-default btn-header" value="查询" data-ng-click="search()">
+        </header>
         <div>
             <div class="widget-body no-padding">
                 <div class="row">
@@ -35,7 +37,7 @@
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">入库站点</span>
-                                        <span data-station-tree data-select-modal="outStationParams"></span>
+                                        <span data-station-tree data-select-modal="inStationParams"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
@@ -100,13 +102,12 @@
                                         <span>审核不通过</span>
                                     </label>
                                 </div>
-                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10  margin-top-5">
+                                <div class="col-sm-6 col-xs-12 margin-bottom-10 margin-top-5">
                                     <div class="input-group">
-                                        <span class="input-group-addon">出库库位</span>
-                                        <select smart-select2 class="width-full">
-                                            <!--<option value="">请选择</option>-->
-                                            <option data-ng-repeat="item in outType" data-ng-value="item.key">
-                                                {{item.text}}
+                                        <span class="input-group-addon">单据属性</span>
+                                        <select data-multiple-select>
+                                            <option ng-repeat="attr in billAttr" value="{{attr.value}}">
+                                                {{attr.text}}
                                             </option>
                                         </select>
                                     </div>

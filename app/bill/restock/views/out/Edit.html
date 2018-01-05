@@ -2,125 +2,99 @@
     <div jarvis-widget data-widget-editbutton="false">
         <header class="custom-header">
             <h2>{{ $state.current.data.title }}</h2>
-            <!-- TODO:未完成-->
-            <input type="button" class="btn btn-default widget-header-btn" value="返回" data-ng-click="search()">
+            <input type="button" class="btn btn-default widget-header-btn" value="返回" data-ng-click="back()">
             <input type="button" class="btn btn-default widget-header-btn" value="提交审核" data-ng-click="search()">
+            <input type="button" class="btn btn-default widget-header-btn" value="保存" data-ng-click="save()">
         </header>
 
         <div>
             <div class="widget-body no-padding">
-                <!--<div class="widget-body-toolbar">-->
                 <div class="row">
                     <div class="col-sm-12">
-                        <!-- your contents here -->
                         <div class="margin-top-10 padding-top-0">
                             <h5 class="padding-rl-10">
                                 <small>
                                     查询条件
                                 </small>
                             </h5>
-                            <!--<br>-->
-
                             <div class="row padding-rl-10">
 
-                                <div class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">单号<span>tkckd005</span></span>
-                                        <!--<span class="input-group-addon">单号</span>-->
-                                        <!--<span class="input-group-addon">tkckd005</span>-->
-                                    </div>
-                                </div>
+                                <dl class="col-lg-2 col-sm-2 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>单号</dt>
+                                    <dd data-ng-bind="params.materialName"></dd>
+                                </dl>
 
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">录单时间<span>2017-04-15</span></span>
-                                    </div>
-                                </div>
+                                <dl class="col-lg-3 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>录单时间</dt>
+                                    <dd data-ng-bind="params.createTime"></dd>
+                                </dl>
 
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">出库时间<span>2017-04-27</span></span>
+                                <dl class="col-lg-3 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>出库时间</dt>
+                                    <dd data-ng-bind="params.outTime"></dd>
+                                </dl>
 
-                                    </div>
-                                </div>
+                                <dl class="col-lg-2 col-sm-2 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>录单人</dt>
+                                    <dd data-ng-bind="params.creatorName">王菲</dd>
+                                </dl>
 
-                                <div class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">录单人<span>王菲</span></span>
+                                <dl class="col-lg-2 col-sm-2 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>审核人</dt>
+                                    <dd data-ng-bind="params.checkName">王菲</dd>
+                                </dl>
 
-                                    </div>
-                                </div>
+                                <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>出库站点</dt>
+                                    <dd data-ng-bind="params.outStationName">重庆北城店</dd>
+                                </dl>
 
-                                <div class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">审核人<span>王菲菲</span></span>
+                                <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>出库库位</dt>
+                                    <dd data-ng-bind="params.outType">正常库</dd>
+                                </dl>
 
-                                    </div>
-                                </div>
+                                <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>入库站点</dt>
+                                    <dd data-ng-bind="params.inStationName">重庆物流</dd>
+                                </dl>
 
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">出库站点<span>重庆北城店</span></span>
-                                    </div>
-                                </div>
+                                <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>单据属性</dt>
+                                    <dd data-ng-bind="params.billType">退库计划转</dd>
+                                </dl>
 
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">出库库位<span>正常库</span></span>
-                                    </div>
-                                </div>
+                                <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>出库状态</dt>
+                                    <dd data-ng-bind="params.outStatus">未出库</dd>
+                                </dl>
 
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">入库站点<span>重庆物流</span></span>
-                                    </div>
-                                </div>
+                                <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>提交状态</dt>
+                                    <dd data-ng-bind="params.subStatus">已提交</dd>
+                                </dl>
 
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">单据属性<span>退库计划转</span></span>
-                                    </div>
-                                </div>
+                                <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>审核状态</dt>
+                                    <dd data-ng-bind="params.audStatus">未审核</dd>
+                                </dl>
 
-                                <div class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">出库状态<span>未出库</span></span>
+                                <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>退库数量</dt>
+                                    <dd data-ng-bind="params.outNumber">35</dd>
+                                </dl>
 
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">提交状态<span>已提交</span></span>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">审核状态<span>未审核</span></span>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">退库数量<span>35</span></span>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10">
-                                    <div class="view-group">
-                                        <span class="input-group-addon">退库品种<span>2</span></span>
-                                    </div>
-                                </div>
+                                <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                                    <dt>退库品种</dt>
+                                    <dd data-ng-bind="params.outCargoType">2</dd>
+                                </dl>
 
                                 <div class="col-lg-6 col-sm-6 col-xs-10 margin-bottom-10">
                                     <div class="col-lg-10 col-sm-10 col-xs-12">
                                         <div class="input-group">
                                             <span class="input-group-addon">计划备注</span>
                                             <textarea type="text" rows="1" class="form-control custom-scroll"
-                                                      data-ng-model="params.oddNumber" disabled></textarea>
+                                                      data-ng-model="params.planMemo" disabled></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -130,7 +104,7 @@
                                         <div class="input-group">
                                             <span class="input-group-addon">出库备注</span>
                                             <textarea type="text" rows="1" class="form-control custom-scroll"
-                                                      data-ng-model="params.oddNumber" disabled></textarea>
+                                                      data-ng-model="params.outMemo" disabled></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -140,48 +114,41 @@
                                         <div class="input-group">
                                             <span class="input-group-addon">审核意见</span>
                                             <textarea type="text" rows="1" class="form-control custom-scroll"
-                                                      data-ng-model="params.oddNumber" disabled></textarea>
+                                                      data-ng-model="params.checkMemo" disabled></textarea>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
-
                         </div>
                     </div>
                 </div>
-                <!--</div>-->
+
                 <hr class="gray-line">
                 <div class="padding-10">
-
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                    <div ng-if="showMaterial">
+                        <div class="row  text-align-center">
+                            <h5 style="padding-left: 5px;">原料拣货情况</h5>
+                        </div>
+                        <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="MaterialGrid"></div>
+                        <div class="row text-align-center">
                             <h5 style="padding-left: 5px;">
-                                <small>
-                                    原料拣货情况
-                                </small>
-
+                                货物拣货情况
                             </h5>
+                            <input type="button" class="btn btn-default width-80" value="添加货物"
+                                   data-ng-click="addCargo()">
                         </div>
-                        <div class="col-lg-6 col-sm-6 col-xs-12 text-align-right">
-
-                            <input type="button" class="btn btn-default width-80" value="批量删除"
-                                   data-ng-click="deleteData()">
-                            <input type="button" class="btn btn-default width-80" value="添加"
-                                   data-ng-click="addMaterial()">
+                        <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="CargoGrid"></div>
+                    </div>
+                    <div ng-if="!showMaterial">
+                        <div class="row text-align-center">
+                            <h5 style="padding-left: 5px;">
+                                货物拣货情况
+                            </h5>
+                            <input type="button" class="btn btn-default width-80" value="添加货物"
+                                   data-ng-click="addOnlyCargo()">
                         </div>
+                        <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="onlyCargoGrid"></div>
                     </div>
-                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="MaterialGrid"></div>
-                    <div class="row text-align-center">
-                        <h5 style="padding-left: 5px;">
-                            原料拣货情况
-                        </h5>
-                        <input type="button" class="btn btn-default width-80" value="添加货物"
-                               data-ng-click="addCargo()">
-                    </div>
-                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="returnCargoGrid"></div>
-
                 </div>
             </div>
         </div>

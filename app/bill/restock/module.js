@@ -70,7 +70,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             }
         })
         .state('app.bill.restock.outView', {
-            url: '/bill/restock/out/view/:fromId',
+            url: '/bill/restock/out/view/:outId',
             data: {
                 title: '查看退库出库单'
             },
@@ -82,7 +82,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             }
         })
         .state('app.bill.restock.outEdit', {
-            url: '/bill/restock/out/edit',
+            url: '/bill/restock/out/edit/:outId',
             data: {
                 title: '修改退库出库单'
             },
@@ -94,7 +94,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             }
         })
         .state('app.bill.restock.outCheck', {
-            url: '/bill/restock/out/check',
+            url: '/bill/restock/out/check/:outId',
             data: {
                 title: '审核退库出库单'
             },
@@ -112,7 +112,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/inSearch.html',
+                    templateUrl: 'app/bill/restock/views/in/inSearch.html',
                     controller: 'inSearchCtrl'
                 }
             }
@@ -124,7 +124,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/inView.html',
+                    templateUrl: 'app/bill/restock/views/in/inView.html',
                     controller: 'inViewCtrl'
                 }
             }
@@ -136,7 +136,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/inAction.html',
+                    templateUrl: 'app/bill/restock/views/in/inAction.html',
                     controller: 'inActionCtrl'
                 }
             }
@@ -148,7 +148,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/inActionSearch.html',
+                    templateUrl: 'app/bill/restock/views/in/inActionSearch.html',
                     controller: 'inActionSearchCtrl'
                 }
             }
@@ -160,7 +160,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/inActionView.html',
+                    templateUrl: 'app/bill/restock/views/in/inActionView.html',
                     controller: 'inActionViewCtrl'
                 }
             }
