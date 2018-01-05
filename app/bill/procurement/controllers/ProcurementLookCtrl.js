@@ -1,35 +1,26 @@
 'use strict';
 
-angular.module('app').controller('ProcurementLookCtrl', function ($scope, $stateParams, purchaseBill) {
+angular.module('app').controller('ProcurementLookCtrl', function ($scope, $stateParams, params) {
     // 页面类型 查看or审核
-    $scope.type = 'look';
-    console.log(purchaseBill);
+    $scope.type = params.type;
+    $scope.bill = params.purchaseBill;
 
     $scope.procurementGrid = {
         kendoSetting: {
-            dataSource: purchaseBill.billDetails,
+            dataSource: params.purchaseBill.billDetails,
             columns: [
                 { field: "cargo.cargoName", title: "货物名称", width: 120 },
                 { field: "cargo.cargoCode", title: "货物编码", width: 120 },
-                { field: "xxxxxxxxxx", title: "所属原料", width: 120 },
-                { field: "xxxxxxxxxx", title: "标准单位", width: 120 },
-                { field: "xxxxxxxxxx", title: "规格", width: 120 },
-                { field: "xxxxxxxxxx", title: "生产日期", width: 120 },
-                { field: "xxxxxxxxxx", title: "单位进价", width: 120 },
-                { field: "xxxxxxxxxx", title: "实收数量", width: 120 },
-                { field: "xxxxxxxxxx", title: "发货数量", width: 120 },
-                { field: "xxxxxxxxxx", title: "数量差额", width: 120 },
-                { field: "xxxxxxxxxx", title: "总价差值", width: 120 }
+                { field: "cargo.rawMaterialId", title: "所属原料", width: 120 },
+                { field: "cargo.measurementCode", title: "标准单位", width: 120 },
+                { template: "#: cargo.number #/#: cargo.standardUnitCode #", title: "规格", width: 120 },
+                { field: "dateInProduced", title: "生产日期", width: 160 },
+                { field: "unitPrice", title: "单位进价", width: 120 },
+                { field: "amount", title: "实收数量", width: 120 },
+                { field: "shippedNumber", title: "发货数量", width: 120 },
+                { field: "differenceNumber", title: "数量差额", width: 120 },
+                { field: "differencePrice", title: "总价差值", width: 120 }
             ]
         }
     };
-
-    setTimeout(function () {
-        $scope.procurementGrid.kendoGrid.dataSource.data([
-            { xxxxxxxxxx: 1, audit: false, submit: true },
-            { xxxxxxxxxx: 2, audit: true, submit: true },
-            { xxxxxxxxxx: 3, audit: false, submit: false },
-            { xxxxxxxxxx: 4, audit: true, submit: true }
-        ]);
-    }, 100);
 });

@@ -1,6 +1,7 @@
 <div class="uib-modal">
     <h1 class="uib-modal-title">
-        <span>货物新增/修改</span>
+        <span data-ng-if="type==='look'">查看进货入库单</span>
+        <span data-ng-if="type==='audit'">审核进货入库单</span>
         <span class="option" data-ng-if="type==='look'">
             <input type="button" class="btn btn-primary fl margin-right-5" value="导出">
             <input type="button" class="btn btn-primary fl" value="取消" data-ng-click="$close()">
@@ -8,34 +9,34 @@
         <span class="option" data-ng-if="type==='audit'">
             <input type="button" class="btn btn-primary fl margin-right-5" value="审核不通过">
             <input type="button" class="btn btn-primary fl margin-right-5" value="审核通过">
-            <input type="button" class="btn btn-primary fl" value="取消">
+            <input type="button" class="btn btn-primary fl" value="取消" data-ng-click="$close()">
         </span>
     </h1>
     <div class="uib-content">
         <div class="padding-10">
             <dl class="dl-horizontal">
                 <dt>货运单单号</dt>
-                <dd class="ng-binding">13213213</dd>
+                <dd class="ng-binding" data-ng-bind="bill.freightCode"></dd>
             </dl>
             <dl class="dl-horizontal">
                 <dt>入库库位</dt>
-                <dd class="ng-binding">13213213</dd>
+                <dd class="ng-binding" data-ng-bind="bill.inStorageCode"></dd>
             </dl>
             <dl class="dl-horizontal">
                 <dt>发货件数</dt>
-                <dd class="ng-binding">13213213</dd>
+                <dd class="ng-binding" data-ng-bind="bill.shippedAmount"></dd>
             </dl>
             <dl class="dl-horizontal">
                 <dt>实收件数</dt>
-                <dd class="ng-binding">13213213</dd>
+                <dd class="ng-binding" data-ng-bind="bill.amount"></dd>
             </dl>
             <dl class="dl-horizontal">
                 <dt>供应商</dt>
-                <dd class="ng-binding">13213213</dd>
+                <dd class="ng-binding" data-ng-bind="bill.supplierCode"></dd>
             </dl>
             <dl class="dl-horizontal">
                 <dt>备注</dt>
-                <dd class="ng-binding">13213213</dd>
+                <dd class="ng-binding" data-ng-bind="bill.memo"></dd>
             </dl>
         </div>
         <div class="padding-10">

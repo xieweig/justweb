@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService) {
+angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService, Common) {
     $scope.submitStatus = [
         { value: '', text: '已提交' },
         { value: '', text: '未提交' }
@@ -21,11 +21,11 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
         url: '/api/bill/purchase/findByConditions',
         params: $scope.params,
         kendoSetting: {
-            autoBind: false,
+            // autoBind: false,
             pageable: true,
             columns: [
                 {
-                    title: "操作", width: 160, locked: true,
+                    title: "操作", width: 220, locked: true,
                     command: [
                         { name: 't', text: "查看", click: openViewModal },
                         {
@@ -34,11 +34,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                             visible: function (dataItem) { return dataItem.submitState !== '已提交'; }
                         },
                         {
-                            name: 'e', text: "审核",
-                            click: function (e) {
-                                e.preventDefault();
-                                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-                            },
+                            name: 'audit', text: "审核",
+                            click: openAuditModal,
                             visible: function (dataItem) { return dataItem.auditState === '未审核'; }
                         }
                     ]
@@ -66,7 +63,62 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
     function openViewModal(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        ApiService.get('/api/bill/purchase/findByPurchaseBillCode?purchaseBillCode=' + dataItem.billCode).then(function (response) {
+        loadCargo(dataItem.billCode, function (purchaseBill) {
+            $uibModal.open({
+                templateUrl: 'app/bill/procurement/modals/look.html',
+                size: 'lg',
+                controller: 'ProcurementLookCtrl',
+                resolve: {
+                    params: {
+                        type: 'look',
+                        purchaseBill: purchaseBill
+                    }
+                }
+            });
+        });
+    };
+
+    // 打开审核界面
+    function openAuditModal(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        loadCargo(dataItem.billCode, function (purchaseBill) {
+            $uibModal.open({
+                templateUrl: 'app/bill/procurement/modals/look.html',
+                size: 'lg',
+                controller: 'ProcurementLookCtrl',
+                resolve: {
+                    params: {
+                        type: 'audit',
+                        purchaseBill: purchaseBill
+                    }
+                }
+            });
+        });
+    };
+
+    // 打开审核界面
+    function openEditModal(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        loadCargo(dataItem.billCode, function (purchaseBill) {
+            $uibModal.open({
+                templateUrl: 'app/bill/procurement/modals/edit.html',
+                size: 'lg',
+                controller: 'ProcurementEditCtrl',
+                resolve: {
+                    params: {
+                        type: 'edit',
+                        purchaseBill: purchaseBill
+                    }
+                }
+            });
+        });
+    };
+
+    // 加载单条详情
+    function loadCargo(billCode, cb) {
+        ApiService.get('/api/bill/purchase/findByPurchaseBillCode?purchaseBillCode=' + billCode).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
@@ -74,40 +126,15 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                 var cargoList = _.map(billDetails, function (item) {
                     return item.rawMaterial.cargo.cargoCode;
                 });
-                ApiService.post('http://192.168.21.191:15006/api/v1/baseInfo/cargo/findByCargoCodeList', cargoList, { hasHost: true }).then(function (cargoResponse) {
-                    if (cargoResponse.code !== '000') {
-                        swal('', cargoResponse.message, 'error');
-                    } else {
-                        var cargoList = cargoResponse.result.cargoList;
-                        var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
-                        _.each(billDetails, function (item) {
-                            item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
-                        });
-                        $uibModal.open({
-                            templateUrl: 'app/bill/procurement/modals/look.html',
-                            size: 'lg',
-                            controller: 'ProcurementLookCtrl',
-                            resolve: {
-                                purchaseBill: response.result.purchaseBill
-                            }
-                        });
-                    }
-                }, apiServiceError);
-            }
-        }, apiServiceError);
-    };
-    // 打开查看界面
-    function openEditModal(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        ApiService.get('/api/bill/purchase/findByPurchaseBillCode?purchaseBillCode=' + dataItem.billCode).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error');
-            } else {
-                $uibModal.open({
-                    templateUrl: 'app/bill/procurement/modals/look.html',
-                    size: 'lg',
-                    controller: 'ProcurementLookCtrl'
+                Common.getCargoByCodes(cargoList).then(function (cargoList) {
+                    var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
+                    _.each(billDetails, function (item) {
+                        item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                        if (!item.cargo) {
+                            item.cargo = {};
+                        }
+                    });
+                    cb(response.result.purchaseBill);
                 });
             }
         }, apiServiceError);

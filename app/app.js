@@ -220,4 +220,15 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             return [];
         }, apiServiceError);
     }
+    // 根据货物code集合 获取货物明细
+    this.getCargoByCodes = function (codes) {
+        return ApiService.post('http://192.168.21.191:15006/api/v1/baseInfo/cargo/findByCargoCodeList', codes, { hasHost: true }).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                var cargoList = response.result.cargoList;
+                return cargoList;
+            }
+        }, apiServiceError);
+    }
 });
