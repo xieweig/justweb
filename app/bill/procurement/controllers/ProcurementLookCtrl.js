@@ -1,14 +1,16 @@
 'use strict';
 
-angular.module('app').controller('ProcurementLookCtrl', function ($scope, $stateParams) {
+angular.module('app').controller('ProcurementLookCtrl', function ($scope, $stateParams, purchaseBill) {
     // 页面类型 查看or审核
     $scope.type = 'look';
+    console.log(purchaseBill);
 
     $scope.procurementGrid = {
         kendoSetting: {
+            dataSource: purchaseBill.billDetails,
             columns: [
-                { field: "xxxxxxxxxx", title: "货物名称", width: 120 },
-                { field: "xxxxxxxxxx", title: "货物编码", width: 120 },
+                { field: "cargo.cargoName", title: "货物名称", width: 120 },
+                { field: "cargo.cargoCode", title: "货物编码", width: 120 },
                 { field: "xxxxxxxxxx", title: "所属原料", width: 120 },
                 { field: "xxxxxxxxxx", title: "标准单位", width: 120 },
                 { field: "xxxxxxxxxx", title: "规格", width: 120 },
