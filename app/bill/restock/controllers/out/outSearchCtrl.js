@@ -29,7 +29,6 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
-            // editable: true,
             pageable: true,
             columns: [
                 {
@@ -89,21 +88,38 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
     function view(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.outView', {outId: dataItem.outCode})
+        // $state.go('app.bill.restock.outView', {outId: dataItem.outCode})
+        openModal('view')
     }
 
     // 修改
     function edit(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.outEdit', {outId: dataItem.outCode})
+        // $state.go('app.bill.restock.outEdit', {outId: dataItem.outCode})
+        openModal('edit')
     }
 
     // 审核
     function check(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.outCheck', {outId: dataItem.outCode})
+        // $state.go('app.bill.restock.outCheck', {outId: dataItem.outCode})
+        openModal('check')
+    }
+
+    function openModal(type) {
+        $scope.outModal = $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/outBillModal.html',
+            size: 'lg',
+            controller: 'outBillModalCtrl',
+            resolve: {
+                data: {
+                    number: '1',
+                    type: type
+                }
+            }
+        })
     }
 
     // 来源单号弹窗

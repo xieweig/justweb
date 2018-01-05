@@ -392,3 +392,14 @@ input[type="text"]:disabled {
     text-align: center;
     cursor: move;
 }
+
+@media (min-width: 768px) {
+
+    .modal-dl .dl-horizontal dt {
+        width: 70px!important;
+    }
+
+    .modal-dl .dl-horizontal dd {
+        margin-left: 80px!important;
+    }
+}

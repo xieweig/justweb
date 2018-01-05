@@ -99,6 +99,24 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
                 "pick": 10,
                 "rawMaterialId": 111,
                 "cargoType": "CONVENTION"
+            },
+            {
+                "createTime": "2017-12-12",
+                "updateTime": "2017-12-11 10:30:06",
+                "logicStatus": "USABLE",
+                "cargoCode": "cargoCode002",
+                "barCode": "hy12345678912",
+                "selfBarCode": "hy001",
+                "originalName": "2级咖啡豆",
+                "cargoName": "南山2级咖啡豆",
+                "effectiveTime": 160,
+                "measurementCode": "gg001",
+                "standardUnitCode": "dw001",
+                "memo": "-",
+                "number": 1000,
+                "pick": 1,
+                "rawMaterialId": 111,
+                "cargoType": "CONVENTION"
             }
         ];
         cb(result);
