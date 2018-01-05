@@ -1,0 +1,20 @@
+<div id="content">
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
+            <span class="widget-icon">
+                <i class="fa fa-table"></i>
+            </span>
+            <h2>{{ $state.current.data.title }}</h2>
+            <div class="fr">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="保存" ng-click="save()">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="提交审核" ng-click="saveAndSubmit()">
+                <input type="button" class="btn btn-primary fl" value="取消">
+            </div>
+        </header>
+        <div>
+            <div class="widget-body no-padding">
+                <div data-smart-include="app/bill/procurement/modals/editContent.html"></div>
+            </div>
+        </div>
+    </div>
+</div>

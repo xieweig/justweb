@@ -31,12 +31,12 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         {
                             name: 'e', text: "修改",
                             click: openEditModal,
-                            visible: function (dataItem) { return dataItem.submitState !== '已提交'; }
+                            visible: function (dataItem) { return dataItem.submitState !== 'SUBMITTED'; }
                         },
                         {
                             name: 'audit', text: "审核",
                             click: openAuditModal,
-                            visible: function (dataItem) { return dataItem.auditState === '未审核'; }
+                            visible: function (dataItem) { return dataItem.auditState === 'UN_REVIEWED'; }
                         }
                     ]
                 },
@@ -97,7 +97,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
         });
     };
 
-    // 打开审核界面
+    // 打开修改界面
     function openEditModal(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -133,6 +133,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         if (!item.cargo) {
                             item.cargo = {};
                         }
+                        item.cargoCode = generateMixed(10); //item.cargo.cargoCode;
                     });
                     cb(response.result.purchaseBill);
                 });

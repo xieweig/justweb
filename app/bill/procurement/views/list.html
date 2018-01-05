@@ -18,7 +18,7 @@
                             <div class="col-sm-4 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">录单人</span>
-                                    <input type="text" class="form-control" data-ng-model="params.xxx">
+                                    <input type="text" class="form-control" data-ng-model="params.operatorName">
                                 </div>
                             </div>
                             <div class="col-sm-8 col-xs-12 margin-bottom-10">
@@ -26,13 +26,13 @@
                                     <div class="flex-1">
                                         <div class="input-group">
                                             <span class="input-group-addon">录单时间</span>
-                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.createStartTime">
                                         </div>
                                     </div>
                                     <div class="flex-1">
                                         <div class="input-group">
                                             <span class="input-group-addon" style="border-left: 0;">至</span>
-                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.createEndTime">
                                         </div>
                                     </div>
                                 </div>
@@ -42,7 +42,7 @@
                             <div class="col-sm-4 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">入库单号</span>
-                                    <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                    <input type="text" class="form-control" data-ng-model="params.billCode">
                                 </div>
                             </div>
                             <div class="col-sm-8 col-xs-12 margin-bottom-10">
@@ -50,13 +50,13 @@
                                     <div class="flex-1">
                                         <div class="input-group">
                                             <span class="input-group-addon">入库时间</span>
-                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.inStartTime">
                                         </div>
                                     </div>
                                     <div class="flex-1">
                                         <div class="input-group">
                                             <span class="input-group-addon" style="border-left: 0;">至</span>
-                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.xxx">
+                                            <input type="text" class="form-control" data-datepicker data-ng-model="params.inEndTime">
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                             <div class="col-sm-6 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">供应商</span>
-                                    <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                    <input type="text" class="form-control" data-ng-model="params.supplierCode">
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             <div class="col-sm-4 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">提交状态</span>
-                                    <select data-multiple-select>
+                                    <select data-multiple-select data-ng-model="params.statusCode">
                                         <option ng-repeat="status in submitStatus" value="{{status.value}}">
                                             {{status.text}}
                                         </option>
