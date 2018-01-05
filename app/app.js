@@ -101,7 +101,7 @@ var app = angular.module('app', [
 
 app.factory('MainFactory', function () {
     return {
-        host: 'http://192.168.21.141:15006',
+        host: 'http://192.168.21.191:15009',
         downloadUrl: 'http://192.168.21.141:2222/report/',
         exportExcelHost: 'http://192.168.21.141:15005',
         system: 'baseInfo',
@@ -218,6 +218,17 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
                 swal('请求规格失败', response.message, 'error');
             }
             return [];
+        }, apiServiceError);
+    }
+    // 根据货物code集合 获取货物明细
+    this.getCargoByCodes = function (codes) {
+        return ApiService.post('http://192.168.21.191:15006/api/v1/baseInfo/cargo/findByCargoCodeList', codes, { hasHost: true }).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                var cargoList = response.result.cargoList;
+                return cargoList;
+            }
         }, apiServiceError);
     }
 });

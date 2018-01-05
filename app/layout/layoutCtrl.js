@@ -17,12 +17,12 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
     ];
 
     $rootScope.outType = [
-        { key: '1', value: '1', text: '正常库' },
-        { key: '2', value: '2', text: '仓储库' },
-        { key: '3', value: '3', text: '进货库' },
-        { key: '4', value: '4', text: '退货库' },
-        { key: '5', value: '5', text: '在途库' },
-        { key: '6', value: '6', text: '预留库' }
+        { key: 'NORMALLIBRARY', value: 'NORMALLIBRARY', text: '正常库' },
+        { key: 'STORAGELIBRARY', value: 'STORAGELIBRARY', text: '仓储库' },
+        { key: 'STOCKLIBRARY', value: 'STOCKLIBRARY', text: '进货库' },
+        { key: 'RETURNLIBRARY', value: 'RETURNLIBRARY', text: '退货库' },
+        { key: 'PASSAGELIBRARY', value: 'PASSAGELIBRARY', text: '在途库' },
+        { key: 'RESERVEDLIBRARY', value: 'RESERVEDLIBRARY', text: '预留库' }
     ];
 
 

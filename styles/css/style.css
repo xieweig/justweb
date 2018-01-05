@@ -367,6 +367,10 @@ input[type="text"]:disabled {
     width: 100% !important;
 }
 
+.k-grid-content-locked{
+    height: 100% !important;
+}
+
 .sortable {
     padding: 10px 0;
     padding-left: 20px;
