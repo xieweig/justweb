@@ -21,6 +21,21 @@ angular.module('app.bill.plan', ['ui.router']).config(function ($stateProvider) 
                 }
             }
         })
+        .state('app.bill.plan.edit', {
+            url: '/bill/plan/edit',
+            params: {
+                billCode: ''
+            },
+            data: {
+                title: '查询总部计划'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/plan/views/add.html',
+                    controller: 'PlanAddCtrl'
+                }
+            }
+        })
         .state('app.bill.plan.list', {
             url: '/bill/plan/list',
             data: {
@@ -30,18 +45,6 @@ angular.module('app.bill.plan', ['ui.router']).config(function ($stateProvider) 
                 "content@app": {
                     templateUrl: 'app/bill/plan/views/list.html',
                     controller: 'PlanListCtrl'
-                }
-            }
-        })
-        .state('app.bill.plan.look', {
-            url: '/bill/plan/look',
-            data: {
-                title: '查看总部计划'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/plan/views/look.html',
-                    controller: 'PlanLookCtrl'
                 }
             }
         })

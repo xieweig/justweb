@@ -226,8 +226,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                var cargoList = response.result.cargoList;
-                return cargoList;
+                return response.result.cargoList;
             }
         }, apiServiceError);
     }

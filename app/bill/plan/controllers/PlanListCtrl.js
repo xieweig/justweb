@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal) {
+angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $state, ApiService) {
 
     // 出库查询
     $scope.outStationParams = {
@@ -29,32 +29,64 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal) {
                 {
                     title: "操作", width: 220, locked: true,
                     command: [
-                        { name: 's', text: "修改", click: editPlan },
-                        { name: 's', text: "删除" },
-                        { name: 'e', text: "审核", visible: function (item) { return item.receivedStatus === 'IS_NOT_RECEIVED'; } },
-                        { name: 't', text: "查看", visible: function (item) { return item.receivedStatus === 'IS_NOT_RECEIVED'; } }
+                        { name: 'e', text: "修改", click: editPlan, visible: function (item) { return item.billSubmitState === 'UNCOMMITTED'; } },
+                        { name: 'd', text: "删除" },
+                        { name: 'a', text: "审核", click: auditPlan, visible: function (item) { return item.auditState === 'UN_REVIEWED'; } },
+                        // { name: 'a', text: "审核", click: auditPlan, visible: function (item) { return item.auditState === 'UN_REVIEWED' && item.auditState === 'SUBMITTED'; } },                        
+                        { name: 's', text: "查看", click: lookPlan }
                     ]
                 },
                 { field: "billCode", title: "计划编号", width: 120 },
                 { field: "billName", title: "计划名称", width: 120 },
                 { field: "billType", title: "计划类型", width: 120 },
                 { field: "", title: "完成度", width: 120 },
-                { field: "xxxxxx", title: "创建时间", width: 160 },
-                { field: "xxxxxx", title: "创建人", width: 120 },
-                { field: "xxxxxx", title: "提交状态", width: 120 },
-                { field: "xxxxxx", title: "审核状态", width: 120 },
-                { field: "xxxxxx", title: "审核人", width: 120 }
+                { field: "createTime", title: "创建时间", width: 160 },
+                { field: "operatorName", title: "创建人", width: 120 },
+                { field: "billSubmitState", title: "提交状态", width: 120 },
+                { field: "auditState", title: "审核状态", width: 120 },
+                { field: "auditorName", title: "审核人", width: 120 }
             ]
         }
     };
 
     // 修改计划 
     function editPlan(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $state.go('app.bill.plan.edit', { billCode: dataItem.billCode });
+    }
+
+    // 审核
+    function auditPlan(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         $uibModal.open({
             templateUrl: 'app/bill/plan/modals/look.html',
             size: 'lg',
-            controller: 'PlanAuditCtrl'
+            controller: 'PlanAuditCtrl',
+            resolve: {
+                params: {
+                    type: 'audit',
+                    billCode: dataItem.billCode
+                }
+            }
         });
     }
 
+    // 查看
+    function lookPlan(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $uibModal.open({
+            templateUrl: 'app/bill/plan/modals/look.html',
+            size: 'lg',
+            controller: 'PlanAuditCtrl',
+            resolve: {
+                params: {
+                    type: 'look',
+                    billCode: dataItem.billCode
+                }
+            }
+        });
+    }
 });
