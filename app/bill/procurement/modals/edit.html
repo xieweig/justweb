@@ -1,78 +1,14 @@
-
 <div class="uib-modal">
-        <h1 class="uib-modal-title">
-            <span data-ng-if="type==='add'">新增进货入库单</span>
-            <span data-ng-if="type==='edit'">修改进货入库单</span>
-            <span class="option">
-                <input type="button" class="btn btn-primary fl margin-right-5" value="保存" ng-click="save()">
-                <input type="button" class="btn btn-primary fl margin-right-5" value="提交审核" ng-click="saveAndSubmit()">
-                <input type="button" class="btn btn-primary fl" value="取消" data-ng-click="$close();">
-            </span>
-        </h1>
-        <div class="uib-content">
-            <div class="padding-10">
-                <div class="row">
-                    <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                        <div class="input-group">
-                            <span class="input-group-addon">货运单单号</span>
-                            <input type="text" class="form-control" data-ng-model="bill.freightCode">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                        <div class="input-group">
-                            <span class="input-group-addon">入库库位</span>
-                            <select id="inStorageCode" smart-select2 class="select2 width-full" data-ng-model="bill.inStorageCode">
-                                <option value="">请选择</option>
-                                <option data-ng-repeat="item in location" data-ng-value="item.value">{{item.text}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                        <div class="input-group">
-                            <span class="input-group-addon">发货件数</span>
-                            <input type="text" class="form-control" data-only-number data-ng-model="bill.shippedAmount">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                        <div class="input-group">
-                            <span class="input-group-addon">实收件数</span>
-                            <input type="text" class="form-control" data-ng-model="bill.amount">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                        <div class="input-group">
-                            <span class="input-group-addon">供应商</span>
-                            <input type="text" class="form-control" data-ng-model="bill.supplierCode">
-                            <div class="input-group-btn">
-                                <input class="btn btn-default" type="button" value="选择" data-station-tree data-select-modal="traceEdit.outStationParams">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-xs-12 margin-bottom-10">
-                        <div class="input-group">
-                            <span class="input-group-addon">备注</span>
-                            <textarea class="form-control" rows="2" data-ng-model="bill.memo"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr class="gray-line">
-            <div class="padding-10">
-                <div>
-                    <input type="button" class="btn btn-default" value="批量删除" data-ng-click="batchDelete()">
-                    <input type="button" class="btn btn-primary" value="添加" data-ng-click="openAddCargoModal()">
-                </div>
-                <div class="margin-top-10" data-kendo-grids data-options="procurementGrid"></div>
-            </div>
-        </div>
+    <h1 class="uib-modal-title">
+        <span data-ng-if="type==='add'">新增进货入库单</span>
+        <span data-ng-if="type==='edit'">修改进货入库单</span>
+        <span class="option">
+            <input type="button" class="btn btn-primary fl margin-right-5" value="保存" ng-click="save()">
+            <input type="button" class="btn btn-primary fl margin-right-5" value="提交审核" ng-click="saveAndSubmit()">
+            <input type="button" class="btn btn-primary fl" value="取消" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div data-smart-include="app/bill/procurement/modals/editContent.html"></div>
     </div>
+</div>
