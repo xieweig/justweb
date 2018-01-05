@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanViewModalCtrl', function ($scope, ApiService, data) {
+angular.module('app').controller('TransferViewModalCtrl', function ($scope, ApiService, data) {
     $scope.params = {};
 
     // 请求页面数据

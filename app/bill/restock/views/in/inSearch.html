@@ -2,8 +2,7 @@
     <div jarvis-widget data-widget-editbutton="false">
         <header class="custom-header">
             <h2>{{ $state.current.data.title }}</h2>
-            <!-- TODO:未完成-->
-            <input type="button" class="btn btn-default widget-header-btn" value="重置" data-ng-click="search()">
+            <input type="button" class="btn btn-default widget-header-btn" value="重置" data-ng-click="reset()">
             <input type="button" class="btn btn-default widget-header-btn" value="查询" data-ng-click="search()">
         </header>
 
@@ -49,12 +48,21 @@
                                     </div>
                                 </div>
 
-                                <!--单据属性-->
+                                <div class="col-lg-3 col-sm-6 col-xs-12 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">单据属性</span>
+                                        <select data-multiple-select>
+                                            <option ng-repeat="attr in billAttr" value="{{attr.value}}">
+                                                {{attr.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">入库站点</span>
-                                        <span data-station-tree data-select-modal="outStationParams"></span>
+                                        <span data-station-tree data-select-modal="inStationParams"></span>
                                     </div>
                                 </div>
 
@@ -65,8 +73,7 @@
                                     </div>
                                 </div>
 
-
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10  margin-top-5">
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">单据状态</span>
                                         <select smart-select2 class="width-full">
@@ -100,7 +107,7 @@
                                    data-ng-click="addData()">
                         </div>
                     </div>
-                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="returnCargoGrid"></div>
+                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="inStationBill"></div>
                 </div>
             </div>
         </div>
