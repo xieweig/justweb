@@ -1,73 +1,97 @@
 'use strict';
 
-angular.module('app').controller('inSearchCtrl', function ($scope) {
+angular.module('app').controller('inSearchCtrl', function ($scope, $state) {
     $scope.params = {};
     $scope.tmp = 0;
 
-    $scope.returnCargoGrid = {
+    $scope.billAttr = [
+        {value: '', text: '配送计划转'},
+        {value: '', text: '调剂计划转'},
+        {value: '', text: '退货计划转'},
+        {value: '', text: '无计划计划转'}
+    ];
+
+    $scope.inStationBill = {
         primaryId: 'code',
         kendoSetting: {
-            // selectable: 'multiple, row',
+            height: 300,
             autoBind: false,
             persistSelection: true,
             editable: true,
             pageable: true,
             columns: [
-                // {selectable: true},
                 {
-                    command: [{name: 's', text: "查看"}, {name: 'e', text: "修改"}, {name: 't', text: "审核"}],
-                    title: "操作",
-                    width: 153
+                    command: [{name: 'e', text: "调拨", click: transfer}, {name: 's', text: "查看", click: view}],
+                    title: "操作", locked: true, width: 110
                 },
-                {field: "billType", title: "单据属性", width: 80},
-                {field: "outStatus", title: "出库状态", width: 70},
-                {field: "inputStatus", title: "提交状态", width: 70},
-                {field: "checkStatus", title: "审核状态", width: 80},
-                {field: "fromCode", title: "来源单号", width: 150},
-                {field: "outCode", title: "出库单号", width: 100},
-                {field: "recordTime", title: "录单时间"},
-                {field: "outTime", title: "出库时间"}
+                {field: "fromBillCode", locked: true, title: "来源单号", width: 150},
+                {field: "inBillCode", locked: true, title: "入库单号", width: 150},
+                {field: "billStatue", title: "单据状态", width: 100},
+                {field: "billType", title: "单据属性", width: 100},
+                {field: "recordTime", title: "录单时间", width: 150},
+                {field: "inTime", title: "入库时间", width: 150},
+                {field: "creatorName", title: "入库人", width: 100},
+                {field: "outStation", title: "出库站点", width: 100},
+                {field: "inStation", title: "入库站点", width: 100},
+                {field: "inNumber", title: "入库数量", width: 100},
+                {field: "inVariety", title: "入库品种", width: 100},
+                {field: "totalPrice", title: "总进价", width: 100}
             ]
-        }
-    }
-    ;
-
-
-    $scope.outStationParams = {
-        // single: true,
-        callback: function (data) {
-            console.log(data);
         }
     };
 
-    $scope.addData = function () {
-        var dataSource = $scope.returnCargoGrid.kendoGrid.dataSource;
-        dataSource.add({
-            code: $scope.tmp,
-            billType: '退库计划转',
-            outStatus: '出库成功',
-            inputStatus: '已提交',
-            checkStatus: '审核不通过',
-            fromCode: 'htk001_stk001',
-            outCode: 'tkckd005',
-            recordTime: '2017-04-15',
-            outTime: '2017-04-27'
+    // 选择站点
+    $scope.inStationParams = {
+        callback: function (data) {
+            $scope.params.inStationCode = _.map(data, function (item) {
+                return item.stationCode;
+            });
+        }
+    };
+
+    $scope.outStationParams = {
+        callback: function (data) {
+            $scope.params.outStationCode = _.map(data, function (item) {
+                return item.stationCode;
+            });
+        }
+    };
+
+    // 查询
+    $scope.search = function () {
+        $scope.inStationBill.kendoGrid.dataSource.add({
+            "billStatue": "单据状态",
+            "billType": "单据属性",
+            "fromBillCode": "来源单号",
+            "inBillCode": "入库单号",
+            "recordTime": "录单时间",
+            "inTime": "入库时间",
+            "creatorName": "入库人",
+            "outStation": "出库站点",
+            "inStation": "入库站点",
+            "inNumber": "入库数量",
+            "inVariety": "入库品种",
+            "totalPrice": "总进价"
         })
-        $scope.tmp++;
     }
 
-    $scope.deleteData = function () {
-        var selectId = $scope.returnCargoGrid.kendoGrid.selectedKeyNames();
-        var dataSource = $scope.returnCargoGrid.kendoGrid.dataSource;
-        // console.log(dataSource._total)
-        for (var j in selectId) {
-            for (var i = 0; i < dataSource._total; i++) {
-                // console.log('id', i, typeof selectId[j], typeof dataSource.at(i).code);
-                if (dataSource.at(i).code.toString() === selectId[j]) {
-                    // console.log('find')
-                    dataSource.remove(dataSource.at(i));
-                }
-            }
-        }
+    // 重置
+    $scope.reset = function () {
+
     }
+
+    // 查看
+    function view(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $state.go('app.bill.restock.inView', {pickId: dataItem.inBillCode})
+    }
+
+    // 调拨
+    function transfer(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $state.go('app.bill.restock.inAction', {pickId: dataItem.inBillCode})
+    }
+
 });
