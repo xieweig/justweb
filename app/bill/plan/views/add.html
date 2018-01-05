@@ -1,10 +1,15 @@
 <div id="content">
-    <div jarvis-widget data-widget-color="darken" data-widget-editbutton="false">
-        <header>
+    <div jarvis-widget data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
             <span class="widget-icon">
                 <i class="fa fa-table"></i>
             </span>
             <h2>{{ $state.current.data.title }}</h2>
+            <div class="fr">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="提交审核" ng-click="saveAndSubmit()">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="保存" ng-click="save()">
+                <input type="button" class="btn btn-primary fl" value="取消">
+            </div>
         </header>
         <div>
             <div class="widget-body no-padding">
@@ -13,19 +18,13 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">计划名称</span>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">计划中心</span>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" data-ng-model="plan.billName">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group margin-bottom-10">
                                 <span class="input-group-addon">计划类型</span>
-                                <select smart-select2 class="width-full">
+                                <select smart-select2 class="width-full" data-ng-model="plan.billType">
                                     <option value="">请选择</option>
                                     <option data-ng-repeat="item in billType" data-ng-value="item.key">{{item.text}}</option>
                                 </select>
@@ -34,7 +33,7 @@
                     </div>
                     <div class="input-group margin-bottom-10 width-full">
                         <span class="input-group-addon" style="width: 100px;">备注</span>
-                        <textarea class="form-control" rows="3"></textarea>
+                        <textarea class="form-control" rows="3" data-ng-model="plan.memo"></textarea>
                     </div>
                 </div>
                 <div class="padding-10">

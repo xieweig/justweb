@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uibModal) {
+angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService) {
+    $scope.plan = {};
     $timeout(function () {
         var isTrigger = false;
         $('.nav-tabs a').click(function () {
@@ -78,16 +79,8 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
             resolve: {
                 cb: function () {
                     return function (data) {
-                        item.cargo = {
-                            cargoName: '货物',
-                            cargoCode: 'CODE001',
-                            barCode: '1564646465',
-                            selfBarCode: '1564646465',
-                            materialName: '咖啡豆',
-                            number: '100',
-                            measurementName: 'g/包',
-                            class: '分类'
-                        };
+                        console.log(data);
+                        item.cargo = data;
                     }
                 }
             }
@@ -146,5 +139,44 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
     // 清空站点
     $scope.clearStation = function (item, index) {
         item.stationGrid.kendoGrid.dataSource.data([]);
+    };
+
+    // 保存站点
+    $scope.save = function () {
+        var plan = _.cloneDeep($scope.plan);
+        if ($scope.materialMap.length === 0) {
+            plan.basicEnum = 'BY_CARGO';
+            plan.planBillDetailDTOS = _.map($scope.cargoMap, function (item) {
+                var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
+                    return {
+                        amount: stationItem.number,
+                        inStation: {
+                            stationCode: stationItem.inStationCode,
+                            stationName: stationItem.inStationName
+                        },
+                        outStation: {
+                            stationCode: stationItem.outStationCode,
+                            stationName: stationItem.outStationName
+                        }
+                    };
+                });
+                return {
+                    cargoCode: item.cargo.cargoCode,
+                    planBillStationDTOS: stations
+                };
+            });
+        } else {
+            plan.basicEnum = 'BY_MATERIAL';
+        }
+        console.log(plan);
+        ApiService.post('/api/bill/planBill/create', plan).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error')
+            } else {
+                swal('操作成功', '', 'success').then(function () {
+                    $state.go('app.bill.plan.list');
+                });
+            }
+        }, apiServiceError);
     };
 });

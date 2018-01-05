@@ -10,10 +10,10 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
     ];
 
     $rootScope.billType = [
-        { key: '1', value: '1', text: '配送计划' },
-        { key: '2', value: '2', text: '调剂计划' },
-        { key: '3', value: '3', text: '退库计划' },
-        { key: '4', value: '4', text: '退货计划' }
+        { key: 'DELIVERY', value: 'DELIVERY', text: '配送计划' },
+        { key: 'ADJUST', value: 'ADJUST', text: '调剂计划' },
+        { key: 'RESTOCK', value: 'RESTOCK', text: '退库计划' },
+        { key: 'RETURNED', value: 'RETURNED', text: '退货计划' }
     ];
 
     $rootScope.outType = [

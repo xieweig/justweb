@@ -2,13 +2,15 @@
 
 angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout, cb) {
     $scope.cargoConfigure = [{ text: '123' }];
+    $scope.search = function () {
+        $scope.cargoGrid.kendoGrid.dataSource.page(1);
+    };
     $scope.cargoGrid = {
-        primaryId: 'cargoCode',
+        url: 'http://192.168.21.191:15006/api/v1/baseInfo/cargo/findByBarCodeAndLikeCargoName',
         kendoSetting: {
-            height: 150,
-            editable: true,
+            pageable: true,
             columns: [
-                { selectable: true },
+                { command: [{ name: 'add', text: "选择", click: addCargo }], title: "操作", width: 85, locked: true },
                 { field: "cargoCode", title: "货物编码", width: 150 },
                 { field: "cargoName", title: "货物商品名称", width: 150 },
                 { field: "originalName", title: "货物内部名称", width: 150 },
@@ -25,8 +27,28 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
     };
 
     // 添加货物
-    $scope.addCargo = function () {
+    function addCargo(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        cb({
+            "createTime": dataItem.createTime,
+            "updateTime": dataItem.updateTime,
+            "logicStatus": dataItem.logicStatus,
+            "cargoId": dataItem.cargoId,
+            "cargoCode": dataItem.cargoCode,
+            "barCode": dataItem.barCode,
+            "selfBarCode": dataItem.selfBarCode,
+            "originalName": dataItem.originalName,
+            "cargoName": dataItem.cargoName,
+            "effectiveTime": dataItem.effectiveTime,
+            "measurementCode": dataItem.measurementCode,
+            "standardUnitCode": dataItem.standardUnitCode,
+            "memo": dataItem.memo,
+            "number": dataItem.number,
+            "rawMaterialId": dataItem.rawMaterialId,
+            "cargoType": dataItem.cargoType,
+            "rawMaterialName": dataItem.rawMaterialName
+        });
         $scope.$close();
-        cb({ cargoCode: '213' });
-    };
+    }
 });
