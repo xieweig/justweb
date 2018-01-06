@@ -48,9 +48,11 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $uibModal
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
                     {field: "standardUnit", title: "标准单位"},
-                    {field: "number", title: "规格"},
+                    // {field: "number", title: "规格"},
+                    {title: "规格", template: "#: cargo.number #/#: cargo.standardUnitCode #"},
                     {field: "pick", title: "实拣数量"},
-                    {field: "standardNum", title: "标准单位数量"}
+                    {field: "standardNum", title: "标准单位数量"},
+                    {field: "", title: "实调数量"}
                 ]
             }
         };
@@ -62,7 +64,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $uibModal
                     {field: "outStatus", title: "货物编码"},
                     {field: "inputStatus", title: "所属原料"},
                     {field: "standardUnit", title: "标准单位"},
-                    {field: "number", title: "规格"},
+                    // {field: "number", title: "规格"},
+                    {title: "规格", template: "#: cargo.number #/#: cargo.standardUnitCode #"},
                     {field: "pickNumber", title: "应拣数量"},
                     {field: "pick", title: "实拣数量"},
                     {field: "standardNum", title: "标准单位数量"}
@@ -84,7 +87,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $uibModal
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialId", title: "所属原料"},
                     {field: "standardUnit", title: "标准单位"},
-                    {field: "number", title: "规格"},
+                    // {field: "number", title: "规格"},
+                    {title: "规格", template: "#: cargo.number #/#: cargo.standardUnitCode #"},
                     {field: "pick", title: "实拣数量", editable: true},
                     {field: "standardNum", title: "标准单位数量"}
                 ],
@@ -118,7 +122,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $uibModal
                     {field: "outStatus", title: "货物编码"},
                     {field: "inputStatus", title: "所属原料"},
                     {field: "standardUnit", title: "标准单位"},
-                    {field: "number", title: "规格"},
+                    // {field: "number", title: "规格"},
+                    {title: "规格", template: "#: cargo.number #/#: cargo.standardUnitCode #"},
                     {field: "pickNumber", title: "应拣数量"},
                     {field: "pick", title: "实拣数量"},
                     {field: "standardNum", title: "标准单位数量"}
@@ -301,8 +306,13 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $uibModal
     }
 
     /**
-     审核退库出库单
+     * 审核退库出库单
      */
+
+    /**
+     * 查看退库入库单
+     */
+
 
 
 });

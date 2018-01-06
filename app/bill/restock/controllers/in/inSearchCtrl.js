@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('inSearchCtrl', function ($scope, $state) {
+angular.module('app').controller('inSearchCtrl', function ($scope, $state, $uibModal) {
     $scope.params = {};
     $scope.tmp = 0;
 
@@ -14,7 +14,7 @@ angular.module('app').controller('inSearchCtrl', function ($scope, $state) {
     $scope.inStationBill = {
         primaryId: 'code',
         kendoSetting: {
-            height: 300,
+            // height: 500,
             autoBind: false,
             persistSelection: true,
             editable: true,
@@ -84,14 +84,36 @@ angular.module('app').controller('inSearchCtrl', function ($scope, $state) {
     function view(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.inView', {pickId: dataItem.inBillCode})
+        // $state.go('app.bill.restock.inView', {pickId: dataItem.inBillCode})
+        $scope.outModal = $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/outBillModal.html',
+            size: 'lg',
+            controller: 'outBillModalCtrl',
+            resolve: {
+                data: {
+                    billCode: dataItem.inBillCode,
+                    type: 'inview'
+                }
+            }
+        })
     }
 
     // 调拨
     function transfer(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.inAction', {pickId: dataItem.inBillCode})
+        // $state.go('app.bill.restock.inAction', {pickId: dataItem.inBillCode})
+        $scope.addModal = $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/transferView.html',
+            size: 'lg',
+            controller: 'TransferViewModalCtrl',
+            resolve: {
+                data: {
+                    number: dataItem.outCode,
+                    type: 'transfer'
+                }
+            }
+        })
     }
 
 });

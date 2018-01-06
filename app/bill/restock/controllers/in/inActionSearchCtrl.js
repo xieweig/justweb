@@ -17,10 +17,12 @@ angular.module('app').controller('inActionSearchCtrl', function ($scope, $uibMod
                     title: "操作",
                     width: 153
                 },
-                {field: "fromCode", title: "来源单号", width: 150, template: function (data) {
+                {
+                    field: "fromCode", title: "来源单号", width: 150, template: function (data) {
                         return '<a href="#" class="transfer-btn-group">' + data.fromCode + '</a>'
-                    }},
-                {field: "outCode", title: "出库单号", width: 100},
+                    }
+                },
+                {field: "outCode", title: "调拨单号", width: 100},
                 {field: "billType", title: "单据属性", width: 80},
                 {field: "outStatus", title: "出库状态", width: 70},
                 {field: "inputStatus", title: "提交状态", width: 70},
@@ -65,8 +67,20 @@ angular.module('app').controller('inActionSearchCtrl', function ($scope, $uibMod
     }
 
     // 查看
-    function view() {
-
+    function view(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $scope.addModal = $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/transferView.html',
+            size: 'lg',
+            controller: 'TransferViewModalCtrl',
+            resolve: {
+                data: {
+                    number: dataItem.outCode,
+                    type: 'view'
+                }
+            }
+        })
     }
 
     // 来源单号
@@ -74,13 +88,14 @@ angular.module('app').controller('inActionSearchCtrl', function ($scope, $uibMod
         e.preventDefault();
         var dataItem = $scope.transferBill.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
         // $state.go('app.bill.restock.inView', {fromId: dataItem.fromCode})
-        $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/transferView.html',
+        $scope.outModal = $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/outBillModal.html',
             size: 'lg',
-            controller: 'TransferViewModalCtrl',
+            controller: 'outBillModalCtrl',
             resolve: {
                 data: {
-                    number: dataItem.fromCode
+                    billCode: dataItem.fromCode,
+                    type: 'inview'
                 }
             }
         })
