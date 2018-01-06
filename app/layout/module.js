@@ -22,6 +22,9 @@ angular.module('app.layout', ['ui.router']).config(function ($stateProvider, $ur
                 scopeStation: function (Common) {
                     return Common.getStation();
                     // return Common.getScopeStation();
+                },
+                store: function (Common) {
+                    return Common.getStore();
                 }
             }
         });

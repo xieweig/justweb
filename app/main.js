@@ -11,6 +11,10 @@ var REGULAR = {
 
 };
 
+var COMMON_URL = {
+    baseInfo: 'http://192.168.21.191:15006'
+};
+
 $(function () {
     // 造cookie
     // $.cookie('userCode', 'YGADMIN');
