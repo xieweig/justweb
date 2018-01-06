@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('ProcurementLookCtrl', function ($scope, $stateParams, params) {
+angular.module('app').controller('ProcurementLookCtrl', function ($scope, $stateParams, ApiService, $state, params) {
     // 页面类型 查看or审核
     $scope.type = params.type;
     $scope.bill = params.purchaseBill;
@@ -22,5 +22,30 @@ angular.module('app').controller('ProcurementLookCtrl', function ($scope, $state
                 { field: "differencePrice", title: "总价差值", width: 120 }
             ]
         }
+    };
+    // 通过
+    $scope.pass = function () {
+        ApiService.post('/api/bill/purchase/auditSuccess', { purchaseBillCode: params.purchaseBill.billCode, auditPersonCode: $.cookie('userCode') }).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                swal('操作成功', '', 'success').then(function () {
+                    $state.go('app.bill.procurement.list');
+                });
+            }
+        }, apiServiceError);
+    };
+
+    // 不通过
+    $scope.unPass = function () {
+        ApiService.post('/api/bill/purchase/auditFailure', { purchaseBillCode: params.purchaseBill.billCode, auditPersonCode: $.cookie('userCode') }).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                swal('操作成功', '', 'success').then(function () {
+                    $state.go('app.bill.procurement.list');
+                });
+            }
+        }, apiServiceError);
     };
 });

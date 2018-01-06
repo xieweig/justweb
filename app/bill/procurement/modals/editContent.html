@@ -12,7 +12,7 @@
             <div class="col-sm-4 col-xs-12 margin-bottom-10">
                 <div class="input-group">
                     <span class="input-group-addon">入库库位</span>
-                    <select id="inStorageCode" smart-select2 class="select2 width-full" data-ng-model="bill.inStorageCode">
+                    <select id="inStorageCode" smart-select2 class="select2 width-full" data-ng-model="bill.storage.storageCode">
                         <option value="">请选择</option>
                         <option data-ng-repeat="item in location" data-ng-value="item.value">{{item.text}}</option>
                     </select>
@@ -23,7 +23,7 @@
             <div class="col-sm-4 col-xs-12 margin-bottom-10">
                 <div class="input-group">
                     <span class="input-group-addon">发货件数</span>
-                    <input type="text" class="form-control" data-only-number data-ng-model="bill.shippedAmount">
+                    <input type="text" class="form-control" data-only-number data-ng-model="bill.shippedNumber">
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
             <div class="col-sm-4 col-xs-12 margin-bottom-10">
                 <div class="input-group">
                     <span class="input-group-addon">实收件数</span>
-                    <input type="text" class="form-control" data-ng-model="bill.amount">
+                    <input type="text" class="form-control" data-ng-model="bill.actualAmount">
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
             <div class="col-sm-4 col-xs-12 margin-bottom-10">
                 <div class="input-group">
                     <span class="input-group-addon">供应商</span>
-                    <input type="text" class="form-control" data-ng-model="bill.supplierCode">
+                    <input type="text" class="form-control" data-ng-model="bill.supplier.supplierCode">
                     <div class="input-group-btn">
                         <input class="btn btn-default" type="button" value="选择" data-station-tree data-select-modal="traceEdit.outStationParams">
                     </div>

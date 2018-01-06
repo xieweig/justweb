@@ -110,7 +110,9 @@ app.factory('MainFactory', function () {
             var headers = {
                 'Content-Type': dataType && dataType === 'text' ? 'application/x-www-form-urlencoded' : 'application/json;charset=UTF-8',
                 'Access-Control-Allow-Origin': '*',
-                "Access-Control-Allow-Credentials": "true"
+                "Access-Control-Allow-Credentials": "true",
+                'userCode': $.cookie('userCode'),
+                'stationCode': $.cookie('currentStationCode')
             };
             if (otherHeader) {
                 _.extend(headers, otherHeader);
