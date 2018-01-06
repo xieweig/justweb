@@ -9,7 +9,7 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
 
     // 条件查询的货物列表
     $scope.cargoList = {
-        url: 'http://192.168.21.191:15001/api/v1/baseInfo/cargo/findByCargoCode',
+        url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCargoCode',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
@@ -34,13 +34,13 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
         kendoSetting: {
             editable: true,
             columns: [
-                { title: "操作", locked: true, command: [{name: 'select', text: "删除", click:delCurCargo}], width: 80 },
+                { title: "操作", locked: true, command: [{ name: 'select', text: "删除", click: delCurCargo }], width: 80 },
                 { field: "cargoName", title: "货物名称", width: 120 },
                 { field: "cargoCode", title: "货物编码", width: 120 },
                 { field: "rawMaterialId", title: "所属原料", width: 120 },
                 { field: "standardUnitCode", title: "标准单位", width: 120 },
                 { field: "number", title: "规格", width: 120 },
-                { field: "cargoNumber", title: "货物数量", width: 120 , editable: true}
+                { field: "cargoNumber", title: "货物数量", width: 120, editable: true }
             ]
         }
     };
@@ -50,17 +50,17 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
         primaryId: 'code',
         kendoSetting: {
             columns: [
-                {field: "materialName", title: "原料名称"},
-                {field: "materialCode", title: "原料编码"},
-                {field: "pickNumber", title: "应拣数量"},
-                {field: "pick", title: "实拣数量"},
-                {field: "progress", title: "完成度"}
+                { field: "materialName", title: "原料名称" },
+                { field: "materialCode", title: "原料编码" },
+                { field: "pickNumber", title: "应拣数量" },
+                { field: "pick", title: "实拣数量" },
+                { field: "progress", title: "完成度" }
             ]
         }
     };
 
     // 同步已选中数据
-    $timeout(function (){
+    $timeout(function () {
         _.each(data.cl, function (item) {
             $scope.currentCargoList.kendoGrid.dataSource.add(item)
         })

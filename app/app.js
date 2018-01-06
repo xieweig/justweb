@@ -101,7 +101,7 @@ var app = angular.module('app', [
 
 app.factory('MainFactory', function () {
     return {
-        host: 'http://192.168.21.56:15009',
+        host: 'http://192.168.21.191:15009',
         downloadUrl: 'http://192.168.21.141:2222/report/',
         exportExcelHost: 'http://192.168.21.141:15005',
         system: 'baseInfo',
@@ -166,7 +166,7 @@ app.factory("ApiService", function ($http, $q, MainFactory) {
 app.service("Common", function ($http, $q, MainFactory, ApiService) {
     // 获取区域
     this.getLargeArea = function (largeAreaType) {
-        return ApiService.get('http://192.168.21.56:15006/api/v1/baseInfo/largeArea/findByLargeAreaTypeForApi?largeAreaType=' + largeAreaType, { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/largeArea/findByLargeAreaTypeForApi?largeAreaType=' + largeAreaType, { hasHost: true }).then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.largeAreaApiReturnDTOs, function (item) {
                     return { key: item.largeAreaId, value: item.largeAreaCode, text: item.largeAreaName };
@@ -179,7 +179,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     }
     // 城市
     this.getCity = function () {
-        return ApiService.get('http://192.168.21.56:15006/api/v1/baseInfo/city/findAllUsableForApi', { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/city/findAllUsableForApi', { hasHost: true }).then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.cityReturnDTOs, function (item) {
                     return { key: item.cityId, value: item.cityCode, text: item.cityName, regionId: item.regionId, regionCode: item.regionCode };
@@ -192,7 +192,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     }
     // 全部站点
     this.getStation = function (largeAreaType) {
-        return ApiService.get('http://192.168.21.56:15006/api/v1/baseInfo/station/findAllUsableForApi', { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/station/findAllUsableForApi', { hasHost: true }).then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.stationApiReturnDTOs, function (item) {
                     return { key: item.stationId, value: item.stationCode, text: item.stationName, cityId: item.cityId, cityCode: item.cityCode, cityStatus: item.cityLogicStatus, regionId: item.regionId, regionCode: item.regionCode, regionStatus: item.regionLogicStatus, siteType: item.siteType };
@@ -205,7 +205,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     }
     // 权限站点
     this.getScopeStation = function (largeAreaType) {
-        return ApiService.get('http://192.168.21.56:15006/oauth/api/oauth/user/findUserManagementScope?userCode=' + $.cookie("userCode"), { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.baseInfo + '/oauth/api/oauth/user/findUserManagementScope?userCode=' + $.cookie("userCode"), { hasHost: true }).then(function (response) {
             if (response.code === '000') {
                 if (response.result.scopeStations) {
                     // 老基础资料接口
@@ -222,7 +222,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     }
     // 根据货物code集合 获取货物明细
     this.getCargoByCodes = function (codes) {
-        return ApiService.post('http://192.168.21.191:15006/api/v1/baseInfo/cargo/findByCargoCodeList', codes, { hasHost: true }).then(function (response) {
+        return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCargoCodeList', codes, { hasHost: true }).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {

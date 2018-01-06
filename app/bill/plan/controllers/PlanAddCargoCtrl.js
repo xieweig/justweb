@@ -6,7 +6,7 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
         $scope.cargoGrid.kendoGrid.dataSource.page(1);
     };
     $scope.cargoGrid = {
-        url: 'http://192.168.21.191:15006/api/v1/baseInfo/cargo/findByBarCodeAndLikeCargoName',
+        url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByBarCodeAndLikeCargoName',
         kendoSetting: {
             pageable: true,
             columns: [
