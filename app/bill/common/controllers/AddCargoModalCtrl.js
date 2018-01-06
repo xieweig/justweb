@@ -7,7 +7,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
     };
     // 条件查询的货物列表
     $scope.cargoList = {
-        url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByBarCodeAndLikeCargoName',
+        url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCondition',
         params: $scope.params,
         primaryId: 'cargoCode',
         kendoSetting: {

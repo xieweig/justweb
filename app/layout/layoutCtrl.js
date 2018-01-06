@@ -1,13 +1,9 @@
 'use strict';
 
-angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station, scopeStation) {
-    $rootScope.location = [
-        { key: '1', value: '1', text: '进货库' },
-        { key: '1', value: '1', text: '仓储库' },
-        { key: '1', value: '1', text: '退货库' },
-        { key: '1', value: '1', text: '在途库' },
-        { key: '1', value: '1', text: '预留库' }
-    ];
+angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station, scopeStation, store) {
+    $rootScope.location = _.map(store, function (item) {
+        return { key: item.tempStorageId, value: item.tempStorageCode, text: item.tempStorageName };
+    });
 
     $rootScope.billType = [
         { key: 'DELIVERY', value: 'DELIVERY', text: '配送计划' },

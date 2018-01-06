@@ -230,4 +230,14 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             }
         }, apiServiceError);
     }
+    this.getStore = function () {
+        return ApiService.get('/api/bill/purchase/queryStorageByStationCode?stationCode=' + $.cookie('currentStationCode')).then(function (response) {
+            if (response.code === '000') {
+                return response.result.content;
+            } else {
+                swal('请求规格失败', response.message, 'error');
+            }
+            return [];
+        }, apiServiceError);
+    }
 });
