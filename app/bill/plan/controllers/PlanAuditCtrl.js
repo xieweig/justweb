@@ -1,7 +1,15 @@
 'use strict';
 
-angular.module('app').controller('PlanAuditCtrl', function ($scope) {
-    $scope.type = 'audit';
+angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, params) {
+    $scope.type = params.type;
+
+    ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + params.billCode).then(function (response) {
+        if (response.code !== '000') {
+            swal('', response.message, 'error');
+        } else {
+            $scope.plan = response.result.planBill;
+        }
+    });
 
     $scope.itemMap = [{
         unfurled: false,
@@ -52,5 +60,21 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope) {
     // 伸缩项
     $scope.scaling = function (index) {
         $scope.itemMap[index].unfurled = !$scope.itemMap[index].unfurled;
+    };
+
+    $scope.auditBill = function (pass) {
+        var url = '';
+        if (pass) {
+            url = '/api/bill/planBill/pass';
+        } else {
+            url = '/api/bill/planBill/unpass';
+        }
+        ApiService.post(url, { billCode: params.billCode }).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+
+            }
+        }, apiServiceError);
     };
 });

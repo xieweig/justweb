@@ -1,32 +1,86 @@
 'use strict';
 
-angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uibModal) {
+angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
+    $stateParams.billCode = '1515143576283';
+
+    if ($stateParams.billCode) {
+        ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                var planBill = response.result.planBill;
+                var cargoCodes = _.map(planBill.planBillDetails, function (billItem) {
+                    return billItem.goodsCode;
+                });
+                Common.getCargoByCodes(cargoCodes).then(function (cargoList) {
+                    var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
+                    _.each(planBill.planBillDetails, function (item) {
+                        item.cargo = cargoObject[item.goodsCode];
+                    });
+                    $scope.plan = {
+                        billName: planBill.billName,
+                        billCode: planBill.billCode,
+                        memo: planBill.memo
+                    };
+                    if (planBill.basicEnum === 'BY_CARGO') {
+                        $scope.cargoMap = _.map(planBill.planBillDetails, function (item) {
+                            return pushCargo(item);
+                        })
+
+                        $('#tabs-1').addClass('active');
+                        $('a[href="#tabs-1"]').parent().addClass('active');
+                    } else {
+                        $('#tabs-2').addClass('active');
+                        $('a[href="#tabs-2"]').parent().addClass('active');
+                    }
+                    $timeout(function () {
+                        $('#billType').val(planBill.billType).trigger('change');
+                    });
+                });
+            }
+        }, apiServiceError);
+    } else {
+        $scope.plan = {};
+        $('#tabs-1').addClass('active');
+        $('a[href="#tabs-1"]').parent().addClass('active');
+    }
+
     $timeout(function () {
-        var isTrigger = false;
         $('.nav-tabs a').click(function () {
             var $this = $(this);
-            if (!isTrigger) {
-                swal({
-                    title: '该操作将会清空原有的数据,确定继续?',
-                    showCancelButton: true,
-                    type: "warning"
-                }).then(function (result) {
-                    if (!result.value) {
-                        isTrigger = true;
-                        $this.parent().siblings().find('a').trigger('click');
-                    } else {
-                        var tabType = $this.attr('tabType');
-                        if (tabType === 'cargo') {
-                            $scope.materialMap = [];
-                        } else if (tabType === 'material') {
-                            $scope.cargoMap = [];
-                        }
+            swal({
+                title: '该操作将会清空原有的数据,确定继续?',
+                showCancelButton: true,
+                type: "warning"
+            }).then(function (result) {
+                var tabType = $this.attr('tabType'), showBlock = '';
+                if (!result.value) {
+                    showBlock = tabType;
+                    if (tabType === 'cargo') {
+                        showBlock = 'material';
+                    } else if (tabType === 'material') {
+                        showBlock = 'cargo';
                     }
-                });
-            } else {
-                // 程序只会触发一次
-                isTrigger = false;
-            }
+                } else {
+                    if (tabType === 'cargo') {
+                        $scope.materialMap = [];
+                    } else if (tabType === 'material') {
+                        $scope.cargoMap = [];
+                    }
+                    showBlock = tabType;
+                }
+                if (showBlock === 'cargo') {
+                    $('#tabs-1').addClass('active');
+                    $('a[href="#tabs-1"]').parent().addClass('active');
+                    $('#tabs-2').removeClass('active');
+                    $('a[href="#tabs-2"]').parent().removeClass('active');
+                } else {
+                    $('#tabs-2').addClass('active');
+                    $('a[href="#tabs-2"]').parent().addClass('active');
+                    $('#tabs-1').removeClass('active');
+                    $('a[href="#tabs-1"]').parent().removeClass('active');
+                }
+            });
         });
     });
 
@@ -39,15 +93,34 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
     $scope.cargoMap = [];
     $scope.materialMap = [];
     $scope.addItem = function (type) {
-        var item = {
+        if (type === 'material') {
+            $scope.materialMap.push(pushCargo());
+        } else {
+            $scope.cargoMap.push(pushCargo());
+        }
+    };
+
+    function pushCargo(item) {
+        var dataSource = [];
+        if (item) {
+            dataSource = _.map(item.resultPlanBillDetailDTOSet, function (stationItem) {
+                return {
+                    inStationCode: stationItem.inLocation.stationCode,
+                    inStationName: '入库站点',
+                    outStationCode: stationItem.outLocation.stationCode,
+                    outStationName: '出库站点',
+                    number: stationItem.amount
+                };
+            });
+        }
+        return {
             unfurled: true,
-            cargo: {},
+            cargo: item.cargo || {},
             stationGrid: {
-                primaryId: 'stationCode',
                 kendoSetting: {
-                    height: 150,
+                    height: 200,
                     editable: true,
-                    autoBind: false,
+                    dataSource: dataSource,
                     columns: [
                         { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 85, locked: true },
                         { field: "inStationName", title: "调出站点" },
@@ -56,13 +129,8 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
                     ]
                 }
             }
-        }
-        if (type === 'material') {
-            $scope.materialMap.push(item);
-        } else {
-            $scope.cargoMap.push(item);
-        }
-    };
+        };
+    }
 
     // 伸缩项
     $scope.scaling = function (item, index) {
@@ -78,16 +146,8 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
             resolve: {
                 cb: function () {
                     return function (data) {
-                        item.cargo = {
-                            cargoName: '货物',
-                            cargoCode: 'CODE001',
-                            barCode: '1564646465',
-                            selfBarCode: '1564646465',
-                            materialName: '咖啡豆',
-                            number: '100',
-                            measurementName: 'g/包',
-                            class: '分类'
-                        };
+                        console.log(data);
+                        item.cargo = data;
                     }
                 }
             }
@@ -147,4 +207,59 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $uib
     $scope.clearStation = function (item, index) {
         item.stationGrid.kendoGrid.dataSource.data([]);
     };
+
+    // 保存站点
+    $scope.save = function () {
+        var plan = _.cloneDeep($scope.plan);
+        sendHttpReques('save', plan);
+    };
+
+    // 审核站点
+    $scope.submit = function () {
+        var plan = _.cloneDeep($scope.plan);
+        sendHttpReques('submit', plan);
+    };
+
+    // 发送请求
+    function sendHttpReques(type, plan) {
+        var url = '';
+        if (type === 'save') {
+            url = '/api/bill/planBill/create';
+        } else {
+            url = '/api/bill/planBill/submit';
+        }
+        if ($scope.materialMap.length === 0) {
+            plan.basicEnum = 'BY_CARGO';
+            plan.planBillDetailDTOS = _.map($scope.cargoMap, function (item) {
+                var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
+                    return {
+                        amount: stationItem.number,
+                        inStation: {
+                            stationCode: stationItem.inStationCode,
+                            stationName: stationItem.inStationName
+                        },
+                        outStation: {
+                            stationCode: stationItem.outStationCode,
+                            stationName: stationItem.outStationName
+                        }
+                    };
+                });
+                return {
+                    cargoCode: item.cargo.cargoCode,
+                    planBillStationDTOS: stations
+                };
+            });
+        } else {
+            plan.basicEnum = 'BY_MATERIAL';
+        }
+        ApiService.post(url, plan).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error')
+            } else {
+                swal('操作成功', '', 'success').then(function () {
+                    $state.go('app.bill.plan.list');
+                });
+            }
+        }, apiServiceError);
+    }
 });

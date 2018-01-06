@@ -363,12 +363,14 @@ input[type="text"]:disabled {
     height: 44px !important;
 }
 
-.k-grid table{
-    width: 100% !important;
+.k-grid-content-locked{
+    /* height: -webkit-calc(100% - 60px) !important;
+    height: calc(100% - 60px) !important; */
+    height: 100%;
 }
 
-.k-grid-content-locked{
-    height: 100% !important;
+.k-grid table{
+    width: 100% !important;
 }
 
 .sortable {
