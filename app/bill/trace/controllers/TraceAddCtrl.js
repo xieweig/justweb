@@ -4,15 +4,20 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
     $scope.trace = {};
     $scope.isRead = params.isRead;
     initTraceEdit(params.isRead);
-    if (params.billCode) {
-        ApiService.get('/api/bill/waybill/findOneWayBill?id=' + params.billCode).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error');
-            } else {
-                // 初始化参数
-                $scope.trace = response.result.wayBill;
-            }
-        });
+    $scope.initPage = function () {
+        if (params.billCode) {
+            ApiService.get('/api/bill/waybill/findOneWayBill?id=' + params.billCode).then(function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    // 初始化参数
+                    $scope.trace = response.result.wayBill;
+                    $timeout(function () {
+                        $scope.detailsGrid.kendoGrid.dataSource.data($scope.trace.editWayBillDetailDTOList);
+                    });
+                }
+            });
+        }
     }
 
     /**
