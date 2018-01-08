@@ -9,38 +9,44 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
 
     // 条件查询的货物列表
     $scope.cargoList = {
-        url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCargoCode',
+        url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCondition',
         params: $scope.params,
+        primaryId: 'cargoCode',
         kendoSetting: {
             autoBind: false,
+            persistSelection: true,
+            pageable: true,
+            height: 300,
             columns: [
-                { selectable: true },
-                { field: "xxxxxxxxxx", title: "货物编码", width: 120 },
-                { field: "xxxxxxxxxx", title: "货物内部名称", width: 120 },
-                { field: "xxxxxxxxxx", title: "所属原料", width: 120 },
-                { field: "xxxxxxxxxx", title: "货物条码", width: 120 },
-                { field: "xxxxxxxxxx", title: "自定义条码", width: 120 },
-                { field: "xxxxxxxxxx", title: "保质期(天)", width: 120 },
-                { field: "xxxxxxxxxx", title: "规格", width: 120 },
-                { field: "xxxxxxxxxx", title: "最小标准单位", width: 120 },
-                { field: "xxxxxxxxxx", title: "建档时间", width: 120 },
-                { field: "xxxxxxxxxx", title: "备注", width: 200 }
+                {selectable: true},
+                {field: "cargoCode", title: "货物编码", width: 120},
+                {field: "originalName", title: "货物内部名称", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
+                {field: "barCode", title: "货物条码", width: 120},
+                {field: "selfBarCode", title: "自定义条码", width: 120},
+                {field: "effectiveTime", title: "保质期(天)", width: 120},
+                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
+                {field: "standardUnitCode", title: "最小标准单位", width: 120},
+                {field: "createTime", title: "建档时间", width: 120},
+                {field: "memo", title: "备注", width: 200}
             ]
         }
     };
 
     // 已选中货物列表
     $scope.currentCargoList = {
+        primaryId: 'cargoCode',
+        persistSelection: true,
         kendoSetting: {
             editable: true,
             columns: [
-                { title: "操作", locked: true, command: [{ name: 'select', text: "删除", click: delCurCargo }], width: 80 },
-                { field: "cargoName", title: "货物名称", width: 120 },
-                { field: "cargoCode", title: "货物编码", width: 120 },
-                { field: "rawMaterialId", title: "所属原料", width: 120 },
-                { field: "standardUnitCode", title: "标准单位", width: 120 },
-                { field: "number", title: "规格", width: 120 },
-                { field: "cargoNumber", title: "货物数量", width: 120, editable: true }
+                {title: "操作", locked: true, command: [{name: 'select', text: "删除", click: delCurCargo}], width: 80},
+                {field: "cargoName", title: "货物名称", width: 120},
+                {field: "cargoCode", title: "货物编码", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
+                {field: "standardUnitCode", title: "标准单位", width: 120},
+                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
+                {field: "cargoNumber", title: "货物数量", width: 120, editable: true}
             ]
         }
     };
@@ -50,55 +56,54 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         _.each(data.cl, function (item) {
             $scope.currentCargoList.kendoGrid.dataSource.add(item)
         })
-        $scope.params.materialName = data.m.materialName
-        $scope.params.materialNumber = data.m.materialNumber
-        $scope.params.rawMaterialId = data.m.rawMaterialId
-        $scope.params.progress = data.m.progress
+        if ($scope.show) {
+            $scope.params.materialName = data.m.materialName
+            $scope.params.materialNumber = data.m.materialNumber
+            $scope.params.rawMaterialId = data.m.rawMaterialId
+            $scope.params.progress = data.m.progress
+        }
     }, 100);
+
+    // 增加货物
+    $scope.addCargo = function () {
+        var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
+        var dataSource = $scope.cargoList.kendoGrid.dataSource;
+        var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
+        _.each(dataSource.data(), function (item, index) {
+            if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
+                // 添加货物预置为0
+                item.cargoNumber = 0;
+                currentDataSource.add(item);
+            }
+        });
+    };
 
     /**
      * 提交选中货物
      */
     $scope.submit = function () {
         var result = _.map($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
-            return { cargoCode: '123' };
+            return {
+                barCode: item.barCode,
+                cargoCode: item.cargoCode,
+                cargoId: item.cargoId,
+                cargoName: item.cargoName,
+                cargoType: item.cargoType,
+                createTime: item.createTime,
+                effectiveTime: item.effectiveTime,
+                logicStatus: item.logicStatus,
+                measurementCode: item.measurementCode,
+                memo: item.memo,
+                number: item.number,
+                originalName: item.originalName,
+                rawMaterialId: item.rawMaterialId,
+                rawMaterialName: item.rawMaterialName,
+                selfBarCode: item.selfBarCode,
+                standardUnitCode: item.standardUnitCode,
+                updateTime: item.updateTime,
+                cargoNumber: item.cargoNumber
+            };
         });
-        result = [
-            {
-                "createTime": "2017-12-11",
-                "updateTime": "2017-12-11 10:30:06",
-                "logicStatus": "USABLE",
-                "cargoCode": "cargoCode001",
-                "barCode": "hy1234567891",
-                "selfBarCode": "hy001",
-                "originalName": "1级咖啡豆",
-                "cargoName": "南山1级咖啡豆",
-                "effectiveTime": 160,
-                "measurementCode": "gg001",
-                "standardUnitCode": "dw001",
-                "memo": "-",
-                "number": 0,
-                "rawMaterialId": 111,
-                "cargoType": "CONVENTION"
-            },
-            {
-                "createTime": "2017-12-12",
-                "updateTime": "2017-12-11 10:30:06",
-                "logicStatus": "USABLE",
-                "cargoCode": "cargoCode002",
-                "barCode": "hy12345678912",
-                "selfBarCode": "hy001",
-                "originalName": "2级咖啡豆",
-                "cargoName": "南山2级咖啡豆",
-                "effectiveTime": 160,
-                "measurementCode": "gg001",
-                "standardUnitCode": "dw001",
-                "memo": "-",
-                "number": 0,
-                "rawMaterialId": 111,
-                "cargoType": "CONVENTION"
-            }
-        ];
         cb(result);
     };
 

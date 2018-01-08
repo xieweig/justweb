@@ -54,7 +54,7 @@ angular.module('app').controller('outViewCtrl', function ($scope, ApiService) {
                 {field: "standardNum", title: "标准单位数量"}
             ]
         }
-    }
+    };
 
     $scope.onlyCargoGrid = {
         primaryId: 'code',

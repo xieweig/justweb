@@ -13,7 +13,7 @@
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">计划编码</span>
-                                <input type="text" class="form-control" data-ng-model="params.planNumber">
+                                <input type="text" class="form-control" data-ng-model="params.billCode">
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
@@ -32,7 +32,7 @@
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">录单人</span>
-                                <input type="text" class="form-control" data-ng-model="params.recordPerson">
+                                <input type="text" class="form-control" data-ng-model="params.creatorName">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
@@ -41,14 +41,14 @@
                                     <div class="input-group">
                                         <span class="input-group-addon">录单时间</span>
                                         <input type="text" class="form-control" data-datepicker
-                                               data-ng-model="params.recordStartTime">
+                                               data-ng-model="params.createTime">
                                     </div>
                                 </div>
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-left: 0;">至</span>
                                         <input type="text" class="form-control" data-datepicker
-                                               data-ng-model="params.recordEndTime">
+                                               data-ng-model="params.createEndTime">
                                     </div>
                                 </div>
                             </div>

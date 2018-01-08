@@ -1,6 +1,11 @@
 'use strict';
 
 angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station, scopeStation, store) {
+
+    $rootScope.largeArea = largeArea;
+    $rootScope.city = city;
+    $rootScope.station = station;
+
     $rootScope.location = _.map(store, function (item) {
         return { key: item.tempStorageId, value: item.tempStorageCode, text: item.tempStorageName };
     });
@@ -9,7 +14,8 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         { key: 'DELIVERY', value: 'DELIVERY', text: '配送计划' },
         { key: 'ADJUST', value: 'ADJUST', text: '调剂计划' },
         { key: 'RESTOCK', value: 'RESTOCK', text: '退库计划' },
-        { key: 'RETURNED', value: 'RETURNED', text: '退货计划' }
+        { key: 'RETURNED', value: 'RETURNED', text: '退货计划' },
+        { key: 'NOPLAN', value: 'NOPLAN', text: '无计划' }
     ];
 
     $rootScope.outType = [

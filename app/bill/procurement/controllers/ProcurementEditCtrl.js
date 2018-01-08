@@ -42,6 +42,17 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         }
     };
 
+    $scope.supplierTreeOpt = {
+        type: 'supplier',
+        single: true,
+        callback: function (data) {
+            $scope.bill.supplier = {
+                supplierCode: data.supplierCode,
+                supplierName: data.supplierName
+            };
+        }
+    };
+
     // 批量删除
     $scope.batchDelete = function () {
         var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
@@ -103,7 +114,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         } else if (!bill.shippedAmount) {
             swal('请输入发货件数', '', 'warning');
             return
-        } else if (!bill.amount) {
+        } else if (!bill.actualAmount) {
             swal('请输入实收数量', '', 'warning');
             return
         } else if (!bill.supplierCode) {
@@ -130,8 +141,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         }
         bill.station = {
             stationCode: $.cookie('currentStationCode'),
-            stationName: $.cookie('currentStationName'),
-            stationType: $.cookie('STORE')
+            stationName: $.cookie('currentStationName')
         };
         bill.billDetails = _.map($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
             return {
@@ -152,12 +162,16 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 differencePrice: item.differencePrice
             };
         });
+        delete bill.supplierCode;
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.procurement.list');
+                swal('操作成功', '', 'success').then(function () {
+                    $state.go('app.bill.procurement.list');
+                });
             }
         }, apiServiceError);
     }
+
 });

@@ -2,7 +2,9 @@
 
 angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uibModal, ApiService) {
     $scope.params = {};
-    $scope.kendoQueryCondition = {};
+    $scope.kendoQueryCondition = {
+        operatorName: ''
+    };
 
     $scope.submitStatus = [
         {value: '', text: '已提交'},
@@ -24,12 +26,13 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
 
     $scope.outBillGrid = {
         primaryId: 'code',
-        url: '',
+        url: '/api/bill/restock/findByConditions',
         params: $scope.kendoQueryCondition,
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
             pageable: true,
+            height: 300,
             columns: [
                 {
                     command: [
@@ -56,13 +59,18 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
                         return '<a href="#" class="plan-btn-group">' + data.fromCode + '</a>'
                     }
                 },
-                {field: "outCode", locked: true, title: "出库单号", width: 150},
+                {field: "billCode", locked: true, title: "出库单号", width: 150},
                 {field: "billType", title: "单据属性", width: 150},
                 {field: "outStatus", title: "出库状态", width: 150},
                 {field: "inputStatus", title: "提交状态", width: 150},
                 {field: "checkStatus", title: "审核状态", width: 150},
                 {field: "recordTime", title: "录单时间", width: 150},
-                {field: "outTime", title: "出库时间", width: 150}
+                {field: "outTime", title: "出库时间", width: 150},
+                {field: "outTime", title: "录单人", width: 150},
+                {field: "outTime", title: "审核人", width: 150},
+                {field: "totalAmount", title: "配送数量", width: 150},
+                {field: "typeAmount", title: "配送品种数", width: 150}
+
             ]
         }
     };
@@ -89,7 +97,7 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         // $state.go('app.bill.restock.outView', {outId: dataItem.outCode})
-        openModal('view')
+        openModal('view', dataItem)
     }
 
     // 修改
@@ -97,7 +105,7 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         // $state.go('app.bill.restock.outEdit', {outId: dataItem.outCode})
-        openModal('edit')
+        openModal('edit', dataItem)
     }
 
     // 审核
@@ -105,17 +113,17 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         // $state.go('app.bill.restock.outCheck', {outId: dataItem.outCode})
-        openModal('check')
+        openModal('check', dataItem)
     }
 
-    function openModal(type) {
+    function openModal(type, data) {
         $scope.outModal = $uibModal.open({
             templateUrl: 'app/bill/restock/modals/outBillModal.html',
             size: 'lg',
             controller: 'outBillModalCtrl',
             resolve: {
                 data: {
-                    number: '1',
+                    billCode: data.billCode,
                     type: type
                 }
             }
@@ -147,26 +155,27 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
 
     // 查询
     $scope.search = function () {
+        $scope.outBillGrid.kendoGrid.dataSource.page(1);
         // console.log($scope.kendoQueryCondition)
-        ApiService.get('http://127.0.0.1:5000/api/bill/restock/out/search', {hasHost: true}).then(function (response) {
-            if (response.code === '000') {
-                _.each(response.result.content, function (item) {
-                    var dataSource = $scope.outBillGrid.kendoGrid.dataSource;
-                    dataSource.add({
-                        billType: item.billType,
-                        outStatus: item.outStatus,
-                        inputStatus: item.inputStatus,
-                        checkStatus: item.checkStatus,
-                        fromCode: item.fromCode,
-                        outCode: item.outCode,
-                        recordTime: item.recordTime,
-                        outTime: item.outTime
-                    })
-                })
-
-            } else {
-                swal('请求失败', response.message, 'error');
-            }
-        }, apiServiceError)
+        // ApiService.get('http://127.0.0.1:5000/api/bill/restock/out/search', {hasHost: true}).then(function (response) {
+        //     if (response.code === '000') {
+        //         _.each(response.result.content, function (item) {
+        //             var dataSource = $scope.outBillGrid.kendoGrid.dataSource;
+        //             dataSource.add({
+        //                 billType: item.billType,
+        //                 outStatus: item.outStatus,
+        //                 inputStatus: item.inputStatus,
+        //                 checkStatus: item.checkStatus,
+        //                 fromCode: item.fromCode,
+        //                 outCode: item.outCode,
+        //                 recordTime: item.recordTime,
+        //                 outTime: item.outTime
+        //             })
+        //         })
+        //
+        //     } else {
+        //         swal('请求失败', response.message, 'error');
+        //     }
+        // }, apiServiceError)
     }
 });

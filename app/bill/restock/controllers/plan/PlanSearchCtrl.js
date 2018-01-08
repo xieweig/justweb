@@ -12,7 +12,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
     // 初始化计划列表
     $scope.stationGrid = {
         primaryId: 'billCode',
-        url: 'http://localhost:5000/api/bill/restock/findPlanByCondition',
+        url: '/api/bill/planBill/findPlanBillByConditions',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
@@ -31,16 +31,16 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
                     }
                 },
                 {
-                    field: "stationPlanNum", title: "站点计划号", template: function (data) {
-                        return '<a href="#" class="plan-btn-group">' + data.stationPlanCode + '</a>';
+                    field: "billCode", title: "站点计划号", template: function (data) {
+                        return '<a href="#" class="plan-btn-group">' + data.billCode + '</a>';
                     }
                 },
                 {field: "createTime", title: "录单时间", width: 90},
-                {field: "creatorName", title: "录单人", width: 60},
-                {field: "outStation", title: "出库站点"},
-                {field: "inStation", title: "调入站点"},
-                {field: "amount", title: "数量", width: 60},
-                {field: "species", title: "规格品种"},
+                {field: "operatorCode", title: "录单人", width: 60}, // 需要改为名称
+                {field: "outStationCode", title: "出库站点"}, // 需要改为名称
+                {field: "inStationCode", title: "调入站点"}, // 需要改为名称
+                {field: "totalAmount", title: "数量", width: 60},
+                {field: "typeAmount", title: "规格品种"},
                 {field: "memo", title: "备注"}
             ]
         }
@@ -70,7 +70,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         console.log(dataItem);
-        $state.go('app.bill.restock.stationPick', {pickId: dataItem.stationPlanCode})
+        $state.go('app.bill.restock.stationPick', {pickId: dataItem.billCode})
     }
 
     // 站点计划号跳转
@@ -84,7 +84,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
             controller: 'PlanViewModalCtrl',
             resolve: {
                 data: {
-                    billCode: '单号'
+                    billCode: dataItem.billCode
                 }
             }
         })
@@ -94,7 +94,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
     grid.on('click', '.rate-btn-group', function (e) {
         e.preventDefault();
         var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.outView', {planId: dataItem.stationPlanCode})
+        $state.go('app.bill.restock.outView', {planId: dataItem.receiveCode})
     });
 
     // 重置表格

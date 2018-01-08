@@ -4,7 +4,7 @@
             <h2>{{ $state.current.data.title }}</h2>
             <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="reset()">
             <input type="button" class="btn btn-default btn-header" value="提交出库单" data-ng-click="submit()">
-            <input type="button" class="btn btn-default btn-header" value="保存" data-ng-click="search()">
+            <input type="button" class="btn btn-default btn-header" value="保存" data-ng-click="save()">
         </header>
 
         <div>
@@ -22,7 +22,7 @@
                                             <span class="input-group-addon">出库库位</span>
                                             <select smart-select2 id="select-out" class="width-full"
                                                     data-ng-model="params.outStationType">
-                                                <option value="1">正常库</option>
+                                                <!--<option value="1">正常库</option>-->
                                                 <option data-ng-repeat="item in outType" data-ng-value="item.key">
                                                     {{item.text}}
                                                 </option>
@@ -33,8 +33,8 @@
                                 <div class="col-lg-12 col-sm-12 col-xs-12 margin-bottom-10">
                                     <div class="col-lg-3 col-sm-4 col-xs-12">
                                         <div class="input-group">
-                                            <span class="input-group-addon">出库站点</span>
-                                            <span data-station-tree data-select-modal="outStationParams"></span>
+                                            <span class="input-group-addon">调入站点</span>
+                                            <span data-station-tree data-select-modal="inStationParams"></span>
                                         </div>
                                     </div>
                                 </div>

@@ -12,24 +12,30 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
         {key: '6', value: '6', text: '预留库'}
     ];
 
-    $scope.change = function () {};
-    // 获取计划单信息
-    ApiService.get('http://localhost:5000/api/bill/restock/findPlanOne?id=' + $stateParams.pickId, {hasHost: true}).then(function (response) {
-        if (response.code === '000') {
-            var res = response.result.content[0];
-            $scope.params.billCode = res.billCode;
-            $scope.params.memo = res.remarks;
-            $scope.params.recordTime = res.recordTime;
-            $scope.params.outStationName = res.outStationName;
-            $scope.params.inStationName = res.inStationName;
-            $scope.params.type = res.type;
+    $scope.change = function () {
+    };
 
-            if (res.type === 'material') {
-                // 按原料拣货，不要要考虑货物
+    // 获取计划单信息
+    ApiService.post('/api/bill/planBill/findByBillCode?billCode=' + $stateParams.pickId).then(function (response) {
+        if (response.code === '000') {
+            var res = response.result.planBill;
+            // 判断按什么拣货
+            $scope.params.basicEnum = res.basicEnum;
+            $scope.params.billCode = res.billCode;
+            $scope.params.memo = res.memo;
+            $scope.params.createTime = res.createTime;
+            $scope.params.outStationCode = res.outStationCode;
+            $scope.params.inStationCode = res.inStationCode;
+
+            if (res.basicEnum === 'BY_MATERIAL') {
+                // 按原料拣货
                 $timeout(function () {
                     $('#tabs').children('li:eq(1)').children('a').click();
-                    _.each(res.materialList, function (item) {
-                        $scope.addItem(item)
+                    _.each(res.childPlanBillDetails, function (item) {
+                        $scope.addItem({
+                            rawMaterialId: item.goodsCode,
+                            pickNumber: item.amount
+                        })
                     })
                 }, 1)
             } else {
@@ -45,7 +51,7 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                             pickNumber: res.cargoList[i].pickNumber
                         })
                     }
-                }, 1)
+                }, 1);
 
                 // TODO: 按货物拣货->按原料 提示
                 $scope.change = function (e) {
@@ -193,7 +199,7 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
     $scope.submit = function () {
 
     };
-    
+
     $scope.reset = function () {
         _.each($scope.itemMap, function (item) {
             item.cargoGrid.kendoGrid.dataSource.data([])

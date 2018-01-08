@@ -5,20 +5,19 @@ angular.module('app').controller('PlanViewModalCtrl', function ($scope, ApiServi
      查看站点退库计划弹窗
      */
     $scope.params = {};
-
     // 请求单条计划详情
-    ApiService.get('http://localhost:5000/api/bill/restock/findPlanOne?id=' + data.billCode, {hasHost: true}).then(function (response) {
+    ApiService.post('/api/bill/planBill/findByBillCode?billCode=' + data.billCode ).then(function (response) {
         if (response.code === '000') {
-            var res = response.result.content[0];
+            var res = response.result.planBill;
             $scope.params.billCode = res.billCode;
-            $scope.params.remarks = res.memo;
+            $scope.params.memo = res.memo;
             $scope.params.recordTime = res.createTime;
-            $scope.params.outStationName = res.outStation;
-            $scope.params.inStationName = res.inStation;
+            $scope.params.outStationName = res.outStationCode;
+            $scope.params.inStationName = res.inStationCode;
 
-            var billDetails = response.result.content[0].BillDetails;
+            var billDetails = response.result.planBill.childPlanBillDetails;
             var cargoList = _.map(billDetails, function (item) {
-                return item.货物编码
+                return item.goodsCode
             });
             Common.getCargoByCodes(cargoList).then(function (cargoList) {
                 // cargoList: 货物详细信息
@@ -26,7 +25,7 @@ angular.module('app').controller('PlanViewModalCtrl', function ($scope, ApiServi
                     return item.cargoCode
                 }), cargoList);
                 _.each(billDetails, function (item) {
-                    item.cargo = cargoObject[item.货物编码];
+                    item.cargo = cargoObject[item.goodsCode];
                     if (!item.cargo) {
                         item.cargo = {};
                     } else {
@@ -36,7 +35,7 @@ angular.module('app').controller('PlanViewModalCtrl', function ($scope, ApiServi
                             rawMaterialName: item.cargo.rawMaterialName,
                             number: item.cargo.number,
                             standardUnitCode: item.cargo.standardUnitCode,
-                            amount: item.cargo.amount
+                            amount: item.cargo.amount // amount是请求的数据来的
                         })
                     }
                 });

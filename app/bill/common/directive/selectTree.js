@@ -42,7 +42,7 @@ angular.module('app').directive('selectTree', function ($uibModal) {
                                 return item.groupName || item.name;
                             }).join();
                         } else {
-                            text = options.modal.groupName || options.modal.name;
+                            text = options.modal.groupName || options.modal.name || options.modal.supplierName;
                         }
                         elm.html(text);
                     }
@@ -50,10 +50,26 @@ angular.module('app').directive('selectTree', function ($uibModal) {
                         selectModal.callback(options.modal);
                     }
                 };
+                var controllerName = '';
+                var templateName = '';
+                switch (selectModal.type) {
+                    case 'material':
+                        controllerName = 'MaterialTreeCtrl';
+                        templateName = 'materialTree.html';
+                        break;
+                    case 'product':
+                        controllerName = 'ProductTreeCtrl';
+                        templateName = 'productTree.html';
+                        break;
+                    case 'supplier':
+                        controllerName = 'SupplierTreeCtrl';
+                        templateName = 'supplierTree.html';
+                        break;
+                };
                 $uibModal.open({
-                    templateUrl: 'app/baseInfo/common/modals/' + (selectModal.type === 'material' ? 'materialTree' : 'productTree') + '.html',
+                    templateUrl: 'app/bill/common/modals/' + templateName,
                     size: 'md',
-                    controller: (selectModal.type === 'material' ? 'MaterialTreeCtrl' : 'ProductTreeCtrl'),
+                    controller: controllerName,
                     resolve: {
                         options: options,
                         hasChildren: selectModal.hasChildren === true
