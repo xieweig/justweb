@@ -7,6 +7,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
     ];
     $scope.auditStatus = [
         { value: 'UN_REVIEWED', text: '未审核' },
+        { value: 'AUDIT_ING', text: '审核中' },
         { value: 'AUDIT_SUCCESS', text: '审核通过' },
         { value: 'AUDIT_FAILURE', text: '审核不通过' }
     ];
@@ -52,8 +53,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                 { field: "inTotalPrice", title: "进货实洋", width: 120 },
                 { field: "differencePrice", title: "总价值差", width: 120 },
                 { field: "supplierCode", title: "供应商", width: 120 },
-                { field: "auditState", title: "提交状态", width: 120 },
-                { field: "submitState", title: "审核状态", width: 120 },
+                { title: "提交状态", width: 120, template: function (data) { return getTextByVal($scope.auditStatus, data.auditState); } },
+                { title: "审核状态", width: 120, template: function (data) { return getTextByVal($scope.submitStatus, data.submitState); } },
                 { field: "memo", title: "备注", width: 120 }
             ]
         }
