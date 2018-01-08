@@ -110,7 +110,9 @@ app.factory('MainFactory', function () {
             var headers = {
                 'Content-Type': dataType && dataType === 'text' ? 'application/x-www-form-urlencoded' : 'application/json;charset=UTF-8',
                 'Access-Control-Allow-Origin': '*',
-                "Access-Control-Allow-Credentials": "true"
+                "Access-Control-Allow-Credentials": "true",
+                'userCode': $.cookie('userCode'),
+                'stationCode': $.cookie('currentStationCode')
             };
             if (otherHeader) {
                 _.extend(headers, otherHeader);
@@ -230,8 +232,12 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             }
         }, apiServiceError);
     }
-    this.getStore = function () {
-        return ApiService.get('/api/bill/purchase/queryStorageByStationCode?stationCode=' + $.cookie('currentStationCode')).then(function (response) {
+    // 根据站点code获取库位信息
+    this.getStore = function (stationCode) {
+        if (!stationCode) {
+            stationCode = $.cookie('currentStationCode');
+        }
+        return ApiService.get('/api/bill/purchase/queryStorageByStationCode?stationCode=' + stationCode).then(function (response) {
             if (response.code === '000') {
                 return response.result.content;
             } else {
