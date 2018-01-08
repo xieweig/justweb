@@ -134,8 +134,8 @@
         </div>
     </div>
     <hr class="gray-line">
-    <div class="input-group" data-ng-show="type==='audit'">
+    <div class="input-group">
         <span class="input-group-addon">审核意见</span>
-        <textarea type="text" rows="3" class="form-control custom-scroll" data-ng-model="auditMemo"></textarea>
+        <textarea type="text" rows="3" class="form-control custom-scroll" data-ng-disabled="type!=='audit'" data-ng-model="plan.auditMemo"></textarea>
     </div>
 </div>

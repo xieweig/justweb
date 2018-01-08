@@ -4,9 +4,9 @@ angular.module('app').controller('PlanAddMaterialCtrl', function ($scope, $timeo
 
     $scope.materialGrid = {
         primaryId: 'cargoCode',
+        url: COMMON_URL.baseInfo + '/api/v1/baseInfo/rawMaterial/findByConditionForApi',
         kendoSetting: {
-            height: 150,
-            editable: true,
+            pageable: true,
             columns: [
                 { selectable: true },
                 { field: "cargoCode", title: "货物编码", width: 150 },

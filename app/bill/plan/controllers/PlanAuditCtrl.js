@@ -35,7 +35,6 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
     // 添加原料
     $scope.itemMap = [];
     function pushCargo(isCargo, item) {
-        console.log(item);
         var result = {
             unfurled: false,
             stationGrid: {
@@ -57,7 +56,6 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
         $scope.itemMap.push(result);
     }
 
-    $scope.auditMemo = '123';
     // 伸缩项
     $scope.scaling = function (index) {
         $scope.itemMap[index].unfurled = !$scope.itemMap[index].unfurled;
