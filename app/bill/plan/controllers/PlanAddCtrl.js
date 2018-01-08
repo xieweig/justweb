@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
-    $stateParams.billCode = '1515143576283';
+    // $stateParams.billCode = '1515143576283';
 
     if ($stateParams.billCode) {
         ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
@@ -115,7 +115,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         }
         return {
             unfurled: true,
-            cargo: item.cargo || {},
+            cargo: item && item.cargo ? item.cargo : {},
             stationGrid: {
                 kendoSetting: {
                     height: 200,

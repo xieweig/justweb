@@ -1,16 +1,6 @@
 'use strict';
 
 angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService, Common) {
-    $scope.submitStatus = [
-        { value: 'SUBMITTED', text: '已提交' },
-        { value: 'UNCOMMITTED', text: '未提交' }
-    ];
-    $scope.auditStatus = [
-        { value: 'UN_REVIEWED', text: '未审核' },
-        { value: 'AUDIT_ING', text: '审核中' },
-        { value: 'AUDIT_SUCCESS', text: '审核通过' },
-        { value: 'AUDIT_FAILURE', text: '审核不通过' }
-    ];
 
 
     // 表格参数及搜索

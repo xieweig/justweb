@@ -26,6 +26,17 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         { key: 'RESERVEDLIBRARY', value: 'RESERVEDLIBRARY', text: '预留库' }
     ];
 
+    $rootScope.submitStatus = [
+        { value: 'SUBMITTED', text: '已提交' },
+        { value: 'UNCOMMITTED', text: '未提交' }
+    ];
+    $rootScope.auditStatus = [
+        { value: 'UN_REVIEWED', text: '未审核' },
+        { value: 'AUDIT_ING', text: '审核中' },
+        { value: 'AUDIT_SUCCESS', text: '审核通过' },
+        { value: 'AUDIT_FAILURE', text: '审核不通过' }
+    ];
+
 
     var stationTypeMap = { station: {}, scopeStation: {} };
     // 拼接站点树结构

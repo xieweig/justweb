@@ -31,8 +31,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                     command: [
                         { name: 'e', text: "修改", click: editPlan, visible: function (item) { return item.billSubmitState === 'UNCOMMITTED'; } },
                         { name: 'd', text: "删除" },
-                        { name: 'a', text: "审核", click: auditPlan, visible: function (item) { return item.auditState === 'UN_REVIEWED'; } },
-                        // { name: 'a', text: "审核", click: auditPlan, visible: function (item) { return item.auditState === 'UN_REVIEWED' && item.auditState === 'SUBMITTED'; } },                        
+                        { name: 'a', text: "审核", click: auditPlan, visible: function (item) { return item.auditState === 'UN_REVIEWED' && item.billSubmitState === 'SUBMITTED'; } },
                         { name: 's', text: "查看", click: lookPlan }
                     ]
                 },
@@ -44,6 +43,9 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                 { field: "operatorName", title: "创建人", width: 120 },
                 { field: "billSubmitState", title: "提交状态", width: 120 },
                 { field: "auditState", title: "审核状态", width: 120 },
+
+                { title: "提交状态", width: 120, template: function (data) { return getTextByVal($scope.submitStatus, data.billSubmitState); } },
+                { title: "审核状态", width: 120, template: function (data) { return getTextByVal($scope.auditStatus, data.auditState); } },
                 { field: "auditorName", title: "审核人", width: 120 }
             ]
         }
