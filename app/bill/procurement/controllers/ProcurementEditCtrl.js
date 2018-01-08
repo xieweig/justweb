@@ -42,6 +42,16 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         }
     };
 
+    $scope.supplierTreeOpt = {
+        type: 'supplier',
+        single: true,
+        initTip: '123123',
+        callback: function (data) {
+            $scope.currentGroup.parentGroupName = data.groupName;
+            $scope.currentGroup.parentGroupId = data.id;
+        }
+    };
+
     // 批量删除
     $scope.batchDelete = function () {
         var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();

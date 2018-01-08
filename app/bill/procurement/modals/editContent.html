@@ -39,10 +39,8 @@
             <div class="col-sm-4 col-xs-12 margin-bottom-10">
                 <div class="input-group">
                     <span class="input-group-addon">供应商</span>
-                    <input type="text" class="form-control" data-ng-model="bill.supplier.supplierCode">
-                    <div class="input-group-btn">
-                        <input class="btn btn-default" type="button" value="选择" data-station-tree data-select-modal="traceEdit.outStationParams">
-                    </div>
+                    <!-- <input type="text" class="form-control" data-ng-model="bill.supplier.supplierCode"> -->
+                    <span data-select-tree data-select-modal="supplierTreeOpt"></span>
                 </div>
             </div>
         </div>
