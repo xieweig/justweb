@@ -42,7 +42,7 @@ angular.module('app').directive('selectTree', function ($uibModal) {
                                 return item.groupName || item.name;
                             }).join();
                         } else {
-                            text = options.modal.groupName || options.modal.name;
+                            text = options.modal.groupName || options.modal.name || options.modal.supplierName;
                         }
                         elm.html(text);
                     }

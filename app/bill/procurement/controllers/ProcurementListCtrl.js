@@ -2,13 +2,13 @@
 
 angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService, Common) {
     $scope.submitStatus = [
-        { value: '', text: '已提交' },
-        { value: '', text: '未提交' }
+        { value: 'SUBMITTED', text: '已提交' },
+        { value: 'UNCOMMITTED', text: '未提交' }
     ];
     $scope.auditStatus = [
-        { value: '', text: '未审核' },
-        { value: '', text: '审核通过' },
-        { value: '', text: '审核不通过' }
+        { value: 'UN_REVIEWED', text: '未审核' },
+        { value: 'AUDIT_SUCCESS', text: '审核通过' },
+        { value: 'AUDIT_FAILURE', text: '审核不通过' }
     ];
 
 

@@ -45,10 +45,11 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
     $scope.supplierTreeOpt = {
         type: 'supplier',
         single: true,
-        initTip: '123123',
         callback: function (data) {
-            $scope.currentGroup.parentGroupName = data.groupName;
-            $scope.currentGroup.parentGroupId = data.id;
+            $scope.bill.supplier = {
+                supplierCode: data.supplierCode,
+                supplierName: data.supplierName
+            };
         }
     };
 
@@ -166,7 +167,9 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.procurement.list');
+                swal('操作成功', '', 'success').then(function () {
+                    $state.go('app.bill.procurement.list');
+                });
             }
         }, apiServiceError);
     }

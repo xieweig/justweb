@@ -6,47 +6,38 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
     // 用于接下来判断是单选还是多选  返回值会不同
     var isMultiple = _.isUndefined(currentOption.checkboxes) || currentOption.checkboxes === true;
     $scope.treeViewOptions = {
-        url: hasChildren === false ? '/api/baseInfo/productTypes/findProductTypeByProductTypeId' : '/api/baseInfo/productTypes/findProductGroupByProductTypeId',
-        data: { id: '1' },
+        url: COMMON_URL.baseInfo + '/api/v1/baseInfo/supplier/findBySupplierName',
+        data: { supplierName: '' },
         schema: {
             type: "json",
             model: {
-                id: "id",
+                id: "supplierCode",
                 hasChildren: "group"
             },
             data: function (data) {
-                if (data.result && data.result.content) {
-                    _.each(data.result.content, function (item) {
-                        if (item.group) {
-                            item.imageUrl = './styles/img/treeView/folder.png';
-                        } else {
-                            item.imageUrl = './styles/img/treeView/file.png';
-                        }
-                        item.groupTypeName = getTextByKey($scope.productBaseType, item.groupType)
-                    });
-                    return data.result.content;
+                if (data.code) {
+                    if (data.code !== '000') {
+                        swal('', data.message, 'error');
+                        return [];
+                    } else {
+                        return data.result.result;
+                    }
                 } else {
-                    return [];
+                    return data;
                 }
             }
         },
-        template: '#: item.groupName+(item.groupTypeName?"["+item.groupTypeName+"]":"") #'
-            + '<input class="groupId" type="hidden" value="#: item.id #"/>'
-            + '<input class="groupName" type="hidden" value="#: item.groupName #"/>'
-            + '<input class="groupCode" type="hidden" value="#: item.groupCode #"/>'
-            + '<input class="groupCode" type="hidden" value="#: item.parentGroupName #"/>'
-            + '<input class="groupCode" type="hidden" value="#: item.parentGroupCode #"/>'
-            + '<input class="isGroup" type="hidden" value="#: item.group #"/>'
-            + '<input class="price" type="hidden" value="#: item.price #"/>'
-            + '<input class="memo" type="hidden" value="#: item.memo #"/>'
+        template: '#: item.supplierName #'
+            + '<input class="supplierName" type="hidden" value="#: item.supplierName #"/>'
+            + '<input class="supplierCode" type="hidden" value="#: item.supplierCode #"/>'
     };
 
     $scope.params = {};
-    $scope.filterProduct = function () {
-        if ($scope.params.productName || $scope.params.productCode || $scope.params.productTypeName || $scope.params.productTypeCode) {
+    $scope.filterSupplier = function () {
+        if ($scope.params.supplierName) {
             $scope.treeViewOptions.treeView.dataSource.read($scope.params);
         } else {
-            $scope.treeViewOptions.treeView.dataSource.read({ id: '1' });
+            $scope.treeViewOptions.treeView.dataSource.read({ supplierName: '' });
         }
     }
 
@@ -84,12 +75,8 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
                 return;
             }
             options.modal = {
-                id: selectNode.find('.groupId').val(),
-                groupName: selectNode.find('.groupName').val(),
-                groupCode: selectNode.find('.groupCode').val(),
-                parentGroupCode: selectNode.find('.parentGroupCode').val(),
-                memo: selectNode.find('.memo').val(),
-                parentGroupName: selectNode.find('.parentGroupName').val()
+                supplierName: selectNode.find('.supplierName').val(),
+                supplierCode: selectNode.find('.supplierCode').val(),
             };
         }
         // 判断有没有回调函数  有则执行
@@ -109,12 +96,16 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
             if (item.checked) {
                 if (options.onlyLeaf) {
                     if (!item.group) {
-                        checkedNodes.push({ id: item.id, groupCode: item.groupCode, groupName: item.groupName, parentGroupCode: item.parentGroupCode, parentGroupName: item.parentGroupName, type: item.groupType, price: item.price, memo: item.memo });
+                        checkedNodes.push(getResult(item));
                     }
                 } else {
-                    checkedNodes.push({ id: item.id, groupCode: item.groupCode, groupName: item.groupName, parentGroupCode: item.parentGroupCode, parentGroupName: item.parentGroupName, type: item.groupType, price: item.price, memo: item.memo });
+                    checkedNodes.push(getResult(item));
                 }
             }
         }
+    }
+
+    function getResult(item) {
+        return { id: item.id, groupCode: item.groupCode, groupName: item.groupName, parentGroupCode: item.parentGroupCode, parentGroupName: item.parentGroupName, type: item.groupType, price: item.price, memo: item.memo };
     }
 });

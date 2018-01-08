@@ -1,6 +1,11 @@
 'use strict';
 
 angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station, scopeStation, store) {
+
+    $rootScope.largeArea = largeArea;
+    $rootScope.city = city;
+    $rootScope.station = station;
+
     $rootScope.location = _.map(store, function (item) {
         return { key: item.tempStorageId, value: item.tempStorageCode, text: item.tempStorageName };
     });
