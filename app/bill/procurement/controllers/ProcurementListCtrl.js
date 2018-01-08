@@ -112,6 +112,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         purchaseBill: purchaseBill
                     }
                 }
+            }).closed.then(function () {
+                $scope.search();
             });
         });
     };
@@ -124,12 +126,14 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
             } else {
                 var billDetails = response.result.purchaseBill.billDetails;
                 var cargoList = _.map(billDetails, function (item) {
-                    return item.rawMaterial.cargo.cargoCode;
+                    return item.rawMaterial ? item.rawMaterial.cargo.cargoCode : '';
                 });
                 Common.getCargoByCodes(cargoList).then(function (cargoList) {
                     var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
                     _.each(billDetails, function (item) {
-                        item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                        if (item.rawMaterial) {
+                            item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                        }
                         if (!item.cargo) {
                             item.cargo = {};
                         }

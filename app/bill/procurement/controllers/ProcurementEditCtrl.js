@@ -4,6 +4,10 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
     // 页面类型 查看or审核
     $scope.type = params.type;
     $scope.bill = params.purchaseBill;
+    params.purchaseBill.supplier = {
+        supplierCode: params.purchaseBill.supplierCode,
+        supplierName: params.purchaseBill.supplierCode
+    };
 
     $timeout(function () {
         $('#inStorageCode').val(params.purchaseBill.inStorageCode).trigger('change');
@@ -45,6 +49,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
     $scope.supplierTreeOpt = {
         type: 'supplier',
         single: true,
+        initTip: params.purchaseBill.supplier.supplierName,
         callback: function (data) {
             $scope.bill.supplier = {
                 supplierCode: data.supplierCode,
@@ -162,13 +167,16 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 differencePrice: item.differencePrice
             };
         });
-        delete bill.supplierCode;
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
                 swal('操作成功', '', 'success').then(function () {
-                    $state.go('app.bill.procurement.list');
+                    if (params.type === 'add') {
+                        $state.go('app.bill.procurement.list');
+                    } else {
+                        $scope.$close();
+                    }
                 });
             }
         }, apiServiceError);

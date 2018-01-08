@@ -19,8 +19,8 @@ $(function () {
     // 造cookie
     // $.cookie('userCode', 'YGADMIN');
     // $.cookie('userName', '超级管理员');
-    // $.cookie('currentStationCode', 'HDQA00');
-    // $.cookie('currentStationName', '总部');
+    $.cookie('currentStationCode', 'HDQA00');
+    $.cookie('currentStationName', '总部');
     // document.cookie = "userCode=YGADMIN; userName=超级管理员; paymentUrl=/payment; currentStationName=%E9%83%91%E5%B7%9E%E4%B8%87%E8%B1%A1%E5%9F%8E%E5%BA%97_%E5%92%96%E5%95%A1%E9%A6%86; currentStationCode=CGOC01; stationClass=CQ; paymentToken=0D214DCF-ED95-4128-9C7D-D44FD5264ED1; paymentAccountID=97284; merchantCode=0000524695";
 
     // moment.js default language
