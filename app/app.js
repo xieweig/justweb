@@ -233,7 +233,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
         }, apiServiceError);
     }
     // 根据原料code集合 获取货物明细
-    this.getMaertialByCodes = function (codes) {
+    this.getMaterialByCodes = function (codes) {
         return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/material/findByMaterialCodeList', codes, { hasHost: true }).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');

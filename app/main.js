@@ -12,8 +12,8 @@ var REGULAR = {
 };
 
 var COMMON_URL = {
-    bill: 'http://192.168.21.56:15009',
-    baseInfo: 'http://192.168.21.56:15006'
+    bill: 'http://192.168.21.100:15009',
+    baseInfo: 'http://192.168.21.141:15006'
 };
 
 $(function () {

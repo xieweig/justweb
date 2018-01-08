@@ -36,6 +36,12 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         { value: 'AUDIT_SUCCESS', text: '审核通过' },
         { value: 'AUDIT_FAILURE', text: '审核不通过' }
     ];
+    
+    $rootScope.packageType = [
+        { value: 'ONE_BILL_TO_ONE_PACKAGE', text: '一单一包' },
+        { value: 'ONE_BILL_TO_MANY_PACKAGE', text: '一单多包' },
+        { value: 'MANY_BILL_TO_ONE_PACKAGE', text: '多单合包' }
+    ];
 
 
     var stationTypeMap = { station: {}, scopeStation: {} };
