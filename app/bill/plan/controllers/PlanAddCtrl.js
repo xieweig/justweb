@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
-    $stateParams.billCode = '1515393623159';
+    $stateParams.billCode = '1515140045318'
 
     if ($stateParams.billCode) {
         ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
@@ -20,12 +20,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 var isCargo = planBill.basicEnum === 'BY_CARGO';
                 if (isCargo) {
                     Common.getCargoByCodes(goodsCode).then(function (cargoList) {
+                        $('#tabs-1').addClass('active');
+                        $('a[href="#tabs-1"]').parent().addClass('active');
                         var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
                         _.each(planBill.planBillDetails, function (item) {
                             item.cargo = cargoObject[item.goodsCode];
                         });
-                        $('#tabs-1').addClass('active');
-                        $('a[href="#tabs-1"]').parent().addClass('active');
 
                         $scope.cargoMap = _.map(planBill.planBillDetails, function (item) {
                             return pushCargo(item);
@@ -36,8 +36,22 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         });
                     });
                 } else {
-                    $('#tabs-2').addClass('active');
-                    $('a[href="#tabs-2"]').parent().addClass('active');
+                    Common.getMaterialByCodes(goodsCode).then(function (materialList) {
+                        $('#tabs-2').addClass('active');
+                        $('a[href="#tabs-2"]').parent().addClass('active');
+                        var materialObject = _.zipObject(_.map(materialList, function (item) { return item.materialCode }), materialList);
+                        _.each(planBill.planBillDetails, function (item) {
+                            item.material = materialObject[item.goodsCode];
+                        });
+
+                        $scope.materialMap = _.map(planBill.planBillDetails, function (item) {
+                            return pushCargo(item);
+                        })
+
+                        $timeout(function () {
+                            $('#billType').val(planBill.billType).trigger('change');
+                        });
+                    });
                 }
             }
         }, apiServiceError);
@@ -118,8 +132,18 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     dataSource: item.resultPlanBillDetailDTOSet,
                     columns: [
                         { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 85, locked: true },
-                        { template: function (data) { return getTextByVal($scope.station, data.outLocation.stationCode) }, title: "调出站点" },
-                        { template: function (data) { return getTextByVal($scope.station, data.inLocation.stationCode) }, title: "调入站点" },
+                        {
+                            title: "调出站点",
+                            template: function (data) {
+                                return getTextByVal($scope.station, data.outLocation.stationCode)
+                            }
+                        },
+                        {
+                            title: "调入站点",
+                            template: function (data) {
+                                return getTextByVal($scope.station, data.inLocation.stationCode)
+                            }
+                        },
                         { field: "amount", title: "调剂数量(点击修改)", editable: true }
                     ]
                 }
@@ -141,7 +165,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
-                        console.log(data);
                         item.cargo = data;
                     }
                 }
@@ -157,10 +180,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
-                        item.material = {
-                            materialName: '原料',
-                            materialCode: 'CODE001',
-                        };
+                        item.material = data;
                     }
                 }
             }
@@ -191,7 +211,17 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 cb: function () {
                     return function (data) {
                         _.each(data, function (dataItem) {
-                            item.stationGrid.kendoGrid.dataSource.add(dataItem)
+                            item.stationGrid.kendoGrid.dataSource.add({
+                                amount: 0,
+                                inLocation: {
+                                    stationCode: dataItem.inStationCode,
+                                    stationName: getTextByVal($scope.station, dataItem.inStationCode)
+                                },
+                                outLocation: {
+                                    stationCode: dataItem.outStationCode,
+                                    stationName: getTextByVal($scope.station, dataItem.outStationCode)
+                                }
+                            })
                         });
                     }
                 }
@@ -230,12 +260,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     return {
                         amount: stationItem.amount,
                         inStation: {
-                            stationCode: stationItem.inLocation.stationCode,
-                            stationName: '12321'
+                            stationCode: stationItem.inLocation.stationCode
                         },
                         outStation: {
-                            stationCode: stationItem.outLocation.stationCode,
-                            stationName: '12321'
+                            stationCode: stationItem.outLocation.stationCode
                         }
                     };
                 });
@@ -246,6 +274,23 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             });
         } else {
             plan.basicEnum = 'BY_MATERIAL';
+            plan.planBillDetailDTOS = _.map($scope.materialMap, function (item) {
+                var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
+                    return {
+                        amount: stationItem.amount,
+                        inStation: {
+                            stationCode: stationItem.inLocation.stationCode
+                        },
+                        outStation: {
+                            stationCode: stationItem.outLocation.stationCode
+                        }
+                    };
+                });
+                return {
+                    rawMaterialCode: item.material.materialCode,
+                    planBillStationDTOS: stations
+                };
+            });
         }
         ApiService.post(url, plan).then(function (response) {
             if (response.code !== '000') {

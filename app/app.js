@@ -232,6 +232,16 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             }
         }, apiServiceError);
     }
+    // 根据原料code集合 获取货物明细
+    this.getMaertialByCodes = function (codes) {
+        return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/material/findByMaterialCodeList', codes, { hasHost: true }).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                return response.result.materialList;
+            }
+        }, apiServiceError);
+    }
     // 根据站点code获取库位信息
     this.getStore = function (stationCode) {
         if (!stationCode) {
