@@ -36,7 +36,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         {
                             name: 'audit', text: "审核",
                             click: openAuditModal,
-                            visible: function (dataItem) { return dataItem.auditState === 'UN_REVIEWED'; }
+                            visible: function (dataItem) { return dataItem.auditState === 'UN_REVIEWED' && dataItem.submitState === 'SUBMITTED'; }
                         }
                     ]
                 },
@@ -74,6 +74,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         purchaseBill: purchaseBill
                     }
                 }
+            }).closed.then(function () {
+                $scope.search();
             });
         });
     };
@@ -93,6 +95,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         purchaseBill: purchaseBill
                     }
                 }
+            }).closed.then(function () {
+                $scope.search();
             });
         });
     };

@@ -113,7 +113,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         if (!bill.freightCode) {
             swal('请输入运单单号', '', 'warning');
             return
-        } else if (!bill.inStorageCode) {
+        } else if (!bill.storage || !bill.storage.storageCode) {
             swal('请选择入库库位', '', 'warning');
             return
         } else if (!bill.shippedAmount) {
@@ -122,7 +122,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         } else if (!bill.actualAmount) {
             swal('请输入实收数量', '', 'warning');
             return
-        } else if (!bill.supplierCode) {
+        } else if (!bill.supplier || !bill.supplier.supplierCode) {
             swal('请输入供应商', '', 'warning');
             return
         }
@@ -167,6 +167,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 differencePrice: item.differencePrice
             };
         });
+        bill.operatorCode = 'YGADMIN';
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
@@ -175,7 +176,9 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                     if (params.type === 'add') {
                         $state.go('app.bill.procurement.list');
                     } else {
-                        $scope.$close();
+                        $scope.$close(function () {
+                            console.log(213);
+                        });
                     }
                 });
             }

@@ -23,27 +23,22 @@ angular.module('app').controller('ProcurementLookCtrl', function ($scope, $state
             ]
         }
     };
-    // 通过
-    $scope.pass = function () {
-        ApiService.post('/api/bill/purchase/auditSuccess', { purchaseBillCode: params.purchaseBill.billCode, auditPersonCode: $.cookie('userCode') }).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error');
-            } else {
-                swal('操作成功', '', 'success').then(function () {
-                    $state.go('app.bill.procurement.list');
-                });
-            }
-        }, apiServiceError);
-    };
 
     // 不通过
-    $scope.unPass = function () {
-        ApiService.post('/api/bill/purchase/auditFailure', { purchaseBillCode: params.purchaseBill.billCode, auditPersonCode: $.cookie('userCode') }).then(function (response) {
+    $scope.doPass = function (pass) {
+        var url = '';
+        var auditParams = { purchaseBillCode: params.purchaseBill.billCode, auditPersonCode: $.cookie('userCode') };
+        if (pass) {
+            url = '/api/bill/purchase/auditSuccess?' + $.param(auditParams);
+        } else {
+            url = '/api/bill/purchase/auditFailure?' + $.param(auditParams);
+        }
+        ApiService.post(url).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
                 swal('操作成功', '', 'success').then(function () {
-                    $state.go('app.bill.procurement.list');
+                    $scope.$close();
                 });
             }
         }, apiServiceError);

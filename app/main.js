@@ -12,6 +12,7 @@ var REGULAR = {
 };
 
 var COMMON_URL = {
+    bill: 'http://192.168.21.191:15009',
     baseInfo: 'http://192.168.21.191:15006'
 };
 

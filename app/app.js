@@ -101,7 +101,7 @@ var app = angular.module('app', [
 
 app.factory('MainFactory', function () {
     return {
-        host: 'http://192.168.21.191:15009',
+        host: COMMON_URL.bill,
         downloadUrl: 'http://192.168.21.141:2222/report/',
         exportExcelHost: 'http://192.168.21.141:15005',
         system: 'baseInfo',

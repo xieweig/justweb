@@ -69,7 +69,11 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
         } else {
             url = '/api/bill/planBill/unpass';
         }
-        ApiService.post(url, { billCode: params.billCode }).then(function (response) {
+        var params = {
+            billCode: params.billCode,
+            auditMemo: $scope.auditMemo
+        };
+        ApiService.post(url, params).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
