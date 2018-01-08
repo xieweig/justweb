@@ -32,7 +32,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                 persistSelection: true,
                 columns: [
                     { field: "outStorageBillCode", title: "出库单号", width: 120 },
-                    { title: "所属包号", width: 120, template: '#: packageNumbers #' },
+                    { title: "所属包号", width: 120, template: '#: data.packageNumbers #' },
                     { field: "outStationCode", title: "出库站点", width: 120 },
                     { field: "inStationCode", title: "入库站点", width: 120 },
                     { field: "outStorageTime", title: "出库时间", width: 150 },

@@ -17,7 +17,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
     $scope.search = function () {
         $scope.traceGrid.kendoGrid.dataSource.page(1);
     };
-    $scope.traceGrid = {
+    window.x=$scope.traceGrid = {
         url: '/api/bill/waybill/findWayBillByConditions',
         params: $scope.params,
         kendoSetting: {

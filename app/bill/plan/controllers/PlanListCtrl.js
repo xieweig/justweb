@@ -22,6 +22,11 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
     $scope.planList = {
         url: '/api/bill/planBill/hq/findPlanBillByConditions',
         params: $scope.params,
+        dataSource: {
+            data: function (data) {
+
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,

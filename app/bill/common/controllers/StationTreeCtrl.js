@@ -8,7 +8,7 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
     var isMultiple = _.isUndefined(currentOption.checkboxes) || currentOption.checkboxes !== false;
     $scope.treeViewOptions = {
         dataSource: {
-            data: $rootScope.getStationTree(stationType),
+            data: $rootScope.getStationTree(stationType, true),
             schema: {
                 model: {
                     children: "items"

@@ -207,7 +207,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     }
     // 权限站点
     this.getScopeStation = function (largeAreaType) {
-        return ApiService.get(COMMON_URL.baseInfo + '/oauth/api/oauth/user/findUserManagementScope?userCode=' + $.cookie("userCode"), { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.oauth + '/api/oauth/user/findUserManagementScope?userCode=' + $.cookie("userCode"), { hasHost: true }).then(function (response) {
             if (response.code === '000') {
                 if (response.result.scopeStations) {
                     // 老基础资料接口

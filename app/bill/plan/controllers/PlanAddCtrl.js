@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
-    $stateParams.billCode = '1515140045318'
 
     if ($stateParams.billCode) {
         ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
