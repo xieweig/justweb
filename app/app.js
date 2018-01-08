@@ -232,8 +232,12 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             }
         }, apiServiceError);
     }
-    this.getStore = function () {
-        return ApiService.get('/api/bill/purchase/queryStorageByStationCode?stationCode=' + $.cookie('currentStationCode')).then(function (response) {
+    // 根据站点code获取库位信息
+    this.getStore = function (stationCode) {
+        if (!stationCode) {
+            stationCode = $.cookie('currentStationCode');
+        }
+        return ApiService.get('/api/bill/purchase/queryStorageByStationCode?stationCode=' + stationCode).then(function (response) {
             if (response.code === '000') {
                 return response.result.content;
             } else {
