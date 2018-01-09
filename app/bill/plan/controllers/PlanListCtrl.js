@@ -2,6 +2,9 @@
 
 angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $state, ApiService) {
 
+    $scope.curAuditStatus = {};
+    $scope.curSubmitStatus = {};
+
     // 出库查询
     $scope.outStationParams = {
         callback: function (data) {
@@ -34,6 +37,19 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                 if (!data.inStationCodeArray) {
                     data.inStationCodeArray = 'USER_ALL'
                 }
+                // 提交和审核状态
+                data.submitStatus = [];
+                _.each($scope.curSubmitStatus, function (item, key) {
+                    if (item) {
+                        data.submitStatus.push(key);
+                    }
+                });
+                data.auditStatus = [];
+                _.each($scope.curAuditStatus, function (item, key) {
+                    if (item) {
+                        data.auditStatus.push(key);
+                    }
+                });
             }
         },
         kendoSetting: {
