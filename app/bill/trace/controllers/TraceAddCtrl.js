@@ -33,8 +33,8 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                 columns: [
                     {field: "outStorageBillCode", title: "出库单号", width: 120},
                     {title: "所属包号", width: 120, template: '#: data.packageNumbers #'},
-                    {field: "outStationCode", title: "出库站点", width: 120},
-                    {field: "inStationCode", title: "入库站点", width: 120},
+                    {field: "outStationName", title: "出库站点", width: 120},
+                    {field: "inStationName", title: "入库站点", width: 120},
                     {field: "outStorageTime", title: "出库时间", width: 150},
                     {field: "operatorName", title: "录单人", width: 120},
                     {field: "totalCount", title: "品种数", width: 120},
@@ -145,7 +145,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                 $scope.addModal.close();
             }
         }
-    }
+    };
 
 
     /**
@@ -261,6 +261,10 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                         totalAmount: scanFillBillDTO.totalAmount,
                         totalCount: scanFillBillDTO.totalCount,
                         outStorageTime: scanFillBillDTO.outStockTime,
+                        inStationCode: scanFillBillDTO.inStationCode,
+                        inStationName: getTextByVal($scope.station, scanFillBillDTO.inStationCode),
+                        outStationCode: scanFillBillDTO.outStationCode,
+                        outStationName: getTextByVal($scope.station, scanFillBillDTO.outStationCode),
                         operatorName: scanFillBillDTO.operatorName
                     };
                     $timeout(function () {
