@@ -31,19 +31,19 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                 autoBind: false,
                 persistSelection: true,
                 columns: [
-                    { field: "outStorageBillCode", title: "出库单号", width: 120 },
-                    { title: "所属包号", width: 120, template: '#: data.packageNumbers #' },
-                    { field: "outStationCode", title: "出库站点", width: 120 },
-                    { field: "inStationCode", title: "入库站点", width: 120 },
-                    { field: "outStorageTime", title: "出库时间", width: 150 },
-                    { field: "operatorName", title: "录单人", width: 120 },
-                    { field: "totalCount", title: "品种数", width: 120 },
-                    { field: "totalAmount", title: "货物数", width: 120 }
+                    {field: "outStorageBillCode", title: "出库单号", width: 120},
+                    {title: "所属包号", width: 120, template: '#: data.packageNumbers #'},
+                    {field: "outStationCode", title: "出库站点", width: 120},
+                    {field: "inStationCode", title: "入库站点", width: 120},
+                    {field: "outStorageTime", title: "出库时间", width: 150},
+                    {field: "operatorName", title: "录单人", width: 120},
+                    {field: "totalCount", title: "品种数", width: 120},
+                    {field: "totalAmount", title: "货物数", width: 120}
                 ]
             }
         };
         if (!isRead) {
-            $scope.detailsGrid.kendoSetting.columns.splice(0, 0, { selectable: true });
+            $scope.detailsGrid.kendoSetting.columns.splice(0, 0, {selectable: true});
         }
     }
 
@@ -52,24 +52,26 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
      */
     $scope.showAddModal = function () {
         $scope.currentDetails = {};
+        $scope.packageMap = [{text: ''}];
         $scope.addModal = $uibModal.open({
             templateUrl: 'app/bill/trace/modals/traceDetails.html',
             scope: $scope,
             size: 'lg'
         });
-    }
+    };
 
 
     /**
      * 编辑货物中的包选择
      */
-    $scope.packageMap = [{ text: '' }];
+    $scope.packageMap = [{text: ''}];
     $scope.packageTypeChange = function () {
-        $scope.packageMap = [{ text: '' }];
-    }
+        $scope.packageMap = [{text: ''}];
+    };
+
     $scope.addPackageMap = function () {
-        $scope.packageMap.push({ text: '' });
-    }
+        $scope.packageMap.push({text: ''});
+    };
 
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
@@ -91,7 +93,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
 
     /**
      * 增加一条明细
-     * @param {*是否点击的下一条 如果点击的下一条需要清空表格数据} isNext 
+     * @param {*是否点击的下一条 如果点击的下一条需要清空表格数据} isNext
      */
     $scope.addDetails = function (isNext) {
         // 判断所属包号是否填写完整
@@ -146,9 +148,9 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
     }
 
 
-    /** 
+    /**
      * 保存运单
-    */
+     */
     $scope.save = function () {
         if (!$scope.trace) {
             swal('请输入填写单据详情', '', 'warning');
@@ -198,7 +200,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                 saveTrace($scope.trace);
             }
         }
-    }
+    };
 
     // 保存trace
     function saveTrace(trace) {
@@ -241,5 +243,34 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                 dataSource.remove(dataSource.at(item));
             }
         });
+    };
+
+    // 查询出库单
+    $scope.searchBill = function () {
+        ApiService.get('http://192.168.21.100:15009/api/bill/waybill/scanQueryBill?billCode=' + $scope.currentDetails.outStorageBillCode, {hasHost: true}).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                var scanFillBillDTO = response.result.scanFillBillDTO;
+                if (!scanFillBillDTO) {
+                    $scope.currentDetails = {};
+                } else {
+                    $scope.currentDetails = {
+                        isRead: true,
+                        outStorageBillCode: scanFillBillDTO.billCode,
+                        totalAmount: scanFillBillDTO.totalAmount,
+                        totalCount: scanFillBillDTO.totalCount,
+                        outStorageTime: scanFillBillDTO.outStockTime,
+                        operatorName: scanFillBillDTO.operatorName
+                    };
+                    $timeout(function () {
+                        $('#packageType').val('ONE_BILL_TO_MANY_PACKAGE').trigger('change');
+                        $scope.packageMap = _.map(scanFillBillDTO.packNumbers, function (item) {
+                            return {text: item};
+                        });
+                    });
+                }
+            }
+        }, apiServiceError);
     }
 });
