@@ -5,27 +5,37 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
     // 出库查询
     $scope.outStationParams = {
         callback: function (data) {
-            $scope.params.outStationCode = _.map(data, function (item) {
+            $scope.params.outStationCodeArray = _.chain(data).map(function (item) {
                 return item.stationCode;
-            });
+            }).join().value();
         }
     };
 
     // 入库查询
     $scope.inStationParams = {
         callback: function (data) {
-            $scope.params.inStationCode = _.map(data, function (item) {
+            $scope.params.inStationCodeArray = _.chain(data).map(function (item) {
                 return item.stationCode;
-            });
+            }).join().value();
         }
     };
-    $scope.params = {hqBill: true};
+    $scope.params = {};
     $scope.search = function () {
         $scope.planList.kendoGrid.dataSource.page(1);
     };
     $scope.planList = {
         url: '/api/bill/planBill/hq/findPlanBillByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data.outStationCodeArray) {
+                    data.outStationCodeArray = 'USER_ALL'
+                }
+                if (!data.inStationCodeArray) {
+                    data.inStationCodeArray = 'USER_ALL'
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,

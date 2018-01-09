@@ -75,28 +75,27 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                                <div class="input-group">
-                                    <span class="input-group-addon">提交状态</span>
-                                    <span class="smart-form">
-
-                                    </span>
-                                    <select data-multiple-select data-ng-model="params.statusCode">
-                                        <option ng-repeat="status in submitStatus" value="{{status.value}}">
-                                            {{status.text}}
-                                        </option>
-                                    </select>
+                        <div class="margin-bottom-10">
+                            <div class="smart-checkbox">
+                                <div class="smart-checkbox-title">提交状态</div>
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="checkbox" data-ng-repeat="status in submitStatus">
+                                            <input data-ng-model="curSubmitStatus[status.value]" type="checkbox" name="submitStatus"><i></i>{{status.text}}
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4 col-xs-12 margin-bottom-10">
-                                <div class="input-group">
-                                    <span class="input-group-addon">提交状态</span>
-                                    <select data-multiple-select>
-                                        <option ng-repeat="status in auditStatus" value="{{status.value}}">
-                                            {{status.text}}
-                                        </option>
-                                    </select>
+                        </div>
+                        <div>
+                            <div class="smart-checkbox">
+                                <div class="smart-checkbox-title">审核状态</div>
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="checkbox" data-ng-repeat="status in auditStatus">
+                                            <input data-ng-model="curAuditStatus[status.value]" type="checkbox" name="auditStatus"><i></i>{{status.text}}
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

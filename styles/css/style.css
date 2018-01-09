@@ -18,9 +18,9 @@
  * - CUSTOM STYLES
  */
 
- textarea{
-     resize: none;
- }
+textarea {
+    resize: none;
+}
 
 .load-modal {
     position: fixed;
@@ -224,11 +224,11 @@ input[type="text"]:disabled {
     background: #eee !important;
 }
 
-.dl-horizontal{
+.dl-horizontal {
     margin-bottom: 0;
 }
 
-.dl-horizontal dd,.dl-horizontal dt{
+.dl-horizontal dd, .dl-horizontal dt {
     line-height: 24px;
 }
 
@@ -253,8 +253,8 @@ input[type="text"]:disabled {
     }
 }
 
-@media (max-width: 768px){
-    .text-center-xs{
+@media (max-width: 768px) {
+    .text-center-xs {
         text-align: center;
     }
 }
@@ -357,19 +357,18 @@ input[type="text"]:disabled {
     z-index: 9999 !important;
 }
 
-
-.widget-header-wrap{
+.widget-header-wrap {
     padding: 5px !important;
     height: 44px !important;
 }
 
-.k-grid-content-locked{
+.k-grid-content-locked {
     /* height: -webkit-calc(100% - 60px) !important;
     height: calc(100% - 60px) !important; */
     /* height: initial !important */
 }
 
-.k-grid table{
+.k-grid table {
     width: 100% !important;
 }
 
@@ -380,11 +379,12 @@ input[type="text"]:disabled {
     border: 1px solid #eaeaea;
 }
 
-.sortable:hover{
+.sortable:hover {
     background-color: #1976d2;
     color: #fff;
 }
-.sortable .handler{
+
+.sortable .handler {
     float: left;
     margin-left: -20px;
     margin-top: -10px;
@@ -398,10 +398,38 @@ input[type="text"]:disabled {
 @media (min-width: 768px) {
 
     .modal-dl .dl-horizontal dt {
-        width: 70px!important;
+        width: 70px !important;
     }
 
     .modal-dl .dl-horizontal dd {
-        margin-left: 80px!important;
+        margin-left: 80px !important;
     }
+}
+
+.smart-checkbox {
+    display: flex;
+}
+
+.smart-checkbox .smart-form {
+    flex: 1;
+    padding: 0;
+}
+
+.smart-checkbox-title {
+    padding: 6px 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+}
+
+.smart-checkbox .smart-form .inline-group {
+    margin: 0;
+}
+
+.smart-checkbox .smart-form .checkbox {
+    margin: 0 5px;
+    line-height: 28px;
+}
+
+.smart-checkbox .smart-form .checkbox i {
+    top: 5px;
 }
