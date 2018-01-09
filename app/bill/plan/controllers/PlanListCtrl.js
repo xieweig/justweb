@@ -5,17 +5,21 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
     // 出库查询
     $scope.outStationParams = {
         callback: function (data) {
-            console.log(data);
+            $scope.params.outStationCode = _.map(data, function (item) {
+                return item.stationCode;
+            });
         }
     };
 
     // 入库查询
     $scope.inStationParams = {
         callback: function (data) {
-            console.log(data);
+            $scope.params.inStationCode = _.map(data, function (item) {
+                return item.stationCode;
+            });
         }
     };
-    $scope.params = {};
+    $scope.params = {hqBill: true};
     $scope.search = function () {
         $scope.planList.kendoGrid.dataSource.page(1);
     };
