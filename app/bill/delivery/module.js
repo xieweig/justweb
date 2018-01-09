@@ -20,5 +20,17 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
                     controller: 'DeliveryListCtrl'
                 }
             }
+        })
+        .state('app.bill.delivery.pick', {
+            url: '/bill/delivery/pick',
+            data: {
+                title: '站点配送拣货'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/delivery/views/pick.html',
+                    controller: 'DeliveryPickCtrl'
+                }
+            }
         });
 });

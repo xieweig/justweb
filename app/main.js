@@ -4,16 +4,14 @@ $.sound_path = appConfig.sound_path;
 $.sound_on = appConfig.sound_on;
 
 // sweetAlert全局配置
-swal.setDefaults({ allowEscapeKey: false, allowOutsideClick: false, allowEnterKey: false });
+swal.setDefaults({allowEscapeKey: false, allowOutsideClick: false, allowEnterKey: false});
 
 // 全局正则
-var REGULAR = {
-
-};
+var REGULAR = {};
 
 var COMMON_URL = {
-    bill: 'http://192.168.21.56:15009',
-    baseInfo: 'http://192.168.21.56:15006',
+    bill: 'http://192.168.21.141:17001/coffeeBill',
+    baseInfo: 'http://192.168.21.141:17001/baseInfoApi',
     oauth: '/oauth'
 };
 
@@ -30,7 +28,6 @@ $(function () {
     angular.bootstrap(document, ['app']);
 
 });
-
 
 
 /**
@@ -132,13 +129,13 @@ function generateMixed(n) {
                 var rowTemplate = '#= count #';
                 var renderRowCount = function () {
                     that.options._count += 1;
-                    return kendo.render(kendo.template(rowTemplate), [{ count: that.options._count }]);
+                    return kendo.render(kendo.template(rowTemplate), [{count: that.options._count}]);
                 };
 
                 if (options.rowNumber) {
                     if (options.columns) {
                         //1. 添加行号列
-                        options.columns.splice(0, 0, { attributes: { 'class': 'tight-cell text-center' }, editor: null, editable: false, title: '', template: renderRowCount, width: 38 });
+                        options.columns.splice(0, 0, {attributes: {'class': 'tight-cell text-center'}, editor: null, editable: false, title: '', template: renderRowCount, width: 38});
                     }
                 }
             }
@@ -165,16 +162,16 @@ function generateMixed(n) {
 
 
 /* 对Date的扩展，将 Date 转化为指定格式的String 
-* 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q)
-* 可以用 1-2 个占位符 
-* 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
-* eg: 
-* (new Date()).format("yyyy-MM-dd hh:mm:ss.S")==> 2006-07-02 08:09:04.423
-* (new Date()).format("yyyy-MM-dd E HH:mm:ss") ==> 2009-03-10 二 20:09:04
-* (new Date()).format("yyyy-MM-dd EE hh:mm:ss") ==> 2009-03-10 周二 08:09:04
-* (new Date()).format("yyyy-MM-dd EEE hh:mm:ss") ==> 2009-03-10 星期二 08:09:04
-* (new Date()).format("yyyy-M-d h:m:s.S") ==> 2006-7-2 8:9:4.18
-*/
+ * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q)
+ * 可以用 1-2 个占位符
+ * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+ * eg:
+ * (new Date()).format("yyyy-MM-dd hh:mm:ss.S")==> 2006-07-02 08:09:04.423
+ * (new Date()).format("yyyy-MM-dd E HH:mm:ss") ==> 2009-03-10 二 20:09:04
+ * (new Date()).format("yyyy-MM-dd EE hh:mm:ss") ==> 2009-03-10 周二 08:09:04
+ * (new Date()).format("yyyy-MM-dd EEE hh:mm:ss") ==> 2009-03-10 星期二 08:09:04
+ * (new Date()).format("yyyy-M-d h:m:s.S") ==> 2006-7-2 8:9:4.18
+ */
 Date.prototype.format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1, //月份
