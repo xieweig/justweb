@@ -19,13 +19,15 @@
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">录单人</span>
-                                        <input type="text" class="form-control" data-ng-model="kendoQueryCondition.creatorName">
+                                        <input type="text" class="form-control"
+                                               data-ng-model="kendoQueryCondition.operatorName">
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">出库单号</span>
-                                        <input type="text" class="form-control" data-ng-model="kendoQueryCondition.BillCode">
+                                        <input type="text" class="form-control"
+                                               data-ng-model="kendoQueryCondition.billCode">
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
@@ -46,14 +48,14 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">录单日期</span>
                                                 <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="params.oddNumber">
+                                                       data-ng-model="params.createStartTime">
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="border-left: 0;">至</span>
                                                 <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="params.oddNumber">
+                                                       data-ng-model="params.createEndTime">
                                             </div>
                                         </div>
                                     </div>
@@ -64,43 +66,44 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">入库日期</span>
                                                 <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="params.oddNumber">
+                                                       data-ng-model="params.inStartTime">
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="border-left: 0;">至</span>
                                                 <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="params.oddNumber">
+                                                       data-ng-model="params.inEndTime">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
                                     <span class="checkbox-label-fix">提交状态</span>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2" data-ng-model="kendoQueryCondition.submitStatus['unsubmit']">
-                                        <span>未提交</span>
-                                    </label>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2" data-ng-model="kendoQueryCondition.submitStatus['submit']">
-                                        <span>已提交</span>
-                                    </label>
+                                    <span data-ng-repeat="sb in submitStateCode">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="checkbox-inline"
+                                                   class="checkbox style-2"
+                                                   value="{{ sb.value }}"
+                                                   data-ng-checked="kendoQueryCondition.submitStateCode.indexOf(sb.value)>-1"
+                                                   data-ng-click="toggleSubmit(sb.value, 'submit')">
+                                            <span>{{ sb.text }}</span>
+                                        </label>
+                                    </span>
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
                                     <span class="checkbox-label-fix">审核状态</span>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2">
-                                        <span>未审核</span>
-                                    </label>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2">
-                                        <span>审核通过</span>
-                                    </label>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2">
-                                        <span>审核不通过</span>
-                                    </label>
+                                    <span data-ng-repeat="ad in auditStateCode">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="checkbox-inline"
+                                                   class="checkbox style-2"
+                                                   value="{{ ad.value }}"
+                                                   data-ng-checked="kendoQueryCondition.auditStateCode.indexOf(ad.value)>-1"
+                                                   data-ng-click="toggleSubmit(ad.value, 'audit')"
+                                            >
+                                            <span>{{ ad.text }}</span>
+                                        </label>
+                                    </span>
                                 </div>
                                 <div class="col-sm-6 col-xs-12 margin-bottom-10 margin-top-5">
                                     <div class="input-group">
@@ -114,18 +117,18 @@
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-16" style="margin-top: 12px">
                                     <span class="checkbox-label-fix">出库状态</span>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2">
-                                        <span>未出库</span>
-                                    </label>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2">
-                                        <span>出库成功</span>
-                                    </label>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="checkbox-inline" class="checkbox style-2">
-                                        <span>出库失败</span>
-                                    </label>
+
+                                    <span data-ng-repeat="os in inOrOutStateCode">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="checkbox-inline"
+                                                   class="checkbox style-2"
+                                                   value="{{ os.value }}"
+                                                   data-ng-checked="kendoQueryCondition.inOrOutStateCode.indexOf(os.value)>-1"
+                                                   data-ng-click="toggleSubmit(os.value, 'out')"
+                                            >
+                                            <span>{{ os.text }}</span>
+                                        </label>
+                                    </span>
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
                                     <div class="display-flex">
@@ -133,14 +136,14 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">配送品种</span>
                                                 <input type="text" class="form-control"
-                                                       data-ng-model="params.oddNumber">
+                                                       data-ng-model="params.startVariety">
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="border-left: 0;">至</span>
                                                 <input type="text" class="form-control"
-                                                       data-ng-model="params.oddNumber">
+                                                       data-ng-model="params.endVariety">
                                             </div>
                                         </div>
                                     </div>
@@ -151,14 +154,14 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">配送总价</span>
                                                 <input type="text" class="form-control"
-                                                       data-ng-model="params.oddNumber">
+                                                       data-ng-model="params.startTotalPrice">
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="border-left: 0;">至</span>
                                                 <input type="text" class="form-control"
-                                                       data-ng-model="params.oddNumber">
+                                                       data-ng-model="params.endTotalPrice">
                                             </div>
                                         </div>
                                     </div>

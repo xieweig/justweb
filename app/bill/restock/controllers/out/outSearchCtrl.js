@@ -3,25 +3,58 @@
 angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uibModal, ApiService) {
     $scope.params = {};
     $scope.kendoQueryCondition = {
-        operatorName: ''
+        operatorName: '',
+        submitStateCode: [],
+        auditStateCode: [],
+        inOrOutStateCode: []
     };
 
-    $scope.submitStatus = [
-        {value: '', text: '已提交'},
-        {value: '', text: '未提交'}
+    $scope.submitStateCode = [
+        {value: 'SAVED', text: '未提交'},
+        {value: 'SUBMITTED', text: '已提交'}
     ];
 
-    $scope.auditStatus = [
-        {value: '', text: '未审核'},
-        {value: '', text: '审核通过'},
-        {value: '', text: '审核不通过'}
+    $scope.auditStateCode = [
+        {value: 'OPEN', text: '未审核'},
+        {value: 'AUDITSUCCESS', text: '审核通过'},
+        {value: 'AUDITFAILURE', text: '审核不通过'}
     ];
+
+    $scope.inOrOutStateCode = [
+        {value: 'NOT_OUT', text: '未出库'},
+        {value: 'OUT_SUCCESS', text: '出库成功'},
+        {value: 'OUT_FAILURE', text: '出库失败'}
+    ]
 
     $scope.billAttr = [
         {value: '', text: '配送计划转'},
         {value: '', text: '调剂计划转'},
         {value: '', text: '退货计划转'},
         {value: '', text: '无计划计划转'}
+    ];
+
+    // 类型存储
+    $scope.outState = [
+        {value: 'NOT_OUT', text: '未出库'},
+        {value: 'NOT_IN', text: '未入库'},
+        {value: 'IN_ING', text: '入库中'},
+        {value: 'OUT_ING', text: '出库中'},
+        {value: 'OUT_FAILURE', text: '出库失败'},
+        {value: 'OUT_SUCCESS', text: '出库成功'},
+        {value: 'IN_FAILURE', text: '入库失败'},
+        {value: 'IN_SUCCESS', text: '入库成功'},
+    ];
+
+    $scope.submitState = [
+        {value: 'UNCOMMITTED', text: '未提交'},
+        {value: 'SUBMITTED', text: '已提交'}
+    ];
+
+    $scope.auditState = [
+        {value: 'UN_REVIEWED', text: '未审核'},
+        {value: 'AUDIT_ING', text: '审核中'},
+        {value: 'AUDIT_SUCCESS', text: '审核通过'},
+        {value: 'AUDIT_FAILURE', text: '审核不通过'}
     ];
 
     $scope.outBillGrid = {
@@ -55,21 +88,51 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
                     width: 153
                 },
                 {
-                    field: "fromCode", locked: true, title: "来源单号", width: 150, template: function (data) {
-                        return '<a href="#" class="plan-btn-group">' + data.fromCode + '</a>'
+                    locked: true, title: "来源单号", width: 150, template: function (data) {
+                        return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
                     }
                 },
                 {field: "billCode", locked: true, title: "出库单号", width: 150},
                 {field: "billType", title: "单据属性", width: 150},
-                {field: "outStatus", title: "出库状态", width: 150},
-                {field: "inputStatus", title: "提交状态", width: 150},
-                {field: "checkStatus", title: "审核状态", width: 150},
+                {
+                    title: "出库状态", width: 150, template: function (data) {
+                        var str = '';
+                        _.each($scope.outState, function (item) {
+                            if (item.value === data.inOrOutState) {
+                                str = item.text
+                            }
+                        });
+                        return str
+                    }
+                },
+                {
+                    title: "提交状态", width: 150, template: function (data) {
+                        var str = '';
+                        _.each($scope.submitState, function (item) {
+                            if (item.value === data.submitState) {
+                                str = item.text
+                            }
+                        });
+                        return str
+                    }
+                },
+                {
+                    title: "审核状态", width: 150, template: function (data) {
+                        var str = '';
+                        _.each($scope.auditState, function (item) {
+                            if (item.value === data.auditState) {
+                                str = item.text
+                            }
+                        });
+                        return str
+                    }
+                },//
                 {field: "recordTime", title: "录单时间", width: 150},
                 {field: "outTime", title: "出库时间", width: 150},
-                {field: "outTime", title: "录单人", width: 150},
-                {field: "outTime", title: "审核人", width: 150},
-                {field: "totalAmount", title: "配送数量", width: 150},
-                {field: "typeAmount", title: "配送品种数", width: 150}
+                {field: "outTime", title: "录单人", width: 150}, //
+                {field: "outTime", title: "审核人", width: 150}, //
+                {field: "amount", title: "配送数量", width: 150},
+                {field: "variety", title: "配送品种数", width: 150}
 
             ]
         }
@@ -156,26 +219,24 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
     // 查询
     $scope.search = function () {
         $scope.outBillGrid.kendoGrid.dataSource.page(1);
-        // console.log($scope.kendoQueryCondition)
-        // ApiService.get('http://127.0.0.1:5000/api/bill/restock/out/search', {hasHost: true}).then(function (response) {
-        //     if (response.code === '000') {
-        //         _.each(response.result.content, function (item) {
-        //             var dataSource = $scope.outBillGrid.kendoGrid.dataSource;
-        //             dataSource.add({
-        //                 billType: item.billType,
-        //                 outStatus: item.outStatus,
-        //                 inputStatus: item.inputStatus,
-        //                 checkStatus: item.checkStatus,
-        //                 fromCode: item.fromCode,
-        //                 outCode: item.outCode,
-        //                 recordTime: item.recordTime,
-        //                 outTime: item.outTime
-        //             })
-        //         })
-        //
-        //     } else {
-        //         swal('请求失败', response.message, 'error');
-        //     }
-        // }, apiServiceError)
     }
+
+    // 状态修改
+    $scope.toggleSubmit = function (status, type) {
+        var query = $scope.kendoQueryCondition;
+        var arr = []
+        if (type === 'submit') {
+            arr = query.submitStateCode
+        } else if (type === 'audit') {
+            arr = query.auditStateCode
+        } else if (type === 'out') {
+            arr = query.inOrOutStateCode
+        }
+        var index = arr.indexOf(status)
+        if (index > -1) {
+            arr.splice(index, 1)
+        } else {
+            arr.push(status)
+        }
+    };
 });

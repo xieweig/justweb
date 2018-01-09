@@ -15,25 +15,25 @@
 
                         <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
                             <div class="view-group">
-                                <span class="input-group-addon">货物名称<span>咖啡豆001</span></span>
+                                <span class="input-group-addon">货物名称<span>{{ item.cargoName }}</span></span>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
                             <div class="view-group">
-                                <span class="input-group-addon">货物条码<span>hw001</span></span>
+                                <span class="input-group-addon">货物条码<span>{{ item.cargoCode }}</span></span>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
                             <div class="view-group">
-                                <span class="input-group-addon">所属原料<span>咖啡豆</span></span>
+                                <span class="input-group-addon">所属原料<span>{{ item.rawMaterialName }}</span></span>
                             </div>
                         </div>
 
                         <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
                             <div class="view-group">
-                                <span class="input-group-addon">规格<span>500克(g)/包</span></span>
+                                <span class="input-group-addon">规格<span>{{ item.number }}/{{ item.standardUnitCode }}</span></span>
                             </div>
                         </div>
 

@@ -2,7 +2,9 @@
 
 angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $timeout, cb, data) {
     $scope.params = {};
+    $scope.material = {}
     $scope.show = data.hasOwnProperty('m');
+
     $scope.search = function () {
         $scope.cargoList.kendoGrid.dataSource.page(1);
     };
@@ -46,7 +48,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 {field: "rawMaterialName", title: "所属原料", width: 120},
                 {field: "standardUnitCode", title: "标准单位", width: 120},
                 {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
-                {field: "cargoNumber", title: "货物数量", width: 120, editable: true}
+                {field: "actualAmount", title: "货物数量", width: 120, editable: true}
             ]
         }
     };
@@ -55,12 +57,13 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
     $timeout(function () {
         _.each(data.cl, function (item) {
             $scope.currentCargoList.kendoGrid.dataSource.add(item)
-        })
+        });
         if ($scope.show) {
-            $scope.params.materialName = data.m.materialName
-            $scope.params.materialNumber = data.m.materialNumber
-            $scope.params.rawMaterialId = data.m.rawMaterialId
-            $scope.params.progress = data.m.progress
+            $scope.material.materialName = data.m.materialName;
+            $scope.material.shippedAmount = data.m.shippedAmount;
+            $scope.material.actualAmount = 0;
+            $scope.material.rawMaterialId = data.m.rawMaterialId;
+            $scope.material.progress = data.m.progress;
         }
     }, 100);
 
@@ -71,9 +74,16 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
         _.each(dataSource.data(), function (item, index) {
             if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
-                // 添加货物预置为0
-                item.cargoNumber = 0;
-                currentDataSource.add(item);
+                console.log($scope.material.rawMaterialId, item.rawMaterialId)
+                if(item.rawMaterialId.toString() === $scope.material.rawMaterialId) {
+                    // 添加货物预置数量
+                    if($scope.material.shippedAmount > $scope.material.actualAmount){
+                        item.actualAmount = parseInt(parseInt($scope.material.shippedAmount) - parseInt($scope.material.actualAmount))/parseInt(item.number)
+                    }else {
+                        item.actualAmount = 0;
+                    }
+                    currentDataSource.add(item);
+                }
             }
         });
     };
@@ -101,7 +111,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 selfBarCode: item.selfBarCode,
                 standardUnitCode: item.standardUnitCode,
                 updateTime: item.updateTime,
-                cargoNumber: item.cargoNumber
+                actualAmount: item.actualAmount
             };
         });
         cb(result);

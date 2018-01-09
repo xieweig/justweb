@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $uibModal) {
+angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal) {
     // 查询站点退库计划
     $scope.params = {};
 
@@ -12,7 +12,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
     // 初始化计划列表
     $scope.stationGrid = {
         primaryId: 'billCode',
-        url: '/api/bill/planBill/findPlanBillByConditions',
+        url: '/api/bill/restock/findPlanBillByConditions',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
@@ -20,14 +20,14 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
             columns: [
                 {
                     command: [{
-                        name: 'select', text: "拣货", click: jumpToPick, visible: function (item) {
-                            return item.billState === 'SAVED';
+                        name: 'select', text: "拣货", click: jumpToPick, visible: function (data) {
+                            return data.billState === 'SAVED';
                         }
                     }], title: "操作", width: 80
                 },
                 {
                     field: "completionRate", title: "完成率", width: 60, template: function (data) {
-                        return '<a href="#" class="rate-btn-group">' + data.progress + '</a>';
+                        return '<a href="#" class="rate-btn-group">' + data.progress || 0 + '%</a>';
                     }
                 },
                 {
@@ -36,9 +36,29 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
                     }
                 },
                 {field: "createTime", title: "录单时间", width: 90},
-                {field: "operatorCode", title: "录单人", width: 60}, // 需要改为名称
-                {field: "outStationCode", title: "出库站点"}, // 需要改为名称
-                {field: "inStationCode", title: "调入站点"}, // 需要改为名称
+                {field: "operatorName", title: "录单人", width: 60},
+                {
+                    field: "outStationCode", title: "出库站点", template: function (data) {
+                        var name = '';
+                        _.each($rootScope.location, function (item) {
+                            if (item.value === data.outStationCode) {
+                                name = item.text
+                            }
+                        });
+                        return name
+                    }
+                }, // 需要改为名称
+                {
+                    field: "inStationCode", title: "调入站点", template: function (data) {
+                        var name = '';
+                        _.each($rootScope.location, function (item) {
+                            if (item.value === data.inStationCode) {
+                                name = item.text
+                            }
+                        })
+                        return name
+                    }
+                }, // 需要改为名称
                 {field: "totalAmount", title: "数量", width: 60},
                 {field: "typeAmount", title: "规格品种"},
                 {field: "memo", title: "备注"}
@@ -50,7 +70,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
     $scope.inStationParams = {
         // single: true,
         callback: function (data) {
-            $scope.params.inStationCode = _.map(data, function (item) {
+            $scope.params.inStationCodeArray = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -59,7 +79,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $state, $ui
     $scope.outStationParams = {
         // single: true,
         callback: function (data) {
-            $scope.params.outStationCode = _.map(data, function (item) {
+            $scope.params.outStationCodeArray = _.map(data, function (item) {
                 return item.stationCode;
             });
         }

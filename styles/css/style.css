@@ -398,10 +398,10 @@ input[type="text"]:disabled {
 @media (min-width: 768px) {
 
     .modal-dl .dl-horizontal dt {
-        width: 70px!important;
+        width: 60px!important;
     }
 
     .modal-dl .dl-horizontal dd {
-        margin-left: 80px!important;
+        margin-left: 70px!important;
     }
 }

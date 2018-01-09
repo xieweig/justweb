@@ -26,7 +26,6 @@
                                 <div class="input-group">
                                     <span class="input-group-addon">出库库位</span>
                                     <select smart-select2 id="select-out" class="width-full">
-                                        <option value="1">正常库</option>
                                         <option data-ng-repeat="item in outType" data-ng-value="item.key">
                                             {{item.text}}
                                         </option>
@@ -63,7 +62,7 @@
                                         <div class="input-group">
                                             <span class="input-group-addon">录单时间</span>
                                             <input type="text" class="form-control" data-datepicker
-                                                   data-ng-model="params.recordTime" disabled>
+                                                   data-ng-model="params.createTime" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -130,8 +129,12 @@
                                                 <dd data-ng-bind="item.material.materialName"></dd>
                                             </dl>
                                             <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
-                                                <dt>原料总数量</dt>
-                                                <dd data-ng-bind="item.material.materialNumber"></dd>
+                                                <dt>应拣总数量</dt>
+                                                <dd data-ng-bind="item.material.shippedAmount"></dd>
+                                            </dl>
+                                            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                                                <dt>实拣总数量</dt>
+                                                <dd data-ng-bind="item.material.actualAmount"></dd>
                                             </dl>
                                             <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
                                                 <dt>完成度</dt>
