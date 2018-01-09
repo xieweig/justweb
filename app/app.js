@@ -168,51 +168,77 @@ app.factory("ApiService", function ($http, $q, MainFactory) {
 app.service("Common", function ($http, $q, MainFactory, ApiService) {
     // 获取区域
     this.getLargeArea = function (largeAreaType) {
-        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/largeArea/findByLargeAreaTypeForApi?largeAreaType=' + largeAreaType, { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/largeArea/findByLargeAreaTypeForApi?largeAreaType=' + largeAreaType, {hasHost: true}).then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.largeAreaApiReturnDTOs, function (item) {
-                    return { key: item.largeAreaId, value: item.largeAreaCode, text: item.largeAreaName };
+                    return {key: item.largeAreaId, value: item.largeAreaCode, text: item.largeAreaName};
                 });
             } else {
                 swal('请求规格失败', response.message, 'error');
             }
             return [];
         }, apiServiceError);
-    }
+    };
     // 城市
     this.getCity = function () {
-        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/city/findAllUsableForApi', { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/city/findAllUsableForApi', {hasHost: true}).then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.cityReturnDTOs, function (item) {
-                    return { key: item.cityId, value: item.cityCode, text: item.cityName, regionId: item.regionId, regionCode: item.regionCode };
+                    return {
+                        key: item.cityId,
+                        value: item.cityCode,
+                        text: item.cityName,
+                        regionId: item.regionId,
+                        regionCode: item.regionCode
+                    };
                 });
             } else {
                 swal('请求规格失败', response.message, 'error');
             }
             return [];
         }, apiServiceError);
-    }
+    };
     // 全部站点
     this.getStation = function (largeAreaType) {
-        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/station/findAllUsableForApi', { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/station/findAllUsableForApi', {hasHost: true}).then(function (response) {
             if (response.code === '000') {
                 return _.map(response.result.stationApiReturnDTOs, function (item) {
-                    return { key: item.stationId, value: item.stationCode, text: item.stationName, cityId: item.cityId, cityCode: item.cityCode, cityStatus: item.cityLogicStatus, regionId: item.regionId, regionCode: item.regionCode, regionStatus: item.regionLogicStatus, siteType: item.siteType };
+                    return {
+                        key: item.stationId,
+                        value: item.stationCode,
+                        text: item.stationName,
+                        cityId: item.cityId,
+                        cityCode: item.cityCode,
+                        cityStatus: item.cityLogicStatus,
+                        regionId: item.regionId,
+                        regionCode: item.regionCode,
+                        regionStatus: item.regionLogicStatus,
+                        siteType: item.siteType
+                    };
                 });
             } else {
                 swal('请求规格失败', response.message, 'error');
             }
             return [];
         }, apiServiceError);
-    }
+    };
     // 权限站点
     this.getScopeStation = function (largeAreaType) {
-        return ApiService.get(COMMON_URL.oauth + '/api/oauth/user/findUserManagementScope?userCode=' + $.cookie("userCode"), { hasHost: true }).then(function (response) {
+        return ApiService.get(COMMON_URL.oauth + '/api/oauth/user/findUserManagementScope?userCode=' + $.cookie("userCode"), {hasHost: true}).then(function (response) {
             if (response.code === '000') {
                 if (response.result.scopeStations) {
                     // 老基础资料接口
                     return _.map(response.result.scopeStations, function (item) {
-                        return { key: '', value: item.stationCode, text: item.stationName, cityCode: item.city.cityCode, cityStatus: 'USABLE', regionCode: item.city.largeArea.largeAreaCode, regionStatus: 'USABLE', siteType: item.siteType };
+                        return {
+                            key: '',
+                            value: item.stationCode,
+                            text: item.stationName,
+                            cityCode: item.city.cityCode,
+                            cityStatus: 'USABLE',
+                            regionCode: item.city.largeArea.largeAreaCode,
+                            regionStatus: 'USABLE',
+                            siteType: item.siteType
+                        };
                     });
                 }
                 return [];
@@ -221,27 +247,27 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             }
             return [];
         }, apiServiceError);
-    }
+    };
     // 根据货物code集合 获取货物明细
     this.getCargoByCodes = function (codes) {
-        return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCargoCodeList', codes, { hasHost: true }).then(function (response) {
+        return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCargoCodeList', codes, {hasHost: true}).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
                 return response.result.cargoList;
             }
         }, apiServiceError);
-    }
-    // 根据原料code集合 获取货物明细
+    };
+    // 根据原料code集合 获取原料明细
     this.getMaterialByCodes = function (codes) {
-        return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/material/findByMaterialCodeList', codes, { hasHost: true }).then(function (response) {
+        return ApiService.post(COMMON_URL.baseInfo +'/api/v1/baseInfo/rawMaterial/findAvailableMaterialsByCodes', codes, {hasHost: true}).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                return response.result.materialList;
+                return response.result.rawMaterialList;
             }
         }, apiServiceError);
-    }
+    };
     // 根据站点code获取库位信息
     this.getStore = function (stationCode) {
         if (!stationCode) {
@@ -255,5 +281,5 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             }
             return [];
         }, apiServiceError);
-    }
+    };
 });

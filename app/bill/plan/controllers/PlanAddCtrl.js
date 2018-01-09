@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
-
+    $stateParams.billCode = '1515463452228';
     if ($stateParams.billCode) {
         ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
             if (response.code !== '000') {
@@ -21,14 +21,16 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     Common.getCargoByCodes(goodsCode).then(function (cargoList) {
                         $('#tabs-1').addClass('active');
                         $('a[href="#tabs-1"]').parent().addClass('active');
-                        var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
+                        var cargoObject = _.zipObject(_.map(cargoList, function (item) {
+                            return item.cargoCode
+                        }), cargoList);
                         _.each(planBill.planBillDetails, function (item) {
                             item.cargo = cargoObject[item.goodsCode];
                         });
 
                         $scope.cargoMap = _.map(planBill.planBillDetails, function (item) {
-                            return pushCargo(item);
-                        })
+                            return pushCargo(item, !isCargo);
+                        });
 
                         $timeout(function () {
                             $('#billType').val(planBill.billType).trigger('change');
@@ -38,14 +40,16 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     Common.getMaterialByCodes(goodsCode).then(function (materialList) {
                         $('#tabs-2').addClass('active');
                         $('a[href="#tabs-2"]').parent().addClass('active');
-                        var materialObject = _.zipObject(_.map(materialList, function (item) { return item.materialCode }), materialList);
+                        var materialObject = _.zipObject(_.map(materialList, function (item) {
+                            return item.materialCode
+                        }), materialList);
                         _.each(planBill.planBillDetails, function (item) {
                             item.material = materialObject[item.goodsCode];
                         });
 
                         $scope.materialMap = _.map(planBill.planBillDetails, function (item) {
-                            return pushCargo(item);
-                        })
+                            return pushCargo(item, !isCargo);
+                        });
 
                         $timeout(function () {
                             $('#billType').val(planBill.billType).trigger('change');
@@ -99,10 +103,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         });
     });
 
-    $('#grid').on('click', '.kendo-btn-a', function () {
-
-    })
-
 
     // 项目数组
     $scope.cargoMap = [];
@@ -115,39 +115,69 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         }
     };
 
-    function pushCargo(item) {
+    function pushCargo(item, isMaterial) {
         if (!item) {
             item = {
                 resultPlanBillDetailDTOSet: []
             };
         }
-        return {
-            unfurled: true,
-            cargo: item && item.cargo ? item.cargo : {},
-            stationGrid: {
-                kendoSetting: {
-                    height: 200,
-                    editable: true,
-                    dataSource: item.resultPlanBillDetailDTOSet,
-                    columns: [
-                        { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 85, locked: true },
-                        {
-                            title: "调出站点",
-                            template: function (data) {
-                                return getTextByVal($scope.station, data.outLocation.stationCode)
-                            }
-                        },
-                        {
-                            title: "调入站点",
-                            template: function (data) {
-                                return getTextByVal($scope.station, data.inLocation.stationCode)
-                            }
-                        },
-                        { field: "amount", title: "调剂数量(点击修改)", editable: true }
-                    ]
+        if (isMaterial) {
+            return {
+                unfurled: true,
+                material: item && item.material ? item.material : {},
+                stationGrid: {
+                    kendoSetting: {
+                        height: 200,
+                        editable: true,
+                        dataSource: item.resultPlanBillDetailDTOSet,
+                        columns: [
+                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                            {
+                                title: "调出站点",
+                                template: function (data) {
+                                    return getTextByVal($scope.station, data.outLocation.stationCode)
+                                }
+                            },
+                            {
+                                title: "调入站点",
+                                template: function (data) {
+                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                }
+                            },
+                            {field: "amount", title: "调剂数量(点击修改)", editable: true}
+                        ]
+                    }
                 }
-            }
-        };
+            };
+        } else {
+            return {
+                unfurled: true,
+                cargo: item && item.cargo ? item.cargo : {},
+                stationGrid: {
+                    kendoSetting: {
+                        height: 200,
+                        editable: true,
+                        dataSource: item.resultPlanBillDetailDTOSet,
+                        columns: [
+                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                            {
+                                title: "调出站点",
+                                template: function (data) {
+                                    return getTextByVal($scope.station, data.outLocation.stationCode)
+                                }
+                            },
+                            {
+                                title: "调入站点",
+                                template: function (data) {
+                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                }
+                            },
+                            {field: "amount", title: "调剂数量(点击修改)", editable: true}
+                        ]
+                    }
+                }
+            };
+        }
     }
 
     // 伸缩项
@@ -199,6 +229,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     $scope.clearCargo = function (item, index) {
         item.cargo = {};
     };
+    // 清空原料
+    $scope.clearMaterial = function (item, index) {
+        item.material = {};
+    };
 
     // 添加站点
     $scope.addStation = function (item, index) {
@@ -209,9 +243,13 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
+                        var dataSource = item.stationGrid.kendoGrid.dataSource;
+                        var current = _.map(dataSource.data(), function (item) {
+                            return item.inLocation.stationCode + '-' + item.outLocation.stationCode;
+                        });
                         _.each(data, function (dataItem) {
                             item.stationGrid.kendoGrid.dataSource.add({
-                                amount: 0,
+                                amount: dataItem.number,
                                 inLocation: {
                                     stationCode: dataItem.inStationCode,
                                     stationName: getTextByVal($scope.station, dataItem.inStationCode)

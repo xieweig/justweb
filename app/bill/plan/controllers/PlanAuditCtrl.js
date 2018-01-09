@@ -15,9 +15,21 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
             // 根据code查找货物/原料
             if (isCargo) {
                 Common.getCargoByCodes(goodsCodes).then(function (cargoList) {
-                    var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
+                    var cargoObject = _.zipObject(_.map(cargoList, function (item) {
+                        return item.cargoCode
+                    }), cargoList);
                     _.each($scope.plan.planBillDetails, function (item) {
                         item.cargo = cargoObject[item.goodsCode];
+                    });
+                    getPanel(isCargo);
+                });
+            } else {
+                Common.getMaterialByCodes(goodsCodes).then(function (materialList) {
+                    var materialObject = _.zipObject(_.map(materialList, function (item) {
+                        return item.materialCode
+                    }), materialList);
+                    _.each($scope.plan.planBillDetails, function (item) {
+                        item.material = materialObject[item.goodsCode];
                     });
                     getPanel(isCargo);
                 });
@@ -28,22 +40,30 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
     // 获取展示面包
     function getPanel(isCargo) {
         _.each($scope.plan.planBillDetails, function (item) {
-            pushCargo(isCargo, item);
+            pushItem(isCargo, item);
         });
     }
 
     // 添加原料
     $scope.itemMap = [];
-    function pushCargo(isCargo, item) {
+    function pushItem(isCargo, item) {
         var result = {
             unfurled: false,
             stationGrid: {
                 kendoSetting: {
                     dataSource: item.resultPlanBillDetailDTOSet,
                     columns: [
-                        { template: function (data) { return getTextByVal($scope.station, data.outLocation.stationCode) }, title: "调出站点" },
-                        { template: function (data) { return getTextByVal($scope.station, data.inLocation.stationCode) }, title: "调入站点" },
-                        { field: "amount", title: "调剂数量" }
+                        {
+                            template: function (data) {
+                                return getTextByVal($scope.station, data.outLocation.stationCode)
+                            }, title: "调出站点"
+                        },
+                        {
+                            template: function (data) {
+                                return getTextByVal($scope.station, data.inLocation.stationCode)
+                            }, title: "调入站点"
+                        },
+                        {field: "amount", title: "调剂数量"}
                     ]
                 }
             }
@@ -51,7 +71,7 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
         if (isCargo) {
             result.cargo = item.cargo;
         } else {
-            result.material = {};
+            result.material = item.material;
         }
         $scope.itemMap.push(result);
     }
