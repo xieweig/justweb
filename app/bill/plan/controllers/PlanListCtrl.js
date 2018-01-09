@@ -38,16 +38,16 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                     data.inStationCodeArray = 'USER_ALL'
                 }
                 // 提交和审核状态
-                data.submitStatus = [];
+                data.submitStates = [];
                 _.each($scope.curSubmitStatus, function (item, key) {
                     if (item) {
-                        data.submitStatus.push(key);
+                        data.submitStates.push(key);
                     }
                 });
-                data.auditStatus = [];
+                data.auditStates = [];
                 _.each($scope.curAuditStatus, function (item, key) {
                     if (item) {
-                        data.auditStatus.push(key);
+                        data.auditStates.push(key);
                     }
                 });
             }
