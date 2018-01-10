@@ -76,6 +76,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
         single: true,
+        isSupplier: true,
         initTip: $scope.trace.outStationCode,
         callback: function (data) {
             $scope.trace.outStationCode = data.stationCode;
@@ -85,6 +86,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
     // 搜索条件中的入库站点选择
     $scope.inStationParams = {
         single: true,
+        isSupplier: true,
         initTip: $scope.trace.inStationCode,
         callback: function (data) {
             $scope.trace.inStationCode = data.stationCode;

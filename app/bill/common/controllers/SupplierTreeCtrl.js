@@ -39,7 +39,7 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
         } else {
             $scope.treeViewOptions.treeView.dataSource.read({ supplierName: '' });
         }
-    }
+    };
 
     // 如果是单选 则只有原料有选择框
     currentOption.check ? $scope.treeViewOptions.check = currentOption.check : '';
@@ -65,13 +65,13 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
             options.modal = [];
             checkedNodeIds($scope.treeViewOptions.dataSource.view(), options.modal);
             if (options.onlyLeaf && options.modal.length === 0) {
-                swal('请选择产品', '', 'warning');
+                swal('请选择供应商', '', 'warning');
                 return;
             }
         } else {
             var selectNode = $scope.treeViewOptions.treeView.select();
             if (options.onlyLeaf && selectNode.find('.isGroup').val() === 'true') {
-                swal('请选择产品', '', 'warning');
+                swal('请选择供应商', '', 'warning');
                 return;
             }
             options.modal = {

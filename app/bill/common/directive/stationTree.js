@@ -37,10 +37,10 @@ angular.module('app').directive('stationTree', function ($uibModal) {
                         var text = '';
                         if (_.isArray(options.modal)) {
                             text = _.map(options.modal, function (item) {
-                                return item.stationName;
+                                return item.stationName || item.supplierName;
                             }).join();
                         } else {
-                            text = options.modal.stationName;
+                            text = options.modal.stationName || options.modal.supplierName;
                         }
                         elm.find('.tipsText').html(text);
                     }
@@ -48,14 +48,25 @@ angular.module('app').directive('stationTree', function ($uibModal) {
                         selectModal.callback(options.modal);
                     }
                 };
-                $uibModal.open({
-                    templateUrl: 'app/bill/common/modals/stationTree.html',
-                    size: selectModal.sortable ? 'lg' : 'md',
-                    controller: 'StationTreeCtrl',
-                    resolve: {
-                        options: options
-                    }
-                });
+                if (!selectModal.isSupplier) {
+                    $uibModal.open({
+                        templateUrl: 'app/bill/common/modals/stationTree.html',
+                        size: selectModal.sortable ? 'lg' : 'md',
+                        controller: 'StationTreeCtrl',
+                        resolve: {
+                            options: options
+                        }
+                    });
+                } else {
+                    $uibModal.open({
+                        templateUrl: 'app/bill/common/modals/stationAndSupplierTree.html',
+                        size: selectModal.sortable ? 'lg' : 'md',
+                        controller: 'StationAndSupplierTreeCtrl',
+                        resolve: {
+                            options: options
+                        }
+                    });
+                }
             });
         }
     }
