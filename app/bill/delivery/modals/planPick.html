@@ -1,0 +1,98 @@
+<div class="uib-modal" data-ng-init="initPage()">
+    <h1 class="uib-modal-title">
+        <span>站点配送计划拣货</span>
+        <span class="option">
+            <input type="button" class="btn btn-primary" value="保存">
+            <input type="button" class="btn btn-default" value="提交拣货" data-ng-click="submitPick()">
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row">
+            <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                <p>配送信息</p>
+                <div style="border: 1px dashed #ddd;padding: 10px;">
+                    <div class="input-group margin-bottom-10">
+                        <span class="input-group-addon">单号</span>
+                        <input type="text" class="form-control" disabled>
+                    </div>
+                    <div class="input-group margin-bottom-10">
+                        <span class="input-group-addon">出库站点</span>
+                        <span data-station-tree data-select-modal="outStationParams"></span>
+                    </div>
+                    <div class="input-group margin-bottom-10">
+                        <span class="input-group-addon">计划备注</span>
+                        <input type="text" class="form-control" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                <p>配送计划单信息</p>
+                <div style="border: 1px dashed #ddd;padding: 10px;">
+                    <div class="input-group margin-bottom-10">
+                        <span class="input-group-addon">录单时间</span>
+                        <input type="text" class="form-control" disabled>
+                    </div>
+                    <div class="input-group margin-bottom-10">
+                        <span class="input-group-addon">出库站点</span>
+                        <input type="text" class="form-control" disabled>
+                    </div>
+                    <div class="input-group margin-bottom-10">
+                        <span class="input-group-addon">入库站点</span>
+                        <input type="text" class="form-control" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="gray-line">
+        <div class="tab-pane">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tabs-1" tabType="cargo" data-toggle="tab">选择站点</a></li>
+                <li><a href="#tabs-2" tabType="material" data-toggle="tab">选择供应商</a></li>
+            </ul>
+            <div class="tab-content padding-10">
+                <div class="tab-pane active" id="tabs-1">
+                    <p class="text-center">配送计划拣货货物明细</p>
+                    <div>
+                        <input type="text" class="form-control" style="max-width: 315px;" placeholder="扫描货物编码" data-ng-keyup="enterCargo()">
+                    </div>
+                    <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
+                </div>
+                <div class="tab-pane" id="tabs-2">
+                    <p class="text-center">配送计划拣货货物明细</p>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-lg-3">
+                            <dl class="dl-horizontal">
+                                <dt>原料名称</dt>
+                                <dd>13</dd>
+                            </dl>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-3">
+                            <dl class="dl-horizontal">
+                                <dt>应拣总数量</dt>
+                                <dd>13</dd>
+                            </dl>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-3">
+                            <dl class="dl-horizontal">
+                                <dt>实拣总数量</dt>
+                                <dd>13</dd>
+                            </dl>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-3">
+                            <dl class="dl-horizontal">
+                                <dt>完成度</dt>
+                                <dd>13</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <hr class="gray-line">
+                    <div>
+                        <input type="button" class="btn btn-default" value="添加货物">
+                    </div>
+                    <div class="margin-top-10" data-kendo-grids data-options="materialGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
