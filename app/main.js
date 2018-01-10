@@ -10,8 +10,8 @@ swal.setDefaults({allowEscapeKey: false, allowOutsideClick: false, allowEnterKey
 var REGULAR = {};
 
 var COMMON_URL = {
-    bill: 'http://192.168.21.56:15009',
-    baseInfo: 'http://192.168.21.141:15006',
+    bill: '/bill',
+    baseInfo: '/baseInfoApi',
     oauth: '/oauth'
 };
 

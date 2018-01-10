@@ -12,7 +12,7 @@ angular.module('app.bill.trace', ['ui.router']).config(function ($stateProvider)
         .state('app.bill.trace.list', {
             url: '/bill/trace/list',
             data: {
-                title: '添加运单'
+                title: '查询运单'
             },
             views: {
                 "content@app": {

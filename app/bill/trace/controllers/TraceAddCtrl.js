@@ -247,9 +247,19 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
         });
     };
 
+    $scope.enterBillCode = function () {
+        if (event.keyCode === 13) {
+            $scope.searchBill();
+        }
+    };
+
     // 查询出库单
     $scope.searchBill = function () {
-        ApiService.get('http://192.168.21.100:15009/api/bill/waybill/scanQueryBill?billCode=' + $scope.currentDetails.outStorageBillCode, {hasHost: true}).then(function (response) {
+        if (!$scope.currentDetails.outStorageBillCode) {
+            swal('请输入出库单号', '', 'warning');
+            return
+        }
+        ApiService.get('/api/bill/waybill/scanQueryBill?billCode=' + $scope.currentDetails.outStorageBillCode).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
