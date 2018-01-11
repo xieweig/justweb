@@ -233,18 +233,16 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
     $scope.deleteDetails = function () {
         var selectIds = $scope.detailsGrid.kendoGrid.selectedKeyNames();
         var dataSource = $scope.detailsGrid.kendoGrid.dataSource;
-        var indexPos = _.chain(dataSource.data()).map(function (item, index) {
+        var delCount = 0;
+        _.chain(dataSource.data()).toArray().reverse().each(function (item) {
             if (_.indexOf(selectIds, item.outStorageBillCode) > -1) {
-                return index;
+                delCount++;
+                dataSource.remove(item);
             }
-        }).reverse().value();
-
-        // 根据反序  从最后一条开始删除
-        _.each(indexPos, function (item) {
-            if (_.isNumber(item) && item >= 0) {
-                dataSource.remove(dataSource.at(item));
-            }
-        });
+        }).value();
+        if (delCount === 0) {
+            swal('请选择要删除的明细信息', '', 'warning');
+        }
     };
 
     $scope.enterBillCode = function () {

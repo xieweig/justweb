@@ -1,6 +1,7 @@
 <div class="uib-modal" data-ng-init="initPage()">
     <h1 class="uib-modal-title">
-        <span>运单新增/修改</span>
+        <span data-ng-if="isRead">运单查看</span>
+        <span data-ng-if="!isRead">运单修改</span>
         <span class="option" data-ng-hide="isRead">
             <input type="button" class="btn btn-primary" value="提交运单" data-ng-click="save()">
             <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
