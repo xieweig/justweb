@@ -65,7 +65,7 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                     // 行号
                     kendoSetting.columns.splice(index, 1, {
                         title: '',
-                        attributes: { 'class': ' text-center' },
+                        attributes: {'class': ' text-center'},
                         editable: false,
                         width: 40,
                         template: function (data) {
@@ -77,7 +77,7 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                                 }
                                 return false;
                             });
-                            return kendo.render(kendo.template('#= count #'), [{ count: rowNumber }]);
+                            return kendo.render(kendo.template('#= count #'), [{count: rowNumber}]);
                         }
                     });
                 } else if (item.WdatePicker) {
@@ -98,7 +98,7 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                     // 其他
                     var fieldName = item.field;
                     if (fieldName) {
-                        fields[fieldName] = { defaultValue: item.defaultValue, editable: item.editable === true, nullable: item.nullable, type: item.type, validation: item.validation };
+                        fields[fieldName] = {defaultValue: item.defaultValue, editable: item.editable === true, nullable: item.nullable, type: item.type, validation: item.validation};
                     }
                 }
                 // 设置单列可编辑状态 为Boolean需要转为函数 否则编辑会失效
@@ -251,6 +251,9 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
             // 如果不在timeout里面 modal中的表格会初始化不成功
             $timeout(function () {
                 scope.options.kendoGrid = elm.kendoGrid(kendoSetting).data('kendoGrid');
+                if (_.isFunction(scope.options.ready)) {
+                    scope.options.ready();
+                }
             });
         }
     }
