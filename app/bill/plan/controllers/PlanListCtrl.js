@@ -2,17 +2,24 @@
 
 angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $state, ApiService) {
 
+    $scope.curAuditStatus = {};
+    $scope.curSubmitStatus = {};
+
     // 出库查询
     $scope.outStationParams = {
         callback: function (data) {
-            console.log(data);
+            $scope.params.outStationCodeArray = _.chain(data).map(function (item) {
+                return item.stationCode;
+            }).join().value();
         }
     };
 
     // 入库查询
     $scope.inStationParams = {
         callback: function (data) {
-            console.log(data);
+            $scope.params.inStationCodeArray = _.chain(data).map(function (item) {
+                return item.stationCode;
+            }).join().value();
         }
     };
     $scope.params = {};
@@ -22,6 +29,29 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
     $scope.planList = {
         url: '/api/bill/planBill/hq/findPlanBillByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data.outStationCodeArray) {
+                    data.outStationCodeArray = 'USER_ALL'
+                }
+                if (!data.inStationCodeArray) {
+                    data.inStationCodeArray = 'USER_ALL'
+                }
+                // 提交和审核状态
+                data.submitStates = [];
+                _.each($scope.curSubmitStatus, function (item, key) {
+                    if (item) {
+                        data.submitStates.push(key);
+                    }
+                });
+                data.auditStates = [];
+                _.each($scope.curAuditStatus, function (item, key) {
+                    if (item) {
+                        data.auditStates.push(key);
+                    }
+                });
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,

@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
-    $stateParams.billCode = '1515463452228';
     if ($stateParams.billCode) {
         ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
             if (response.code !== '000') {
@@ -247,18 +246,23 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         var current = _.map(dataSource.data(), function (item) {
                             return item.inLocation.stationCode + '-' + item.outLocation.stationCode;
                         });
-                        _.each(data, function (dataItem) {
-                            item.stationGrid.kendoGrid.dataSource.add({
-                                amount: dataItem.number,
-                                inLocation: {
-                                    stationCode: dataItem.inStationCode,
-                                    stationName: getTextByVal($scope.station, dataItem.inStationCode)
-                                },
-                                outLocation: {
-                                    stationCode: dataItem.outStationCode,
-                                    stationName: getTextByVal($scope.station, dataItem.outStationCode)
-                                }
-                            })
+                        _.each(data, function (dataItem, index) {
+                            if (_.indexOf(current, dataItem.inStationCode + '-' + dataItem.outStationCode) > -1) {
+                                var amount = parseInt(dataSource.at(index).get('amount')) + parseInt(dataItem.number)
+                                dataSource.at(index).set('amount', amount);
+                            } else {
+                                item.stationGrid.kendoGrid.dataSource.add({
+                                    amount: dataItem.number,
+                                    inLocation: {
+                                        stationCode: dataItem.inStationCode,
+                                        stationName: getTextByVal($scope.station, dataItem.inStationCode)
+                                    },
+                                    outLocation: {
+                                        stationCode: dataItem.outStationCode,
+                                        stationName: getTextByVal($scope.station, dataItem.outStationCode)
+                                    }
+                                });
+                            }
                         });
                     }
                 }

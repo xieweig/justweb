@@ -153,6 +153,9 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                     },
                     requestStart: function (e) {
                         showLoadingModal();
+                        if (_.isFunction(scope.options.dataSource.requestStart)) {
+                            scope.options.dataSource.requestStart(scope.options.params);
+                        }
                     },
                     requestEnd: function (e) {
                         hideLoadingModal();

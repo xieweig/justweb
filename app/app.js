@@ -110,9 +110,7 @@ app.factory('MainFactory', function () {
             var headers = {
                 'Content-Type': dataType && dataType === 'text' ? 'application/x-www-form-urlencoded' : 'application/json;charset=UTF-8',
                 'Access-Control-Allow-Origin': '*',
-                "Access-Control-Allow-Credentials": "true",
-                'userCode': $.cookie('userCode'),
-                'stationCode': $.cookie('currentStationCode')
+                "Access-Control-Allow-Credentials": "true"
             };
             if (otherHeader) {
                 _.extend(headers, otherHeader);
@@ -260,10 +258,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     };
     // 根据原料code集合 获取原料明细
     this.getMaterialByCodes = function (codes) {
-        codes = _.map(codes, function (item) {
-            return parseInt(item)
-        });
-        return ApiService.post(COMMON_URL.baseInfo +'/api/v1/baseInfo/rawMaterial/findAvailableMaterialsByIds', codes, {hasHost: true}).then(function (response) {
+        return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/rawMaterial/findAvailableMaterialsByCodes', codes, {hasHost: true}).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
@@ -287,6 +282,20 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             stationCode = $.cookie('currentStationCode');
         }
         return ApiService.get('/api/bill/purchase/queryStorageByStationCode?stationCode=' + stationCode).then(function (response) {
+            if (response.code === '000') {
+                return response.result.content;
+            } else {
+                swal('请求规格失败', response.message, 'error');
+            }
+            return [];
+        }, apiServiceError);
+    };
+    // 根据配置类型查询数据源配置
+    this.getStore = function (configureType) {
+        if (!configureType) {
+            return;
+        }
+        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/configure/findByConfigureTypeForApi?configureType=' + configureType, {hasHost: true}).then(function (response) {
             if (response.code === '000') {
                 return response.result.content;
             } else {

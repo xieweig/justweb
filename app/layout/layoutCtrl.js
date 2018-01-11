@@ -9,6 +9,12 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         return {key: item.tempStorageId, value: item.tempStorageCode, text: item.tempStorageName};
     });
 
+    $rootScope.billPurpose = [
+        {key: 'Plan', value: 'Plan', text: '计划'},
+        {key: 'OutStorage', value: 'OutStorage', text: '出库'},
+        {key: 'InStorage', value: 'InStorage', text: '入库'}
+    ];
+
     $rootScope.billType = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
         {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},

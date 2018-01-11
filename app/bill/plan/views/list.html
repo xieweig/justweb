@@ -1,5 +1,6 @@
 <div id="content">
-    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false"
+         data-widget-attstyle="jarviswidget-color-white">
         <header class="widget-header-wrap">
             <span class="widget-icon">
                 <i class="fa fa-table"></i>
@@ -17,13 +18,13 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">计划编号</span>
-                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                                <input type="text" class="form-control" data-ng-model="params.billCode">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">计划名称</span>
-                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                                <input type="text" class="form-control" data-ng-model="params.billName">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
@@ -41,13 +42,13 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">货物名称</span>
-                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                                <input type="text" class="form-control" data-ng-model="params.cargoCodeArray">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">货物编码</span>
-                                <input type="text" class="form-control" data-ng-model="params.xxx">
+                                <input type="text" class="form-control" data-ng-model="params.cargoCode">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
@@ -55,13 +56,15 @@
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon">创建时间</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createStartTime">
+                                        <input type="text" class="form-control" data-datepicker
+                                               data-ng-model="params.createStartTime">
                                     </div>
                                 </div>
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-left: 0;">至</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createEndTime">
+                                        <input type="text" class="form-control" data-datepicker
+                                               data-ng-model="params.createEndTime">
                                     </div>
                                 </div>
                             </div>
@@ -69,34 +72,42 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">创建人</span>
-                                <input type="text" class="form-control" data-ng-model="params.xxx">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">提交状态</span>
-                                <select smart-select2 class="select2 width-full" data-ng-model="params.wayBillStatus">
-                                    <option value="">请选择</option>
-                                    <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">审核状态</span>
-                                <select smart-select2 class="select2 width-full" data-ng-model="params.wayBillStatus">
-                                    <option value="">请选择</option>
-                                    <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
-                                </select>
+                                <input type="text" class="form-control" data-ng-model="params.creatorName">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">计划类型</span>
-                                <select smart-select2 class="select2 width-full" data-ng-model="params.wayBillStatus">
+                                <select smart-select2 class="select2 width-full" data-ng-model="params.billPurpose">
                                     <option value="">请选择</option>
-                                    <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
+                                    <option data-ng-repeat="item in billPurpose" data-ng-value="item.value">
+                                        {{item.text}}
+                                    </option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="margin-bottom-10">
+                        <div class="smart-checkbox">
+                            <div class="smart-checkbox-title">提交状态</div>
+                            <div class="smart-form">
+                                <div class="inline-group">
+                                    <label class="checkbox" data-ng-repeat="status in submitStatus">
+                                        <input data-ng-model="curSubmitStatus[status.value]" type="checkbox" name="submitStatus"><i></i>{{status.text}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="smart-checkbox">
+                            <div class="smart-checkbox-title">审核状态</div>
+                            <div class="smart-form">
+                                <div class="inline-group">
+                                    <label class="checkbox" data-ng-repeat="status in auditStatus">
+                                        <input data-ng-model="curAuditStatus[status.value]" type="checkbox" name="auditStatus"><i></i>{{status.text}}
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

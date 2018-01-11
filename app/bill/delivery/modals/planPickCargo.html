@@ -1,0 +1,52 @@
+<div class="uib-modal" data-ng-init="initPage()">
+    <h1 class="uib-modal-title">
+        <span>实物点数</span>
+        <span class="option">
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close()">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row">
+            <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>货物名称</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>货物条码</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>所属原料</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>规格</dt>
+                <dd>123213</dd>
+            </dl>
+        </div>
+        <hr class="gray-line">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 col-xs-12">
+                <div class="input-group margin-bottom-10">
+                    <span class="input-group-addon">
+                        <span class="radio no-margin">
+                            <label><input type="radio" class="radiobox" name="typeOpt"><span> 增加数量</span></label>
+                        </span>
+                    </span>
+                    <input class="form-control" placeholder="" type="text" data-only-number>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="radio no-margin">
+                            <label><input type="radio" class="radiobox" name="typeOpt"><span> 减少数量</span></label>
+                        </span>
+                    </span>
+                    <input class="form-control" placeholder="" type="text" data-only-number>
+                </div>
+            </div>
+        </div>
+        <div class="margin-top-10 text-center">
+            <input type="button" class="btn btn-primary width-80" value="确定">
+        </div>
+    </div>
+</div>
