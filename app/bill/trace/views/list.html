@@ -1,10 +1,13 @@
 <div id="content">
-    <div jarvis-widget data-widget-color="darken" data-widget-editbutton="false">
-        <header>
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
             <span class="widget-icon">
                 <i class="fa fa-table"></i>
             </span>
             <h2>{{ $state.current.data.title }}</h2>
+            <div class="fr">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="查询" data-ng-click="search()">
+            </div>
         </header>
         <div>
             <div class="widget-body no-padding">
@@ -69,28 +72,21 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">运送件数</span>
-                                <input type="text" class="form-control" data-ng-model="params.amountOfPackages">
+                                <input type="text" class="form-control" data-only-number data-ng-model="params.amountOfPackages">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">运单状态</span>
-                                <select smart-select2 class="select2 width-full" data-ng-model="params.wayBillStatus">
+                                <select smart-select2 class="select2 width-full" data-ng-model="params.receivedStatus">
                                     <option value="">请选择</option>
-                                    <option data-ng-repeat="item in materialConfigure" data-ng-value="item.value">{{item.text}}</option>
+                                    <option data-ng-repeat="item in billStatus" data-ng-value="item.value">{{item.text}}</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center">
-                        <input type="button" class="btn btn-primary width-80" value="查询" data-ng-click="search()">
-                    </div>
                 </div>
                 <div class="padding-10">
-                    <div>
-                        <input type="button" class="btn btn-default width-80" value="添加" data-ng-click="addTrace()">
-                    </div>
-                    <hr class="gray-line">
                     <div class="margin-top-10" data-kendo-grids data-options="traceGrid"></div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal) {
+angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService) {
     // 查询站点退库计划
     $scope.params = {};
 
@@ -21,12 +21,12 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
                 {
                     command: [{
                         name: 'select', text: "拣货", click: jumpToPick, visible: function (data) {
-                            return data.billState === 'SAVED';
+                            return data.operationState === 'NOOPERATION';
                         }
                     }], title: "操作", width: 80
                 },
                 {
-                    field: "completionRate", title: "完成率", width: 60, template: function (data) {
+                    title: "完成率", width: 60, template: function (data) {
                         return '<a href="#" class="rate-btn-group">' + data.progress || 0 + '%</a>';
                     }
                 },
@@ -35,30 +35,18 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
                         return '<a href="#" class="plan-btn-group">' + data.billCode + '</a>';
                     }
                 },
-                {field: "createTime", title: "录单时间", width: 90},
+                {field: "createTime", title: "录单时间", width: 100},
                 {field: "operatorName", title: "录单人", width: 60},
                 {
                     field: "outStationCode", title: "出库站点", template: function (data) {
-                        var name = '';
-                        _.each($rootScope.location, function (item) {
-                            if (item.value === data.outStationCode) {
-                                name = item.text
-                            }
-                        });
-                        return name
+                        return getTextByVal($scope.station, data.outStationCode)
                     }
-                }, // 需要改为名称
+                },
                 {
                     field: "inStationCode", title: "调入站点", template: function (data) {
-                        var name = '';
-                        _.each($rootScope.location, function (item) {
-                            if (item.value === data.inStationCode) {
-                                name = item.text
-                            }
-                        })
-                        return name
+                        return getTextByVal($scope.station, data.inStationCode)
                     }
-                }, // 需要改为名称
+                },
                 {field: "totalAmount", title: "数量", width: 60},
                 {field: "typeAmount", title: "规格品种"},
                 {field: "memo", title: "备注"}
@@ -68,20 +56,20 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
 
     // 选择站点
     $scope.inStationParams = {
-        // single: true,
         callback: function (data) {
-            $scope.params.inStationCodeArray = _.map(data, function (item) {
+            var array = _.map(data, function (item) {
                 return item.stationCode;
             });
+            $scope.params.inStationCodeArray = array.join(',')
         }
     };
 
     $scope.outStationParams = {
-        // single: true,
         callback: function (data) {
-            $scope.params.outStationCodeArray = _.map(data, function (item) {
+            var array = _.map(data, function (item) {
                 return item.stationCode;
             });
+            $scope.params.outStationCodeArray = array.join(',')
         }
     };
 
@@ -110,17 +98,39 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
         })
     });
 
-    // 完成率跳转到出库单
+    // 完成率跳转到出库单 改为弹窗
     grid.on('click', '.rate-btn-group', function (e) {
         e.preventDefault();
         var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-        $state.go('app.bill.restock.outView', {planId: dataItem.receiveCode})
+        ApiService.get('/api/bill/restock/findRestockBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
+            if (response.code === '000') {
+                console.log(response.result);
+                var restockCode = response.result.restockBill.billCode
+                openModal('view', {billCode: restockCode})
+            } else {
+                swal('请求失败', response.message, 'error');
+            }
+        }, apiServiceError);
+        // $state.go('app.bill.restock.outView', {planId: dataItem.receiveCode})
     });
 
     // 重置表格
     $scope.reset = function () {
-        $scope.params = {};
-        $scope.stationGrid.kendoGrid.dataSource.data([])
+        $state.params = {}
+        $state.reload()
     };
 
+    function openModal(type, data) {
+        $scope.outModal = $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/outBillModal.html',
+            size: 'lg',
+            controller: 'outBillModalCtrl',
+            resolve: {
+                data: {
+                    billCode: data.billCode,
+                    type: type
+                }
+            }
+        })
+    }
 });

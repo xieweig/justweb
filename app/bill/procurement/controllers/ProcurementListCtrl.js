@@ -1,15 +1,6 @@
 'use strict';
 
 angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService, Common) {
-    $scope.submitStatus = [
-        { value: 'SUBMITTED', text: '已提交' },
-        { value: 'UNCOMMITTED', text: '未提交' }
-    ];
-    $scope.auditStatus = [
-        { value: 'UN_REVIEWED', text: '未审核' },
-        { value: 'AUDIT_SUCCESS', text: '审核通过' },
-        { value: 'AUDIT_FAILURE', text: '审核不通过' }
-    ];
 
 
     // 表格参数及搜索
@@ -36,7 +27,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         {
                             name: 'audit', text: "审核",
                             click: openAuditModal,
-                            visible: function (dataItem) { return dataItem.auditState === 'UN_REVIEWED'; }
+                            visible: function (dataItem) { return dataItem.auditState === 'UN_REVIEWED' && dataItem.submitState === 'SUBMITTED'; }
                         }
                     ]
                 },
@@ -52,8 +43,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                 { field: "inTotalPrice", title: "进货实洋", width: 120 },
                 { field: "differencePrice", title: "总价值差", width: 120 },
                 { field: "supplierCode", title: "供应商", width: 120 },
-                { field: "auditState", title: "提交状态", width: 120 },
-                { field: "submitState", title: "审核状态", width: 120 },
+                { title: "提交状态", width: 120, template: function (data) { return getTextByVal($scope.auditStatus, data.auditState); } },
+                { title: "审核状态", width: 120, template: function (data) { return getTextByVal($scope.submitStatus, data.submitState); } },
                 { field: "memo", title: "备注", width: 120 }
             ]
         }
@@ -74,6 +65,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         purchaseBill: purchaseBill
                     }
                 }
+            }).closed.then(function () {
+                $scope.search();
             });
         });
     };
@@ -93,6 +86,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         purchaseBill: purchaseBill
                     }
                 }
+            }).closed.then(function () {
+                $scope.search();
             });
         });
     };
@@ -112,6 +107,8 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         purchaseBill: purchaseBill
                     }
                 }
+            }).closed.then(function () {
+                $scope.search();
             });
         });
     };
@@ -124,12 +121,14 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
             } else {
                 var billDetails = response.result.purchaseBill.billDetails;
                 var cargoList = _.map(billDetails, function (item) {
-                    return item.rawMaterial.cargo.cargoCode;
+                    return item.rawMaterial ? item.rawMaterial.cargo.cargoCode : '';
                 });
                 Common.getCargoByCodes(cargoList).then(function (cargoList) {
                     var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
                     _.each(billDetails, function (item) {
-                        item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                        if (item.rawMaterial) {
+                            item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                        }
                         if (!item.cargo) {
                             item.cargo = {};
                         }

@@ -8,7 +8,7 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
     $scope.outType = [];
     // 获取当前站点
     Common.getStore().then(function (storage) {
-        $scope.storage = storage
+        $scope.storage = storage;
         _.each(storage, function (item) {
             $scope.outType.push({
                 key: item.tempStorageCode,
@@ -30,34 +30,40 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
         if (response.code === '000') {
             var res = response.result.planBill;
             // 判断按什么拣货
-            // $scope.params.basicEnum = res.basicEnum;
-            // $scope.params.billCode = res.billCode;
-            // $scope.params.memo = res.memo;
-            // $scope.params.createTime = res.createTime;
-            // $scope.params.outStationCode = res.outStationCode;
-            // $scope.params.inStationCode = res.inStationCode;
-            // $scope.params.rootCode = res.rootCode
-
-            _.each(['basicEnum', 'billCode', 'memo', 'createTime', 'updateTime', 'outStationCode', 'inStationCode', 'rootCode'], function (name) {
+            _.each(['basicEnum', 'billCode', 'memo', 'createTime', 'updateTime', 'rootCode'], function (name) {
                 $scope.params[name] = res[name]
-            })
+            });
+            $scope.params.outStationName = getTextByVal($scope.station, res.outStationCode);
+            $scope.params.inStationName = getTextByVal($scope.station, res.inStationCode);
 
             if (res.basicEnum === 'BY_MATERIAL') {
                 // 按原料拣货
                 $timeout(function () {
                     $('#tabs').children('li:eq(1)').children('a').click();
-                    _.each(res.childPlanBillDetails, function (item) {
-                        $scope.addItem({
-                            rawMaterialId: item.goodsCode,
-                            shippedAmount: item.amount
+
+                    var materialList = _.map(res.childPlanBillDetails, function (item) {
+                        return item.goodsCode
+                    });
+
+                    Common.getMaterialByIds(materialList).then(function (materialList) {
+                        var materialObject = _.zipObject(_.map(materialList, function (item) {
+                            return item.materialCode
+                        }), materialList);
+                        console.log(materialObject);
+                        _.each(res.childPlanBillDetails, function (item) {
+                            console.log(materialObject);
+                            $scope.addItem({
+                                materialName: materialObject[item.goodsCode],
+                                rawMaterialId: item.goodsCode,
+                                shippedAmount: item.amount
+                            })
                         })
                     })
-                }, 1)
+                })
             } else {
                 // 按货物拣货，需要考虑原料
                 $timeout(function () {
-                    var dataSource = $scope.cargoGrid.kendoGrid.dataSource;
-                    var details = res.childPlanBillDetails
+                    var details = res.childPlanBillDetails;
                     var cargoList = _.map(details, function (item) {
                         return item.goodsCode
                     });
@@ -66,27 +72,22 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                         var cargoObject = _.zipObject(_.map(cargoList, function (item) {
                             return item.cargoCode
                         }), cargoList);
-                        $scope.cargoObject = cargoObject
+                        $scope.cargoObject = cargoObject;
                         _.each(details, function (item) {
                             item.cargo = cargoObject[item.goodsCode];
                             console.log(cargoObject)
-                            if (!item.cargo) {
-                                item.cargo = {};
-                            } else {
-                                $scope.cargoGrid.kendoGrid.dataSource.add({
-                                    cargoName: item.cargo.cargoName,
-                                    cargoCode: item.cargo.cargoCode,
-                                    rawMaterialName: item.cargo.rawMaterialName,
-                                    number: item.cargo.number,
-                                    standardUnitCode: item.cargo.standardUnitCode,
-                                    shippedAmount: item.amount // amount是请求的数据来的
-                                })
-                            }
+                            $scope.cargoGrid.kendoGrid.dataSource.add({
+                                cargoName: item.cargo.cargoName,
+                                cargoCode: item.cargo.cargoCode,
+                                rawMaterialName: item.cargo.rawMaterialName,
+                                number: item.cargo.number,
+                                standardUnitCode: item.cargo.standardUnitCode,
+                                shippedAmount: item.amount // amount是请求的数据来的
+                            })
                         });
                     })
                 });
 
-                // TODO: 按货物拣货->按原料 提示
                 $scope.change = function (e) {
                     swal({
                         title: '提示',
@@ -101,8 +102,25 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                                 e.preventDefault()
                             });
                             $scope.change = function () {
-                            }
+                                // 屏蔽掉原change函数
+                            };
                             // 计算原来各种原料的需求，再addItem
+                            var materialList = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
+                                console.log('++++', item);
+                                return 1
+                            });
+                            Common.getMaterialByCodes(materialList).then(function (materialList) {
+                                var materialObject = _.zipObject(_.map(materialList, function (item) {
+                                    return item.materialCode
+                                }), materialList);
+                                _.each(res.childPlanBillDetails, function (item) {
+                                    $scope.addItem({
+                                        materialName: materialObject[item.goodsCode],
+                                        rawMaterialId: item.goodsCode,
+                                        shippedAmount: parseInt(item.amount) * parseInt(item.cargo.number)
+                                    })
+                                })
+                            })
                         } else {
                             $('#tabs').children('li:first-child').children('a').click()
                         }
@@ -112,7 +130,7 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
         } else {
             swal('请求失败', response.message, 'error');
         }
-    }, apiServiceError)
+    }, apiServiceError);
 
     /**
      * 按货物拣货
@@ -125,7 +143,8 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                 {field: "cargoName", title: "货物名称"},
                 {field: "cargoCode", title: "货物编码"},
                 {field: "rawMaterialId", title: "所属原料"},
-                {field: "number", title: "规格"},
+                // {field: "number", title: "规格"},
+                {title: "规格", template: "#: number #/#: standardUnitCode #"},
                 {field: "shippedAmount", title: "应拣数量"},
                 {field: "actualAmount", title: "实拣数量"},
                 {field: "memo", title: "备注", editable: true}
@@ -223,8 +242,6 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                 }
             }
         });
-
-
     }
 
     function delCargo(e) {
@@ -234,7 +251,7 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
         $scope.itemMap[dataItem['index']].cargoGrid.kendoGrid.dataSource.remove(dataItem)
     }
 
-    $scope.bill = {}
+    $scope.bill = {};
 
     // save
     $scope.save = function () {
@@ -261,7 +278,7 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
         bill.billCode = $scope.params.billCode;
         bill.billProperty = 'RESTOCK';
         bill.planMemo = $scope.params.memo;
-        bill.outMemo  = '';
+        bill.outMemo = '';
         bill.sourceCode = $scope.params.billCode;
         bill.planMemo = $scope.params.memo;
         // bill.operatorCode = $.cookie('userCode')
@@ -303,7 +320,26 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
             })
         } else {
             bill.basicEnum = 'BY_MATERIAL'
-            // 按原料
+            // 按原料拣货
+            bill.billDetails = [];
+            _.each($scope.itemMap, function (item) {
+                console.log('#', item)
+                _.each(item.cargoGrid.kendoGrid.dataSource.data(), function (data) {
+                    console.log('##', data)
+                    bill.billDetails.push({
+                        rawMaterial: {
+                            rawMaterialCode: data.rawMaterialId,
+                            rawMaterialName: data.rawMaterialName,
+                            cargo: {
+                                cargoCode: data.cargoCode,
+                                cargoName: data.cargoName
+                            }
+                        },
+                        actualAmount: data.actualAmount,
+                        shippedAmount: ''
+                    })
+                })
+            })
         }
 
         ApiService.post(url, bill).then(function (response) {

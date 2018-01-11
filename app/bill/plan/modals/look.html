@@ -37,6 +37,10 @@
                 <dt>计划备注</dt>
                 <dd class="ng-binding">{{plan.memo}}</dd>
             </dl>
+            <dl class="dl-horizontal">
+                <dt>审核意见</dt>
+                <dd class="ng-binding">{{plan.memo}}</dd>
+            </dl>
         </div>
         <div data-ng-if="type==='audit'">
             <div class="row">
@@ -61,7 +65,8 @@
             </div>
             <div class="input-group">
                 <span class="input-group-addon">计划备注</span>
-                <textarea type="text" rows="1" class="form-control custom-scroll" data-ng-model="plan.memo"></textarea>
+                <textarea type="text" rows="1" class="form-control custom-scroll" disabled
+                          data-ng-model="plan.memo"></textarea>
             </div>
         </div>
     </div>
@@ -72,54 +77,54 @@
         </div>
         <div class="plan-panel-body">
             <div data-ng-hide="item.unfurled">
-                <p class="no-margin" data-ng-if="item.material">原料名称:咖啡豆</p>
-                <p class="no-margin" data-ng-if="item.cargo">货物名称:咖啡豆</p>
+                <p class="no-margin" data-ng-if="item.material">原料名称:{{item.material.materialName}}</p>
+                <p class="no-margin" data-ng-if="item.cargo">货物名称:{{item.cargo.cargoName}}</p>
             </div>
             <div data-ng-show="item.unfurled">
                 <div class="row" data-ng-if="item.material">
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>原料名称</dt>
-                        <dd data-ng-bind="item.cargo.cargoName"></dd>
+                        <dd data-ng-bind="item.material.materialName"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>原料编码</dt>
-                        <dd data-ng-bind="item.cargo.cargoCode"></dd>
+                        <dd data-ng-bind="item.material.cargoCode"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>所属原料分类</dt>
-                        <dd data-ng-bind="item.cargo.barCode"></dd>
+                        <dd data-ng-bind="item.material.barCode"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>最小标准单位</dt>
-                        <dd data-ng-bind="item.cargo.selfBarCode"></dd>
+                        <dd data-ng-bind="item.material.selfBarCode"></dd>
                     </dl>
                 </div>
                 <div class="row" data-ng-if="item.cargo">
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>货物名称</dt>
                         <dd data-ng-bind="item.cargo.cargoName"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>货物编码</dt>
                         <dd data-ng-bind="item.cargo.cargoCode"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>货物条码</dt>
                         <dd data-ng-bind="item.cargo.barCode"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>货物自定义条码</dt>
                         <dd data-ng-bind="item.cargo.selfBarCode"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>所属原料</dt>
                         <dd data-ng-bind="item.cargo.materialName"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>规格</dt>
                         <dd data-ng-bind="item.cargo.number + item.cargo.measurementName"></dd>
                     </dl>
-                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                    <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>分类</dt>
                         <dd data-ng-bind="item.cargo.class"></dd>
                     </dl>
@@ -132,6 +137,7 @@
     <hr class="gray-line">
     <div class="input-group">
         <span class="input-group-addon">审核意见</span>
-        <textarea type="text" rows="3" class="form-control custom-scroll" data-ng-model="params.oddNumber"></textarea>
+        <textarea type="text" rows="3" class="form-control custom-scroll" data-ng-disabled="type!=='audit'"
+                  data-ng-model="plan.auditMemo"></textarea>
     </div>
 </div>

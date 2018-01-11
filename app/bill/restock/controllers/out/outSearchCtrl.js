@@ -15,9 +15,10 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
     ];
 
     $scope.auditStateCode = [
-        {value: 'OPEN', text: '未审核'},
+        {value: 'UN_REVIEWED', text: '未审核'},
         {value: 'AUDITSUCCESS', text: '审核通过'},
-        {value: 'AUDITFAILURE', text: '审核不通过'}
+        {value: 'AUDITFAILURE', text: '审核不通过'},
+        {value: 'AUDIT_ING', text: '审核中'}
     ];
 
     $scope.inOrOutStateCode = [
@@ -76,11 +77,15 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
                         },
                         {
                             name: 'e', text: "修改", click: edit, visible: function (dataItem) {
-                                return true
+                                var state = dataItem.billState === 'AUDIT_FAILURE'; // 已提交，审核不通过
+                                state = state || dataItem.billState === "SUBMITTED";
+                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE")
+                                state = state || dataItem.submitState === 'UNCOMMITTED';
+                                return state
                             }
                         }, {
-                            name: 't', text: "审核", click: check, visible: function (dataItem) {
-                                return true
+                            name: 't', text: "审核", click: audit, visible: function (dataItem) {
+                                return dataItem.submitState === 'SUBMITTED' && (dataItem.auditState === 'UN_REVIEWED' || dataItem.auditState === 'AUDIT_FAILURE' || dataItem.auditState === 'AUDIT_ING')
                             }
                         }],
                     locked: true,
@@ -93,7 +98,11 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
                     }
                 },
                 {field: "billCode", locked: true, title: "出库单号", width: 150},
-                {field: "billType", title: "单据属性", width: 150},
+                {
+                    title: "单据属性", width: 150, template: function (data) {
+                        return getTextByVal($scope.billType, data.billType) + '转'
+                    }
+                },
                 {
                     title: "出库状态", width: 150, template: function (data) {
                         var str = '';
@@ -172,11 +181,10 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
     }
 
     // 审核
-    function check(e) {
+    function audit(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        // $state.go('app.bill.restock.outCheck', {outId: dataItem.outCode})
-        openModal('check', dataItem)
+        openModal('audit', dataItem)
     }
 
     function openModal(type, data) {
@@ -184,6 +192,7 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
             templateUrl: 'app/bill/restock/modals/outBillModal.html',
             size: 'lg',
             controller: 'outBillModalCtrl',
+            // scope: $scope,
             resolve: {
                 data: {
                     billCode: data.billCode,
@@ -191,6 +200,8 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
                 }
             }
         })
+        // $scope.outBillGrid.kendoGrid.dataSource.read();
+        // $scope.outBillGrid.kendoGrid.refresh()
     }
 
     // 来源单号弹窗
@@ -204,7 +215,7 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
             controller: 'PlanViewModalCtrl',
             resolve: {
                 data: {
-                    number: dataItem.stationPlanNum
+                    billCode: dataItem.sourceCode
                 }
             }
         })

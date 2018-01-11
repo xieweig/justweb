@@ -4,6 +4,10 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
     // 页面类型 查看or审核
     $scope.type = params.type;
     $scope.bill = params.purchaseBill;
+    params.purchaseBill.supplier = {
+        supplierCode: params.purchaseBill.supplierCode,
+        supplierName: params.purchaseBill.supplierCode
+    };
 
     $timeout(function () {
         $('#inStorageCode').val(params.purchaseBill.inStorageCode).trigger('change');
@@ -45,6 +49,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
     $scope.supplierTreeOpt = {
         type: 'supplier',
         single: true,
+        initTip: params.purchaseBill.supplier.supplierName,
         callback: function (data) {
             $scope.bill.supplier = {
                 supplierCode: data.supplierCode,
@@ -108,7 +113,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         if (!bill.freightCode) {
             swal('请输入运单单号', '', 'warning');
             return
-        } else if (!bill.inStorageCode) {
+        } else if (!bill.storage || !bill.storage.storageCode) {
             swal('请选择入库库位', '', 'warning');
             return
         } else if (!bill.shippedAmount) {
@@ -117,7 +122,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         } else if (!bill.actualAmount) {
             swal('请输入实收数量', '', 'warning');
             return
-        } else if (!bill.supplierCode) {
+        } else if (!bill.supplier || !bill.supplier.supplierCode) {
             swal('请输入供应商', '', 'warning');
             return
         }
@@ -162,13 +167,19 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 differencePrice: item.differencePrice
             };
         });
-        delete bill.supplierCode;
+        bill.operatorCode = 'YGADMIN';
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
                 swal('操作成功', '', 'success').then(function () {
-                    $state.go('app.bill.procurement.list');
+                    if (params.type === 'add') {
+                        $state.go('app.bill.procurement.list');
+                    } else {
+                        $scope.$close(function () {
+                            console.log(213);
+                        });
+                    }
                 });
             }
         }, apiServiceError);

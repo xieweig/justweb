@@ -35,27 +35,24 @@
                             <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">计划备注</span>
-                                    <textarea type="text" rows="" class="form-control custom-scroll"
-                                              data-ng-model="params.memo" disabled></textarea>
+                                    <input type="text" class="form-control" data-ng-model="params.memo" disabled>
                                 </div>
                             </div>
-
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">出库备注</span>
+                                    <input type="text" class="form-control" data-ng-model="params.memo">
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <!-- your contents here -->
                     <div class="well margin-top-10 padding-top-0">
                         <h5>
-                            <small>
-                                退库计划单信息
-                            </small>
+                            <small>退库计划单信息</small>
                         </h5>
-                        <!--<br>-->
-
                         <div class="row" style="margin-bottom: 18px;">
-
                             <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
                                 <div class="display-flex">
                                     <div class="flex-1">
@@ -67,35 +64,25 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">入库站点</span>
                                     <input type="text" class="form-control" data-ng-model="params.inStationName"
                                            disabled>
-                                    <!--<span data-station-tree data-select-modal="inStationParams"></span>-->
                                 </div>
                             </div>
-
-                            <!-- TODO: 修改出库来源 -->
                             <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">出库站点</span>
                                     <input type="text" class="form-control" data-ng-model="params.outStationName"
                                            disabled>
-                                    <!--<span data-station-tree data-select-modal="outStationParams"></span>-->
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
-
             </div>
-
         </section>
-
         <div>
             <div class="widget-body no-padding">
                 <div class="tab-pane" id="hr2">
@@ -153,10 +140,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
 </div>

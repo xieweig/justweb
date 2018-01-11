@@ -45,13 +45,13 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $rootScope, $
             autoBind: false,
             persistSelection: true,
             editable: true,
-            // pageable: true,
+            pageable: true,
             columns: [
                 {selectable: true},
                 {field: "cargoName", title: "货物名称"},
                 {field: "cargoCode", title: "货物编码"},
                 {field: "rawMaterialName", title: "所属原料"},
-                {field: "cargoNumber", title: "货物数量"}, // 对应添加货物的实拣数量
+                {field: "actualAmount", title: "货物数量"}, // 对应添加货物的实拣数量
                 {field: "number", title: "标准单位数量"},
                 {field: "standardUnitCode", title: "标准单位"},
                 {field: "memo", title: "备注"}
@@ -60,9 +60,9 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $rootScope, $
     };
 
     $scope.inStationParams = {
-        // single: true,
+        single: true,
         callback: function (data) {
-            console.log(data);
+            $scope.params.inStationCode = data
         }
     };
 
@@ -88,8 +88,6 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $rootScope, $
 
     // 保存出库单
     $scope.save = function () {
-        console.log($scope.CargoListGrid.kendoGrid.dataSource.data())
-        console.log($scope.params.memo)
         saveOrAudit('save', _.cloneDeep($scope.bill))
     };
 
@@ -106,26 +104,39 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $rootScope, $
         } else {
             url = '/api/bill/restock/submitRestockBill'
         }
-        bill.planMemo = $scope.params.memo
-        bill.operatorCode = $.cookie('userCode')
-        bill.totalPrice = '12345'
-        // station没调试
+        bill.basicEnum = 'BY_CARGO';
+        bill.planMemo = $scope.params.memo;
+        bill.operatorCode = $.cookie('userCode');
+        bill.totalPrice = '12345';
+        // 获取当前库位
         bill.outStation = {
-            stationCode: 'HDQA00',
-            stationName: $.cookie('currentStationName'),
+            stationCode: $.cookie('currentStationCode'),
+            stationName: '',
             stationType: $.cookie('STORE'),
             storage: {
-                storageCode: $scope.storage[0].tempStorageCode,
-                storageName: $scope.storage[0].tempStorageName
+                storageCode: $scope.params.outStationType,
+                storageName: ''
             }
-        }
+        };
+        // 获取选择站点的在途库
+        var inStationCode = $scope.params.inStationCode.stationCode;
+        var tmpStorageCode = '';
+        Common.getStore(inStationCode).then(function (storageList) {
+            var jump = true;
+            _.each(storageList, function (item) {
+                if (jump && item.storageType === 'PASSAGELIBRARY') { // 数据的Type没加 所以没了
+                    tmpStorageCode = item.tempStorageCode;
+                    jump = false
+                }
+            })
+        });
         bill.inStation = {
-            stationCode: 'HDQA00',
-            stationName: $.cookie('currentStationName'),
+            stationCode: inStationCode,
+            stationName: '',
             stationType: 'LOGISTICS',
             storage: {
-                storageCode: $scope.storage[0].tempStorageCode,
-                storageName: $scope.storage[0].tempStorageName
+                storageCode: tmpStorageCode,
+                storageName: ''
             }
         }
         bill.billDetails = _.map($scope.CargoListGrid.kendoGrid.dataSource.data(), function (item) {
@@ -138,8 +149,8 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $rootScope, $
                         cargoName: item.cargoName
                     }
                 },
-                actualAmount: null,
-                shippedAmount: '1'
+                actualAmount: item.actualAmount,
+                shippedAmount: ''
             }
         })
         ApiService.post(url, bill).then(function (response) {

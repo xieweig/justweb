@@ -31,6 +31,14 @@ angular.module('app.bill.trace', ['ui.router']).config(function ($stateProvider)
                     templateUrl: 'app/bill/trace/views/add.html',
                     controller: 'TraceAddCtrl'
                 }
+            },
+            resolve: {
+                params: function () {
+                    return {
+                        billCode: '',
+                        isRead: false
+                    };
+                }
             }
         });
 });

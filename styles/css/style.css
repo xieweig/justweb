@@ -366,7 +366,7 @@ input[type="text"]:disabled {
 .k-grid-content-locked{
     /* height: -webkit-calc(100% - 60px) !important;
     height: calc(100% - 60px) !important; */
-    height: 100%;
+    /* height: initial !important */
 }
 
 .k-grid table{

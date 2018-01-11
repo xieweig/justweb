@@ -16,11 +16,13 @@
                 <input type="button" class="btn btn-default widget-header-btn" value="提交审核" data-ng-click="submit()">
                 <input type="button" class="btn btn-default widget-header-btn" value="保存" data-ng-click="save()">
             </span>
-            <span ng-if="modalType === 'check'">
+            <span ng-if="modalType === 'audit'">
                 <input type="button" class="btn btn-default widget-header-btn" value="返回" data-ng-click="$close()">
-            <input type="button" class="btn btn-default widget-header-btn" value="审核不通过" data-ng-click="search()"
+            <input type="button" class="btn btn-default widget-header-btn" value="审核不通过"
+                   data-ng-click="audit('failure')"
                    style="width: 100px">
-            <input type="button" class="btn btn-default widget-header-btn" value="审核通过" data-ng-click="search()">
+            <input type="button" class="btn btn-default widget-header-btn" value="审核通过"
+                   data-ng-click="audit('success')">
             </span>
             <span ng-if="modalType === 'inview'">
                 <input type="button" class="btn btn-primary" value="导出" data-ng-click="export()">
@@ -63,17 +65,17 @@
 
             <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库库位</dt>
-                <dd data-ng-bind="params.outLocation.storage.storageCode">正常库</dd>
+                <dd data-ng-bind="params.outLocation.storage.storageName"></dd>
             </dl>
 
             <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>入库站点</dt>
-                <dd data-ng-bind="params.inStationName">重庆物流</dd>
+                <dd data-ng-bind="params.inStationName"></dd>
             </dl>
 
             <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>单据属性</dt>
-                <dd data-ng-bind="params.billType">退库计划转</dd>
+                <dd data-ng-bind="params.billType"></dd>
             </dl>
 
             <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
@@ -81,24 +83,24 @@
                 <dd data-ng-bind="params.inOrOutState"></dd>
             </dl>
 
-            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+            <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>提交状态</dt>
                 <dd data-ng-bind="params.submitState"></dd>
             </dl>
 
-            <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>审核状态</dt>
                 <dd data-ng-bind="params.auditState"></dd>
             </dl>
 
             <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>退库数量</dt>
-                <dd data-ng-bind="params.amount"></dd>
+                <dd data-ng-bind="params.totalAmount"></dd>
             </dl>
 
             <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>退库品种</dt>
-                <dd data-ng-bind="params.variety"></dd>
+                <dd data-ng-bind="params.totalVarietyAmount"></dd>
             </dl>
 
             <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
@@ -115,8 +117,14 @@
                 <div class="col-lg-10 col-sm-10 col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon">出库备注</span>
-                        <textarea type="text" rows="1" class="form-control custom-scroll"
-                                  data-ng-model="params.outMemo" disabled></textarea>
+                        <span ng-if="modalType === 'edit'">
+                            <textarea type="text" rows="1" class="form-control custom-scroll"
+                                  data-ng-model="params.outMemo"></textarea>
+                        </span>
+                        <span ng-if="modalType !== 'edit'">
+                            <textarea type="text" rows="1" class="form-control custom-scroll"
+                                      data-ng-model="params.outMemo" disabled></textarea>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -125,11 +133,11 @@
                 <div class="col-lg-12 col-sm-12 col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon">审核意见</span>
-                        <span ng-if="modalType === 'check'">
+                        <span ng-if="modalType === 'audit'">
                         <textarea type="text" rows="1" class="form-control custom-scroll"
                                   data-ng-model="params.checkMemo"></textarea>
                         </span>
-                        <span ng-if="modalType !== 'check'">
+                        <span ng-if="modalType !== 'audit'">
                         <textarea type="text" rows="1" class="form-control custom-scroll"
                                   data-ng-model="params.checkMemo" disabled></textarea>
                         </span>

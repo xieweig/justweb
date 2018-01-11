@@ -7,10 +7,10 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             height: 150,
             editable: true,
             columns: [
-                { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 85, locked: true },
-                { field: "outStationName", title: "调出站点" },
-                { field: "inStationName", title: "调入站点" },
-                { field: "number", title: "数量(点击修改)", editable: true }
+                {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                {field: "outStationName", title: "调出站点"},
+                {field: "inStationName", title: "调入站点"},
+                {field: "number", title: "数量(点击修改)", editable: true}
             ]
         }
     };
@@ -114,9 +114,21 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
 
     // 公共的添加方法
     function addStationToGrid(data) {
-        _.each(data, function (item) {
-            $scope.stationGrid.kendoGrid.dataSource.add(item);
+        var dataSource = $scope.stationGrid.kendoGrid.dataSource;
+        var current = _.map(dataSource.data(), function (item) {
+            return item.outStationCode + '-' + item.inStationCode;
         });
+        var existent = [];
+        _.each(data, function (item) {
+            if (_.indexOf(current, item.outStationCode + '-' + item.inStationCode) > -1) {
+                existent.push(item.outStationName + '-' + item.inStationName);
+            } else {
+                $scope.stationGrid.kendoGrid.dataSource.add(item);
+            }
+        });
+        if (existent.length > 0) {
+            swal('操作成功!', '其中 ' + existent.join() + ' 已存在', 'success');
+        }
     }
 
     $scope.add = function () {

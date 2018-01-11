@@ -1,42 +1,61 @@
 'use strict';
 
 angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
-    $stateParams.billCode = '1515143576283';
-
+    $stateParams.billCode = '1515463452228';
     if ($stateParams.billCode) {
         ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
                 var planBill = response.result.planBill;
-                var cargoCodes = _.map(planBill.planBillDetails, function (billItem) {
+                $scope.plan = {
+                    billName: planBill.billName,
+                    billCode: planBill.billCode,
+                    memo: planBill.memo
+                };
+                var goodsCode = _.map(planBill.planBillDetails, function (billItem) {
                     return billItem.goodsCode;
                 });
-                Common.getCargoByCodes(cargoCodes).then(function (cargoList) {
-                    var cargoObject = _.zipObject(_.map(cargoList, function (item) { return item.cargoCode }), cargoList);
-                    _.each(planBill.planBillDetails, function (item) {
-                        item.cargo = cargoObject[item.goodsCode];
-                    });
-                    $scope.plan = {
-                        billName: planBill.billName,
-                        billCode: planBill.billCode,
-                        memo: planBill.memo
-                    };
-                    if (planBill.basicEnum === 'BY_CARGO') {
-                        $scope.cargoMap = _.map(planBill.planBillDetails, function (item) {
-                            return pushCargo(item);
-                        })
-
+                var isCargo = planBill.basicEnum === 'BY_CARGO';
+                if (isCargo) {
+                    Common.getCargoByCodes(goodsCode).then(function (cargoList) {
                         $('#tabs-1').addClass('active');
                         $('a[href="#tabs-1"]').parent().addClass('active');
-                    } else {
+                        var cargoObject = _.zipObject(_.map(cargoList, function (item) {
+                            return item.cargoCode
+                        }), cargoList);
+                        _.each(planBill.planBillDetails, function (item) {
+                            item.cargo = cargoObject[item.goodsCode];
+                        });
+
+                        $scope.cargoMap = _.map(planBill.planBillDetails, function (item) {
+                            return pushCargo(item, !isCargo);
+                        });
+
+                        $timeout(function () {
+                            $('#billType').val(planBill.billType).trigger('change');
+                        });
+                    });
+                } else {
+                    Common.getMaterialByCodes(goodsCode).then(function (materialList) {
                         $('#tabs-2').addClass('active');
                         $('a[href="#tabs-2"]').parent().addClass('active');
-                    }
-                    $timeout(function () {
-                        $('#billType').val(planBill.billType).trigger('change');
+                        var materialObject = _.zipObject(_.map(materialList, function (item) {
+                            return item.materialCode
+                        }), materialList);
+                        _.each(planBill.planBillDetails, function (item) {
+                            item.material = materialObject[item.goodsCode];
+                        });
+
+                        $scope.materialMap = _.map(planBill.planBillDetails, function (item) {
+                            return pushCargo(item, !isCargo);
+                        });
+
+                        $timeout(function () {
+                            $('#billType').val(planBill.billType).trigger('change');
+                        });
                     });
-                });
+                }
             }
         }, apiServiceError);
     } else {
@@ -84,10 +103,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         });
     });
 
-    $('#grid').on('click', '.kendo-btn-a', function () {
-
-    })
-
 
     // 项目数组
     $scope.cargoMap = [];
@@ -100,36 +115,69 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         }
     };
 
-    function pushCargo(item) {
-        var dataSource = [];
-        if (item) {
-            dataSource = _.map(item.resultPlanBillDetailDTOSet, function (stationItem) {
-                return {
-                    inStationCode: stationItem.inLocation.stationCode,
-                    inStationName: '入库站点',
-                    outStationCode: stationItem.outLocation.stationCode,
-                    outStationName: '出库站点',
-                    number: stationItem.amount
-                };
-            });
+    function pushCargo(item, isMaterial) {
+        if (!item) {
+            item = {
+                resultPlanBillDetailDTOSet: []
+            };
         }
-        return {
-            unfurled: true,
-            cargo: item.cargo || {},
-            stationGrid: {
-                kendoSetting: {
-                    height: 200,
-                    editable: true,
-                    dataSource: dataSource,
-                    columns: [
-                        { command: [{ name: 'destroy', text: "删除" }], title: "操作", width: 85, locked: true },
-                        { field: "inStationName", title: "调出站点" },
-                        { field: "outStationName", title: "调入站点" },
-                        { field: "number", title: "调剂数量(点击修改)", editable: true }
-                    ]
+        if (isMaterial) {
+            return {
+                unfurled: true,
+                material: item && item.material ? item.material : {},
+                stationGrid: {
+                    kendoSetting: {
+                        height: 200,
+                        editable: true,
+                        dataSource: item.resultPlanBillDetailDTOSet,
+                        columns: [
+                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                            {
+                                title: "调出站点",
+                                template: function (data) {
+                                    return getTextByVal($scope.station, data.outLocation.stationCode)
+                                }
+                            },
+                            {
+                                title: "调入站点",
+                                template: function (data) {
+                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                }
+                            },
+                            {field: "amount", title: "调剂数量(点击修改)", editable: true}
+                        ]
+                    }
                 }
-            }
-        };
+            };
+        } else {
+            return {
+                unfurled: true,
+                cargo: item && item.cargo ? item.cargo : {},
+                stationGrid: {
+                    kendoSetting: {
+                        height: 200,
+                        editable: true,
+                        dataSource: item.resultPlanBillDetailDTOSet,
+                        columns: [
+                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                            {
+                                title: "调出站点",
+                                template: function (data) {
+                                    return getTextByVal($scope.station, data.outLocation.stationCode)
+                                }
+                            },
+                            {
+                                title: "调入站点",
+                                template: function (data) {
+                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                }
+                            },
+                            {field: "amount", title: "调剂数量(点击修改)", editable: true}
+                        ]
+                    }
+                }
+            };
+        }
     }
 
     // 伸缩项
@@ -146,7 +194,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
-                        console.log(data);
                         item.cargo = data;
                     }
                 }
@@ -162,10 +209,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
-                        item.material = {
-                            materialName: '原料',
-                            materialCode: 'CODE001',
-                        };
+                        item.material = data;
                     }
                 }
             }
@@ -185,6 +229,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     $scope.clearCargo = function (item, index) {
         item.cargo = {};
     };
+    // 清空原料
+    $scope.clearMaterial = function (item, index) {
+        item.material = {};
+    };
 
     // 添加站点
     $scope.addStation = function (item, index) {
@@ -195,8 +243,22 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
+                        var dataSource = item.stationGrid.kendoGrid.dataSource;
+                        var current = _.map(dataSource.data(), function (item) {
+                            return item.inLocation.stationCode + '-' + item.outLocation.stationCode;
+                        });
                         _.each(data, function (dataItem) {
-                            item.stationGrid.kendoGrid.dataSource.add(dataItem)
+                            item.stationGrid.kendoGrid.dataSource.add({
+                                amount: dataItem.number,
+                                inLocation: {
+                                    stationCode: dataItem.inStationCode,
+                                    stationName: getTextByVal($scope.station, dataItem.inStationCode)
+                                },
+                                outLocation: {
+                                    stationCode: dataItem.outStationCode,
+                                    stationName: getTextByVal($scope.station, dataItem.outStationCode)
+                                }
+                            })
                         });
                     }
                 }
@@ -233,14 +295,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             plan.planBillDetailDTOS = _.map($scope.cargoMap, function (item) {
                 var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
                     return {
-                        amount: stationItem.number,
+                        amount: stationItem.amount,
                         inStation: {
-                            stationCode: stationItem.inStationCode,
-                            stationName: stationItem.inStationName
+                            stationCode: stationItem.inLocation.stationCode
                         },
                         outStation: {
-                            stationCode: stationItem.outStationCode,
-                            stationName: stationItem.outStationName
+                            stationCode: stationItem.outLocation.stationCode
                         }
                     };
                 });
@@ -251,6 +311,23 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             });
         } else {
             plan.basicEnum = 'BY_MATERIAL';
+            plan.planBillDetailDTOS = _.map($scope.materialMap, function (item) {
+                var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
+                    return {
+                        amount: stationItem.amount,
+                        inStation: {
+                            stationCode: stationItem.inLocation.stationCode
+                        },
+                        outStation: {
+                            stationCode: stationItem.outLocation.stationCode
+                        }
+                    };
+                });
+                return {
+                    rawMaterialCode: item.material.materialCode,
+                    planBillStationDTOS: stations
+                };
+            });
         }
         ApiService.post(url, plan).then(function (response) {
             if (response.code !== '000') {

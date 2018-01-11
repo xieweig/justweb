@@ -21,18 +21,18 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        .state('app.bill.restock.planView', {
-            url: '/bill/restock/plan/view/:planId',
-            data: {
-                title: '查看站点退库计划'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/restock/views/plan/View.html',
-                    controller: 'PlanViewCtrl'
-                }
-            }
-        })
+        // .state('app.bill.restock.planView', {
+        //     url: '/bill/restock/plan/view/:planId',
+        //     data: {
+        //         title: '查看站点退库计划'
+        //     },
+        //     views: {
+        //         "content@app": {
+        //             templateUrl: 'app/bill/restock/views/plan/View.html',
+        //             controller: 'PlanViewCtrl'
+        //         }
+        //     }
+        // })
         .state('app.bill.restock.selfPick', {
             url: '/bill/restock/station/selfpick',
             data: {
@@ -42,6 +42,12 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 "content@app": {
                     templateUrl: 'app/bill/restock/views/pick/self.html',
                     controller: 'selfPickCtrl'
+                }
+            },
+            resolve: {
+                station: function (Common) {
+                    var options = {type: 'LOGISTICS'};
+                    return Common.getStation(options);
                 }
             }
         })
@@ -69,42 +75,42 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        .state('app.bill.restock.outView', {
-            url: '/bill/restock/out/view/:outId',
-            data: {
-                title: '查看退库出库单'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/restock/views/out/View.html',
-                    controller: 'outViewCtrl'
-                }
-            }
-        })
-        .state('app.bill.restock.outEdit', {
-            url: '/bill/restock/out/edit/:outId',
-            data: {
-                title: '修改退库出库单'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/restock/views/out/Edit.html',
-                    controller: 'outEditCtrl'
-                }
-            }
-        })
-        .state('app.bill.restock.outCheck', {
-            url: '/bill/restock/out/check/:outId',
-            data: {
-                title: '审核退库出库单'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/restock/views/out/Check.html',
-                    controller: 'outCheckCtrl'
-                }
-            }
-        })
+        // .state('app.bill.restock.outView', {
+        //     url: '/bill/restock/out/view/:outId',
+        //     data: {
+        //         title: '查看退库出库单'
+        //     },
+        //     views: {
+        //         "content@app": {
+        //             templateUrl: 'app/bill/restock/views/out/View.html',
+        //             controller: 'outViewCtrl'
+        //         }
+        //     }
+        // })
+        // .state('app.bill.restock.outEdit', {
+        //     url: '/bill/restock/out/edit/:outId',
+        //     data: {
+        //         title: '修改退库出库单'
+        //     },
+        //     views: {
+        //         "content@app": {
+        //             templateUrl: 'app/bill/restock/views/out/Edit.html',
+        //             controller: 'outEditCtrl'
+        //         }
+        //     }
+        // })
+        // .state('app.bill.restock.outCheck', {
+        //     url: '/bill/restock/out/check/:outId',
+        //     data: {
+        //         title: '审核退库出库单'
+        //     },
+        //     views: {
+        //         "content@app": {
+        //             templateUrl: 'app/bill/restock/views/out/Check.html',
+        //             controller: 'outCheckCtrl'
+        //         }
+        //     }
+        // })
         .state('app.bill.restock.inSearch', {
             url: '/bill/restock/in/search',
             data: {
@@ -117,18 +123,18 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        .state('app.bill.restock.inView', {
-            url: '/bill/restock/in/view',
-            data: {
-                title: '查看退库出库单'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/restock/views/in/inView.html',
-                    controller: 'inViewCtrl'
-                }
-            }
-        })
+        // .state('app.bill.restock.inView', {
+        //     url: '/bill/restock/in/view',
+        //     data: {
+        //         title: '查看退库出库单'
+        //     },
+        //     views: {
+        //         "content@app": {
+        //             templateUrl: 'app/bill/restock/views/in/inView.html',
+        //             controller: 'inViewCtrl'
+        //         }
+        //     }
+        // })
         .state('app.bill.restock.inAction', {
             url: '/bill/restock/in/action',
             data: {

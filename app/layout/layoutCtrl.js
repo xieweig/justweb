@@ -1,43 +1,62 @@
 'use strict';
 
 angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station, scopeStation, store) {
-
     $rootScope.largeArea = largeArea;
     $rootScope.city = city;
     $rootScope.station = station;
 
     $rootScope.location = _.map(store, function (item) {
-        return { key: item.tempStorageId, value: item.tempStorageCode, text: item.tempStorageName };
+        return {key: item.tempStorageId, value: item.tempStorageCode, text: item.tempStorageName};
     });
 
     $rootScope.billType = [
-        { key: 'DELIVERY', value: 'DELIVERY', text: '配送计划' },
-        { key: 'ADJUST', value: 'ADJUST', text: '调剂计划' },
-        { key: 'RESTOCK', value: 'RESTOCK', text: '退库计划' },
-        { key: 'RETURNED', value: 'RETURNED', text: '退货计划' },
-        { key: 'NOPLAN', value: 'NOPLAN', text: '无计划' }
+        {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
+        {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
+        {key: 'RESTOCK', value: 'RESTOCK', text: '退库计划'},
+        {key: 'RETURNED', value: 'RETURNED', text: '退货计划'}
     ];
 
     $rootScope.outType = [
-        { key: 'NORMALLIBRARY', value: 'NORMALLIBRARY', text: '正常库' },
-        { key: 'STORAGELIBRARY', value: 'STORAGELIBRARY', text: '仓储库' },
-        { key: 'STOCKLIBRARY', value: 'STOCKLIBRARY', text: '进货库' },
-        { key: 'RETURNLIBRARY', value: 'RETURNLIBRARY', text: '退货库' },
-        { key: 'PASSAGELIBRARY', value: 'PASSAGELIBRARY', text: '在途库' },
-        { key: 'RESERVEDLIBRARY', value: 'RESERVEDLIBRARY', text: '预留库' }
+        {key: 'NORMALLIBRARY', value: 'NORMALLIBRARY', text: '正常库'},
+        {key: 'STORAGELIBRARY', value: 'STORAGELIBRARY', text: '仓储库'},
+        {key: 'STOCKLIBRARY', value: 'STOCKLIBRARY', text: '进货库'},
+        {key: 'RETURNLIBRARY', value: 'RETURNLIBRARY', text: '退货库'},
+        {key: 'PASSAGELIBRARY', value: 'PASSAGELIBRARY', text: '在途库'},
+        {key: 'RESERVEDLIBRARY', value: 'RESERVEDLIBRARY', text: '预留库'}
+    ];
+
+    $rootScope.submitStatus = [
+        {value: 'SUBMITTED', text: '已提交'},
+        {value: 'UNCOMMITTED', text: '未提交'}
+    ];
+    $rootScope.auditStatus = [
+        {value: 'UN_REVIEWED', text: '未审核'},
+        {value: 'AUDIT_ING', text: '审核中'},
+        {value: 'AUDIT_SUCCESS', text: '审核通过'},
+        {value: 'AUDIT_FAILURE', text: '审核不通过'}
+    ];
+
+    $rootScope.packageType = [
+        {value: 'ONE_BILL_TO_ONE_PACKAGE', text: '一单一包'},
+        {value: 'ONE_BILL_TO_MANY_PACKAGE', text: '一单多包'},
+        {value: 'MANY_BILL_TO_ONE_PACKAGE', text: '多单合包'}
     ];
 
 
-    var stationTypeMap = { station: {}, scopeStation: {} };
+    var stationTypeMap = {station: {}, scopeStation: {}};
     // 拼接站点树结构
     $rootScope.getStationTree = function (stationType, isPermissions) {
         stationType = (!stationType ? 'All' : stationType);
         if (isPermissions ? !stationTypeMap.scopeStation[stationType] : !stationTypeMap.station[stationType]) {
             var stationTree = [];
             // 将大区数组根据code转化为对象
-            var largeAreaObject = _.zipObject(_.map(largeArea, function (item) { return item.value }), largeArea);
+            var largeAreaObject = _.zipObject(_.map(largeArea, function (item) {
+                return item.value
+            }), largeArea);
             // 将城市数组根据code转化为对象
-            var cityObject = _.zipObject(_.map(city, function (item) { return item.value }), city);
+            var cityObject = _.zipObject(_.map(city, function (item) {
+                return item.value
+            }), city);
             // 将站点排序 然后记录上一次城市ID  城市改变
             var largeAreaPos = {};
             var cityPos = {};
@@ -46,7 +65,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
                 if (stationType !== 'All' && stationType !== undefined && item.siteType !== stationType) {
                     return;
                 }
-                var currentStation = { key: item.key, value: item.value, text: item.text, type: 'station' };
+                var currentStation = {key: item.key, value: item.value, text: item.text, type: 'station'};
                 // 如果区域被禁用  则直接添加
                 if (item.regionStatus === 'DISABLED') {
                     stationTree.push(currentStation);
@@ -57,7 +76,15 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
                 if (largeAreaSerial === undefined) {
                     // 测试站点存在对应大区没有的情况
                     var largeAreaItem = largeAreaObject[item.regionCode];
-                    largeAreaSerial = largeAreaPos[item.regionCode] = stationTree.push({ expanded: true, key: largeAreaItem.key, value: largeAreaItem.value, text: largeAreaItem.text, type: 'largeArea', isNode: true, items: [] }) - 1;
+                    largeAreaSerial = largeAreaPos[item.regionCode] = stationTree.push({
+                            expanded: true,
+                            key: largeAreaItem.key,
+                            value: largeAreaItem.value,
+                            text: largeAreaItem.text,
+                            type: 'largeArea',
+                            isNode: true,
+                            items: []
+                        }) - 1;
                 }
                 // 获取该站点对应的大区在树中的索引
                 var currentLargeArea = stationTree[largeAreaSerial];
@@ -76,7 +103,15 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
                 if (citySerial === undefined) {
                     // 测试站点存在对应大区没有的情况
                     var cityItem = cityObject[item.cityCode];
-                    citySerial = cityPos[item.cityCode] = [largeAreaSerial, currentLargeArea.items.push({ expanded: true, key: cityItem.key, value: cityItem.value, text: cityItem.text, type: 'city', isNode: true, items: [] }) - 1];
+                    citySerial = cityPos[item.cityCode] = [largeAreaSerial, currentLargeArea.items.push({
+                        expanded: true,
+                        key: cityItem.key,
+                        value: cityItem.value,
+                        text: cityItem.text,
+                        type: 'city',
+                        isNode: true,
+                        items: []
+                    }) - 1];
                 }
                 // 获取该站点对应的城市在对应大于中的索引
                 var currentCity = stationTree[citySerial[0]].items[citySerial[1]];
@@ -108,7 +143,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         if (!params.excelUniqueIdentification) {
             params = _.cloneDeep(params);
         }
-        ApiService.post(url, params, { hasHost: true }).then(function (response) {
+        ApiService.post(url, params, {hasHost: true}).then(function (response) {
             if (response.code !== '000') {
                 swal('导出失败', response.message, 'error');
             } else {

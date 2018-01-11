@@ -41,6 +41,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         persistSelection: true,
         kendoSetting: {
             editable: true,
+            autoBind: false,
             columns: [
                 {title: "操作", locked: true, command: [{name: 'select', text: "删除", click: delCurCargo}], width: 80},
                 {field: "cargoName", title: "货物名称", width: 120},
@@ -75,13 +76,19 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         _.each(dataSource.data(), function (item, index) {
             if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
                 console.log($scope.material.rawMaterialId, item.rawMaterialId)
-                if(item.rawMaterialId.toString() === $scope.material.rawMaterialId) {
-                    // 添加货物预置数量
-                    if($scope.material.shippedAmount > $scope.material.actualAmount){
-                        item.actualAmount = parseInt(parseInt($scope.material.shippedAmount) - parseInt($scope.material.actualAmount))/parseInt(item.number)
-                    }else {
-                        item.actualAmount = 0;
+                // 判断是否需要区分原料
+                if ($scope.show) {
+                    if (item.rawMaterialId.toString() === $scope.material.rawMaterialId) {
+                        // 添加货物预置数量
+                        if ($scope.material.shippedAmount > $scope.material.actualAmount) {
+                            item.actualAmount = parseInt((parseInt($scope.material.shippedAmount) - parseInt($scope.material.actualAmount)) / parseInt(item.number));
+                        } else {
+                            item.actualAmount = 0;
+                        }
+                        currentDataSource.add(item);
                     }
+                }
+                else {
                     currentDataSource.add(item);
                 }
             }
