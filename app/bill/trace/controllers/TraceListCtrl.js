@@ -63,6 +63,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
 
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
+        isSupplier: true,
         callback: function (data) {
             $scope.params.inStationCode = _.map(data, function (item) {
                 return item.stationCode;
@@ -72,6 +73,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
 
     // 搜索条件中的入库站点选择
     $scope.inStationParams = {
+        isSupplier: true,
         callback: function (data) {
             $scope.params.outStationCode = _.map(data, function (item) {
                 return item.stationCode;
