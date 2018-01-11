@@ -18,7 +18,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                 }
             });
         }
-    }
+    };
 
     /**
      * 初始化
@@ -135,7 +135,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
         } else {
             var dataSource = $scope.detailsGrid.kendoGrid.dataSource;
             var repeatIndex = _.findIndex(dataSource.data(), function (item) {
-                return item.outStorageBillCode == $scope.currentDetails.outStorageBillCode;
+                return item.outStorageBillCode === $scope.currentDetails.outStorageBillCode;
             });
             if (repeatIndex >= 0) {
                 swal('该出库单号已存在', '', 'warning');

@@ -102,7 +102,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         getTraceDetails(dataItem.wayBillCode, true);
-    };
+    }
 
     /**
      * 修改跟踪信息
@@ -111,7 +111,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         getTraceDetails(dataItem.wayBillCode);
-    };
+    }
 
     /**
      * 加载单条数据
