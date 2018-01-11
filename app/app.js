@@ -281,7 +281,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
         }, apiServiceError);
     };
     // 根据配置类型查询数据源配置
-    this.getStore = function (configureType) {
+    this.getConfigure = function (configureType) {
         if (!configureType) {
             return;
         }

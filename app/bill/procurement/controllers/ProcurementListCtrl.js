@@ -99,7 +99,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                 $scope.search();
             });
         });
-    };
+    }
 
     // 打开审核界面
     function openAuditModal(e) {

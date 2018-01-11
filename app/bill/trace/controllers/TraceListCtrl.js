@@ -25,7 +25,6 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
             autoBind: false,
             pageable: true,
             columns: [
-                { selectable: true },
                 {
                     command: [
                         { name: 's', text: "查看", click: seeTrace },
