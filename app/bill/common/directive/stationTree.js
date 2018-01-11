@@ -19,7 +19,9 @@ angular.module('app').directive('stationTree', function ($uibModal) {
             if (selectModal.button !== true) {
                 elm.addClass('ui-select').removeAttr('select-material data-select-material');
             }
-            elm.html(selectModal.initTip);
+            if (selectModal.initTip) {
+                elm.html('<span class="tipsText">' + selectModal.initTip + '</span>');
+            }
             elm.click(function () {
                 var options = {};
                 if (selectModal.single) {
