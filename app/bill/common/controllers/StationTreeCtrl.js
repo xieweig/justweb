@@ -15,6 +15,7 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
                 }
             }
         },
+        loadOnDemand: false,
         checkboxes: {
             checkChildren: true
         },
@@ -36,7 +37,7 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
             var result = [];
             checkedNodeIds($scope.treeViewOptions.treeView.dataSource.view(), result);
             $scope.sortableList = result
-        }
+        };
         $timeout(function () {
             $("#sortable").kendoSortable({
                 handler: ".handler",

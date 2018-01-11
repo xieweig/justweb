@@ -10,12 +10,12 @@ angular.module('app').controller('MaterialTreeCtrl', function ($scope, options, 
         if ($scope.params.materialName || $scope.params.materialCode || $scope.params.materialGroupName || $scope.params.materialGroupCode) {
             $scope.treeViewOptions.treeView.dataSource.read($scope.params);
         } else {
-            $scope.treeViewOptions.treeView.dataSource.read({ id: '1' });
+            $scope.treeViewOptions.treeView.dataSource.read({id: '1'});
         }
     }
     $scope.treeViewOptions = {
         url: $scope.hasChildren ? '/api/baseInfo/material/getMaterialAndGroup' : '/api/baseInfo/material/getMaterialGroup',
-        data: { id: '1' },
+        data: {id: '1'},
         schema: {
             type: "json",
             model: {
@@ -38,14 +38,14 @@ angular.module('app').controller('MaterialTreeCtrl', function ($scope, options, 
             }
         },
         template: '#: item.groupName #'
-            + '<input class="groupId" type="hidden" value="#: item.id #"/>'
-            + '<input class="groupName" type="hidden" value="#: item.groupName #"/>'
-            + '<input class="groupCode" type="hidden" value="#: item.groupCode #"/>'
-            + '<input class="parentGroupName" type="hidden" value="#: item.parentGroupName #"/>'
-            + '<input class="parentGroupCode" type="hidden" value="#: item.parentGroupCode #"/>'
-            + '<input class="standardUnitName" type="hidden" value="#: item.standardUnitName #"/>'
-            + '<input class="isGroup" type="hidden" value="#: item.group #"/>'
-            + '<input class="memo" type="hidden" value="#: item.memo #"/>'
+        + '<input class="groupId" type="hidden" value="#: item.id #"/>'
+        + '<input class="groupName" type="hidden" value="#: item.groupName #"/>'
+        + '<input class="groupCode" type="hidden" value="#: item.groupCode #"/>'
+        + '<input class="parentGroupName" type="hidden" value="#: item.parentGroupName #"/>'
+        + '<input class="parentGroupCode" type="hidden" value="#: item.parentGroupCode #"/>'
+        + '<input class="standardUnitName" type="hidden" value="#: item.standardUnitName #"/>'
+        + '<input class="isGroup" type="hidden" value="#: item.group #"/>'
+        + '<input class="memo" type="hidden" value="#: item.memo #"/>'
     };
 
     // 如果是单选 则只有原料有选择框
@@ -108,10 +108,10 @@ angular.module('app').controller('MaterialTreeCtrl', function ($scope, options, 
             if (item.checked) {
                 if (options.onlyLeaf) {
                     if (!item.group) {
-                        checkedNodes.push({ id: item.id, name: item.groupName, code: item.groupCode, standardUnitId: item.standardUnitId, standardUnitName: item.standardUnitName, standardUnitName: item.standardUnitName, memo: item.memo });
+                        checkedNodes.push({id: item.id, name: item.groupName, code: item.groupCode, standardUnitId: item.standardUnitId, standardUnitName: item.standardUnitName, memo: item.memo});
                     }
                 } else {
-                    checkedNodes.push({ id: item.id, name: item.groupName, code: item.groupCode, standardUnitId: item.standardUnitId, standardUnitName: item.standardUnitName, standardUnitName: item.standardUnitName, memo: item.memo });
+                    checkedNodes.push({id: item.id, name: item.groupName, code: item.groupCode, standardUnitId: item.standardUnitId, standardUnitName: item.standardUnitName, memo: item.memo});
                 }
             }
         }

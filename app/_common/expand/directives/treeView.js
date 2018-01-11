@@ -11,6 +11,10 @@ angular.module('SmartAdmin.Expand').directive('treeView', function (MainFactory)
             if (!options) {
                 return false;
             }
+            // 如果URL不包含http 则加上全局host
+            if (options.url && options.url.indexOf('http') < 0) {
+                options.url = MainFactory.host + options.url;
+            }
             // 根据url初始化dataSource
             if (!options.dataSource) {
                 var dataSource = {
@@ -40,6 +44,7 @@ angular.module('SmartAdmin.Expand').directive('treeView', function (MainFactory)
             options.check ? treeOption.check = options.check : '';
             options.change ? treeOption.change = options.change : '';
             options.select ? treeOption.select = options.select : '';
+            options.loadOnDemand ? treeOption.loadOnDemand = options.loadOnDemand : true;
             // 模板
             options.template ? treeOption.template = options.template : '';
             //初始化
