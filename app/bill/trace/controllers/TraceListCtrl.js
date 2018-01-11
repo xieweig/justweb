@@ -65,7 +65,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
         isSupplier: true,
         callback: function (data) {
             $scope.params.inStationCode = _.map(data, function (item) {
-                return item.stationCode;
+                return item.stationCode || item.supplierCode;
             });
         }
     };
@@ -75,7 +75,7 @@ angular.module('app').controller('TraceListCtrl', function ($scope, $uibModal, $
         isSupplier: true,
         callback: function (data) {
             $scope.params.outStationCode = _.map(data, function (item) {
-                return item.stationCode;
+                return item.stationCode || item.supplierCode;
             });
         }
     };

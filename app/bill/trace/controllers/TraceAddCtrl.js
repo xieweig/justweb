@@ -17,8 +17,8 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $state, $uibM
         isSupplier: true,
         initTip: params.bill ? params.bill.outStationName : '',
         callback: function (data) {
-            $scope.trace.outStationCode = data.stationCode;
-            $scope.trace.outStationName = data.stationName;
+            $scope.trace.outStationCode = data.stationCode || data.supplierCode;
+            $scope.trace.outStationName = data.stationName || data.supplierName;
         }
     };
 
@@ -28,8 +28,8 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $state, $uibM
         isSupplier: true,
         initTip: params.bill ? params.bill.inStationName : '',
         callback: function (data) {
-            $scope.trace.inStationCode = data.stationCode;
-            $scope.trace.inStationName = data.stationName;
+            $scope.trace.inStationCode = data.stationCode || data.supplierCode;
+            $scope.trace.inStationName = data.stationName || data.supplierName;
         }
     };
 
