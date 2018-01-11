@@ -10,7 +10,7 @@ swal.setDefaults({allowEscapeKey: false, allowOutsideClick: false, allowEnterKey
 var REGULAR = {};
 
 var COMMON_URL = {
-    bill: '/bill',
+    bill: '/coffeeBill',
     baseInfo: '/baseInfoApi',
     oauth: '/oauth'
 };
