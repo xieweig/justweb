@@ -1,8 +1,7 @@
 'use strict';
 
-angular.module('app').controller('DeliveryPlanPickCtrl', function ($scope, $uibModal, $timeout, ApiService) {
+angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibModal, $timeout, ApiService) {
     $scope.params = {};
-
     // 出库站点选择
     $scope.outStationParams = {
         callback: function (data) {
@@ -59,7 +58,7 @@ angular.module('app').controller('DeliveryPlanPickCtrl', function ($scope, $uibM
         var keyCode = window.event.keyCode;
         if (keyCode === 13) {
             $uibModal.open({
-                templateUrl: 'app/bill/delivery/modals/planPickCargo.html',
+                templateUrl: 'app/bill/adjust/modals/planPickCargo.html',
                 size: 'md',
                 scope: $scope
             });

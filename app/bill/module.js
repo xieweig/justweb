@@ -7,7 +7,8 @@ angular.module('app.bill', [
     'app.bill.trace',
     'app.bill.restock',
     'app.bill.procurement',
-    'app.bill.delivery'
+    'app.bill.delivery',
+    'app.bill.adjust'
 ]).config(function ($stateProvider) {
     $stateProvider
         .state('app.bill', {
