@@ -1,6 +1,27 @@
 'use strict';
 
-angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeout, cb) {
+angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeout, cb, billType) {
+    var inStationType = '';
+    $scope.inStationIsSupplier = false;
+    var outStationType = '';
+    switch (billType) {
+        case 'DELIVERY':
+            // 配送
+            outStationType = 'LOGISTICS';
+            inStationType = ['BOOKSTORE', 'CAFE'];
+            break;
+        case 'RESTOCK':
+            // 退库
+            outStationType = ['BOOKSTORE', 'CAFE'];
+            inStationType = 'LOGISTICS';
+            break;
+        case 'RETURNED':
+            // 退货
+            outStationType = 'LOGISTICS';
+            $scope.inStationIsSupplier = true;
+            break;
+    }
+
     $scope.stationGrid = {
         primaryId: 'stationCode',
         kendoSetting: {
@@ -18,6 +39,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     // 一站对多站的选择站点
     $scope.otmOutStation = [];
     $scope.otmOutStationOpt = {
+        type: outStationType,
         single: true,
         callback: function (data) {
             $scope.otmOutStation = data;
@@ -25,6 +47,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     };
     $scope.otmInStation = [];
     $scope.otmInStationOpt = {
+        type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
             $scope.otmInStation = data;
         }
@@ -32,6 +55,13 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
 
     $scope.otmAddStation = function () {
         var data = [];
+        if (!$scope.otmOutStation.stationCode) {
+            swal('请选择调出站点', '', 'warning');
+            return false;
+        } else if ($scope.otmInStation.length === 0) {
+            swal('请选择调入站点', '', 'warning');
+            return false;
+        }
         _.each($scope.otmInStation, function (item) {
             data.push({
                 outStationCode: $scope.otmOutStation.stationCode,
@@ -47,6 +77,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     // 多站对一站的选择站点
     $scope.mtoOutStation = [];
     $scope.mtoOutStationOpt = {
+        type: outStationType,
         callback: function (data) {
             $scope.mtoOutStation = data;
         }
@@ -54,6 +85,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     $scope.mtoInStation = [];
     $scope.mtoInStationOpt = {
         single: true,
+        type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
             $scope.mtoInStation = data;
         }
@@ -61,13 +93,20 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
 
     $scope.mtoAddStation = function () {
         var data = [];
+        if ($scope.mtoOutStation.length === 0) {
+            swal('请选择调出站点', '', 'warning');
+            return false;
+        } else if (!$scope.mtoInStation.stationCode) {
+            swal('请选择调入站点', '', 'warning');
+            return false;
+        }
         _.each($scope.mtoOutStation, function (item) {
             data.push({
                 outStationCode: item.stationCode,
                 outStationName: item.stationName,
                 inStationCode: $scope.mtoInStation.stationCode,
                 inStationName: $scope.mtoInStation.stationName,
-                number: 0,
+                number: 0
             });
         });
         addStationToGrid(data);
@@ -79,6 +118,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     $scope.otoOutStationOpt = {
         sortable: true,
         onlyLear: true,
+        type: outStationType,
         callback: function (data) {
             console.log(data);
             $scope.otoOutStation = data;
@@ -88,6 +128,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     $scope.otoInStationOpt = {
         sortable: true,
         onlyLear: true,
+        type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
             $scope.otoInStation = data;
         }

@@ -1,13 +1,14 @@
 'use strict';
 
-angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, hasChildren) {
+angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, hasChildren, $timeout) {
     var currentOption = _.cloneDeep(options);
+    $scope.sortable = currentOption.sortable;
     $scope.hasChildren = hasChildren === true;
     // 用于接下来判断是单选还是多选  返回值会不同
     var isMultiple = _.isUndefined(currentOption.checkboxes) || currentOption.checkboxes === true;
     $scope.treeViewOptions = {
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/supplier/findBySupplierName',
-        data: { supplierName: '' },
+        data: {supplierName: ''},
         schema: {
             type: "json",
             model: {
@@ -28,8 +29,8 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
             }
         },
         template: '#: item.supplierName #'
-            + '<input class="supplierName" type="hidden" value="#: item.supplierName #"/>'
-            + '<input class="supplierCode" type="hidden" value="#: item.supplierCode #"/>'
+        + '<input class="supplierName" type="hidden" value="#: item.supplierName #"/>'
+        + '<input class="supplierCode" type="hidden" value="#: item.supplierCode #"/>'
     };
 
     $scope.params = {};
@@ -37,9 +38,30 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
         if ($scope.params.supplierName) {
             $scope.treeViewOptions.treeView.dataSource.read($scope.params);
         } else {
-            $scope.treeViewOptions.treeView.dataSource.read({ supplierName: '' });
+            $scope.treeViewOptions.treeView.dataSource.read({supplierName: ''});
         }
     };
+
+    // 拖拽排序
+    if (currentOption.sortable) {
+        $scope.sortableList = [];
+        $scope.treeViewOptions.check = function (e) {
+            console.log(e);
+        };
+        $scope.addSortable = function () {
+            var result = [];
+            checkedNodeIds($scope.treeViewOptions.treeView.dataSource.view(), result);
+            $scope.sortableList = result;
+        };
+        $timeout(function () {
+            $("#sortable").kendoSortable({
+                handler: ".handler",
+                hint: function (element) {
+                    return element.clone().addClass("hint");
+                }
+            });
+        });
+    }
 
     // 如果是单选 则只有原料有选择框
     currentOption.check ? $scope.treeViewOptions.check = currentOption.check : '';
@@ -76,7 +98,7 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
             }
             options.modal = {
                 supplierName: selectNode.find('.supplierName').val(),
-                supplierCode: selectNode.find('.supplierCode').val(),
+                supplierCode: selectNode.find('.supplierCode').val()
             };
         }
         // 判断有没有回调函数  有则执行
@@ -106,6 +128,6 @@ angular.module('app').controller('SupplierTreeCtrl', function ($scope, options, 
     }
 
     function getResult(item) {
-        return { id: item.id, groupCode: item.groupCode, groupName: item.groupName, parentGroupCode: item.parentGroupCode, parentGroupName: item.parentGroupName, type: item.groupType, price: item.price, memo: item.memo };
+        return {supplierId: item.supplierId, supplierCode: item.supplierCode, supplierName: item.supplierName};
     }
 });

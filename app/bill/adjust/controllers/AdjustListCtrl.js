@@ -30,14 +30,30 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
         params: $scope.params,
         dataSource: {
             data: function () {
-                return [{}, {}];
+                return [{isAdjust: true}, {}];
             }
         },
         kendoSetting: {
             autoBind: false,
             pageable: true,
             columns: [
-                {title: "操作", width: 180, locked: true, command: [{name: 'picking', text: "拣货", click: picking}, {name: 'look', text: "查看", click: lookDetails}]},
+                {
+                    title: "操作", width: 85, locked: true,
+                    command: [
+                        {
+                            name: 'picking', text: "拣货", click: picking,
+                            visible: function (item) {
+                                return item.isAdjust;
+                            }
+                        },
+                        {
+                            name: 'look', text: "查看", click: lookDetails,
+                            visible: function (item) {
+                                return !item.isAdjust;
+                            }
+                        }
+                    ]
+                },
                 {field: "xxxxx", title: "完成率", width: 120},
                 {field: "xxxxx", title: "站点计划号", width: 120},
                 {field: "xxxxx", title: "录单时间", width: 120},

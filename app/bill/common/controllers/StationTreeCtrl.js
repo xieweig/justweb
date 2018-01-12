@@ -57,7 +57,7 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
             { field: "text", operator: "contains", value: filterName },
             { field: "value", operator: "contains", value: filterCode }
         ]);
-    }
+    };
 
     // 获取选中的结果
     $scope.getSelResult = function () {

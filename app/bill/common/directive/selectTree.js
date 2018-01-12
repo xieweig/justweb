@@ -33,13 +33,14 @@ angular.module('app').directive('selectTree', function ($uibModal) {
                     options.checkboxes = true;
                 }
                 options.onlyLeaf = selectModal.onlyLeaf;
+                options.sortable = selectModal.sortable;
                 options.callback = function () {
                     selectModal.modal = options.modal;
                     if (elm.attr('tagName') !== 'INPUT') {
                         var text = '';
                         if (_.isArray(options.modal)) {
                             text = _.map(options.modal, function (item) {
-                                return item.groupName || item.name;
+                                return item.groupName || item.name || item.supplierName;
                             }).join();
                         } else {
                             text = options.modal.groupName || options.modal.name || options.modal.supplierName;
@@ -65,10 +66,10 @@ angular.module('app').directive('selectTree', function ($uibModal) {
                         controllerName = 'SupplierTreeCtrl';
                         templateName = 'supplierTree.html';
                         break;
-                };
+                }
                 $uibModal.open({
                     templateUrl: 'app/bill/common/modals/' + templateName,
-                    size: 'md',
+                    size: selectModal.sortable ? 'lg' : 'md',
                     controller: controllerName,
                     resolve: {
                         options: options,
