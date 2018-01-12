@@ -55,18 +55,20 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     $scope.otmInStationOpt = {
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
-            if (data.stationCode) {
-                $scope.otmInStation = data;
-            } else {
-                $scope.otmInStation = _.map(data, function (item) {
-                    return {
-                        stationCode: item.supplierCode,
-                        stationName: item.supplierName
-                    };
-                })
-            }
-            if ($scope.otmInStation[0]) {
-                $scope.otmOutStationOpt.type = $scope.otmInStation[0].siteType;
+            if (data.length > 0) {
+                if (data[0].stationCode) {
+                    $scope.otmInStation = data;
+                } else {
+                    $scope.otmInStation = _.map(data, function (item) {
+                        return {
+                            stationCode: item.supplierCode,
+                            stationName: item.supplierName
+                        };
+                    })
+                }
+                if ($scope.otmInStation[0]) {
+                    $scope.otmOutStationOpt.type = $scope.otmInStation[0].siteType;
+                }
             }
         }
     };
