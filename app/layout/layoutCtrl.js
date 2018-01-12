@@ -68,7 +68,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
             var cityPos = {};
             _.each((isPermissions ? scopeStation : station), function (item) {
                 // 如果传入了stationType  则需要限制返回站点的类型
-                if (stationType !== 'All' && stationType !== undefined && item.siteType !== stationType) {
+                if (stationType !== 'All' && stationType !== undefined && stationType.indexOf(item.siteType) > -1) {
                     return;
                 }
                 var currentStation = {key: item.key, value: item.value, text: item.text, type: 'station'};

@@ -8,11 +8,11 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         case 'DELIVERY':
             // 配送
             outStationType = 'LOGISTICS';
-            inStationType = ['BOOKSTORE', 'CAFE'];
+            inStationType = 'BOOKSTORE,CAFE';
             break;
         case 'RESTOCK':
             // 退库
-            outStationType = ['BOOKSTORE', 'CAFE'];
+            outStationType = 'BOOKSTORE,CAFE';
             inStationType = 'LOGISTICS';
             break;
         case 'RETURNED':
@@ -22,8 +22,8 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             break;
         case 'ADJUST':
             // 调剂
-            outStationType = ['BOOKSTORE', 'CAFE'];
-            inStationType = ['BOOKSTORE', 'CAFE'];
+            outStationType = 'BOOKSTORE,CAFE';
+            inStationType = 'BOOKSTORE,CAFE';
             break;
     }
 
@@ -55,8 +55,19 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     $scope.otmInStationOpt = {
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
-            $scope.otmInStation = data;
-            $scope.otmOutStationOpt.type = data.siteType;
+            if (data.stationCode) {
+                $scope.otmInStation = data;
+            } else {
+                $scope.otmInStation = _.map(data, function (item) {
+                    return {
+                        stationCode: item.supplierCode,
+                        stationName: item.supplierName
+                    };
+                })
+            }
+            if ($scope.otmInStation[0]) {
+                $scope.otmOutStationOpt.type = $scope.otmInStation[0].siteType;
+            }
         }
     };
 
@@ -69,7 +80,10 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             swal('请选择调入站点', '', 'warning');
             return false;
         }
-        _.each($scope.otmInStation, function (item) {
+        var repeat = _.find($scope.otmInStation, function (item) {
+            if ($scope.otmOutStation.stationCode === item.stationCode) {
+                return true;
+            }
             data.push({
                 outStationCode: $scope.otmOutStation.stationCode,
                 outStationName: $scope.otmOutStation.stationName,
@@ -77,8 +91,13 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 inStationName: item.stationName,
                 number: 0
             });
+            return false;
         });
-        addStationToGrid(data);
+        if (repeat) {
+            swal('不能包含出入库相同的站点', '', 'warning');
+        } else {
+            addStationToGrid(data);
+        }
     };
 
     // 多站对一站的选择站点
@@ -95,8 +114,17 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         single: true,
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
-            $scope.mtoInStation = data;
-            $scope.mtoOutStationOpt.type = data.siteType;
+            if (data.stationCode) {
+                $scope.mtoInStation = data;
+            } else {
+                $scope.mtoInStation = {
+                    stationCode: data.supplierCode,
+                    stationName: data.supplierName
+                }
+            }
+            if ($scope.mtoInStation[0]) {
+                $scope.mtoOutStationOpt.type = $scope.mtoInStation[0].siteType;
+            }
         }
     };
 
@@ -109,7 +137,10 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             swal('请选择调入站点', '', 'warning');
             return false;
         }
-        _.each($scope.mtoOutStation, function (item) {
+        var repeat = _.find($scope.mtoOutStation, function (item) {
+            if ($scope.mtoInStation.stationCode === item.stationCode) {
+                return true;
+            }
             data.push({
                 outStationCode: item.stationCode,
                 outStationName: item.stationName,
@@ -117,8 +148,13 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 inStationName: $scope.mtoInStation.stationName,
                 number: 0
             });
+            return false;
         });
-        addStationToGrid(data);
+        if (repeat) {
+            swal('不能包含出入库相同的站点', '', 'warning');
+        } else {
+            addStationToGrid(data);
+        }
     };
 
     // ------------------------------ 一对一的操作 -------------------------------
@@ -130,7 +166,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: outStationType,
         callback: function (data) {
             $scope.otoOutStation = data;
-            $scope.otoInStationOpt.type = data.siteType;
+            if (data[0]) {
+                $scope.otoInStationOpt.type = data[0].siteType;
+            }
         }
     };
     $scope.otoInStation = [];
@@ -139,8 +177,19 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         onlyLear: true,
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
-            $scope.otoInStation = data;
-            $scope.otoOutStationOpt.type = data.siteType;
+            if (data.stationCode) {
+                $scope.otoInStation = data;
+            } else {
+                $scope.otoInStation = _.map(data, function (item) {
+                    return {
+                        stationCode: item.supplierCode || item.stationCode,
+                        stationName: item.supplierName || item.stationName
+                    };
+                });
+            }
+            if ($scope.otoInStation[0]) {
+                $scope.otoOutStationOpt.type = $scope.otoInStation[0].siteType;
+            }
         }
     };
     // 一对一添加站点
@@ -150,8 +199,11 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             return;
         }
         var data = [];
-        _.each($scope.otoOutStation, function (item, index) {
+        var repeat = _.find($scope.otoOutStation, function (item, index) {
             var inStation = $scope.otoInStation[index];
+            if (inStation === item.stationCode) {
+                return true;
+            }
             data.push({
                 outStationCode: item.stationCode,
                 outStationName: item.stationName,
@@ -159,8 +211,13 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 inStationName: inStation.stationName,
                 number: 0
             });
+            return false;
         });
-        addStationToGrid(data);
+        if (repeat) {
+            swal('不能包含出入库相同的站点', '', 'warning');
+        } else {
+            addStationToGrid(data);
+        }
     };
 
     // 公共的添加方法
