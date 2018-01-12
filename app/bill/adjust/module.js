@@ -32,5 +32,17 @@ angular.module('app.bill.adjust', ['ui.router']).config(function ($stateProvider
                     controller: 'AdjustPickCtrl'
                 }
             }
+        })
+        .state('app.bill.adjust.outStorageList', {
+            url: '/bill/adjust/outStorageList',
+            data: {
+                title: '查询调剂出库单'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/adjust/views/outStorageList.html',
+                    controller: 'AdjustOutStorageListCtrl'
+                }
+            }
         });
 });

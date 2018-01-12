@@ -38,7 +38,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
             pageable: true,
             columns: [
                 {
-                    title: "操作", width: 85,
+                    title: "操作", width: 80,
                     command: [
                         {
                             name: 'picking', text: "拣货", click: picking,
@@ -54,7 +54,6 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                         }
                     ]
                 },
-                {field: "xxxxx", title: "完成率", width: 120},
                 {field: "xxxxx", title: "站点计划号", width: 120},
                 {field: "xxxxx", title: "录单时间", width: 120},
                 {field: "xxxxx", title: "录单人", width: 120},
@@ -100,19 +99,30 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         $scope.planDetails = {billCode: '111111111'};
-        $scope.planDetailsGrid = {
+        $scope.materialDetails = {
             kendoSetting: {
-                dataSource: [{}, {}],
+                dataSource: [{xxxxx: 1}, {xxxxx: 2}],
+                columns: [
+                    {field: "xxxxx", title: "原料名称", width: 120},
+                    {field: "xxxxx", title: "原料编码", width: 120},
+                    {field: "xxxxx", title: "应拣数量", width: 120},
+                    {field: "xxxxx", title: "实拣数量", width: 120},
+                    {field: "xxxxx", title: "完成度", width: 120}
+                ]
+            }
+        };
+        $scope.cargoDetails = {
+            kendoSetting: {
+                dataSource: [{xxxxx: 1}, {xxxxx: 2}],
                 columns: [
                     {field: "xxxxx", title: "货物名称", width: 120},
                     {field: "xxxxx", title: "货物编码", width: 120},
                     {field: "xxxxx", title: "所属原料", width: 120},
+                    {field: "xxxxx", title: "标准单位", width: 120},
                     {field: "xxxxx", title: "规格", width: 120},
                     {field: "xxxxx", title: "应拣数量", width: 120},
-                    {field: "xxxxx", title: "调入站点", width: 120},
-                    {field: "xxxxx", title: "数量", width: 120},
-                    {field: "xxxxx", title: "规格品种", width: 120},
-                    {field: "xxxxx", title: "备注", width: 120}
+                    {field: "xxxxx", title: "实际数量", width: 120},
+                    {field: "xxxxx", title: "标准单位数量", width: 120}
                 ]
             }
         };
