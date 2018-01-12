@@ -142,6 +142,9 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $state, $uibM
             dataSource.add($scope.currentDetails);
             $scope.currentDetails = {};
             $scope.packageMap = [{text: ''}];
+            $timeout(function () {
+                $('#packageType').val('').trigger('change');
+            });
             if (!isNext) {
                 $scope.addModal.close();
             }
