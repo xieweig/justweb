@@ -108,9 +108,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     $scope.materialMap = [];
     $scope.addItem = function (type) {
         if (type === 'material') {
-            $scope.materialMap.push(pushCargo());
+            $scope.materialMap.splice(0, 0, pushCargo());
         } else {
-            $scope.cargoMap.push(pushCargo());
+            $scope.cargoMap.splice(0, 0, pushCargo());
         }
     };
 
