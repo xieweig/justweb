@@ -158,8 +158,6 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $state, $uibM
     $scope.save = function () {
         if (!$scope.trace) {
             swal('请输入填写单据详情', '', 'warning');
-        } else if (!$scope.trace.wayBillCode) {
-            swal('请输入运单单号', '', 'warning');
         } else if (!$scope.trace.deliveryTime) {
             swal('请输入发货时间', '', 'warning');
         } else if (!$scope.trace.planArrivalTime) {
