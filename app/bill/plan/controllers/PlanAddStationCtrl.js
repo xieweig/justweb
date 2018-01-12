@@ -20,6 +20,11 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             outStationType = 'LOGISTICS';
             $scope.inStationIsSupplier = true;
             break;
+        case 'ADJUST':
+            // 调剂
+            outStationType = ['BOOKSTORE', 'CAFE'];
+            inStationType = ['BOOKSTORE', 'CAFE'];
+            break;
     }
 
     $scope.stationGrid = {
@@ -43,6 +48,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         single: true,
         callback: function (data) {
             $scope.otmOutStation = data;
+            $scope.otmInStationOpt.type = data.siteType;
         }
     };
     $scope.otmInStation = [];
@@ -50,6 +56,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
             $scope.otmInStation = data;
+            $scope.otmOutStationOpt.type = data.siteType;
         }
     };
 
@@ -68,7 +75,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 outStationName: $scope.otmOutStation.stationName,
                 inStationCode: item.stationCode,
                 inStationName: item.stationName,
-                number: 0,
+                number: 0
             });
         });
         addStationToGrid(data);
@@ -80,6 +87,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: outStationType,
         callback: function (data) {
             $scope.mtoOutStation = data;
+            $scope.mtoInStationOpt.type = data.siteType;
         }
     };
     $scope.mtoInStation = [];
@@ -88,6 +96,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
             $scope.mtoInStation = data;
+            $scope.mtoOutStationOpt.type = data.siteType;
         }
     };
 
@@ -120,8 +129,8 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         onlyLear: true,
         type: outStationType,
         callback: function (data) {
-            console.log(data);
             $scope.otoOutStation = data;
+            $scope.otoInStationOpt.type = data.siteType;
         }
     };
     $scope.otoInStation = [];
@@ -131,6 +140,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
             $scope.otoInStation = data;
+            $scope.otoOutStationOpt.type = data.siteType;
         }
     };
     // 一对一添加站点
