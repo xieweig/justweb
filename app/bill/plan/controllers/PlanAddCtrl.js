@@ -304,12 +304,23 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     // 保存站点
     $scope.save = function () {
         var plan = _.cloneDeep($scope.plan);
+        if (!plan.billName) {
+            swal('请选择计划名称', '', 'warning');
+            return;
+        }
         sendHttpReques('save', plan);
     };
 
     // 审核站点
     $scope.submit = function () {
         var plan = _.cloneDeep($scope.plan);
+        if (!plan.billName) {
+            swal('请选择计划名称', '', 'warning');
+            return;
+        } else if (!plan.billType) {
+            swal('请选择计划类型', '', 'warning');
+            return;
+        }
         sendHttpReques('submit', plan);
     };
 

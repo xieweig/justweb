@@ -15,14 +15,14 @@ var COMMON_URL = {
     oauth: location.origin + '/oauth'
 };
 
-if (location.hostname === '192.168.21.180') {
-    COMMON_URL = {
-        bill: 'http://192.168.21.141:15009',
-        baseInfo: 'http://192.168.21.141:15006',
-        oauth: 'http://192.168.21.141:16001'
-    };
-    document.cookie = "userCode=YGADMIN; userName=超级管理员; paymentUrl=/payment; currentStationName=%E6%80%BB%E9%83%A8; currentStationCode=HDQA00; stationClass=CQ";
-}
+// if (false && location.hostname === '192.168.21.180') {
+//     COMMON_URL = {
+//         bill: 'http://192.168.21.141:15009',
+//         baseInfo: 'http://192.168.21.141:15006',
+//         oauth: 'http://192.168.21.141:16001'
+//     };
+//     document.cookie = "userCode=YGADMIN; userName=超级管理员; paymentUrl=/payment; currentStationName=%E6%80%BB%E9%83%A8; currentStationCode=HDQA00; stationClass=CQ";
+// }
 
 $(function () {
 
