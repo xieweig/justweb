@@ -201,7 +201,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         var data = [];
         var repeat = _.find($scope.otoOutStation, function (item, index) {
             var inStation = $scope.otoInStation[index];
-            if (inStation === item.stationCode) {
+            if (inStation.stationCode === item.stationCode) {
                 return true;
             }
             data.push({
