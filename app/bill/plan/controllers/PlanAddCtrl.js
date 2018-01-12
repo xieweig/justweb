@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
+angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common, cargoUnit, materialUnit) {
     if ($stateParams.billCode) {
         ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
             if (response.code !== '000') {
@@ -195,6 +195,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     return function (data) {
                         item.cargo = data;
                     }
+                },
+                cargoUnit: function () {
+                    return cargoUnit;
                 }
             }
         });
