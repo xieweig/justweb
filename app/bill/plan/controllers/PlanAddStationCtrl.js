@@ -48,7 +48,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         single: true,
         callback: function (data) {
             $scope.otmOutStation = data;
-            $scope.otmInStationOpt.type = data.siteType;
+            if ($scope.otmInStationOpt.type !== 'supplier') {
+                $scope.otmInStationOpt.type = data.siteType;
+            }
         }
     };
     $scope.otmInStation = [];
@@ -108,7 +110,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: outStationType,
         callback: function (data) {
             $scope.mtoOutStation = data;
-            $scope.mtoInStationOpt.type = data.siteType;
+            if ($scope.mtoInStationOpt.type !== 'supplier') {
+                $scope.mtoInStationOpt.type = data.siteType;
+            }
         }
     };
     $scope.mtoInStation = [];
@@ -168,7 +172,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: outStationType,
         callback: function (data) {
             $scope.otoOutStation = data;
-            if (data[0]) {
+            if (data[0] && $scope.otoInStationOpt.type !== 'supplier') {
                 $scope.otoInStationOpt.type = data[0].siteType;
             }
         }
