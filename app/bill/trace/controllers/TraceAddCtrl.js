@@ -141,6 +141,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $state, $uibM
             }
             dataSource.add($scope.currentDetails);
             $scope.currentDetails = {};
+            $scope.packageMap = [{text: ''}];
             if (!isNext) {
                 $scope.addModal.close();
             }
