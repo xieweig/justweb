@@ -57,7 +57,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
             pageable: true,
             columns: [
                 {
-                    title: "操作", width: 220, locked: true,
+                    title: "操作", width: 220,
                     command: [
                         {
                             name: 'e', text: "修改", click: editPlan,

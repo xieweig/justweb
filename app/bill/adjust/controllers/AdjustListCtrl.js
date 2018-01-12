@@ -38,7 +38,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
             pageable: true,
             columns: [
                 {
-                    title: "操作", width: 85, locked: true,
+                    title: "操作", width: 85,
                     command: [
                         {
                             name: 'picking', text: "拣货", click: picking,

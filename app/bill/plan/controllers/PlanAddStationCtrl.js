@@ -33,7 +33,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             height: 150,
             editable: true,
             columns: [
-                {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85},
                 {field: "outStationName", title: "调出站点"},
                 {field: "inStationName", title: "调入站点"},
                 {field: "number", title: "数量(点击修改)", editable: true}

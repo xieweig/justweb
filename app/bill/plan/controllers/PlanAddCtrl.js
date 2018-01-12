@@ -130,7 +130,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         editable: true,
                         dataSource: item.resultPlanBillDetailDTOSet,
                         columns: [
-                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85},
                             {
                                 title: "调出站点",
                                 template: function (data) {
@@ -158,7 +158,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         editable: true,
                         dataSource: item.resultPlanBillDetailDTOSet,
                         columns: [
-                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85},
                             {
                                 title: "调出站点",
                                 template: function (data) {
