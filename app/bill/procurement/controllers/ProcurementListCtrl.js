@@ -1,12 +1,17 @@
 'use strict';
 
-angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
+angular.module('app').controller('ProcurementListCtrl', function ($scope, $state, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
 
 
     // 表格参数及搜索
     $scope.params = {};
     $scope.curSubmitStatus = {};
     $scope.curAuditStatus = {};
+
+    $scope.resetPage = function () {
+        $state.reload();
+    };
+
     $scope.search = function () {
         $scope.procurementGrid.kendoGrid.dataSource.page(1);
     };
@@ -126,7 +131,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                 });
             });
         });
-    };
+    }
 
     // 打开修改界面
     function openEditModal(e) {
