@@ -52,6 +52,9 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
                 },
                 materialUnit: function (Common) {
                     return Common.getConfigure('MATERIAL_UNIT');
+                },
+                storageList: function (Common) {
+                    return Common.getStore();
                 }
             }
         })

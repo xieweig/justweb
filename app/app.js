@@ -302,13 +302,12 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
         }
         return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/configure/findByConfigureTypeForApi?configureType=' + configureType, {hasHost: true}).then(function (response) {
             if (response.code === '000') {
-                var configureList = _.map(response.result.configureList, function (item) {
+                return _.map(response.result.configureList, function (item) {
                     return {
                         value: item.configureCode,
                         text: item.configureName
                     }
-                })
-                return configureList;
+                });
             } else {
                 swal('请求规格失败', response.message, 'error');
             }
