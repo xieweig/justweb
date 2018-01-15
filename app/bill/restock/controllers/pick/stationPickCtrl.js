@@ -1,7 +1,10 @@
 'use strict';
 
-angular.module('app').controller('stationPickCtrl', function ($scope, $state, $stateParams, $uibModal, $timeout, ApiService, Common) {
+angular.module('app').controller('stationPickCtrl', function ($scope, $state, $stateParams, $uibModal, $timeout, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
+    $scope.cargoConfigure = cargoUnit;
+    $scope.materialConfigure = materialUnit;
+
     // 将按货物拣货获得的obj存储起来用于判断扫描的货物是否有效
     $scope.cargoObject = {};
     $scope.outType = [];
@@ -135,22 +138,6 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                                     shippedAmount: item.shippedAmount
                                 })
                             })
-                            // var materialList = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
-                            //     return item.rawMaterialCode
-                            // });
-                            // console.log(materialList)
-                            // Common.getMaterialByCodes(materialList).then(function (materialList) {
-                            //     var materialObject = _.zipObject(_.map(materialList, function (item) {
-                            //         return item.materialCode
-                            //     }), materialList);
-                            //     _.each(res.childPlanBillDetails, function (item) {
-                            //         $scope.addItem({
-                            //             materialName: materialObject[item.goodsCode],
-                            //             rawMaterialId: item.goodsCode,
-                            //             shippedAmount: parseInt(item.amount) * parseInt(item.cargo.number)
-                            //         })
-                            //     })
-                            // })
                         } else {
                             $('#tabs').children('li:first-child').children('a').click()
                         }
@@ -174,7 +161,9 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                 {field: "cargoCode", title: "货物编码"},
                 {field: "rawMaterialName", title: "所属原料"},
                 // {field: "number", title: "规格"},
-                {title: "规格", template: "#: number #/#: standardUnitCode #"},
+                {title: "规格", template: function (data) {
+                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                    }},
                 {field: "shippedAmount", title: "应拣数量"},
                 {field: "actualAmount", title: "实拣数量"},
                 {field: "memo", title: "备注", editable: true}
@@ -185,8 +174,6 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
     // 测试回车监听
     $scope.sendCode = function ($event) {
         if ($event.charCode === 13) {
-            // APIService
-            console.log($scope.cargoObject, $scope.params.scanCode)
             if ($scope.cargoObject.hasOwnProperty($scope.params.scanCode)) {
                 initScanCargo()
             } else {
@@ -225,7 +212,9 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                         {field: "cargoName", title: "货物名称"},
                         {field: "cargoCode", title: "货物编码"},
                         {field: "rawMaterialName", title: "所属原料"},
-                        {field: "number", title: "规格"},
+                        {field: "number", title: "规格", template: function (data) {
+                                return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                         }},
                         {field: "actualAmount", title: "实拣数量"},
                         {field: "memo", title: "备注"},
                         {command: [{name: 'delete', text: "删除", click: delCargo}], title: "操作"}
@@ -249,18 +238,14 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
             resolve: {
                 cb: function () {
                     return function (data) {
-                        console.log(data)
                         $scope.cargoList = data;
                         var dataSource = $scope.itemMap[$scope.index].cargoGrid.kendoGrid.dataSource;
-                        // for (var i = 0; i < dataSource._total; i++) {
-                        //     dataSource.remove(dataSource.at(i))
-                        // }
-                        dataSource.data([])
+                        dataSource.data([]);
                         $scope.itemMap[$scope.index].material.actualAmount = 0
                         _.each(data, function (item) {
                             // 添加隐藏数据index 方便删除数据
                             item['index'] = $scope.index;
-                            dataSource.add(item)
+                            dataSource.add(item);
                             $scope.itemMap[$scope.index].material.actualAmount += parseInt(item.actualAmount) * parseInt(item.number)
                             $scope.itemMap[$scope.index].material.progress = parseFloat(parseInt($scope.itemMap[$scope.index].material.actualAmount) / parseInt($scope.itemMap[$scope.index].material.shippedAmount) * 100).toFixed(2) + '%'
                         });
@@ -269,7 +254,8 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                 },
                 data: {
                     cl: $scope.itemMap[index].cargoGrid.kendoGrid.dataSource.data(),
-                    m: $scope.itemMap[index].material
+                    m: $scope.itemMap[index].material,
+                    cargoUnit: $scope.cargoConfigure
                 }
             }
         });

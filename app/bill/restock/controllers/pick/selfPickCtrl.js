@@ -1,12 +1,15 @@
 'use strict';
 
-angular.module('app').controller('selfPickCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common) {
+angular.module('app').controller('selfPickCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
+    $scope.cargoConfigure = cargoUnit;
+    $scope.materialConfigure = materialUnit;
+
     $scope.cargoList = {};
-    $scope.outType = []
+    $scope.outType = [];
     // 获取当前站点
     Common.getStore().then(function (storage) {
-        $scope.storage = storage
+        $scope.storage = storage;
         _.each(storage, function (item) {
             $scope.outType.push({
                 key: item.tempStorageCode,
@@ -31,15 +34,6 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
         operatorCode: ''
     }
 
-    // $scope.outType = [
-    //     // {key: '1', value: '1', text: '正常库'},
-    //     {key: '2', value: '2', text: '仓储库'},
-    //     {key: '3', value: '3', text: '进货库'},
-    //     {key: '4', value: '4', text: '退货库'},
-    //     {key: '5', value: '5', text: '在途库'},
-    //     {key: '6', value: '6', text: '预留库'}
-    // ];
-
     $scope.CargoListGrid = {
         primaryId: 'cargoCode',
         kendoSetting: {
@@ -54,7 +48,9 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
                 {field: "rawMaterialName", title: "所属原料"},
                 {field: "actualAmount", title: "货物数量"}, // 对应添加货物的实拣数量
                 {field: "number", title: "标准单位数量"},
-                {field: "standardUnitCode", title: "标准单位"},
+                {field: "standardUnitCode", title: "标准单位", template: function (data) {
+                        return getTextByVal($scope.materialConfigure, data.standardUnitCode);
+                    }},
                 {field: "memo", title: "备注"}
             ]
         }
@@ -73,7 +69,7 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
         var storageName = '';
         _.each($scope.storage, function (item) {
             // TODO: 后端数据拼错，应为 NORMAL
-            if(item.tempStorageCode === newVal && item.storageType === 'NORAML'){
+            if(item.tempStorageCode === newVal && item.storageType === 'NORMAL'){
                 isChange = false;
                 storageName = item.tempStorageName
             }
@@ -214,7 +210,8 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
                     }
                 },
                 data: {
-                    cl: $scope.CargoListGrid.kendoGrid.dataSource.data()
+                    cl: $scope.CargoListGrid.kendoGrid.dataSource.data(),
+                    cargoUnit: $scope.cargoConfigure
                 }
             }
         });
@@ -231,5 +228,4 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
             }
         }
     };
-
 });

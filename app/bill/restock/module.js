@@ -19,20 +19,16 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                     templateUrl: 'app/bill/restock/views/plan/Search.html',
                     controller: 'PlanSearchCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         })
-        // .state('app.bill.restock.planView', {
-        //     url: '/bill/restock/plan/view/:planId',
-        //     data: {
-        //         title: '查看站点退库计划'
-        //     },
-        //     views: {
-        //         "content@app": {
-        //             templateUrl: 'app/bill/restock/views/plan/View.html',
-        //             controller: 'PlanViewCtrl'
-        //         }
-        //     }
-        // })
         .state('app.bill.restock.selfPick', {
             url: '/bill/restock/station/selfpick',
             data: {
@@ -48,6 +44,12 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 station: function (Common) {
                     var options = {type: 'LOGISTICS'};
                     return Common.getStation(options);
+                },
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })
@@ -63,9 +65,12 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             },
             resolve: {
-                // standardUnit: function (Common) {
-                //     return Common.getStandardUnit('CARGO_UNIT')
-                // }
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         })
         .state('app.bill.restock.outSearch', {
@@ -77,6 +82,14 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 "content@app": {
                     templateUrl: 'app/bill/restock/views/out/Search.html',
                     controller: 'outSearchCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })

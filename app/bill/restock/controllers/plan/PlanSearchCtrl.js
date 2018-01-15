@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService) {
+angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit) {
     // 查询站点退库计划
     $scope.params = {};
 
@@ -140,7 +140,8 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
             resolve: {
                 data: {
                     billCode: data.billCode,
-                    type: type
+                    type: type,
+                    cargoUnit: cargoUnit
                 }
             }
         })
