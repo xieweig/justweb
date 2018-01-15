@@ -98,7 +98,11 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
     function transferPlan(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        loadBillDetails('update');
+        $uibModal.open({
+            templateUrl: 'app/bill/adjust/modals/transfers.html',
+            size: 'lg',
+            scope: $scope
+        });
     }
 
     // 查看详情
