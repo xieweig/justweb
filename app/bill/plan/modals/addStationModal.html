@@ -16,7 +16,7 @@
                 <a href="#tabs-3" data-toggle="tab">一站对一站</a>
             </li>
         </ul>
-        <div class="tab-content padding-10">
+        <div class="tab-content padding-10 select-station-list">
             <div class="tab-pane active" id="tabs-1">
                 <div class="row">
                     <div class="col-sm-6 col-xs-12 margin-bottom-10">
@@ -27,7 +27,7 @@
                         <dl class="dl-horizontal">
                             <dt>调出站点</dt>
                             <dd class="ng-binding">
-                                <p class="no-margin">{{otmOutStation.stationName}}</p>
+                                <p class="no-margin" data-ng-if="otmOutStation.stationCode">{{otmOutStation.stationName}}<span class="fa fa-close" data-ng-click="clearItem(otmOutStation)"></span></p>
                             </dd>
                         </dl>
                     </div>
@@ -40,7 +40,7 @@
                         <dl class="dl-horizontal">
                             <dt>调入站点</dt>
                             <dd class="ng-binding">
-                                <p class="no-margin" data-ng-repeat="item in otmInStation">{{item.stationName}}</p>
+                                <p class="no-margin" data-ng-repeat="item in otmInStation">{{item.stationName}}<span class="fa fa-close" data-ng-click="deleteItem(otmInStation,$index)"></span></p>
                             </dd>
                         </dl>
                     </div>
@@ -59,7 +59,7 @@
                         <dl class="dl-horizontal">
                             <dt>调出站点</dt>
                             <dd class="ng-binding">
-                                <p class="no-margin" data-ng-repeat="item in mtoOutStation">{{item.stationName}}</p>
+                                <p class="no-margin" data-ng-repeat="item in mtoOutStation">{{item.stationName}}<span class="fa fa-close" data-ng-click="deleteItem(mtoOutStation,$index)"></span></p>
                             </dd>
                         </dl>
                     </div>
@@ -72,7 +72,7 @@
                         <dl class="dl-horizontal">
                             <dt>调入站点</dt>
                             <dd class="ng-binding">
-                                <p class="no-margin">{{mtoInStation.stationName}}</p>
+                                <p class="no-margin" data-ng-if="mtoInStation.stationCode">{{mtoInStation.stationName}}<span class="fa fa-close" data-ng-click="clearItem(mtoInStation)"></span></p>
                             </dd>
                         </dl>
                     </div>
@@ -91,7 +91,7 @@
                         <dl class="dl-horizontal">
                             <dt>调出站点</dt>
                             <dd class="ng-binding">
-                                <p class="no-margin" data-ng-repeat="item in otoOutStation">{{item.stationName}}</p>
+                                <p class="no-margin" data-ng-repeat="item in otoOutStation">{{item.stationName}}<span class="fa fa-close" data-ng-click="deleteItem(otoOutStation,$index)"></span></p>
                             </dd>
                         </dl>
                     </div>
@@ -104,7 +104,7 @@
                         <dl class="dl-horizontal">
                             <dt>调入站点</dt>
                             <dd class="ng-binding">
-                                <p class="no-margin" data-ng-repeat="item in otoInStation">{{item.stationName}}</p>
+                                <p class="no-margin" data-ng-repeat="item in otoInStation">{{item.stationName}}<span class="fa fa-close" data-ng-click="deleteItem(otoInStation,$index)"></span></p>
                             </dd>
                         </dl>
                     </div>

@@ -453,3 +453,14 @@ input[type="text"]:disabled {
 .k-callout {
     display: none;
 }
+
+.select-station-list span.fa {
+    color: red;
+}
+
+.select-station-list span.fa:hover {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+    transition: transform 300ms;
+    cursor: pointer;
+}

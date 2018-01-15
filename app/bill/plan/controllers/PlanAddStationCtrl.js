@@ -257,5 +257,15 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         });
         cb(data);
         $scope.$close();
+    };
+
+    // 删除数组的
+    $scope.deleteItem = function (array, index) {
+        array.splice(index, 1);
+    };
+    //  清空
+    $scope.clearItem = function (station) {
+        station.stationCode = '';
+        station.stationName = '';
     }
 });
