@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibModal, $timeout, $state, params, ApiService) {
+angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibModal, $timeout, $state, params, ApiService, cargoUnit, materialUnit) {
     // 页面类型 查看or审核
     $scope.type = params.type;
     $scope.bill = params.purchaseBill;
@@ -20,19 +20,29 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             persistSelection: true,
             dataSource: params.purchaseBill.billDetails,
             columns: [
-                { selectable: true, locked: true },
-                { title: "操作", width: 160, locked: true, command: [{ name: 'edit', text: "编辑" }] },
-                { field: "cargo.cargoName", title: "货物名称", width: 120 },
-                { field: "cargo.cargoCode", title: "货物编码", width: 120 },
-                { field: "cargo.rawMaterialId", title: "所属原料", width: 120 },
-                { field: "cargo.measurementCode", title: "标准单位", width: 120 },
-                { template: "#: cargo.number #/#: cargo.standardUnitCode #", title: "规格", width: 120 },
-                { field: "dateInProduced", title: "生产日期", width: 160, WdatePicker: true, editable: true },
-                { field: "unitPrice", title: "单位进价", width: 120, type: 'number', editable: true },
-                { field: "amount", title: "实收数量", width: 120, type: 'number', editable: true },
-                { field: "shippedNumber", title: "发货数量", width: 120, type: 'number', editable: true },
-                { field: "differenceNumber", title: "数量差额", width: 120 },
-                { field: "differencePrice", title: "总价差值", width: 120 }
+                {selectable: true, locked: true},
+                {title: "操作", width: 160, locked: true, command: [{name: 'edit', text: "编辑"}]},
+                {field: "cargo.cargoName", title: "货物名称", width: 120},
+                {field: "cargo.cargoCode", title: "货物编码", width: 120},
+                {field: "cargo.rawMaterialId", title: "所属原料", width: 120},
+                {
+                    title: "标准单位", width: 120,
+                    template: function (data) {
+                        return getTextByVal(materialUnit, data.cargo.measurementCode);
+                    }
+                },
+                {
+                    title: "规格", width: 120,
+                    template: function (data) {
+                        return cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
+                    }
+                },
+                {field: "dateInProduced", title: "生产日期", width: 160, WdatePicker: true, editable: true},
+                {field: "unitPrice", title: "单位进价", width: 120, type: 'number', editable: true},
+                {field: "amount", title: "实收数量", width: 120, type: 'number', editable: true},
+                {field: "shippedNumber", title: "发货数量", width: 120, type: 'number', editable: true},
+                {field: "differenceNumber", title: "数量差额", width: 120},
+                {field: "differencePrice", title: "总价差值", width: 120}
             ],
             save: function (e) {
                 // 计算数量差额和总价值差
@@ -92,7 +102,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                         });
                         _.each(data, function (item) {
                             if (_.indexOf(cargoCodes, item.cargoCode) < 0) {
-                                dataSource.add({ cargoCode: item.cargoCode, cargo: item });
+                                dataSource.add({cargoCode: item.cargoCode, cargo: item});
                             }
                         });
                     }

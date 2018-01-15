@@ -38,6 +38,12 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
                         type: 'add',
                         purchaseBill: {}
                     };
+                },
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })
