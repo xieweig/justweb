@@ -15,7 +15,7 @@ var COMMON_URL = {
     oauth: location.origin + '/oauth'
 };
 
-if (false) {
+if (true) {
     COMMON_URL = {
         bill: 'http://192.168.21.141:15009',
         baseInfo: 'http://192.168.21.141:15006',
