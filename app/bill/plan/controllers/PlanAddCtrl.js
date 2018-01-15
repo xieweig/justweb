@@ -195,7 +195,14 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
-                        item.cargo = data;
+                        var repeat = _.find($scope.cargoMap, function (item) {
+                            return item.cargo.cargoCode === data.cargoCode;
+                        });
+                        if (!repeat) {
+                            item.cargo = data;
+                        } else {
+                            swal('货物已存在', '', 'warning');
+                        }
                     }
                 },
                 cargoUnit: function () {
