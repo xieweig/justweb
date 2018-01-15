@@ -5,6 +5,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
      查看站点退库计划弹窗
      */
     $scope.params = {};
+    $scope.cargoConfigure = data.cargoUnit;
     $scope.modalType = data.type;
     $scope.materialResult = [];
 
@@ -57,10 +58,14 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
                     {field: "standardUnitCode", title: "标准单位"},
-                    {title: "规格", template: "#: number #/#: standardUnitCode #"},
+                    {title: "规格", template: function (data) {
+                            return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                    }},
                     {field: "shippedAmount", title: "应拣数量"},
                     {field: "actualAmount", title: "实拣数量"},
-                    {field: "number", title: "标准单位数量"}
+                    {title: "标准单位数量", template: function (data) {
+                            return parseInt(data.number) * parseInt(data.actualAmount)
+                        }}
                 ]
             }
         };
@@ -80,9 +85,13 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
                     {field: "standardUnit", title: "标准单位"},
-                    {title: "规格", template: "#: number #/#: standardUnitCode #"},
+                    {title: "规格", template: function (data) {
+                            return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                    }},
                     {field: "actualAmount", title: "实拣数量", editable: true},
-                    {field: "number", title: "标准单位数量"}
+                    {title: "标准单位数量", template: function (data) {
+                            return parseInt(data.number) * parseInt(data.actualAmount)
+                    }}
                 ],
                 save: function (e) {
                     // 每次保存都重新计算总的和原料的拣货数量
@@ -116,11 +125,14 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
                     {field: "standardUnitCode", title: "标准单位"},
-                    // {field: "number", title: "规格"},
-                    {title: "规格", template: "#: number #/#: standardUnitCode #"},
+                    {title: "规格", template: function (data) {
+                            return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                        }},
                     {field: "shippedAmount", title: "应拣数量"},
                     {field: "actualAmount", title: "实拣数量", editable: true},
-                    {field: "number", title: "标准单位数量"}
+                    {title: "标准单位数量", template: function (data) {
+                            return parseInt(data.number) * parseInt(data.actualAmount)
+                    }}
                 ]
             }
         };

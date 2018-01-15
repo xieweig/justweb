@@ -5,6 +5,7 @@ angular.module('app').controller('PlanViewModalCtrl', function ($scope, $rootSco
      查看站点退库计划弹窗
      */
     $scope.params = {};
+    $scope.cargoConfigure = data.cargoUnit;
 
     $scope.cargoGrid = {
         url: '/api/bill/restock/findPlanBillByBillCode?billCode=' + data.billCode,
@@ -13,7 +14,9 @@ angular.module('app').controller('PlanViewModalCtrl', function ($scope, $rootSco
                 {field: "cargoName", title: "货物名称"},
                 {field: "cargoCode", title: "货物编码"},
                 {field: "rawMaterialName", title: "所属原料"},
-                {title: "规格", template: "#: number #/#: standardUnitCode #", width: 120},
+                {title: "规格", template: function (data) {
+                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                    }, width: 120},
                 {field: "amount", title: "应拣数量"}
             ]
         }
@@ -58,6 +61,7 @@ angular.module('app').controller('PlanViewModalCtrl', function ($scope, $rootSco
                             rawMaterialName: item.material.materialName,
                             number: item.cargo.number,
                             standardUnitCode: item.cargo.standardUnitCode,
+                            measurementCode: item.cargo.measurementCode,
                             amount: item.amount
                         })
                     })

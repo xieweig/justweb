@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uibModal, ApiService) {
+angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uibModal, ApiService, cargoUnit) {
     $scope.params = {};
+    $scope.cargoConfigure = cargoUnit
     $scope.kendoQueryCondition = {
         operatorName: '',
         submitStateCode: [],
@@ -199,7 +200,8 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
             resolve: {
                 data: {
                     billCode: data.billCode,
-                    type: type
+                    type: type,
+                    cargoUnit: $scope.cargoConfigure
                 }
             }
         });
