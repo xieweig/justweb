@@ -14,7 +14,9 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
         }
     };
 
+    $scope.params = {};
     $scope.cargoGrid = {
+        params: $scope.params,
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCondition',
         kendoSetting: {
             pageable: true,
