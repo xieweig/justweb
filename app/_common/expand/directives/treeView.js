@@ -44,6 +44,9 @@ angular.module('SmartAdmin.Expand').directive('treeView', function (MainFactory)
             options.check ? treeOption.check = options.check : '';
             options.change ? treeOption.change = options.change : '';
             options.select ? treeOption.select = options.select : '';
+            if (options.loadOnDemand !== undefined) {
+                treeOption.loadOnDemand = options.loadOnDemand;
+            }
             // 模板
             options.template ? treeOption.template = options.template : '';
             //初始化

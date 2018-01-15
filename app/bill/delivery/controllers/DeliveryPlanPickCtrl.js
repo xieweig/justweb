@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('app').controller('DeliveryPlanPickCtrl', function ($scope, $uibModal, $timeout, ApiService) {
+    $scope.params = {};
 
     // 出库站点选择
     $scope.outStationParams = {

@@ -19,6 +19,14 @@ angular.module('app.bill.plan', ['ui.router']).config(function ($stateProvider) 
                     templateUrl: 'app/bill/plan/views/add.html',
                     controller: 'PlanAddCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         })
         .state('app.bill.plan.edit', {
@@ -33,6 +41,14 @@ angular.module('app.bill.plan', ['ui.router']).config(function ($stateProvider) 
                 "content@app": {
                     templateUrl: 'app/bill/plan/views/add.html',
                     controller: 'PlanAddCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })

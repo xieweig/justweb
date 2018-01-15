@@ -291,13 +291,13 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
         }, apiServiceError);
     };
     // 根据配置类型查询数据源配置
-    this.getStandardUnit = function (configureType) {
+    this.getConfigure = function (configureType) {
         if (!configureType) {
             return;
         }
         return ApiService.get(COMMON_URL.baseInfo + '/api/baseInfo/configure/findByCondition?configureType=' + configureType, {hasHost: true}).then(function (response) {
             if (response.code === '000') {
-                return response.result.content;
+                return response.result.configureList;
             } else {
                 swal('请求规格失败', response.message, 'error');
             }

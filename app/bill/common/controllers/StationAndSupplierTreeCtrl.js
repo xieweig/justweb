@@ -18,9 +18,14 @@ angular.module('app').controller('StationAndSupplierTreeCtrl', function ($scope,
             schema: {
                 model: {
                     children: "items"
+                },
+                data: function (data) {
+                    console.log(data);
+                    return data;
                 }
             }
         },
+        loadOnDemand: false,
         checkboxes: {
             checkChildren: true
         },

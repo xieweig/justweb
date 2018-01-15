@@ -433,3 +433,12 @@ input[type="text"]:disabled {
 .smart-checkbox .smart-form .checkbox i {
     top: 5px;
 }
+
+.kendo-link {
+    cursor: pointer;
+    color: #1155cc;
+}
+
+.kendo-link:hover {
+    text-decoration: underline;
+}

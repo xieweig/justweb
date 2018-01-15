@@ -8,7 +8,8 @@ angular.module('app.bill', [
     'app.bill.restock',
     'app.bill.returned',
     'app.bill.procurement',
-    'app.bill.delivery'
+    'app.bill.delivery',
+    'app.bill.adjust'
 ]).config(function ($stateProvider) {
     $stateProvider
         .state('app.bill', {

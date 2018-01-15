@@ -1,24 +1,37 @@
 'use strict';
 
-angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $timeout, ApiService, params) {
+angular.module('app').controller('TraceAddCtrl', function ($scope, $state, $uibModal, $timeout, ApiService, params) {
     $scope.trace = {};
     $scope.isRead = params.isRead;
     initTraceEdit(params.isRead);
     $scope.initPage = function () {
-        if (params.billCode) {
-            ApiService.get('/api/bill/waybill/findOneWayBill?id=' + params.billCode).then(function (response) {
-                if (response.code !== '000') {
-                    swal('', response.message, 'error');
-                } else {
-                    // 初始化参数
-                    $scope.trace = response.result.wayBill;
-                    $timeout(function () {
-                        $scope.detailsGrid.kendoGrid.dataSource.data($scope.trace.editWayBillDetailDTOList);
-                    });
-                }
-            });
+        if (params.bill) {
+            // 初始化参数
+            $scope.trace = params.bill;
         }
-    }
+    };
+
+    // 搜索条件中的出库站点选择
+    $scope.outStationParams = {
+        single: true,
+        isSupplier: true,
+        initTip: params.bill ? params.bill.outStationName : '',
+        callback: function (data) {
+            $scope.trace.outStationCode = data.stationCode || data.supplierCode;
+            $scope.trace.outStationName = data.stationName || data.supplierName;
+        }
+    };
+
+    // 搜索条件中的入库站点选择
+    $scope.inStationParams = {
+        single: true,
+        isSupplier: true,
+        initTip: params.bill ? params.bill.inStationName : '',
+        callback: function (data) {
+            $scope.trace.inStationCode = data.stationCode || data.supplierCode;
+            $scope.trace.inStationName = data.stationName || data.supplierName;
+        }
+    };
 
     /**
      * 初始化
@@ -40,6 +53,11 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
                     {field: "totalCount", title: "品种数", width: 120},
                     {field: "totalAmount", title: "货物数", width: 120}
                 ]
+            },
+            ready: function () {
+                if ($scope.trace.editWayBillDetailDTOList) {
+                    $scope.detailsGrid.kendoGrid.dataSource.data($scope.trace.editWayBillDetailDTOList);
+                }
             }
         };
         if (!isRead) {
@@ -71,26 +89,6 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
 
     $scope.addPackageMap = function () {
         $scope.packageMap.push({text: ''});
-    };
-
-    // 搜索条件中的出库站点选择
-    $scope.outStationParams = {
-        single: true,
-        isSupplier: true,
-        initTip: $scope.trace.outStationCode,
-        callback: function (data) {
-            $scope.trace.outStationCode = data.stationCode;
-        }
-    };
-
-    // 搜索条件中的入库站点选择
-    $scope.inStationParams = {
-        single: true,
-        isSupplier: true,
-        initTip: $scope.trace.inStationCode,
-        callback: function (data) {
-            $scope.trace.inStationCode = data.stationCode;
-        }
     };
 
     /**
@@ -135,7 +133,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
         } else {
             var dataSource = $scope.detailsGrid.kendoGrid.dataSource;
             var repeatIndex = _.findIndex(dataSource.data(), function (item) {
-                return item.outStorageBillCode == $scope.currentDetails.outStorageBillCode;
+                return item.outStorageBillCode === $scope.currentDetails.outStorageBillCode;
             });
             if (repeatIndex >= 0) {
                 swal('该出库单号已存在', '', 'warning');
@@ -143,6 +141,10 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
             }
             dataSource.add($scope.currentDetails);
             $scope.currentDetails = {};
+            $scope.packageMap = [{text: ''}];
+            $timeout(function () {
+                $('#packageType').val('').trigger('change');
+            });
             if (!isNext) {
                 $scope.addModal.close();
             }
@@ -156,8 +158,6 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
     $scope.save = function () {
         if (!$scope.trace) {
             swal('请输入填写单据详情', '', 'warning');
-        } else if (!$scope.trace.wayBillCode) {
-            swal('请输入运单单号', '', 'warning');
         } else if (!$scope.trace.deliveryTime) {
             swal('请输入发货时间', '', 'warning');
         } else if (!$scope.trace.planArrivalTime) {
@@ -168,6 +168,8 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
             swal('请输入出库站点', '', 'warning');
         } else if (!$scope.trace.inStationCode) {
             swal('请输入入库站点', '', 'warning');
+        } else if ($scope.trace.inStationCode === $scope.trace.outStationCode) {
+            swal('出入库站点不能一致', '', 'warning');
         } else if (!$scope.trace.amountOfPackages) {
             swal('请输入运送件数', '', 'warning');
         } else {
@@ -218,7 +220,7 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
             } else {
                 swal('操作成功! ', '', 'success').then(function () {
                     if (params.type === 'edit') {
-                        $scope.close();
+                        $scope.$close();
                     } else {
                         $state.go('app.bill.trace.list');
                     }
@@ -233,18 +235,16 @@ angular.module('app').controller('TraceAddCtrl', function ($scope, $uibModal, $t
     $scope.deleteDetails = function () {
         var selectIds = $scope.detailsGrid.kendoGrid.selectedKeyNames();
         var dataSource = $scope.detailsGrid.kendoGrid.dataSource;
-        var indexPos = _.chain(dataSource.data()).map(function (item, index) {
+        var delCount = 0;
+        _.chain(dataSource.data()).toArray().reverse().each(function (item) {
             if (_.indexOf(selectIds, item.outStorageBillCode) > -1) {
-                return index;
+                delCount++;
+                dataSource.remove(item);
             }
-        }).reverse().value();
-
-        // 根据反序  从最后一条开始删除
-        _.each(indexPos, function (item) {
-            if (_.isNumber(item) && item >= 0) {
-                dataSource.remove(dataSource.at(item));
-            }
-        });
+        }).value();
+        if (delCount === 0) {
+            swal('请选择要删除的明细信息', '', 'warning');
+        }
     };
 
     $scope.enterBillCode = function () {

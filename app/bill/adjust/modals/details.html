@@ -1,0 +1,115 @@
+<div class="uib-modal" data-ng-init="initPage()">
+    <h1 class="uib-modal-title">
+        <span>查看调剂出库单</span>
+        <span class="option" data-ng-if="planDetails.type==='look'">
+            <input type="button" class="btn btn-primary" value="导出">
+            <input type="button" class="btn btn-default" value="返回" data-ng-click="$close();">
+        </span>
+        <span class="option" data-ng-if="planDetails.type==='audit'">
+            <input type="button" class="btn btn-primary" value="审核通过">
+            <input type="button" class="btn btn-primary" value="审核不通过">
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
+        </span>
+        <span class="option" data-ng-if="planDetails.type==='update'">
+            <input type="button" class="btn btn-primary" value="保存">
+            <input type="button" class="btn btn-primary" value="提交审核">
+            <input type="button" class="btn btn-default" value="返回" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>单号</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>录单时间</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>出库时间</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>录单人</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>审核人</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>出库站点</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>出库库位</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>入库站点</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>入库库位</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>单据属性</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>出库状态</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>提交状态</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>审核状态</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>调剂数量</dt>
+                <dd>123213</dd>
+            </dl>
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>调剂品种数</dt>
+                <dd>123213</dd>
+            </dl>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <div class="input-group">
+                    <span class="input-group-addon">计划备注</span>
+                    <input type="text" class="form-control" disabled>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+                <div class="input-group">
+                    <span class="input-group-addon">出库备注</span>
+                    <input type="text" class="form-control" data-ng-disabled="!(planDetails.type==='update')">
+                </div>
+            </div>
+            <div class="col-xs-12 margin-bottom-10 dl-horizontal">
+                <div class="input-group">
+                    <span class="input-group-addon">审核意见</span>
+                    <input type="text" class="form-control" data-ng-disabled="!(planDetails.type==='audit')">
+                </div>
+            </div>
+        </div>
+        <hr class="gray-line">
+        <div>
+            <p class="text-center">原料拣货情况</p>
+            <div class="margin-top-10" data-kendo-grids data-options="materialDetails"></div>
+        </div>
+        <div class="margin-top-10">
+            <p class="text-center">货物拣货情况</p>
+            <div class="text-right" data-ng-if="planDetails.type==='update'">
+                <input type="button" class="btn btn-default" value="添加货物">
+            </div>
+            <div class="margin-top-10" data-kendo-grids data-options="cargoDetails"></div>
+        </div>
+    </div>
+</div>

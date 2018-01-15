@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common) {
+angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common, cargoUnit, materialUnit) {
     if ($stateParams.billCode) {
         ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
             if (response.code !== '000') {
@@ -108,9 +108,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     $scope.materialMap = [];
     $scope.addItem = function (type) {
         if (type === 'material') {
-            $scope.materialMap.push(pushCargo());
+            $scope.materialMap.splice(0, 0, pushCargo());
         } else {
-            $scope.cargoMap.push(pushCargo());
+            $scope.cargoMap.splice(0, 0, pushCargo());
         }
     };
 
@@ -130,7 +130,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         editable: true,
                         dataSource: item.resultPlanBillDetailDTOSet,
                         columns: [
-                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85},
                             {
                                 title: "调出站点",
                                 template: function (data) {
@@ -158,7 +158,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         editable: true,
                         dataSource: item.resultPlanBillDetailDTOSet,
                         columns: [
-                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85, locked: true},
+                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85},
                             {
                                 title: "调出站点",
                                 template: function (data) {
@@ -195,6 +195,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     return function (data) {
                         item.cargo = data;
                     }
+                },
+                cargoUnit: function () {
+                    return cargoUnit;
                 }
             }
         });
@@ -222,6 +225,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         } else {
             $scope.cargoMap.splice(index, 1);
         }
+        hasStation();
     };
 
     // 清空货物
@@ -235,11 +239,18 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
 
     // 添加站点
     $scope.addStation = function (item, index) {
+        if (!$scope.plan.billType) {
+            swal('请选择计划类型', '', 'warning');
+            return;
+        }
         $uibModal.open({
             templateUrl: 'app/bill/plan/modals/addStationModal.html',
             size: 'lg',
             controller: 'PlanAddStationCtrl',
             resolve: {
+                billType: function () {
+                    return $scope.plan.billType;
+                },
                 cb: function () {
                     return function (data) {
                         var dataSource = item.stationGrid.kendoGrid.dataSource;
@@ -264,25 +275,55 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                 });
                             }
                         });
+                        hasStation();
                     }
                 }
             }
         });
     };
+
     // 清空站点
     $scope.clearStation = function (item, index) {
         item.stationGrid.kendoGrid.dataSource.data([]);
+        hasStation();
     };
+
+    // 判断是否包含站点 用于禁用计划类型
+    $scope.isDisableType = false;
+    function hasStation() {
+        var station = {};
+        if ($scope.materialMap.length === 0) {
+            station = _.find($scope.cargoMap, function (item) {
+                return item.stationGrid.kendoGrid.dataSource.data().length !== 0;
+            });
+        } else {
+            station = _.find($scope.cargoMap, function (item) {
+                return item.stationGrid.kendoGrid.dataSource.data().length !== 0;
+            });
+        }
+        $scope.isDisableType = !!station;
+    }
 
     // 保存站点
     $scope.save = function () {
         var plan = _.cloneDeep($scope.plan);
+        if (!plan.billName) {
+            swal('请选择计划名称', '', 'warning');
+            return;
+        }
         sendHttpReques('save', plan);
     };
 
     // 审核站点
     $scope.submit = function () {
         var plan = _.cloneDeep($scope.plan);
+        if (!plan.billName) {
+            swal('请选择计划名称', '', 'warning');
+            return;
+        } else if (!plan.billType) {
+            swal('请选择计划类型', '', 'warning');
+            return;
+        }
         sendHttpReques('submit', plan);
     };
 

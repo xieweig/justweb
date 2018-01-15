@@ -23,13 +23,13 @@
             <div class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10">
                 <div class="input-group">
                     <span class="input-group-addon">所属原料</span>
-                    <input type="text" class="form-control" data-ng-model="params.xx">
+                    <span data-select-tree data-select-modal="materialParamOpt"></span>
                 </div>
             </div>
             <div class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10">
                 <div class="input-group">
                     <span class="input-group-addon">货物条码</span>
-                    <input type="text" class="form-control" data-ng-model="params.xx">
+                    <input type="text" class="form-control" data-ng-model="params.barCode">
                 </div>
             </div>
             <div class="col-lg-8 col-sm-12 col-xs-12 margin-bottom-10">
@@ -55,7 +55,7 @@
                     <span class="display-table-cell" style="width: 80px;">
                         <select smart-select2 class="select2 width-full" data-ng-model="params.measurementCode">
                             <option value="">请选择</option>
-                            <option data-ng-repeat="item in cargoConfigure" data-ng-value="item.value">{{item.text}}</option>
+                            <option data-ng-repeat="item in cargoConfigure" data-ng-value="item.configureCode">{{item.configureName}}</option>
                         </select>
                     </span>
                 </div>
@@ -65,13 +65,13 @@
                     <div class="flex-1">
                         <div class="input-group">
                             <span class="input-group-addon">保质期</span>
-                            <input type="text" class="form-control" data-datepicker data-ng-model="params.createStartTime">
+                            <input type="text" class="form-control" data-only-number data-ng-model="params.effectiveStartTime">
                         </div>
                     </div>
                     <div class="flex-1">
                         <div class="input-group">
                             <span class="input-group-addon" style="border-left: 0;">至</span>
-                            <input type="text" class="form-control" data-datepicker data-ng-model="params.createEndTime">
+                            <input type="text" class="form-control" data-only-number data-ng-model="params.effectiveEndTime">
                             <span class="input-group-addon" style="border-left: 0;">天</span>
                         </div>
                     </div>
@@ -80,13 +80,7 @@
             <div class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10">
                 <div class="input-group">
                     <span class="input-group-addon">建档人</span>
-                    <input type="text" class="form-control" data-ng-model="params.xx">
-                </div>
-            </div>
-            <div class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10">
-                <div class="input-group">
-                    <span class="input-group-addon">可用状态</span>
-                    <input type="text" class="form-control" data-ng-model="params.xx">
+                    <input type="text" class="form-control" data-ng-model="params.operatorName">
                 </div>
             </div>
         </div>

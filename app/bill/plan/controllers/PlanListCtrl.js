@@ -57,7 +57,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
             pageable: true,
             columns: [
                 {
-                    title: "操作", width: 220, locked: true,
+                    title: "操作", width: 220,
                     command: [
                         {
                             name: 'e', text: "修改", click: editPlan,
@@ -78,7 +78,6 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                 {field: "billCode", title: "计划编号", width: 120},
                 {field: "billName", title: "计划名称", width: 120},
                 {field: "billType", title: "计划类型", width: 120},
-                {field: "", title: "完成度", width: 120},
                 {field: "createTime", title: "创建时间", width: 160},
                 {field: "operatorName", title: "创建人", width: 120},
                 {field: "billSubmitState", title: "提交状态", width: 120},
