@@ -101,6 +101,8 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             swal('不能包含出入库相同的站点', '', 'warning');
         } else {
             addStationToGrid(data);
+            $scope.otmOutStation = {};
+            $scope.otmInStation = [];
         }
     };
 
@@ -160,6 +162,8 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             swal('不能包含出入库相同的站点', '', 'warning');
         } else {
             addStationToGrid(data);
+            $scope.mtoOutStation = [];
+            $scope.mtoInStation = {};
         }
     };
 
@@ -223,6 +227,8 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             swal('不能包含出入库相同的站点', '', 'warning');
         } else {
             addStationToGrid(data);
+            $scope.otoOutStation = [];
+            $scope.otoInStation = [];
         }
     };
 

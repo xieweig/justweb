@@ -73,7 +73,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
                 if (item.siteType === 'LOGISTICS') {
                     console.log(213)
                 }
-                if (stationType !== 'All' && stationType !== undefined && stationType.indexOf(item.siteType) < 0) {
+                if (stationType !== 'All' && stationType !== undefined && stationType.toUpperCase().indexOf(item.siteType.toUpperCase()) < 0) {
                     return;
                 }
                 var currentStation = {key: item.key, value: item.value, text: item.text, type: 'station'};
