@@ -10,6 +10,22 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCondition',
         params: $scope.params,
         primaryId: 'cargoCode',
+        dataSource: {
+            data: function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    var result = [];
+                    if (response.result && response.result.result.content) {
+                        result = response.result.result.content;
+                        if (result.length === 1) {
+                            $scope.submit(result);
+                        }
+                    }
+                }
+                return result;
+            }
+        },
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
@@ -81,8 +97,11 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
     /**
      * 提交选中货物
      */
-    $scope.submit = function () {
-        var result = _.map($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
+    $scope.submit = function (dataSource) {
+        if (!dataSource) {
+            dataSource = $scope.currentCargoList.kendoGrid.dataSource.data();
+        }
+        var result = _.map(dataSource, function (item) {
             return {
                 barCode: item.barCode,
                 cargoCode: item.cargoCode,
