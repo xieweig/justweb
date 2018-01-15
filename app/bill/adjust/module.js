@@ -44,5 +44,29 @@ angular.module('app.bill.adjust', ['ui.router']).config(function ($stateProvider
                     controller: 'AdjustOutStorageListCtrl'
                 }
             }
+        })
+        .state('app.bill.adjust.inStorageList', {
+            url: '/bill/adjust/inStorageList',
+            data: {
+                title: '调剂入库单查询'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/adjust/views/inStorageList.html',
+                    controller: 'AdjustInStorageListCtrl'
+                }
+            }
+        })
+        .state('app.bill.adjust.transferList', {
+            url: '/bill/adjust/transferList',
+            data: {
+                title: '调剂调拨单查询'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/adjust/views/transferList.html',
+                    controller: 'AdjustTransferListCtrl'
+                }
+            }
         });
 });

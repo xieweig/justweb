@@ -98,7 +98,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
     function lookDetails(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $scope.planDetails = {billCode: '111111111'};
+        $scope.planDetails = {type: 'look', billCode: '111111111'};
         $scope.materialDetails = {
             kendoSetting: {
                 dataSource: [{xxxxx: 1}, {xxxxx: 2}],
