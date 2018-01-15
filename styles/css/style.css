@@ -442,3 +442,14 @@ input[type="text"]:disabled {
 .kendo-link:hover {
     text-decoration: underline;
 }
+
+.k-tooltip-validation {
+    margin-top: 0 !important;
+    display: block;
+    position: static;
+    padding: 0;
+}
+
+.k-callout {
+    display: none;
+}

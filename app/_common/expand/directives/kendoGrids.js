@@ -94,6 +94,13 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                             });
                         });
                     }
+                } else if (item.kType === 'number') {
+                    item.editor = function (container, options) {
+                        var input = $("<input class='k-input k-textbox'/>");
+                        input.attr("name", options.field);
+                        inputNumber(input);
+                        input.appendTo(container);
+                    }
                 } else if (item.field) {
                     // 其他
                     var fieldName = item.field;

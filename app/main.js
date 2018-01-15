@@ -216,3 +216,41 @@ Date.prototype.format = function (fmt) {
     }
     return fmt;
 };
+
+function inputNumber(element, options) {
+    options = options ? options : {};
+    element.on({
+        compositionstart: function () {
+            var $this = $(this);
+            $this.unbind('input')
+        },
+        compositionend: function () {
+            inputFunction();
+            $(this).on('input', inputFunction);
+        },
+        input: inputFunction
+    });
+
+    function inputFunction() {
+        var val = element.val();
+        var reg = /\d+/g;
+        var result = reg.exec(val);
+        if (!result) {
+            element.val('');
+        } else {
+            val = parseInt(result[0]);
+            var maxNumber = parseInt(options.maxNumber);
+            var minNumber = parseInt(options.minNumber);
+            if (maxNumber && maxNumber < val) {
+                val = maxNumber
+            }
+            if (minNumber && minNumber > val) {
+                val = minNumber
+            }
+            if (val > 9999999) {
+                val = 9999999;
+            }
+            element.val(val);
+        }
+    }
+}

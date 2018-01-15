@@ -171,7 +171,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                     return getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
-                            {field: "amount", title: "调剂数量(点击修改)", editable: true}
+                            {
+                                field: "amount", title: "调剂数量(点击修改)", editable: true, kType: 'number'
+                            }
                         ]
                     }
                 }
