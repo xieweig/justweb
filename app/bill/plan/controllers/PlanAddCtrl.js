@@ -200,6 +200,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 },
                 cargoUnit: function () {
                     return cargoUnit;
+                },
+                materialUnit: function () {
+                    return materialUnit;
                 }
             }
         });

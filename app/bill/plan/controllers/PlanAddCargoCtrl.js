@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout, cb, cargoUnit) {
+angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout, cb, cargoUnit, materialUnit) {
     $scope.cargoConfigure = cargoUnit;
     $scope.search = function () {
         $scope.cargoGrid.kendoGrid.dataSource.page(1);
@@ -36,7 +36,7 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
                 },
                 {
                     title: "最小标准单位", width: 150, template: function (data) {
-                    return getTextByVal($scope.materialConfigure, data.standardUnitCode);
+                    return getTextByVal(materialUnit, data.standardUnitCode);
                 }
                 },
                 {field: "createTime", title: "建档时间", format: '{0: yyyy-MM-dd HH:mm}', width: 145},
@@ -61,6 +61,7 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
             "cargoName": dataItem.cargoName,
             "effectiveTime": dataItem.effectiveTime,
             "measurementCode": dataItem.measurementCode,
+            "measurementName": getTextByVal(materialUnit, dataItem.measurementCode),
             "standardUnitCode": dataItem.standardUnitCode,
             "memo": dataItem.memo,
             "number": dataItem.number,
