@@ -140,7 +140,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                    return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
                             {field: "amount", title: "调剂数量(点击修改)", editable: true}
