@@ -34,7 +34,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
             pageable: true,
             columns: [
                 {
-                    title: "操作", width: 220, locked: true,
+                    title: "操作", width: 220,
                     command: [
                         {name: 't', text: "查看", click: openViewModal},
                         {

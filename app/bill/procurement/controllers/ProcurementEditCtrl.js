@@ -20,8 +20,8 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             persistSelection: true,
             dataSource: params.purchaseBill.billDetails,
             columns: [
-                {selectable: true, locked: true},
-                {title: "操作", width: 160, locked: true, command: [{name: 'edit', text: "编辑"}]},
+                {selectable: true},
+                {title: "操作", width: 160, command: [{name: 'edit', text: "编辑"}]},
                 {field: "cargo.cargoName", title: "货物名称", width: 120},
                 {field: "cargo.cargoCode", title: "货物编码", width: 120},
                 {field: "cargo.rawMaterialId", title: "所属原料", width: 120},

@@ -16,17 +16,17 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
             pageable: true,
             height: 300,
             columns: [
-                { selectable: true },
-                { field: "cargoCode", title: "货物编码", width: 120 },
-                { field: "originalName", title: "货物内部名称", width: 120 },
-                { field: "rawMaterialName", title: "所属原料", width: 120 },
-                { field: "barCode", title: "货物条码", width: 120 },
-                { field: "selfBarCode", title: "自定义条码", width: 120 },
-                { field: "effectiveTime", title: "保质期(天)", width: 120 },
-                { title: "规格", width: 120, template: '#: number #/#: measurementCode #' },
-                { field: "standardUnitCode", title: "最小标准单位", width: 120 },
-                { field: "createTime", title: "建档时间", width: 120 },
-                { field: "memo", title: "备注", width: 200 }
+                {selectable: true},
+                {field: "cargoCode", title: "货物编码", width: 120},
+                {field: "originalName", title: "货物内部名称", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
+                {field: "barCode", title: "货物条码", width: 120},
+                {field: "selfBarCode", title: "自定义条码", width: 120},
+                {field: "effectiveTime", title: "保质期(天)", width: 120},
+                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
+                {field: "standardUnitCode", title: "最小标准单位", width: 120},
+                {field: "createTime", title: "建档时间", width: 120},
+                {field: "memo", title: "备注", width: 200}
             ]
         }
     };
@@ -37,17 +37,17 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
         persistSelection: true,
         kendoSetting: {
             columns: [
-                { title: "操作", locked: true, command: [{ name: 'del', text: "删除", click: deleteCurrentCargo }], width: 80 },
-                { field: "cargoCode", title: "货物编码", width: 120 },
-                { field: "originalName", title: "货物内部名称", width: 120 },
-                { field: "rawMaterialName", title: "所属原料", width: 120 },
-                { field: "barCode", title: "货物条码", width: 120 },
-                { field: "selfBarCode", title: "自定义条码", width: 120 },
-                { field: "effectiveTime", title: "保质期(天)", width: 120 },
-                { title: "规格", width: 120, template: '#: number #/#: measurementCode #' },
-                { field: "standardUnitCode", title: "最小标准单位", width: 120 },
-                { field: "createTime", title: "建档时间", width: 120 },
-                { field: "memo", title: "备注", width: 200 }
+                {title: "操作", command: [{name: 'del', text: "删除", click: deleteCurrentCargo}], width: 80},
+                {field: "cargoCode", title: "货物编码", width: 120},
+                {field: "originalName", title: "货物内部名称", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
+                {field: "barCode", title: "货物条码", width: 120},
+                {field: "selfBarCode", title: "自定义条码", width: 120},
+                {field: "effectiveTime", title: "保质期(天)", width: 120},
+                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
+                {field: "standardUnitCode", title: "最小标准单位", width: 120},
+                {field: "createTime", title: "建档时间", width: 120},
+                {field: "memo", title: "备注", width: 200}
             ]
         }
     };
