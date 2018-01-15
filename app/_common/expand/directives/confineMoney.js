@@ -10,7 +10,7 @@ angular.module('app').directive('confineMoney', function ($uibModal) {
             elm.blur(function () {
                 var value = parseFloat(this.value);
                 value = value < 0 ? -value : value;
-                value = value > 9999999.99 ? 9999999.99 : value;
+                value = value > 9999999.99 ? 0 : value;
                 scope.$apply(function () {
                     scope.ngModel = value === value ? value : '';
                 });

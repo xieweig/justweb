@@ -15,6 +15,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         {key: 'InStorage', value: 'InStorage', text: '入库'}
     ];
 
+
     $rootScope.billType = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
         {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
@@ -68,7 +69,11 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
             var cityPos = {};
             _.each((isPermissions ? scopeStation : station), function (item) {
                 // 如果传入了stationType  则需要限制返回站点的类型
-                if (stationType !== 'All' && stationType !== undefined && stationType.toUpperCase().indexOf(item.siteType.toUpperCase()) < 0) {
+
+                if (item.siteType === 'LOGISTICS') {
+                    console.log(213)
+                }
+                if (stationType !== 'All' && stationType !== undefined && stationType.indexOf(item.siteType) < 0) {
                     return;
                 }
                 var currentStation = {key: item.key, value: item.value, text: item.text, type: 'station'};
