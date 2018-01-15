@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService, Common) {
+angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
 
 
     // 表格参数及搜索
@@ -85,18 +85,21 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            $uibModal.open({
-                templateUrl: 'app/bill/procurement/modals/look.html',
-                size: 'lg',
-                controller: 'ProcurementLookCtrl',
-                resolve: {
-                    params: {
-                        type: 'look',
-                        purchaseBill: purchaseBill
+            Common.getStore(purchaseBill.inStationCode).then(function (storage) {
+                purchaseBill.inStorageName = getTextByVal(storage, purchaseBill.inStorageCode);
+                $uibModal.open({
+                    templateUrl: 'app/bill/procurement/modals/look.html',
+                    size: 'lg',
+                    controller: 'ProcurementLookCtrl',
+                    resolve: {
+                        params: {
+                            type: 'look',
+                            purchaseBill: purchaseBill
+                        }
                     }
-                }
-            }).closed.then(function () {
-                $scope.search();
+                }).closed.then(function () {
+                    $scope.search();
+                });
             });
         });
     }
@@ -106,18 +109,21 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            $uibModal.open({
-                templateUrl: 'app/bill/procurement/modals/look.html',
-                size: 'lg',
-                controller: 'ProcurementLookCtrl',
-                resolve: {
-                    params: {
-                        type: 'audit',
-                        purchaseBill: purchaseBill
+            Common.getStore(purchaseBill.inStationCode).then(function (storage) {
+                purchaseBill.inStorageName = getTextByVal(storage, purchaseBill.inStorageCode);
+                $uibModal.open({
+                    templateUrl: 'app/bill/procurement/modals/look.html',
+                    size: 'lg',
+                    controller: 'ProcurementLookCtrl',
+                    resolve: {
+                        params: {
+                            type: 'audit',
+                            purchaseBill: purchaseBill
+                        }
                     }
-                }
-            }).closed.then(function () {
-                $scope.search();
+                }).closed.then(function () {
+                    $scope.search();
+                });
             });
         });
     };
@@ -127,18 +133,29 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            $uibModal.open({
-                templateUrl: 'app/bill/procurement/modals/edit.html',
-                size: 'lg',
-                controller: 'ProcurementEditCtrl',
-                resolve: {
-                    params: {
-                        type: 'edit',
-                        purchaseBill: purchaseBill
+            Common.getStore(purchaseBill.inStationCode).then(function (storageList) {
+                $uibModal.open({
+                    templateUrl: 'app/bill/procurement/modals/edit.html',
+                    size: 'lg',
+                    controller: 'ProcurementEditCtrl',
+                    resolve: {
+                        params: {
+                            type: 'edit',
+                            purchaseBill: purchaseBill
+                        },
+                        cargoUnit: function () {
+                            return cargoUnit;
+                        },
+                        materialUnit: function () {
+                            return materialUnit;
+                        },
+                        storageList: function () {
+                            return storageList;
+                        }
                     }
-                }
-            }).closed.then(function () {
-                $scope.search();
+                }).closed.then(function () {
+                    $scope.search();
+                });
             });
         });
     };

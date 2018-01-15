@@ -5,6 +5,23 @@ angular.module('app').controller('ProcurementLookCtrl', function ($scope, $state
     $scope.type = params.type;
     $scope.bill = params.purchaseBill;
 
+    // Common.getStore(purchaseBill.inStationCode).then(function (storage) {
+    //     purchaseBill.storage.storageName = getTextByVal(storage, purchaseBill.storage.storageCode);
+    //     $uibModal.open({
+    //         templateUrl: 'app/bill/procurement/modals/look.html',
+    //         size: 'lg',
+    //         controller: 'ProcurementLookCtrl',
+    //         resolve: {
+    //             params: {
+    //                 type: 'look',
+    //                 purchaseBill: purchaseBill
+    //             }
+    //         }
+    //     }).closed.then(function () {
+    //         $scope.search();
+    //     });
+    // });
+
     $scope.procurementGrid = {
         kendoSetting: {
             dataSource: params.purchaseBill.billDetails,

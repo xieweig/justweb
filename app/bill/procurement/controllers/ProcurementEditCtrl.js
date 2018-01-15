@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibModal, $timeout, $state, params, ApiService, cargoUnit, materialUnit) {
+angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibModal, $timeout, $state, params, ApiService, cargoUnit, materialUnit, storageList) {
+    $scope.storageList = storageList;
     // 页面类型 查看or审核
     $scope.type = params.type;
     $scope.bill = params.purchaseBill;
@@ -34,7 +35,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 {
                     title: "规格", width: 120,
                     template: function (data) {
-                        return data.cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
+                        return cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
                     }
                 },
                 {field: "dateInProduced", title: "生产日期", width: 160, WdatePicker: true, editable: true},
