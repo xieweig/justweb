@@ -211,7 +211,8 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
                 },
                 data: {
                     cl: $scope.CargoListGrid.kendoGrid.dataSource.data(),
-                    cargoUnit: $scope.cargoConfigure
+                    cargoUnit: $scope.cargoConfigure,
+                    materialUnit: $scope.materialConfigure
                 }
             }
         });

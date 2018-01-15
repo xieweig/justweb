@@ -3,6 +3,8 @@
 angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $timeout, cb, data) {
     $scope.params = {};
     $scope.cargoConfigure = data.cargoUnit;
+    $scope.materialConfigure = data.materialUnit;
+    console.log($scope.materialConfigure)
     $scope.material = {};
     $scope.show = data.hasOwnProperty('m');
 
@@ -31,7 +33,9 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 {title: "规格", width: 120, template: function (data) {
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                 }},
-                {field: "standardUnitCode", title: "最小标准单位", width: 120},
+                {title: "最小标准单位", width: 120, template: function (data) {
+                        return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                    }},
                 {field: "createTime", title: "建档时间", width: 120},
                 {field: "memo", title: "备注", width: 200}
             ]
@@ -50,7 +54,9 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},
-                {field: "standardUnitCode", title: "标准单位", width: 120},
+                {title: "标准单位", width: 120, template: function (data) {
+                        return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                    }},
                 {title: "规格", width: 120, template: function (data) {
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                 }},
