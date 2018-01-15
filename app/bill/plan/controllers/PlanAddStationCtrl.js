@@ -247,7 +247,11 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             }
         });
         if (existent.length > 0) {
-            swal('操作成功!', '其中 ' + existent.join() + ' 已存在', 'success');
+            if (existent.length === data.length) {
+                swal('操作不成功!', '添加的站点均已存在', 'warning');
+            } else {
+                swal('操作成功!', '其中 ' + existent.join() + ' 已存在', 'success');
+            }
         }
     }
 
