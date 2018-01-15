@@ -291,11 +291,11 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
         }, apiServiceError);
     };
     // 根据配置类型查询数据源配置
-    this.getStore = function (configureType) {
+    this.getStandardUnit = function (configureType) {
         if (!configureType) {
             return;
         }
-        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/configure/findByConfigureTypeForApi?configureType=' + configureType, {hasHost: true}).then(function (response) {
+        return ApiService.get(COMMON_URL.baseInfo + '/api/baseInfo/configure/findByCondition?configureType=' + configureType, {hasHost: true}).then(function (response) {
             if (response.code === '000') {
                 return response.result.content;
             } else {

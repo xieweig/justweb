@@ -1,13 +1,12 @@
 'use strict';
 
-angular.module('app').controller('PlanViewModalCtrl', function ($scope, $rootScope, $timeout, ApiService, Common, data) {
+angular.module('app').controller('ReturnedPlanViewModalCtrl', function ($scope, $rootScope, $timeout, ApiService, Common, data) {
     /**
-     查看站点退库计划弹窗
+     查看站点退货计划弹窗
      */
     $scope.params = {};
 
     $scope.cargoGrid = {
-        url: '/api/bill/restock/findPlanBillByBillCode?billCode=' + data.billCode,
         kendoSetting: {
             columns: [
                 {field: "cargoName", title: "货物名称"},
@@ -20,7 +19,7 @@ angular.module('app').controller('PlanViewModalCtrl', function ($scope, $rootSco
     };
 
     // 请求单条计划详情
-    ApiService.post('/api/bill/restock/findPlanBillByBillCode?billCode=' + data.billCode).then(function (response) {
+    ApiService.post('/api/bill/returned/findPlanBillByBillCode?billCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
             var res = response.result.planBill;
             $scope.params.billCode = res.billCode;

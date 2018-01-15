@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('stationPickCtrl', function ($scope, $state, $stateParams, $uibModal, $timeout, ApiService, Common) {
+angular.module('app').controller('ReturnedPickByPlanCtrl', function ($scope, $state, $stateParams, $uibModal, $timeout, ApiService, Common) {
     $scope.params = {};
     // 将按货物拣货获得的obj存储起来用于判断扫描的货物是否有效
     $scope.cargoObject = {};
@@ -25,7 +25,7 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
     };
 
     // 获取计划单信息
-    ApiService.post('/api/bill/restock/findPlanBillByBillCode?billCode=' + $stateParams.pickId).then(function (response) {
+    ApiService.post('/api/bill/returned/findPlanBillByBillCode?billCode=' + $stateParams.pickId).then(function (response) {
         if (response.code === '000') {
             var res = response.result.planBill;
             // 判断按什么拣货
@@ -135,22 +135,6 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
                                     shippedAmount: item.shippedAmount
                                 })
                             })
-                            // var materialList = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
-                            //     return item.rawMaterialCode
-                            // });
-                            // console.log(materialList)
-                            // Common.getMaterialByCodes(materialList).then(function (materialList) {
-                            //     var materialObject = _.zipObject(_.map(materialList, function (item) {
-                            //         return item.materialCode
-                            //     }), materialList);
-                            //     _.each(res.childPlanBillDetails, function (item) {
-                            //         $scope.addItem({
-                            //             materialName: materialObject[item.goodsCode],
-                            //             rawMaterialId: item.goodsCode,
-                            //             shippedAmount: parseInt(item.amount) * parseInt(item.cargo.number)
-                            //         })
-                            //     })
-                            // })
                         } else {
                             $('#tabs').children('li:first-child').children('a').click()
                         }
@@ -197,10 +181,10 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
 
     function initScanCargo() {
         $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/scan.html',
+            templateUrl: 'app/bill/returned/modals/scan.html',
             scope: $scope,
             size: 'xs',
-            controller: 'ModalScanCtrl'
+            controller: 'ReturnedScanModalCtrl'
         });
     }
 
@@ -300,12 +284,12 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
     function saveOrAudit(type, bill) {
         var url = '';
         if (type === 'save') {
-            url = '/api/bill/restock/saveRestockBill'
+            url = '/api/bill/returned/saveReturnedBill'
         } else {
-            url = '/api/bill/restock/submitRestockBill'
+            url = '/api/bill/returned/submitReturnedBill'
         }
         bill.billCode = $scope.params.billCode;
-        bill.billProperty = 'RESTOCK';
+        bill.billProperty = 'RETURNED';
         bill.planMemo = $scope.params.memo;
         bill.outMemo = $scope.params.outMemo;
         bill.sourceCode = $scope.params.billCode;
@@ -377,7 +361,7 @@ angular.module('app').controller('stationPickCtrl', function ($scope, $state, $s
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.restock.outSearch');
+                $state.go('app.bill.returned.outSearch');
             }
         }, apiServiceError)
     }

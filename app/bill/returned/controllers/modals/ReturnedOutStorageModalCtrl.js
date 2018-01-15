@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout, $uibModal, ApiService, Common, data) {
+angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope, $timeout, $uibModal, ApiService, Common, data) {
     /**
      查看站点退库计划弹窗
      */
@@ -130,16 +130,16 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     /**
      查看退库出库单
      */
-    // 查看单条计划详情
+        // 查看单条计划详情
     var getURL = '';
     if ($scope.modalType !== 'audit') {
-        getURL = '/api/bill/restock/findByRestockBillCode'
+        getURL = '/api/bill/returned/findByReturnedBillCode'
     } else {
-        getURL = '/api/bill/restock/openByRestockBillCode'
+        getURL = '/api/bill/returned/openByReturnedBillCode'
     }
-    ApiService.get(getURL + '?restockBillCode=' + data.billCode).then(function (response) {
+    ApiService.get(getURL + '?returnedBillCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
-            var res = response.result.RestockBill;
+            var res = response.result.ReturnedBill;
             _.each(['billCode', 'createTime', 'updateTime', 'inLocation', 'outLocation', 'planMemo','operatorName', 'totalVarietyAmount', 'totalAmount',
                 'auditMemo', 'outMemo'], function (name) {
                 $scope.params[name] = res[name]
@@ -260,6 +260,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                                 cargoName: item.cargo.cargoName,
                                 cargoCode: item.cargo.cargoCode,
                                 rawMaterialName: item.material.materialName,
+                                rawMaterialCode: item.material.materialCode,
                                 number: item.cargo.number,
                                 standardUnitCode: item.cargo.standardUnitCode,
                                 amount: item.cargo.amount,
@@ -415,9 +416,9 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     function saveOrAudit(type, bill) {
         var url = '';
         if (type === 'save') {
-            url = '/api/bill/restock/updateRestockBillToSave'
+            url = '/api/bill/returned/updateReturnedBillToSave'
         } else {
-            url = '/api/bill/restock/updateRestockBillToSubmit'
+            url = '/api/bill/returned/updateReturnedBillToSubmit'
         }
         bill.billCode = $scope.params.billCode;
         bill.outMemo = $scope.params.outMemo;
@@ -441,6 +442,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         }else{
             // 按货物
             bill.billDetails = _.map($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
+                console.log('returned',item)
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -470,11 +472,11 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     $scope.audit = function (type) {
         var url = '';
         if (type === 'success') {
-            url = '/api/bill/restock/auditSuccess'
+            url = '/api/bill/returned/auditSuccess'
         } else {
-            url = '/api/bill/restock/auditFailure'
+            url = '/api/bill/returned/auditFailure'
         }
-        ApiService.post(url + '?restockBillCode=' + $scope.params.billCode).then(function (response) {
+        ApiService.post(url + '?returnedBillCode=' + $scope.params.billCode).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {

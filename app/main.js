@@ -73,6 +73,7 @@ function apiServiceError(response) {
 
 // 显示隐藏加载窗
 var loadCount = 0;
+
 function showLoadingModal(notAdd) {
     if (!notAdd) {
         loadCount++;
@@ -135,7 +136,14 @@ function generateMixed(n) {
                 if (options.rowNumber) {
                     if (options.columns) {
                         //1. 添加行号列
-                        options.columns.splice(0, 0, {attributes: {'class': 'tight-cell text-center'}, editor: null, editable: false, title: '', template: renderRowCount, width: 38});
+                        options.columns.splice(0, 0, {
+                            attributes: {'class': 'tight-cell text-center'},
+                            editor: null,
+                            editable: false,
+                            title: '',
+                            template: renderRowCount,
+                            width: 38
+                        });
                     }
                 }
             }

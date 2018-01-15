@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService) {
-    // 查询站点退库计划
+angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService) {
     $scope.params = {};
 
     // 搜索
@@ -12,7 +11,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
     // 初始化计划列表
     $scope.stationGrid = {
         primaryId: 'billCode',
-        url: '/api/bill/restock/findPlanBillByConditions',
+        url: '/api/bill/returned/findPlanBillByConditions',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
@@ -77,17 +76,17 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         console.log(dataItem);
-        $state.go('app.bill.restock.stationPick', {pickId: dataItem.billCode})
+        $state.go('app.bill.returned.stationPick', {pickId: dataItem.billCode})
     }
 
     function viewOutStorageBill(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        ApiService.get('/api/bill/restock/findRestockBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
+        ApiService.get('/api/bill/returned/findReturnedBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
             if (response.code === '000') {
                 console.log(response.result);
-                var restockCode = response.result.restockBill.billCode
-                openModal('view', {billCode: restockCode})
+                var returnedCode = response.result.returnedBill.billCode;
+                openModal('view', {billCode: returnedCode})
             } else {
                 swal('请求失败', response.message, 'error');
             }
@@ -100,9 +99,9 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
         e.preventDefault();
         var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
         $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/planView.html',
+            templateUrl: 'app/bill/returned/modals/planView.html',
             size: 'lg',
-            controller: 'PlanViewModalCtrl',
+            controller: 'ReturnedPlanViewModalCtrl',
             resolve: {
                 data: {
                     billCode: dataItem.billCode
@@ -111,32 +110,17 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
         })
     });
 
-    // // 完成率跳转到出库单 改为弹窗
-    // grid.on('click', '.rate-btn-group', function (e) {
-    //     e.preventDefault();
-    //     var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-    //     ApiService.get('/api/bill/restock/findRestockBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
-    //         if (response.code === '000') {
-    //             console.log(response.result);
-    //             var restockCode = response.result.restockBill.billCode
-    //             openModal('view', {billCode: restockCode})
-    //         } else {
-    //             swal('请求失败', response.message, 'error');
-    //         }
-    //     }, apiServiceError);
-    // });
-
     // 重置表格
     $scope.reset = function () {
-        $state.params = {}
+        $state.params = {};
         $state.reload()
     };
 
     function openModal(type, data) {
         $scope.outModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/outBillModal.html',
+            templateUrl: 'app/bill/returned/modals/outBillModal.html',
             size: 'lg',
-            controller: 'outBillModalCtrl',
+            controller: 'ReturnedPlanViewModalCtrl',
             resolve: {
                 data: {
                     billCode: data.billCode,

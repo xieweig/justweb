@@ -63,7 +63,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
             $scope.material.materialName = data.m.materialName;
             $scope.material.shippedAmount = data.m.shippedAmount;
             $scope.material.actualAmount = 0;
-            $scope.material.rawMaterialId = data.m.rawMaterialId;
+            $scope.material.rawMaterialCode = data.m.rawMaterialCode;
             $scope.material.progress = data.m.progress;
         }
     }, 100);
@@ -75,10 +75,10 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
         _.each(dataSource.data(), function (item, index) {
             if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
-                console.log($scope.material.rawMaterialId, item.rawMaterialId)
+                console.log($scope.material.rawMaterialCode, item.rawMaterialCode)
                 // 判断是否需要区分原料
                 if ($scope.show) {
-                    if (item.rawMaterialId.toString() === $scope.material.rawMaterialId) {
+                    if (item.rawMaterialCode.toString() === $scope.material.rawMaterialCode) {
                         // 添加货物预置数量
                         if ($scope.material.shippedAmount > $scope.material.actualAmount) {
                             item.actualAmount = parseInt((parseInt($scope.material.shippedAmount) - parseInt($scope.material.actualAmount)) / parseInt(item.number));
@@ -114,6 +114,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 number: item.number,
                 originalName: item.originalName,
                 rawMaterialId: item.rawMaterialId,
+                rawMaterialCode: item.rawMaterialCode,
                 rawMaterialName: item.rawMaterialName,
                 selfBarCode: item.selfBarCode,
                 standardUnitCode: item.standardUnitCode,

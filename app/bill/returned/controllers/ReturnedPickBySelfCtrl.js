@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('selfPickCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common) {
+angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common) {
     $scope.params = {};
     $scope.cargoList = {};
     $scope.outType = []

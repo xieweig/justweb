@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('ModalScanCtrl', function ($scope) {
+angular.module('app').controller('ReturnedScanModalCtrl', function ($scope) {
     // 拣货的添加货物
     $scope.item = $scope.cargoObject[$scope.params.scanCode];
 
@@ -24,16 +24,15 @@ angular.module('app').controller('ModalScanCtrl', function ($scope) {
                     if (item.cargoCode === $scope.params.scanCode) {
                         item.actualAmount = parseInt(item.actualAmount) - parseInt($scope.item.addNumber)
                     }
-                });
+                })
             }
             $scope.cargoGrid.kendoGrid.refresh();
             $scope.params.scanCode = '';
             $scope.addModal.close()
-        } else {
+        }else{
             swal('拣货数量错误', '', 'error');
         }
-
-    }
+    };
 
     function isInt(number) {
         return (parseInt(number) == number && parseInt(number) <= 10000 && parseInt(number) >= 0)

@@ -61,6 +61,11 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                     templateUrl: 'app/bill/restock/views/pick/station.html',
                     controller: 'stationPickCtrl'
                 }
+            },
+            resolve: {
+                // standardUnit: function (Common) {
+                //     return Common.getStandardUnit('CARGO_UNIT')
+                // }
             }
         })
         .state('app.bill.restock.outSearch', {

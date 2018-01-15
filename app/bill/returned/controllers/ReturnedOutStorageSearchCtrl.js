@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uibModal, ApiService) {
+angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scope, $state, $uibModal, ApiService) {
     $scope.params = {};
     $scope.kendoQueryCondition = {
-        operatorName: '',
         submitStateCode: [],
         auditStateCode: [],
-        inOrOutStateCode: []
+        inOrOutStateCode: [],
+        billProperty: []
     };
 
     $scope.submitStateCode = [
@@ -16,8 +16,8 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
 
     $scope.auditStateCode = [
         {value: 'UN_REVIEWED', text: '未审核'},
-        {value: 'AUDITSUCCESS', text: '审核通过'},
-        {value: 'AUDITFAILURE', text: '审核不通过'},
+        {value: 'AUDIT_SUCCESS', text: '审核通过'},
+        {value: 'AUDIT_FAILURE', text: '审核不通过'},
         {value: 'AUDIT_ING', text: '审核中'}
     ];
 
@@ -28,10 +28,10 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
     ]
 
     $scope.billAttr = [
-        {value: '', text: '配送计划转'},
-        {value: '', text: '调剂计划转'},
-        {value: '', text: '退货计划转'},
-        {value: '', text: '无计划计划转'}
+        {value: 'DELIVERY', text: '配送计划转'},
+        {value: 'ADJUST', text: '调剂计划转'},
+        {value: 'RETURNED', text: '退货计划转'},
+        {value: 'NOPLAN', text: '无计划计划转'}
     ];
 
     // 类型存储
@@ -59,8 +59,8 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
     ];
 
     $scope.outBillGrid = {
-        primaryId: 'code',
-        url: '/api/bill/restock/findByConditions',
+        primaryId: 'billCode',
+        url: '/api/bill/returned/findByConditions',
         params: $scope.kendoQueryCondition,
         kendoSetting: {
             autoBind: false,
@@ -192,10 +192,10 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
 
     function openModal(type, data) {
         $scope.outModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/outBillModal.html',
+            templateUrl: 'app/bill/returned/modals/outStorageBillModal.html',
             size: 'lg',
-            controller: 'outBillModalCtrl',
-            // scope: $scope,
+            controller: 'ReturnedOutStorageModalCtrl',
+            scope: $scope,
             resolve: {
                 data: {
                     billCode: data.billCode,
@@ -213,7 +213,7 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
         e.preventDefault();
         var dataItem = $scope.outBillGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
         $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/planView.html',
+            templateUrl: 'app/bill/returned/modals/planView.html',
             size: 'lg',
             controller: 'PlanViewModalCtrl',
             resolve: {
@@ -236,12 +236,12 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
     // 查询
     $scope.search = function () {
         $scope.outBillGrid.kendoGrid.dataSource.page(1);
-    }
+    };
 
     // 状态修改
     $scope.toggleSubmit = function (status, type) {
         var query = $scope.kendoQueryCondition;
-        var arr = []
+        var arr = [];
         if (type === 'submit') {
             arr = query.submitStateCode
         } else if (type === 'audit') {
@@ -249,7 +249,7 @@ angular.module('app').controller('outSearchCtrl', function ($scope, $state, $uib
         } else if (type === 'out') {
             arr = query.inOrOutStateCode
         }
-        var index = arr.indexOf(status)
+        var index = arr.indexOf(status);
         if (index > -1) {
             arr.splice(index, 1)
         } else {

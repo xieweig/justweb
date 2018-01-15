@@ -69,6 +69,7 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
     // 同步已选中数据
     $timeout(function () {
         _.each(data.cl, function (item) {
+            console.log('+++++', item)
             $scope.currentCargoList.kendoGrid.dataSource.add(item)
         })
         _.each(data.m, function (item) {
@@ -95,6 +96,7 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
                 number: item.number,
                 originalName: item.originalName,
                 rawMaterialId: item.rawMaterialId,
+                rawMaterialCode: item.rawMaterialCode,
                 rawMaterialName: item.rawMaterialName,
                 selfBarCode: item.selfBarCode,
                 standardUnitCode: item.standardUnitCode,
