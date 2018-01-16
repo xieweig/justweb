@@ -12,6 +12,10 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
         $state.reload();
     };
 
+    $scope.toList = function () {
+        $state.go('app.bill.procurement.list');
+    };
+
     $scope.search = function () {
         $scope.procurementGrid.kendoGrid.dataSource.page(1);
     };

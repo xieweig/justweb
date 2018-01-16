@@ -181,6 +181,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         }
     }
 
+    $scope.toList = function () {
+        $state.go('app.bill.plan.list');
+    };
+
     // 伸缩项
     $scope.scaling = function (item, index) {
         item.unfurled = !item.unfurled;
