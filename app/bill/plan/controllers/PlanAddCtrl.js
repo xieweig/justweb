@@ -168,7 +168,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                    return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
                             {
@@ -278,11 +278,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                     amount: dataItem.number,
                                     inLocation: {
                                         stationCode: dataItem.inStationCode,
-                                        stationName: getTextByVal($scope.station, dataItem.inStationCode)
+                                        stationName: dataItem.inStationName || getTextByVal($scope.station, dataItem.inStationCode)
                                     },
                                     outLocation: {
                                         stationCode: dataItem.outStationCode,
-                                        stationName: getTextByVal($scope.station, dataItem.outStationCode)
+                                        stationName: dataItem.outStationName || getTextByVal($scope.station, dataItem.outStationCode)
                                     }
                                 });
                             }
