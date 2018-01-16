@@ -62,7 +62,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
                 {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
                 {field: "productDate", title: "生产日期", width: 120, WdatePicker: true, editable: true},
                 {field: "purchasePrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
-                {field: "number", title: "发货数量", width: 200, kType: 'number', editable: true}
+                {field: "amount", title: "发货数量", width: 200, kType: 'number', editable: true}
             ]
         }
     };
@@ -86,11 +86,15 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
         var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
         var dataSource = $scope.cargoList.kendoGrid.dataSource;
         var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
+        var existArray = _.map(currentDataSource.data(), function (item, index) {
+            return item.cargoCode;
+        });
         _.each(dataSource.data(), function (item, index) {
-            if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
+            if (_.indexOf(selectIds, '' + item.cargoCode) > -1 && _.indexOf(existArray, '' + item.cargoCode) < 0) {
                 currentDataSource.add(item);
             }
         });
+
     };
 
     /**
@@ -118,7 +122,10 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
                 rawMaterialName: item.rawMaterialName,
                 selfBarCode: item.selfBarCode,
                 standardUnitCode: item.standardUnitCode,
-                updateTime: item.updateTime
+                updateTime: item.updateTime,
+                dateInProduced: item.productDate,
+                unitPrice: item.purchasePrice,
+                amount: item.amount
             };
         });
         cb(result);

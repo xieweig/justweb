@@ -38,10 +38,10 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                         return data.cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
                     }
                 },
-                {field: "dateInProduced", title: "生产日期", width: 160, WdatePicker: true, editable: true},
-                {field: "unitPrice", title: "单位进价", width: 120, type: 'number', editable: true},
-                {field: "amount", title: "实收数量", width: 120, type: 'number', editable: true},
-                {field: "shippedNumber", title: "发货数量", width: 120, type: 'number', editable: true},
+                {field: "cargo.dateInProduced", title: "生产日期", width: 160, WdatePicker: true, editable: true},
+                {field: "cargo.unitPrice", title: "单位进价", width: 120, kType: 'decimal', editable: true},
+                {field: "cargo.amount", title: "实收数量", width: 120, kType: 'number', editable: true},
+                {field: "shippedNumber", title: "发货数量", width: 120, kType: 'number', editable: true},
                 {field: "differenceNumber", title: "数量差额", width: 120},
                 {field: "differencePrice", title: "总价差值", width: 120}
             ],
@@ -49,9 +49,14 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 // 计算数量差额和总价值差
                 var model = e.model;
                 model.shippedNumber = parseInt(model.shippedNumber);
-                model.amount = parseInt(model.amount);
-                model.differenceNumber = model.shippedNumber - model.amount;
-                model.differencePrice = (parseFloat(model.unitPrice) * model.differenceNumber).toFixed(2);
+                model.shippedNumber !== model.shippedNumber ? model.shippedNumber = 0 : '';
+
+                model.cargo.amount = parseInt(model.cargo.amount);
+                model.differenceNumber = model.shippedNumber - model.cargo.amount;
+                model.differenceNumber !== model.differenceNumber ? model.differenceNumber = 0 : '';
+
+                model.differencePrice = (parseFloat(model.cargo.unitPrice) * model.differenceNumber).toFixed(2);
+                model.differencePrice !== model.differencePrice ? model.differencePrice = 0 : '';
                 return e;
             }
         }
