@@ -35,7 +35,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 {
                     title: "规格", width: 120,
                     template: function (data) {
-                        return cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
+                        return data.cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
                     }
                 },
                 {field: "dateInProduced", title: "生产日期", width: 160, WdatePicker: true, editable: true},
