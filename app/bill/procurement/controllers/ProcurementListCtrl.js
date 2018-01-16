@@ -60,10 +60,15 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 },
                 {field: "billCode", title: "单号", width: 120},
                 {field: "inWareHouseTime", title: "入库时间", width: 120},
-                {field: "createTime", title: "录单时间", width: 120},
+                {title: "录单时间", width: 180, template: '#: formatDate(data.createTime?new Date(data.createTime):"","yyyy-MM-dd HH:mm:ss") #'},
                 {field: "operatorCode", title: "录单人", width: 120},
                 {field: "auditPersonCode", title: "审核人", width: 120},
-                {field: "inStationCode", title: "入库站点", width: 120},
+                {
+                    title: "入库站点", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.station, data.inStationCode)
+                    }
+                },
                 {field: "inStorageCode", title: "入库库房", width: 120},
                 {field: "amount", title: "实收数量", width: 120},
                 {field: "differenceNumber", title: "数量差值", width: 120},
