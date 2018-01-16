@@ -17,7 +17,7 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
                 text: item.tempStorageName,
                 type: item.storageType
             })
-        })
+        });
         // 设置当前站点默认值
         $timeout(function () {
             $('#select-out').val($scope.outType[0].value).trigger('change')
@@ -32,7 +32,7 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
         planMemo: '',
         outMemo: '',
         operatorCode: ''
-    }
+    };
 
     $scope.CargoListGrid = {
         primaryId: 'cargoCode',
@@ -112,8 +112,9 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
         }
         bill.basicEnum = 'BY_CARGO';
         bill.planMemo = $scope.params.memo;
-        bill.operatorCode = $.cookie('userCode');
+        // bill.operatorCode = $.cookie('userCode');
         bill.totalPrice = '12345';
+        bill.billProperty = 'NOPLAN';
         // 获取当前库位
         bill.outStation = {
             stationCode: $.cookie('currentStationCode'),
@@ -199,10 +200,9 @@ angular.module('app').controller('selfPickCtrl', function ($scope, $state, $root
             resolve: {
                 cb: function () {
                     return function (data) {
-                        console.log(data)
                         $scope.cargoList = data;
                         var dataSource = $scope.CargoListGrid.kendoGrid.dataSource;
-                        dataSource.data([])
+                        dataSource.data([]);
                         for (var i = 0; i < data.length; i++) {
                             dataSource.add(data[i])
                         }

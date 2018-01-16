@@ -268,10 +268,12 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                         _.each(billDetails, function (item) {
                             // materialList: 原料详细信息
                             item.material = materialObject[item.goods.rawMaterialCode];
+                            console.log(item)
                             $scope.onlyCargoGrid.kendoGrid.dataSource.add({
                                 cargoName: item.cargo.cargoName,
                                 cargoCode: item.cargo.cargoCode,
                                 rawMaterialName: item.material.materialName,
+                                rawMaterialCode: item.material.materialCode,
                                 number: item.cargo.number,
                                 standardUnitCode: item.cargo.standardUnitCode,
                                 amount: item.cargo.amount,
@@ -453,6 +455,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         }else{
             // 按货物
             bill.billDetails = _.map($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
+                console.log('++', item)
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -471,7 +474,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $scope.outModal.close()
+                $scope.addModal.close()
             }
         }, apiServiceError)
     }
@@ -490,7 +493,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                alert('success')
+                // alert('success')
+                $scope.addModal.close()
             }
         })
     };

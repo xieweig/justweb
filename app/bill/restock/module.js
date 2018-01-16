@@ -136,57 +136,38 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/in/inSearch.html',
-                    controller: 'inSearchCtrl'
+                    templateUrl: 'app/bill/restock/views/inStorageSearch.html',
+                    controller: 'RestockInStorageSearchCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })
-        // .state('app.bill.restock.inView', {
-        //     url: '/bill/restock/in/view',
-        //     data: {
-        //         title: '查看退库出库单'
-        //     },
-        //     views: {
-        //         "content@app": {
-        //             templateUrl: 'app/bill/restock/views/in/inView.html',
-        //             controller: 'inViewCtrl'
-        //         }
-        //     }
-        // })
-        .state('app.bill.restock.inAction', {
-            url: '/bill/restock/in/action',
+        .state('app.bill.restock.transfer', {
+            url: '/bill/restock/transfer/search',
             data: {
-                title: '退库到货调拨'
+                title: '查询调剂调拨单'
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/in/inAction.html',
-                    controller: 'inActionCtrl'
+                    templateUrl: 'app/bill/restock/views/transferSearch.html',
+                    controller: 'RestockTransferSearchCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })
-        .state('app.bill.restock.inActionSearch', {
-            url: '/bill/restock/in/asearch',
-            data: {
-                title: '查询退库调拨单'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/restock/views/in/inActionSearch.html',
-                    controller: 'inActionSearchCtrl'
-                }
-            }
-        })
-        .state('app.bill.restock.inActionView', {
-            url: '/bill/restock/in/aview',
-            data: {
-                title: '查看退库调拨单'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/restock/views/in/inActionView.html',
-                    controller: 'inActionViewCtrl'
-                }
-            }
-        });
+
 });
