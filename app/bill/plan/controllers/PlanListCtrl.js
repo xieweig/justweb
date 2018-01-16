@@ -14,6 +14,10 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
         }
     };
 
+    $scope.resetPage = function () {
+        $state.reload();
+    };
+
     // 入库查询
     $scope.inStationParams = {
         callback: function (data) {
