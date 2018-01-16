@@ -9,8 +9,11 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
     // 原料配置
     $scope.materialParamOpt = {
         type: 'material',
+        hasChildren: true,
         callback: function (data) {
-            $scope.params.rawMaterialId = data.id;
+            $scope.params.rawMaterialCodes = _.map(data, function (item) {
+                return item.code;
+            });
         }
     };
 
