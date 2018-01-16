@@ -270,9 +270,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             return item.inLocation.stationCode + '-' + item.outLocation.stationCode;
                         });
                         _.each(data, function (dataItem, index) {
-                            if (_.indexOf(current, dataItem.inStationCode + '-' + dataItem.outStationCode) > -1) {
-                                var amount = parseInt(dataSource.at(index).get('amount')) + parseInt(dataItem.number)
-                                dataSource.at(index).set('amount', amount);
+                            var existIndex = _.indexOf(current, dataItem.inStationCode + '-' + dataItem.outStationCode);
+                            if (existIndex > -1) {
+                                var amount = parseInt(dataSource.at(existIndex).get('amount')) + parseInt(dataItem.number)
+                                dataSource.at(existIndex).set('amount', amount);
                             } else {
                                 item.stationGrid.kendoGrid.dataSource.add({
                                     amount: dataItem.number,
