@@ -218,8 +218,9 @@ function formatDate(date, fmt) {
         }
     }
     return fmt;
-};
+}
 
+// 输入数字
 function inputNumber(element, options) {
     options = options ? options : {};
     element.on({
