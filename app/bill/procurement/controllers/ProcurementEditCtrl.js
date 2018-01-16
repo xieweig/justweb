@@ -175,10 +175,10 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                         cargoName: item.cargo.cargoName
                     }
                 },
-                dateInProduced: item.dateInProduced,
-                unitPrice: item.unitPrice,
-                shippedNumber: item.shippedNumber,
-                amount: item.amount,
+                dateInProduced: item.cargo.dateInProduced,
+                unitPrice: item.cargo.unitPrice,
+                shippedNumber: item.cargo.shippedNumber,
+                amount: item.cargo.amount,
                 differenceNumber: item.differenceNumber,
                 differencePrice: item.differencePrice
             };
