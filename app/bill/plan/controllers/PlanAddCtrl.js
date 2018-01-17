@@ -108,7 +108,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     $scope.materialMap = [];
     $scope.addItem = function (type) {
         if (type === 'material') {
-            $scope.materialMap.splice(0, 0, pushCargo());
+            $scope.materialMap.splice(0, 0, pushCargo('', true));
         } else {
             $scope.cargoMap.splice(0, 0, pushCargo());
         }
@@ -227,7 +227,14 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
-                        item.material = data;
+                        var repeat = _.find($scope.materialMap, function (item) {
+                            return item.material.materialCode === data.materialCode;
+                        });
+                        if (!repeat) {
+                            item.material = data;
+                        } else {
+                            swal('原料已存在', '', 'warning');
+                        }
                     }
                 }
             }

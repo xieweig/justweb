@@ -28,7 +28,7 @@ angular.module('app').controller('PlanAddMaterialCtrl', function ($scope, $timeo
                 {field: "materialName", title: "原料名称", width: 170},
                 {field: "materialTypeName", title: "原料分类", width: 170},
                 {field: "materialTypeCode", title: "原料分类编码", width: 170},
-                {field: "standardUnitName", title: "最小标准单位", width: 170},
+                {field: "standardUnit", title: "最小标准单位", width: 170},
                 {field: "createTime", title: "建档时间", width: 170},
                 {field: "operatorCode", title: "建档人", width: 170},
                 {field: "memo", title: "备注", width: 200}
