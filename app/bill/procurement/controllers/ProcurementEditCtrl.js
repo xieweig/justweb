@@ -157,6 +157,11 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         saveOrAudit('audit', _.cloneDeep(bill));
     };
 
+    // 回到列表页
+    $scope.toList = function () {
+        $state.go('app.bill.procurement.list');
+    };
+
     function saveOrAudit(type, bill) {
         var url = '';
         if (type === 'save') {
