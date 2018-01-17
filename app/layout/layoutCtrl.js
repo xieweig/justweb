@@ -24,12 +24,12 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
     ];
 
     $rootScope.outType = [
-        {key: 'NORMALLIBRARY', value: 'NORMALLIBRARY', text: '正常库'},
-        {key: 'STORAGELIBRARY', value: 'STORAGELIBRARY', text: '仓储库'},
-        {key: 'STOCKLIBRARY', value: 'STOCKLIBRARY', text: '进货库'},
-        {key: 'RETURNLIBRARY', value: 'RETURNLIBRARY', text: '退货库'},
-        {key: 'PASSAGELIBRARY', value: 'PASSAGELIBRARY', text: '在途库'},
-        {key: 'RESERVEDLIBRARY', value: 'RESERVEDLIBRARY', text: '预留库'}
+        {value: 'NORMAL', text: '正常库'},
+        {value: 'STORAGE', text: '仓储库'},
+        {value: 'IN_STORAGE', text: '进货库'},
+        {value: 'OUT_STORAGE', text: '退货库'},
+        {value: 'ON_STORAGE', text: '在途库'},
+        {value: 'RESERVE_STORAGE', text: '预留库'}
     ];
 
     $rootScope.submitStatus = [

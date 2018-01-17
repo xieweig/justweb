@@ -1,0 +1,84 @@
+<div id="content">
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
+            <span class="widget-icon">
+                <i class="fa fa-table"></i>
+            </span>
+            <h2>{{ $state.current.data.title }}</h2>
+            <div class="fr">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="查询" data-ng-click="search()">
+            </div>
+        </header>
+        <div>
+            <div class="widget-body no-padding">
+                <div class="widget-body-toolbar">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                            <div class="display-flex">
+                                <div class="flex-1">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">{{typeName}}时间</span>
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createStartTime">
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="border-left: 0;">至</span>
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createEndTime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="smart-checkbox">
+                                <div class="smart-checkbox-title">审核状态</div>
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="checkbox"><input value="1" type="checkbox" name="target"><i></i>货物</label>
+                                        <label class="checkbox"><input value="0" type="checkbox" name="target"><i></i>原料</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">{{typeName}}站点</span>
+                                <span data-station-tree data-select-modal="overflowStation"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">{{typeName}}库位</span>
+                                <select data-multiple-select>
+                                    <option data-ng-repeat="item in outType" value="item.value">{{item.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">{{typeName}}目标编码</span>
+                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">{{typeName}}目标名称</span>
+                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">操作人</span>
+                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding-10">
+                    <p>查询结果</p>
+                    <div class="margin-top-10" data-kendo-grids data-options="billGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
