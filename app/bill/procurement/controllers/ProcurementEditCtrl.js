@@ -38,9 +38,9 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                         return data.cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
                     }
                 },
-                {field: "cargo.dateInProduced", title: "生产日期", width: 160, WdatePicker: true, editable: true},
-                {field: "cargo.unitPrice", title: "单位进价", width: 120, kType: 'decimal', editable: true},
-                {field: "cargo.amount", title: "发货数量", width: 120, kType: 'number', editable: true},
+                {field: "cargo.dateInProduced", title: "生产日期", width: 160, WdatePicker: true},
+                {field: "cargo.unitPrice", title: "单位进价", width: 120, kType: 'decimal'},
+                {field: "cargo.amount", title: "发货数量", width: 120, kType: 'number'},
                 {field: "shippedNumber", title: "实收数量", width: 120, kType: 'number', editable: true},
                 {field: "differenceNumber", title: "数量差额", width: 120},
                 {field: "differencePrice", title: "总价差值", width: 120}
@@ -121,6 +121,9 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                             }
                         });
                     }
+                },
+                data: function () {
+                    return $scope.procurementGrid.kendoGrid.dataSource.data();
                 }
             }
         });

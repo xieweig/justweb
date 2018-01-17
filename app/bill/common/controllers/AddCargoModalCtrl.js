@@ -19,7 +19,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
                     if (response.result && response.result.result.content) {
                         result = response.result.result.content;
                         if (result.length === 1) {
-                            $scope.submit(result);
+                            $scope.addCargo(result);
                         }
                     }
                 }
@@ -82,19 +82,23 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
     }
 
     // 增加货物
-    $scope.addCargo = function () {
-        var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
-        var dataSource = $scope.cargoList.kendoGrid.dataSource;
+    $scope.addCargo = function (dataSource) {
+        var selectIds = [];
         var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
+        if (!dataSource) {
+            selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
+            dataSource = $scope.cargoList.kendoGrid.dataSource.data();
+        } else {
+            selectIds = [dataSource[0].cargoCode];
+        }
         var existArray = _.map(currentDataSource.data(), function (item, index) {
             return item.cargoCode;
         });
-        _.each(dataSource.data(), function (item, index) {
+        _.each(dataSource, function (item, index) {
             if (_.indexOf(selectIds, '' + item.cargoCode) > -1 && _.indexOf(existArray, '' + item.cargoCode) < 0) {
                 currentDataSource.add(item);
             }
         });
-
     };
 
     /**
