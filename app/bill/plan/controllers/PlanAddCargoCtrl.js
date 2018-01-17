@@ -11,9 +11,9 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
         type: 'material',
         hasChildren: true,
         callback: function (data) {
-            $scope.params.rawMaterialCodes = _.map(data, function (item) {
-                return item.code;
-            });
+            $scope.params.rawMaterialId = _.chain(data).map(function (item) {
+                return item.id;
+            }).join().value();
         }
     };
 

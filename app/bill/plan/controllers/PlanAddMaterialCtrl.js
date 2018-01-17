@@ -45,6 +45,7 @@ angular.module('app').controller('PlanAddMaterialCtrl', function ($scope, $timeo
             "materialName": dataItem.materialName,
             "materialTypeName": dataItem.materialTypeName,
             "materialTypeCode": dataItem.materialTypeCode,
+            "standardUnit": dataItem.standardUnit,
             "standardUnitName": dataItem.standardUnitName,
             "createTime": dataItem.createTime,
             "operatorCode": dataItem.operatorCode,
