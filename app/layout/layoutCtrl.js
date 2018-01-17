@@ -53,6 +53,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
     var stationTypeMap = {station: {}, scopeStation: {}};
     // 拼接站点树结构
     $rootScope.getStationTree = function (stationType, isPermissions) {
+        console.log('站点类型:' + stationType);
         stationType = (!stationType ? 'All' : stationType);
         if (isPermissions ? !stationTypeMap.scopeStation[stationType] : !stationTypeMap.station[stationType]) {
             var stationTree = [];
