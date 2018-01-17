@@ -36,6 +36,28 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                         params.auditStatus.push(key);
                     }
                 });
+            },
+            data: function (response) {
+                var data = getKendoData(response);
+                var supplierCodes = [];
+                _.each(data, function (item) {
+                    supplierCodes.push(item.supplierCode);
+                });
+
+                // 回显供应商
+                Common.getSupplierByIds(supplierCodes).then(function (supplierList) {
+                    var supplierObj = _.zipObject(_.map(supplierList, function (item) {
+                        return item.supplierCode;
+                    }), supplierList);
+                    var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
+                    _.each(dataSource.data(), function (item, index) {
+                        var supplier = supplierObj[item.get('supplierCode')];
+                        if (supplier) {
+                            item.set('supplierCode', supplier.supplierName);
+                        }
+                    });
+                });
+                return data;
             }
         },
         kendoSetting: {
@@ -78,7 +100,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 {field: "differenceNumber", title: "数量差值", width: 120},
                 {field: "inTotalPrice", title: "进货实洋", width: 120},
                 {field: "differencePrice", title: "总价值差", width: 120},
-                {field: "supplierCode", title: "供应商", width: 120},
+                {field: "supplierCode", title: "供应商", width: 120, editable: true},
                 {
                     title: "提交状态", width: 120, template: function (data) {
                     return getTextByVal($scope.auditStatus, data.auditState);

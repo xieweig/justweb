@@ -258,3 +258,20 @@ function inputNumber(element, options) {
         }
     }
 }
+
+function getKendoData(response) {
+    for (var name in response.result) {
+        var content = response.result[name];
+        if (content) {
+            if (content.hasOwnProperty("content")) {
+                return content.content;
+            } else if (content.hasOwnProperty("results")) {
+                return content.results;
+            } else {
+                return content;
+            }
+        } else {
+            return null;
+        }
+    }
+}

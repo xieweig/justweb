@@ -212,25 +212,7 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                 if (scope.options.dataSource && scope.options.dataSource.data) {
                     dataSource.schema.data = scope.options.dataSource.data;
                 } else {
-                    dataSource.schema.data = function (response) {
-                        for (var name in response.result) {
-                            var content = response.result[name];
-                            if (content) {
-                                if (content.hasOwnProperty("content")) {
-                                    return content.content;
-                                } else if (content.hasOwnProperty("results")) {
-                                    return content.results;
-                                } else {
-                                    return content;
-                                }
-                            } else {
-                                return null;
-                            }
-                        }
-                        if (_.isFunction(dataSource.data)) {
-                            dataSource.data(response);
-                        }
-                    }
+                    dataSource.schema.data = getKendoData
                 }
                 // 如果使用了分页
                 if (kendoSetting.pageable) {
