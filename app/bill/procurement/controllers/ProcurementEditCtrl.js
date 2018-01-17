@@ -163,59 +163,78 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
     };
 
     function saveOrAudit(type, bill) {
-        var url = '';
-        if (type === 'save') {
-            if ($scope.type === 'edit') {
-                url = '/api/bill/purchase/updatePurchaseBillToSave';
+        if (initSubmitData(type, bill)) {
+            var url = '';
+            if (type === 'save') {
+                if ($scope.type === 'edit') {
+                    url = '/api/bill/purchase/updatePurchaseBillToSave';
+                } else {
+                    url = '/api/bill/purchase/savePurchaseBill';
+                }
             } else {
-                url = '/api/bill/purchase/savePurchaseBill';
+                if ($scope.type === 'edit') {
+                    url = '/api/bill/purchase/updatePurchaseBillToSubmit';
+                } else {
+                    url = '/api/bill/purchase/submitPurchaseBill';
+                }
             }
-        } else {
-            if ($scope.type === 'edit') {
-                url = '/api/bill/purchase/updatePurchaseBillToSubmit';
-            } else {
-                url = '/api/bill/purchase/submitPurchaseBill';
-            }
+            ApiService.post(url, bill).then(function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    swal('操作成功', '', 'success').then(function () {
+                        if (params.type === 'add') {
+                            $state.go('app.bill.procurement.list');
+                        } else {
+                            $scope.$close(function () {
+                                console.log(213);
+                            });
+                        }
+                    });
+                }
+            }, apiServiceError);
         }
+    }
+
+    // 组装提交的数据
+    function initSubmitData(type, bill) {
         bill.station = {
             stationCode: $.cookie('currentStationCode'),
             stationName: $.cookie('currentStationName')
         };
-        bill.billDetails = _.map($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
-            return {
-                packageCode: item.packageCode,
-                rawMaterial: {
-                    rawMaterialCode: item.cargo.rawMaterialId,
-                    rawMaterialName: '',
-                    cargo: {
-                        cargoCode: item.cargo.cargoCode,
-                        cargoName: item.cargo.cargoName
-                    }
-                },
-                dateInProduced: item.cargo.dateInProduced,
-                unitPrice: item.cargo.unitPrice,
-                shippedNumber: item.cargo.shippedNumber,
-                amount: item.cargo.amount,
-                differenceNumber: item.differenceNumber,
-                differencePrice: item.differencePrice
-            };
-        });
         bill.operatorCode = 'YGADMIN';
-        ApiService.post(url, bill).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error');
+        bill.billDetails = [];
+        var errorItem = _.find($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
+            if (type !== 'save' && ( !item.cargo.dateInProduced || !item.cargo.unitPrice || !item.cargo.amount || !item.shippedNumber)) {
+                swal('表格信息填写不完整', '', 'warning');
+                return true;
             } else {
-                swal('操作成功', '', 'success').then(function () {
-                    if (params.type === 'add') {
-                        $state.go('app.bill.procurement.list');
-                    } else {
-                        $scope.$close(function () {
-                            console.log(213);
-                        });
-                    }
+                bill.billDetails.push({
+                    packageCode: item.packageCode,
+                    rawMaterial: {
+                        rawMaterialCode: item.cargo.rawMaterialId,
+                        rawMaterialName: '',
+                        cargo: {
+                            cargoCode: item.cargo.cargoCode,
+                            cargoName: item.cargo.cargoName
+                        }
+                    },
+                    dateInProduced: item.cargo.dateInProduced,
+                    unitPrice: item.cargo.unitPrice,
+                    shippedNumber: item.cargo.shippedNumber,
+                    amount: item.cargo.amount,
+                    differenceNumber: item.differenceNumber,
+                    differencePrice: item.differencePrice
                 });
             }
-        }, apiServiceError);
+            return false;
+        });
+        if (errorItem) {
+            return false
+        } else if (bill.billDetails.length === 0) {
+            swal('请添加货物', '', 'warning');
+            return false;
+        }
+        return true;
     }
-
 });
