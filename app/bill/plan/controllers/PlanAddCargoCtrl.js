@@ -64,13 +64,14 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
             "cargoName": dataItem.cargoName,
             "effectiveTime": dataItem.effectiveTime,
             "measurementCode": dataItem.measurementCode,
-            "measurementName": getTextByVal(materialUnit, dataItem.measurementCode),
+            "measurementName": getTextByVal(cargoUnit, dataItem.measurementCode),
             "standardUnitCode": dataItem.standardUnitCode,
             "memo": dataItem.memo,
             "number": dataItem.number,
             "rawMaterialId": dataItem.rawMaterialId,
             "cargoType": dataItem.cargoType,
-            "rawMaterialName": dataItem.rawMaterialName
+            "rawMaterialName": dataItem.rawMaterialName,
+            "rawMaterialTypeName": dataItem.rawMaterialTypeName
         });
         $scope.$close();
     }
