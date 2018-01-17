@@ -328,6 +328,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             swal('请选择计划名称', '', 'warning');
             return;
         }
+        getItemObject('save', plan);
         sendHttpReques('save', plan);
     };
 
@@ -341,7 +342,13 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             swal('请选择计划类型', '', 'warning');
             return;
         }
-        sendHttpReques('submit', plan);
+        if (!getItemObject('submit', plan)) {
+            if (plan.planBillDetailDTOS.length === 0) {
+                swal('请添加项目', '', 'warning');
+            } else {
+                sendHttpReques('submit', plan);
+            }
+        }
     };
 
     // 发送请求
@@ -352,45 +359,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         } else {
             url = '/api/bill/planBill/submit';
         }
-        if ($scope.materialMap.length === 0) {
-            plan.basicEnum = 'BY_CARGO';
-            plan.planBillDetailDTOS = _.map($scope.cargoMap, function (item) {
-                var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
-                    return {
-                        amount: stationItem.amount,
-                        inStation: {
-                            stationCode: stationItem.inLocation.stationCode
-                        },
-                        outStation: {
-                            stationCode: stationItem.outLocation.stationCode
-                        }
-                    };
-                });
-                return {
-                    cargoCode: item.cargo.cargoCode,
-                    planBillStationDTOS: stations
-                };
-            });
-        } else {
-            plan.basicEnum = 'BY_MATERIAL';
-            plan.planBillDetailDTOS = _.map($scope.materialMap, function (item) {
-                var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
-                    return {
-                        amount: stationItem.amount,
-                        inStation: {
-                            stationCode: stationItem.inLocation.stationCode
-                        },
-                        outStation: {
-                            stationCode: stationItem.outLocation.stationCode
-                        }
-                    };
-                });
-                return {
-                    rawMaterialCode: item.material.materialCode,
-                    planBillStationDTOS: stations
-                };
-            });
-        }
         ApiService.post(url, plan).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error')
@@ -400,5 +368,90 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 });
             }
         }, apiServiceError);
+    }
+
+    // 获取货物或者原料的列表
+    function getItemObject(type, plan) {
+        plan.planBillDetailDTOS = [];
+        var stations = [];
+        if ($scope.materialMap.length === 0) {
+            plan.basicEnum = 'BY_CARGO';
+            var errorItem = _.find($scope.cargoMap, function (item) {
+                if (type === 'submit' && (!item.cargo || !item.cargo.cargoCode)) {
+                    swal('存在未选择货物的项目', '', 'warning');
+                    return true;
+                }
+                var exist = _.find(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
+                    if (type === 'submit' && !stationItem.amount) {
+                        swal('存在未输入调剂数量的站点', '', 'warning');
+                        return true;
+                    }
+                    stations.push({
+                        amount: stationItem.amount,
+                        inStation: {
+                            stationCode: stationItem.inLocation.stationCode
+                        },
+                        outStation: {
+                            stationCode: stationItem.outLocation.stationCode
+                        }
+                    });
+                    return false;
+                });
+                if (exist) {
+                    // 未存在调剂数量
+                    return true;
+                } else if (type === 'submit' && stations.length === 0) {
+                    swal('存在未选择站点的项目', '', 'warning');
+                    return true;
+                }
+                plan.planBillDetailDTOS.push({
+                    cargoCode: item.cargo.cargoCode,
+                    planBillStationDTOS: stations
+                });
+                return false;
+            });
+            if (errorItem) {
+                return true;
+            }
+        } else {
+            plan.basicEnum = 'BY_MATERIAL';
+            var errorItem = _.find($scope.materialMap, function (item) {
+                if (type === 'submit' && (!item.material || !item.material.materialCode)) {
+                    swal('存在未选择原料的项目', '', 'warning');
+                    return true;
+                }
+                var exist = _.find(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
+                    if (type === 'submit' && !stationItem.amount) {
+                        swal('存在未输入调剂数量的站点', '', 'warning');
+                        return true;
+                    }
+                    stations.push({
+                        amount: stationItem.amount,
+                        inStation: {
+                            stationCode: stationItem.inLocation.stationCode
+                        },
+                        outStation: {
+                            stationCode: stationItem.outLocation.stationCode
+                        }
+                    });
+                    return false;
+                });
+                if (exist) {
+                    // 未存在调剂数量
+                    return true;
+                } else if (type === 'submit' && stations.length === 0) {
+                    swal('存在未选择站点的项目', '', 'warning');
+                    return true;
+                }
+                plan.planBillDetailDTOS.push({
+                    rawMaterialCode: item.material.materialCode,
+                    planBillStationDTOS: stations
+                });
+                return false;
+            });
+            if (errorItem) {
+                return true;
+            }
+        }
     }
 });
