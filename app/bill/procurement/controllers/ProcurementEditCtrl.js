@@ -7,7 +7,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
     $scope.bill = params.purchaseBill;
     params.purchaseBill.supplier = {
         supplierCode: params.purchaseBill.supplierCode,
-        supplierName: params.purchaseBill.supplierCode
+        supplierName: params.purchaseBill.supplierName
     };
 
     $timeout(function () {
