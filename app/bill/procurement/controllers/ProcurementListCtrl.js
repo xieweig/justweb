@@ -16,6 +16,15 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
         $state.go('app.bill.procurement.list');
     };
 
+    $scope.supplierTreeOpt = {
+        type: 'supplier',
+        callback: function (data) {
+            $scope.params.supplierCode = _.chain(data).map(function (item) {
+                return item.supplierCode
+            }).join().value();
+        }
+    };
+
     $scope.search = function () {
         $scope.procurementGrid.kendoGrid.dataSource.page(1);
     };
