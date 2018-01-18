@@ -13,17 +13,11 @@
             <div class="widget-body no-padding">
                 <div class="widget-body-toolbar">
                     <div class="row">
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">调拨单号</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
-                            </div>
-                        </div>
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
                             <div class="display-flex">
                                 <div class="flex-1">
                                     <div class="input-group">
-                                        <span class="input-group-addon">调拨时间</span>
+                                        <span class="input-group-addon">{{typeName}}时间</span>
                                         <input type="text" class="form-control" data-datepicker data-ng-model="params.createStartTime">
                                     </div>
                                 </div>
@@ -36,50 +30,53 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="smart-checkbox">
+                                <div class="smart-checkbox-title">审核状态</div>
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="checkbox"><input value="1" type="checkbox" name="target"><i></i>货物</label>
+                                        <label class="checkbox"><input value="0" type="checkbox" name="target"><i></i>原料</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
-                                <span class="input-group-addon">操作人</span>
+                                <span class="input-group-addon">{{typeName}}站点</span>
+                                <span data-station-tree data-select-modal="overflowStation"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">{{typeName}}库位</span>
+                                <select data-multiple-select>
+                                    <option data-ng-repeat="item in outType" value="item.value">{{item.text}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">{{typeName}}目标编码</span>
                                 <input type="text" class="form-control" data-ng-model="params.wayBillCode">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
-                                <span class="input-group-addon">入库单入库站点</span>
-                                <span data-station-tree data-select-modal="outStationParams"></span>
+                                <span class="input-group-addon">{{typeName}}目标名称</span>
+                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
-                                <span class="input-group-addon">入库单出库站点</span>
-                                <span data-station-tree data-select-modal="inStationParams"></span>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">调拨单调出站点</span>
-                                <select smart-select2 class="select2 width-full" data-ng-model="params.billPurpose">
-                                    <option value="">请选择</option>
-                                    <option data-ng-repeat="item in billPurpose" data-ng-value="item.value">
-                                        {{item.text}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">调拨单调入站点</span>
-                                <select smart-select2 class="select2 width-full" data-ng-model="params.billPurpose">
-                                    <option value="">请选择</option>
-                                    <option data-ng-repeat="item in billPurpose" data-ng-value="item.value">
-                                        {{item.text}}
-                                    </option>
-                                </select>
+                                <span class="input-group-addon">操作人</span>
+                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="padding-10">
-                    <p>调剂调拨单列表</p>
-                    <div id="billGrid" class="margin-top-10" data-kendo-grids data-options="billGrid"></div>
+                    <p>查询结果</p>
+                    <div class="margin-top-10" data-kendo-grids data-options="billGrid"></div>
                 </div>
             </div>
         </div>

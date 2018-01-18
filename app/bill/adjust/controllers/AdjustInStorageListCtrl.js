@@ -42,7 +42,7 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
             autoBind: false,
             pageable: true,
             columns: [
-                {title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}, {name: 'u', text: "调拨", click: transferPlan}, {name: 'a', text: "审核", click: audit}], width: 220},
+                {title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}, {name: 'u', text: "调拨", click: transferPlan}], width: 160},
                 {field: "xxxxx", title: "单据属性", width: 120},
                 {field: "xxxxx", title: "出库状态", width: 120},
                 {field: "xxxxx", title: "提交状态", width: 120},
@@ -65,23 +65,17 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
         // 点击来源单号的事件
         $('#billGrid').on('click', '.showSourceBill', function () {
             var sourceCode = $(this).attr('sourceCode');
-            $scope.planDetails = {billCode: sourceCode};
-            $scope.cargoGrid = {
-                kendoSetting: {
-                    dataSource: [{}, {}],
-                    columns: [
-                        {field: "xxxxx", title: "货物名称", width: 120},
-                        {field: "xxxxx", title: "货物编码", width: 120},
-                        {field: "xxxxx", title: "所属原料", width: 120},
-                        {field: "xxxxx", title: "规格", width: 120},
-                        {field: "xxxxx", title: "应拣数量", width: 120}
-                    ]
-                }
-            };
             $uibModal.open({
-                templateUrl: 'app/bill/adjust/modals/billDetails.html',
+                templateUrl: 'app/bill/adjust/modals/details.html',
                 size: 'lg',
-                scope: $scope
+                scope: $scope,
+                controller: 'AdjustDetailsCtrl',
+                resolve: {
+                    params: {
+                        type: 'look',
+                        billCode: '123123'
+                    }
+                }
             });
         });
     });
@@ -101,52 +95,30 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
         $uibModal.open({
             templateUrl: 'app/bill/adjust/modals/transfers.html',
             size: 'lg',
-            scope: $scope
+            controller: 'AdjustTransfersCtrl',
+            scope: $scope,
+            resolve: {
+                billCode: function () {
+                    return dataItem.sourceCode;
+                }
+            }
         });
-    }
-
-    // 查看详情
-    function audit(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        loadBillDetails('audit');
     }
 
     // 加载出库单详情
     function loadBillDetails(type) {
-        $scope.planDetails = {type: type};
-        $scope.materialDetails = {
-            kendoSetting: {
-                dataSource: [{xxxxx: 1}, {xxxxx: 2}],
-                columns: [
-                    {field: "xxxxx", title: "原料名称", width: 120},
-                    {field: "xxxxx", title: "原料编码", width: 120},
-                    {field: "xxxxx", title: "应拣数量", width: 120},
-                    {field: "xxxxx", title: "实拣数量", width: 120},
-                    {field: "xxxxx", title: "完成度", width: 120}
-                ]
-            }
-        };
-        $scope.cargoDetails = {
-            kendoSetting: {
-                dataSource: [{xxxxx: 1}, {xxxxx: 2}],
-                columns: [
-                    {field: "xxxxx", title: "货物名称", width: 120},
-                    {field: "xxxxx", title: "货物编码", width: 120},
-                    {field: "xxxxx", title: "所属原料", width: 120},
-                    {field: "xxxxx", title: "标准单位", width: 120},
-                    {field: "xxxxx", title: "规格", width: 120},
-                    {field: "xxxxx", title: "应拣数量", width: 120},
-                    {field: "xxxxx", title: "实际数量", width: 120},
-                    {field: "xxxxx", title: "标准单位数量", width: 120}
-                ]
-            }
-        };
 
         $uibModal.open({
             templateUrl: 'app/bill/adjust/modals/details.html',
             size: 'lg',
-            scope: $scope
+            scope: $scope,
+            controller: 'AdjustDetailsCtrl',
+            resolve: {
+                params: {
+                    type: 'look',
+                    billCode: '123123'
+                }
+            }
         });
     }
 });

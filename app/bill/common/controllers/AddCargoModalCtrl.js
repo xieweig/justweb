@@ -10,23 +10,39 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCondition',
         params: $scope.params,
         primaryId: 'cargoCode',
+        dataSource: {
+            data: function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    var result = [];
+                    if (response.result && response.result.result.content) {
+                        result = response.result.result.content;
+                        if (result.length === 1) {
+                            $scope.addCargo(result);
+                        }
+                    }
+                }
+                return result;
+            }
+        },
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
             pageable: true,
             height: 300,
             columns: [
-                { selectable: true },
-                { field: "cargoCode", title: "货物编码", width: 120 },
-                { field: "originalName", title: "货物内部名称", width: 120 },
-                { field: "rawMaterialName", title: "所属原料", width: 120 },
-                { field: "barCode", title: "货物条码", width: 120 },
-                { field: "selfBarCode", title: "自定义条码", width: 120 },
-                { field: "effectiveTime", title: "保质期(天)", width: 120 },
-                { title: "规格", width: 120, template: '#: number #/#: measurementCode #' },
-                { field: "standardUnitCode", title: "最小标准单位", width: 120 },
-                { field: "createTime", title: "建档时间", width: 120 },
-                { field: "memo", title: "备注", width: 200 }
+                {selectable: true},
+                {field: "cargoCode", title: "货物编码", width: 120},
+                {field: "originalName", title: "货物内部名称", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
+                {field: "barCode", title: "货物条码", width: 120},
+                {field: "selfBarCode", title: "自定义条码", width: 120},
+                {field: "effectiveTime", title: "保质期(天)", width: 120},
+                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
+                {field: "standardUnitCode", title: "最小标准单位", width: 120},
+                {field: "createTime", title: "建档时间", width: 120},
+                {field: "memo", title: "备注", width: 200}
             ]
         }
     };
@@ -36,18 +52,17 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
         primaryId: 'cargoCode',
         persistSelection: true,
         kendoSetting: {
+            editable: 'inline',
             columns: [
-                { title: "操作", locked: true, command: [{ name: 'del', text: "删除", click: deleteCurrentCargo }], width: 80 },
-                { field: "cargoCode", title: "货物编码", width: 120 },
-                { field: "originalName", title: "货物内部名称", width: 120 },
-                { field: "rawMaterialName", title: "所属原料", width: 120 },
-                { field: "barCode", title: "货物条码", width: 120 },
-                { field: "selfBarCode", title: "自定义条码", width: 120 },
-                { field: "effectiveTime", title: "保质期(天)", width: 120 },
-                { title: "规格", width: 120, template: '#: number #/#: measurementCode #' },
-                { field: "standardUnitCode", title: "最小标准单位", width: 120 },
-                { field: "createTime", title: "建档时间", width: 120 },
-                { field: "memo", title: "备注", width: 200 }
+                {title: "操作", command: [{name: 'edit', text: "编辑"}, {name: 'del', text: "删除", click: deleteCurrentCargo}], width: 160},
+                {field: "cargoName", title: "货物名称", width: 120},
+                {field: "cargoCode", title: "货物编码", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
+                {field: "standardUnitCode", title: "标准单位", width: 120},
+                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
+                {field: "productDate", title: "生产日期", width: 120, WdatePicker: true, editable: true},
+                {field: "purchasePrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
+                {field: "amount", title: "发货数量", width: 200, kType: 'number', editable: true}
             ]
         }
     };
@@ -67,12 +82,20 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
     }
 
     // 增加货物
-    $scope.addCargo = function () {
-        var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
-        var dataSource = $scope.cargoList.kendoGrid.dataSource;
+    $scope.addCargo = function (dataSource) {
+        var selectIds = [];
         var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
-        _.each(dataSource.data(), function (item, index) {
-            if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
+        if (!dataSource) {
+            selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
+            dataSource = $scope.cargoList.kendoGrid.dataSource.data();
+        } else {
+            selectIds = [dataSource[0].cargoCode];
+        }
+        var existArray = _.map(currentDataSource.data(), function (item, index) {
+            return item.cargoCode;
+        });
+        _.each(dataSource, function (item, index) {
+            if (_.indexOf(selectIds, '' + item.cargoCode) > -1 && _.indexOf(existArray, '' + item.cargoCode) < 0) {
                 currentDataSource.add(item);
             }
         });
@@ -81,8 +104,11 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
     /**
      * 提交选中货物
      */
-    $scope.submit = function () {
-        var result = _.map($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
+    $scope.submit = function (dataSource) {
+        if (!dataSource) {
+            dataSource = $scope.currentCargoList.kendoGrid.dataSource.data();
+        }
+        var result = _.map(dataSource, function (item) {
             return {
                 barCode: item.barCode,
                 cargoCode: item.cargoCode,
@@ -100,7 +126,10 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
                 rawMaterialName: item.rawMaterialName,
                 selfBarCode: item.selfBarCode,
                 standardUnitCode: item.standardUnitCode,
-                updateTime: item.updateTime
+                updateTime: item.updateTime,
+                dateInProduced: item.productDate,
+                unitPrice: item.purchasePrice,
+                amount: item.amount
             };
         });
         cb(result);

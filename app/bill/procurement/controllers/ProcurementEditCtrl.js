@@ -1,12 +1,13 @@
 'use strict';
 
-angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibModal, $timeout, $state, params, ApiService) {
+angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibModal, $timeout, $state, params, ApiService, cargoUnit, materialUnit, storageList) {
+    $scope.storageList = storageList;
     // 页面类型 查看or审核
     $scope.type = params.type;
     $scope.bill = params.purchaseBill;
     params.purchaseBill.supplier = {
         supplierCode: params.purchaseBill.supplierCode,
-        supplierName: params.purchaseBill.supplierCode
+        supplierName: params.purchaseBill.supplierName
     };
 
     $timeout(function () {
@@ -20,27 +21,42 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             persistSelection: true,
             dataSource: params.purchaseBill.billDetails,
             columns: [
-                { selectable: true, locked: true },
-                { title: "操作", width: 160, locked: true, command: [{ name: 'edit', text: "编辑" }] },
-                { field: "cargo.cargoName", title: "货物名称", width: 120 },
-                { field: "cargo.cargoCode", title: "货物编码", width: 120 },
-                { field: "cargo.rawMaterialId", title: "所属原料", width: 120 },
-                { field: "cargo.measurementCode", title: "标准单位", width: 120 },
-                { template: "#: cargo.number #/#: cargo.standardUnitCode #", title: "规格", width: 120 },
-                { field: "dateInProduced", title: "生产日期", width: 160, WdatePicker: true, editable: true },
-                { field: "unitPrice", title: "单位进价", width: 120, type: 'number', editable: true },
-                { field: "amount", title: "实收数量", width: 120, type: 'number', editable: true },
-                { field: "shippedNumber", title: "发货数量", width: 120, type: 'number', editable: true },
-                { field: "differenceNumber", title: "数量差额", width: 120 },
-                { field: "differencePrice", title: "总价差值", width: 120 }
+                {selectable: true},
+                {title: "操作", width: 160, command: [{name: 'edit', text: "编辑"}]},
+                {field: "cargo.cargoName", title: "货物名称", width: 120},
+                {field: "cargo.cargoCode", title: "货物编码", width: 120},
+                {field: "cargo.rawMaterialId", title: "所属原料", width: 120},
+                {
+                    title: "标准单位", width: 120,
+                    template: function (data) {
+                        return getTextByVal(materialUnit, data.cargo.measurementCode);
+                    }
+                },
+                {
+                    title: "规格", width: 120,
+                    template: function (data) {
+                        return data.cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
+                    }
+                },
+                {field: "cargo.dateInProduced", title: "生产日期", width: 160, WdatePicker: true},
+                {field: "cargo.unitPrice", title: "单位进价", width: 120, kType: 'decimal'},
+                {field: "cargo.amount", title: "发货数量", width: 120, kType: 'number'},
+                {field: "shippedNumber", title: "实收数量", width: 120, kType: 'number', editable: true},
+                {field: "differenceNumber", title: "数量差额", width: 120},
+                {field: "differencePrice", title: "总价差值", width: 120}
             ],
             save: function (e) {
                 // 计算数量差额和总价值差
                 var model = e.model;
                 model.shippedNumber = parseInt(model.shippedNumber);
-                model.amount = parseInt(model.amount);
-                model.differenceNumber = model.shippedNumber - model.amount;
-                model.differencePrice = (parseFloat(model.unitPrice) * model.differenceNumber).toFixed(2);
+                model.shippedNumber !== model.shippedNumber ? model.shippedNumber = 0 : '';
+
+                model.cargo.amount = parseInt(model.cargo.amount);
+                model.differenceNumber = model.shippedNumber - model.cargo.amount;
+                model.differenceNumber !== model.differenceNumber ? model.differenceNumber = 0 : '';
+
+                model.differencePrice = (parseFloat(model.cargo.unitPrice) * model.differenceNumber).toFixed(2);
+                model.differencePrice !== model.differencePrice ? model.differencePrice = 0 : '';
                 return e;
             }
         }
@@ -60,18 +76,27 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
 
     // 批量删除
     $scope.batchDelete = function () {
-        var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
-        var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
-        // 循环需要删除的索引的反序
-        var indexPos = _.chain(dataSource.data()).map(function (item, index) {
-            if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
-                return index;
-            }
-        }).reverse().value();
-        // 根据反序  从最后一条开始删除
-        _.each(indexPos, function (item) {
-            if (_.isNumber(item) && item >= 0) {
-                dataSource.remove(dataSource.at(item));
+        swal({
+            title: '确定要删除选中的项目吗',
+            type: 'warning',
+            confirmButtonText: '是的',
+            showCancelButton: true
+        }).then(function (res) {
+            if (res.value) {
+                var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
+                var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
+                // 循环需要删除的索引的反序
+                var indexPos = _.chain(dataSource.data()).map(function (item, index) {
+                    if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
+                        return index;
+                    }
+                }).reverse().value();
+                // 根据反序  从最后一条开始删除
+                _.each(indexPos, function (item) {
+                    if (_.isNumber(item) && item >= 0) {
+                        dataSource.remove(dataSource.at(item));
+                    }
+                });
             }
         });
     };
@@ -92,10 +117,13 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                         });
                         _.each(data, function (item) {
                             if (_.indexOf(cargoCodes, item.cargoCode) < 0) {
-                                dataSource.add({ cargoCode: item.cargoCode, cargo: item });
+                                dataSource.add({cargoCode: item.cargoCode, cargo: item});
                             }
                         });
                     }
+                },
+                data: function () {
+                    return $scope.procurementGrid.kendoGrid.dataSource.data();
                 }
             }
         });
@@ -129,60 +157,84 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         saveOrAudit('audit', _.cloneDeep(bill));
     };
 
+    // 回到列表页
+    $scope.toList = function () {
+        $state.go('app.bill.procurement.list');
+    };
+
     function saveOrAudit(type, bill) {
-        var url = '';
-        if (type === 'save') {
-            if ($scope.type === 'edit') {
-                url = '/api/bill/purchase/updatePurchaseBillToSave';
+        if (initSubmitData(type, bill)) {
+            var url = '';
+            if (type === 'save') {
+                if ($scope.type === 'edit') {
+                    url = '/api/bill/purchase/updatePurchaseBillToSave';
+                } else {
+                    url = '/api/bill/purchase/savePurchaseBill';
+                }
             } else {
-                url = '/api/bill/purchase/savePurchaseBill';
+                if ($scope.type === 'edit') {
+                    url = '/api/bill/purchase/updatePurchaseBillToSubmit';
+                } else {
+                    url = '/api/bill/purchase/submitPurchaseBill';
+                }
             }
-        } else {
-            if ($scope.type === 'edit') {
-                url = '/api/bill/purchase/updatePurchaseBillToSubmit';
-            } else {
-                url = '/api/bill/purchase/submitPurchaseBill';
-            }
+            ApiService.post(url, bill).then(function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    swal('操作成功', '', 'success').then(function () {
+                        if (params.type === 'add') {
+                            $state.go('app.bill.procurement.list');
+                        } else {
+                            $scope.$close(function () {
+                                console.log(213);
+                            });
+                        }
+                    });
+                }
+            }, apiServiceError);
         }
+    }
+
+    // 组装提交的数据
+    function initSubmitData(type, bill) {
         bill.station = {
             stationCode: $.cookie('currentStationCode'),
             stationName: $.cookie('currentStationName')
         };
-        bill.billDetails = _.map($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
-            return {
-                packageCode: item.packageCode,
-                rawMaterial: {
-                    rawMaterialCode: item.cargo.rawMaterialId,
-                    rawMaterialName: '',
-                    cargo: {
-                        cargoCode: item.cargo.cargoCode,
-                        cargoName: item.cargo.cargoName
-                    }
-                },
-                dateInProduced: item.dateInProduced,
-                unitPrice: item.unitPrice,
-                shippedNumber: item.shippedNumber,
-                amount: item.amount,
-                differenceNumber: item.differenceNumber,
-                differencePrice: item.differencePrice
-            };
-        });
         bill.operatorCode = 'YGADMIN';
-        ApiService.post(url, bill).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error');
+        bill.billDetails = [];
+        var errorItem = _.find($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
+            if (type !== 'save' && ( !item.cargo.dateInProduced || !item.cargo.unitPrice || !item.cargo.amount || !item.shippedNumber)) {
+                swal('表格信息填写不完整', '', 'warning');
+                return true;
             } else {
-                swal('操作成功', '', 'success').then(function () {
-                    if (params.type === 'add') {
-                        $state.go('app.bill.procurement.list');
-                    } else {
-                        $scope.$close(function () {
-                            console.log(213);
-                        });
-                    }
+                bill.billDetails.push({
+                    packageCode: item.packageCode,
+                    rawMaterial: {
+                        rawMaterialCode: item.cargo.rawMaterialId,
+                        rawMaterialName: '',
+                        cargo: {
+                            cargoCode: item.cargo.cargoCode,
+                            cargoName: item.cargo.cargoName
+                        }
+                    },
+                    dateInProduced: item.cargo.dateInProduced,
+                    unitPrice: item.cargo.unitPrice,
+                    shippedNumber: item.cargo.shippedNumber,
+                    amount: item.cargo.amount,
+                    differenceNumber: item.differenceNumber,
+                    differencePrice: item.differencePrice
                 });
             }
-        }, apiServiceError);
+            return false;
+        });
+        if (errorItem) {
+            return false
+        } else if (bill.billDetails.length === 0) {
+            swal('请添加货物', '', 'warning');
+            return false;
+        }
+        return true;
     }
-
 });

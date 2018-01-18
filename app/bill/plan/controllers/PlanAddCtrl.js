@@ -108,7 +108,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     $scope.materialMap = [];
     $scope.addItem = function (type) {
         if (type === 'material') {
-            $scope.materialMap.splice(0, 0, pushCargo());
+            $scope.materialMap.splice(0, 0, pushCargo('', true));
         } else {
             $scope.cargoMap.splice(0, 0, pushCargo());
         }
@@ -140,7 +140,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                    return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
                             {field: "amount", title: "调剂数量(点击修改)", editable: true}
@@ -168,16 +168,22 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                    return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
-                            {field: "amount", title: "调剂数量(点击修改)", editable: true}
+                            {
+                                field: "amount", title: "调剂数量(点击修改)", editable: true, kType: 'number'
+                            }
                         ]
                     }
                 }
             };
         }
     }
+
+    $scope.toList = function () {
+        $state.go('app.bill.plan.list');
+    };
 
     // 伸缩项
     $scope.scaling = function (item, index) {
@@ -193,11 +199,21 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
-                        item.cargo = data;
+                        var repeat = _.find($scope.cargoMap, function (item) {
+                            return item.cargo.cargoCode === data.cargoCode;
+                        });
+                        if (!repeat) {
+                            item.cargo = data;
+                        } else {
+                            swal('货物已存在', '', 'warning');
+                        }
                     }
                 },
                 cargoUnit: function () {
                     return cargoUnit;
+                },
+                materialUnit: function () {
+                    return materialUnit;
                 }
             }
         });
@@ -211,7 +227,14 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             resolve: {
                 cb: function () {
                     return function (data) {
-                        item.material = data;
+                        var repeat = _.find($scope.materialMap, function (item) {
+                            return item.material.materialCode === data.materialCode;
+                        });
+                        if (!repeat) {
+                            item.material = data;
+                        } else {
+                            swal('原料已存在', '', 'warning');
+                        }
                     }
                 }
             }
@@ -258,19 +281,20 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             return item.inLocation.stationCode + '-' + item.outLocation.stationCode;
                         });
                         _.each(data, function (dataItem, index) {
-                            if (_.indexOf(current, dataItem.inStationCode + '-' + dataItem.outStationCode) > -1) {
-                                var amount = parseInt(dataSource.at(index).get('amount')) + parseInt(dataItem.number)
-                                dataSource.at(index).set('amount', amount);
+                            var existIndex = _.indexOf(current, dataItem.inStationCode + '-' + dataItem.outStationCode);
+                            if (existIndex > -1) {
+                                var amount = parseInt(dataSource.at(existIndex).get('amount')) + parseInt(dataItem.number)
+                                dataSource.at(existIndex).set('amount', amount);
                             } else {
                                 item.stationGrid.kendoGrid.dataSource.add({
                                     amount: dataItem.number,
                                     inLocation: {
                                         stationCode: dataItem.inStationCode,
-                                        stationName: getTextByVal($scope.station, dataItem.inStationCode)
+                                        stationName: dataItem.inStationName || getTextByVal($scope.station, dataItem.inStationCode)
                                     },
                                     outLocation: {
                                         stationCode: dataItem.outStationCode,
-                                        stationName: getTextByVal($scope.station, dataItem.outStationCode)
+                                        stationName: dataItem.outStationName || getTextByVal($scope.station, dataItem.outStationCode)
                                     }
                                 });
                             }
@@ -311,6 +335,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             swal('请选择计划名称', '', 'warning');
             return;
         }
+        getItemObject('save', plan);
         sendHttpReques('save', plan);
     };
 
@@ -324,7 +349,13 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             swal('请选择计划类型', '', 'warning');
             return;
         }
-        sendHttpReques('submit', plan);
+        if (!getItemObject('submit', plan)) {
+            if (plan.planBillDetailDTOS.length === 0) {
+                swal('请添加项目', '', 'warning');
+            } else {
+                sendHttpReques('submit', plan);
+            }
+        }
     };
 
     // 发送请求
@@ -335,45 +366,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         } else {
             url = '/api/bill/planBill/submit';
         }
-        if ($scope.materialMap.length === 0) {
-            plan.basicEnum = 'BY_CARGO';
-            plan.planBillDetailDTOS = _.map($scope.cargoMap, function (item) {
-                var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
-                    return {
-                        amount: stationItem.amount,
-                        inStation: {
-                            stationCode: stationItem.inLocation.stationCode
-                        },
-                        outStation: {
-                            stationCode: stationItem.outLocation.stationCode
-                        }
-                    };
-                });
-                return {
-                    cargoCode: item.cargo.cargoCode,
-                    planBillStationDTOS: stations
-                };
-            });
-        } else {
-            plan.basicEnum = 'BY_MATERIAL';
-            plan.planBillDetailDTOS = _.map($scope.materialMap, function (item) {
-                var stations = _.map(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
-                    return {
-                        amount: stationItem.amount,
-                        inStation: {
-                            stationCode: stationItem.inLocation.stationCode
-                        },
-                        outStation: {
-                            stationCode: stationItem.outLocation.stationCode
-                        }
-                    };
-                });
-                return {
-                    rawMaterialCode: item.material.materialCode,
-                    planBillStationDTOS: stations
-                };
-            });
-        }
         ApiService.post(url, plan).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error')
@@ -383,5 +375,90 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 });
             }
         }, apiServiceError);
+    }
+
+    // 获取货物或者原料的列表
+    function getItemObject(type, plan) {
+        plan.planBillDetailDTOS = [];
+        var stations = [];
+        if ($scope.materialMap.length === 0) {
+            plan.basicEnum = 'BY_CARGO';
+            var errorItem = _.find($scope.cargoMap, function (item) {
+                if (type === 'submit' && (!item.cargo || !item.cargo.cargoCode)) {
+                    swal('存在未选择货物的项目', '', 'warning');
+                    return true;
+                }
+                var exist = _.find(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
+                    if (type === 'submit' && !stationItem.amount) {
+                        swal('存在未输入调剂数量的站点', '', 'warning');
+                        return true;
+                    }
+                    stations.push({
+                        amount: stationItem.amount,
+                        inStation: {
+                            stationCode: stationItem.inLocation.stationCode
+                        },
+                        outStation: {
+                            stationCode: stationItem.outLocation.stationCode
+                        }
+                    });
+                    return false;
+                });
+                if (exist) {
+                    // 未存在调剂数量
+                    return true;
+                } else if (type === 'submit' && stations.length === 0) {
+                    swal('存在未选择站点的项目', '', 'warning');
+                    return true;
+                }
+                plan.planBillDetailDTOS.push({
+                    cargoCode: item.cargo.cargoCode,
+                    planBillStationDTOS: stations
+                });
+                return false;
+            });
+            if (errorItem) {
+                return true;
+            }
+        } else {
+            plan.basicEnum = 'BY_MATERIAL';
+            var errorItem = _.find($scope.materialMap, function (item) {
+                if (type === 'submit' && (!item.material || !item.material.materialCode)) {
+                    swal('存在未选择原料的项目', '', 'warning');
+                    return true;
+                }
+                var exist = _.find(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
+                    if (type === 'submit' && !stationItem.amount) {
+                        swal('存在未输入调剂数量的站点', '', 'warning');
+                        return true;
+                    }
+                    stations.push({
+                        amount: stationItem.amount,
+                        inStation: {
+                            stationCode: stationItem.inLocation.stationCode
+                        },
+                        outStation: {
+                            stationCode: stationItem.outLocation.stationCode
+                        }
+                    });
+                    return false;
+                });
+                if (exist) {
+                    // 未存在调剂数量
+                    return true;
+                } else if (type === 'submit' && stations.length === 0) {
+                    swal('存在未选择站点的项目', '', 'warning');
+                    return true;
+                }
+                plan.planBillDetailDTOS.push({
+                    rawMaterialCode: item.material.materialCode,
+                    planBillStationDTOS: stations
+                });
+                return false;
+            });
+            if (errorItem) {
+                return true;
+            }
+        }
     }
 });

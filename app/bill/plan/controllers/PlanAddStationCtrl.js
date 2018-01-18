@@ -48,7 +48,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         single: true,
         callback: function (data) {
             $scope.otmOutStation = data;
-            if ($scope.otmInStationOpt.type !== 'supplier') {
+            if (billType === 'ADJUST' && $scope.otmInStationOpt.type !== 'supplier') {
                 $scope.otmInStationOpt.type = data.siteType;
             }
         }
@@ -68,7 +68,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                         };
                     })
                 }
-                if ($scope.otmInStation[0]) {
+                if (billType === 'ADJUST' && $scope.otmInStation[0]) {
                     $scope.otmOutStationOpt.type = $scope.otmInStation[0].siteType;
                 }
             }
@@ -101,6 +101,8 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             swal('不能包含出入库相同的站点', '', 'warning');
         } else {
             addStationToGrid(data);
+            $scope.otmOutStation = {};
+            $scope.otmInStation = [];
         }
     };
 
@@ -110,7 +112,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: outStationType,
         callback: function (data) {
             $scope.mtoOutStation = data;
-            if ($scope.mtoInStationOpt.type !== 'supplier') {
+            if (billType === 'ADJUST' && $scope.mtoInStationOpt.type !== 'supplier') {
                 $scope.mtoInStationOpt.type = data.siteType;
             }
         }
@@ -128,7 +130,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                     stationName: data.supplierName
                 }
             }
-            if ($scope.mtoInStation[0]) {
+            if (billType === 'ADJUST' && $scope.mtoInStation[0]) {
                 $scope.mtoOutStationOpt.type = $scope.mtoInStation[0].siteType;
             }
         }
@@ -160,6 +162,8 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             swal('不能包含出入库相同的站点', '', 'warning');
         } else {
             addStationToGrid(data);
+            $scope.mtoOutStation = [];
+            $scope.mtoInStation = {};
         }
     };
 
@@ -172,7 +176,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: outStationType,
         callback: function (data) {
             $scope.otoOutStation = data;
-            if (data[0] && $scope.otoInStationOpt.type !== 'supplier') {
+            if (billType === 'ADJUST' && data[0] && $scope.otoInStationOpt.type !== 'supplier') {
                 $scope.otoInStationOpt.type = data[0].siteType;
             }
         }
@@ -193,7 +197,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                     };
                 });
             }
-            if ($scope.otoInStation[0]) {
+            if (billType === 'ADJUST' && $scope.otoInStation[0]) {
                 $scope.otoOutStationOpt.type = $scope.otoInStation[0].siteType;
             }
         }
@@ -223,6 +227,8 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             swal('不能包含出入库相同的站点', '', 'warning');
         } else {
             addStationToGrid(data);
+            $scope.otoOutStation = [];
+            $scope.otoInStation = [];
         }
     };
 
@@ -241,7 +247,11 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             }
         });
         if (existent.length > 0) {
-            swal('操作成功!', '其中 ' + existent.join() + ' 已存在', 'success');
+            if (existent.length === data.length) {
+                swal('操作不成功!', '添加的站点均已存在', 'warning');
+            } else {
+                swal('操作成功!', '其中 ' + existent.join() + ' 已存在', 'success');
+            }
         }
     }
 
@@ -257,5 +267,15 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         });
         cb(data);
         $scope.$close();
+    };
+
+    // 删除数组的
+    $scope.deleteItem = function (array, index) {
+        array.splice(index, 1);
+    };
+    //  清空
+    $scope.clearItem = function (station) {
+        station.stationCode = '';
+        station.stationName = '';
     }
 });

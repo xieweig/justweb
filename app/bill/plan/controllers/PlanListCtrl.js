@@ -14,6 +14,10 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
         }
     };
 
+    $scope.resetPage = function () {
+        $state.reload();
+    };
+
     // 入库查询
     $scope.inStationParams = {
         callback: function (data) {
@@ -77,12 +81,13 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                 },
                 {field: "billCode", title: "计划编号", width: 120},
                 {field: "billName", title: "计划名称", width: 120},
-                {field: "billType", title: "计划类型", width: 120},
+                {
+                    title: "计划类型", width: 120, template: function (data) {
+                    return getTextByVal($scope.billType, data.billType)
+                }
+                },
                 {field: "createTime", title: "创建时间", width: 160},
                 {field: "operatorName", title: "创建人", width: 120},
-                {field: "billSubmitState", title: "提交状态", width: 120},
-                {field: "auditState", title: "审核状态", width: 120},
-
                 {
                     title: "提交状态", width: 120,
                     template: function (data) {

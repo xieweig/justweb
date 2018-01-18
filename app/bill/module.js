@@ -9,6 +9,7 @@ angular.module('app.bill', [
     'app.bill.returned',
     'app.bill.procurement',
     'app.bill.delivery',
+    'app.bill.mistake',
     'app.bill.adjust'
 ]).config(function ($stateProvider) {
     $stateProvider

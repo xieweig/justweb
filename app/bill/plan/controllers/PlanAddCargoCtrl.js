@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout, cb, cargoUnit) {
+angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout, cb, cargoUnit, materialUnit) {
     $scope.cargoConfigure = cargoUnit;
     $scope.search = function () {
         $scope.cargoGrid.kendoGrid.dataSource.page(1);
@@ -9,12 +9,17 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
     // 原料配置
     $scope.materialParamOpt = {
         type: 'material',
+        hasChildren: true,
         callback: function (data) {
-            $scope.params.rawMaterialId = data.id;
+            $scope.params.rawMaterialId = _.chain(data).map(function (item) {
+                return item.id;
+            }).join().value();
         }
     };
 
+    $scope.params = {};
     $scope.cargoGrid = {
+        params: $scope.params,
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCondition',
         kendoSetting: {
             pageable: true,
@@ -34,7 +39,7 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
                 },
                 {
                     title: "最小标准单位", width: 150, template: function (data) {
-                    return getTextByVal($scope.materialConfigure, data.standardUnitCode);
+                    return getTextByVal(materialUnit, data.standardUnitCode);
                 }
                 },
                 {field: "createTime", title: "建档时间", format: '{0: yyyy-MM-dd HH:mm}', width: 145},
@@ -59,12 +64,14 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
             "cargoName": dataItem.cargoName,
             "effectiveTime": dataItem.effectiveTime,
             "measurementCode": dataItem.measurementCode,
+            "measurementName": getTextByVal(cargoUnit, dataItem.measurementCode),
             "standardUnitCode": dataItem.standardUnitCode,
             "memo": dataItem.memo,
             "number": dataItem.number,
             "rawMaterialId": dataItem.rawMaterialId,
             "cargoType": dataItem.cargoType,
-            "rawMaterialName": dataItem.rawMaterialName
+            "rawMaterialName": dataItem.rawMaterialName,
+            "rawMaterialTypeName": dataItem.rawMaterialTypeName
         });
         $scope.$close();
     }

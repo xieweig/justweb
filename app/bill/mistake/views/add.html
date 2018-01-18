@@ -1,0 +1,36 @@
+<div id="content">
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
+            <span class="widget-icon">
+                <i class="fa fa-table"></i>
+            </span>
+            <h2>{{ $state.current.data.title }}</h2>
+            <div class="fr">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="提交{{typeName}}" data-ng-click="search()">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="取消" data-ng-click="search()">
+            </div>
+        </header>
+        <div>
+            <div class="widget-body ">
+                <div class="tab-pane">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#tabs-1" data-toggle="tab">原料{{typeName}}</a>
+                        </li>
+                        <li>
+                            <a href="#tabs-2" data-toggle="tab">货物{{typeName}}</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content padding-10">
+                        <div class="tab-pane active" id="tabs-1">
+                            <div data-smart-include="app/bill/mistake/views/addMaterial.html"></div>
+                        </div>
+                        <div class="tab-pane" id="tabs-2">
+                            <div data-smart-include="app/bill/mistake/views/addCargo.html"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

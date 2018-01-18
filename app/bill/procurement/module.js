@@ -19,6 +19,14 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
                     templateUrl: 'app/bill/procurement/views/list.html',
                     controller: 'ProcurementListCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         })
         .state('app.bill.procurement.add', {
@@ -38,6 +46,15 @@ angular.module('app.bill.procurement', ['ui.router']).config(function ($statePro
                         type: 'add',
                         purchaseBill: {}
                     };
+                },
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                },
+                storageList: function (Common) {
+                    return Common.getStore();
                 }
             }
         })

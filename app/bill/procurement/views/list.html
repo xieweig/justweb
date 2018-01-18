@@ -7,8 +7,8 @@
             </span>
             <h2>{{ $state.current.data.title }}</h2>
             <div class="fr">
-                <input type="button" class="btn btn-primary fl margin-right-5" value="查询" ng-click="search()">
-                <input type="button" class="btn btn-primary fl" value="重置">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="查询" data-ng-click="search()">
+                <input type="button" class="btn btn-primary fl" value="重置" data-ng-click="resetPage()">
             </div>
         </header>
         <div>
@@ -71,7 +71,7 @@
                             <div class="col-sm-6 col-xs-12 margin-bottom-10">
                                 <div class="input-group">
                                     <span class="input-group-addon">供应商</span>
-                                    <input type="text" class="form-control" data-ng-model="params.supplierCode">
+                                    <span data-select-tree data-select-modal="supplierTreeOpt"></span>
                                 </div>
                             </div>
                         </div>

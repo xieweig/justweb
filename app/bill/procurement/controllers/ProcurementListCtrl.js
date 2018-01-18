@@ -1,12 +1,30 @@
 'use strict';
 
-angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibModal, ApiService, Common) {
+angular.module('app').controller('ProcurementListCtrl', function ($scope, $state, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
 
 
     // 表格参数及搜索
     $scope.params = {};
     $scope.curSubmitStatus = {};
     $scope.curAuditStatus = {};
+
+    $scope.resetPage = function () {
+        $state.reload();
+    };
+
+    $scope.toList = function () {
+        $state.go('app.bill.procurement.list');
+    };
+
+    $scope.supplierTreeOpt = {
+        type: 'supplier',
+        callback: function (data) {
+            $scope.params.supplierCode = _.chain(data).map(function (item) {
+                return item.supplierCode
+            }).join().value();
+        }
+    };
+
     $scope.search = function () {
         $scope.procurementGrid.kendoGrid.dataSource.page(1);
     };
@@ -27,6 +45,28 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                         params.auditStatus.push(key);
                     }
                 });
+            },
+            data: function (response) {
+                var data = getKendoData(response);
+                var supplierCodes = [];
+                _.each(data, function (item) {
+                    supplierCodes.push(item.supplierCode);
+                });
+
+                // 回显供应商
+                Common.getSupplierByIds(supplierCodes).then(function (supplierList) {
+                    var supplierObj = _.zipObject(_.map(supplierList, function (item) {
+                        return item.supplierCode;
+                    }), supplierList);
+                    var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
+                    _.each(dataSource.data(), function (item, index) {
+                        var supplier = supplierObj[item.get('supplierCode')];
+                        if (supplier) {
+                            item.set('supplierCode', supplier.supplierName);
+                        }
+                    });
+                });
+                return data;
             }
         },
         kendoSetting: {
@@ -34,7 +74,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
             pageable: true,
             columns: [
                 {
-                    title: "操作", width: 220, locked: true,
+                    title: "操作", width: 220,
                     command: [
                         {name: 't', text: "查看", click: openViewModal},
                         {
@@ -55,16 +95,21 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                 },
                 {field: "billCode", title: "单号", width: 120},
                 {field: "inWareHouseTime", title: "入库时间", width: 120},
-                {field: "createTime", title: "录单时间", width: 120},
+                {title: "录单时间", width: 180, template: '#: formatDate(data.createTime?new Date(data.createTime):"","yyyy-MM-dd HH:mm:ss") #'},
                 {field: "operatorCode", title: "录单人", width: 120},
                 {field: "auditPersonCode", title: "审核人", width: 120},
-                {field: "inStationCode", title: "入库站点", width: 120},
+                {
+                    title: "入库站点", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.station, data.inStationCode)
+                    }
+                },
                 {field: "inStorageCode", title: "入库库房", width: 120},
                 {field: "amount", title: "实收数量", width: 120},
                 {field: "differenceNumber", title: "数量差值", width: 120},
                 {field: "inTotalPrice", title: "进货实洋", width: 120},
                 {field: "differencePrice", title: "总价值差", width: 120},
-                {field: "supplierCode", title: "供应商", width: 120},
+                {field: "supplierCode", title: "供应商", width: 120, editable: true},
                 {
                     title: "提交状态", width: 120, template: function (data) {
                     return getTextByVal($scope.auditStatus, data.auditState);
@@ -85,18 +130,24 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            $uibModal.open({
-                templateUrl: 'app/bill/procurement/modals/look.html',
-                size: 'lg',
-                controller: 'ProcurementLookCtrl',
-                resolve: {
-                    params: {
-                        type: 'look',
-                        purchaseBill: purchaseBill
-                    }
-                }
-            }).closed.then(function () {
-                $scope.search();
+            Common.getStore(purchaseBill.inStationCode).then(function (storage) {
+                purchaseBill.inStorageName = getTextByVal(storage, purchaseBill.inStorageCode);
+                Common.getSupplierByIds([purchaseBill.supplierCode]).then(function (suppliers) {
+                    purchaseBill.supplierName = suppliers[0].supplierName;
+                    $uibModal.open({
+                        templateUrl: 'app/bill/procurement/modals/look.html',
+                        size: 'lg',
+                        controller: 'ProcurementLookCtrl',
+                        resolve: {
+                            params: {
+                                type: 'look',
+                                purchaseBill: purchaseBill
+                            }
+                        }
+                    }).closed.then(function () {
+                        $scope.search();
+                    });
+                });
             });
         });
     }
@@ -106,42 +157,62 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            $uibModal.open({
-                templateUrl: 'app/bill/procurement/modals/look.html',
-                size: 'lg',
-                controller: 'ProcurementLookCtrl',
-                resolve: {
-                    params: {
-                        type: 'audit',
-                        purchaseBill: purchaseBill
-                    }
-                }
-            }).closed.then(function () {
-                $scope.search();
+            Common.getStore(purchaseBill.inStationCode).then(function (storage) {
+                purchaseBill.inStorageName = getTextByVal(storage, purchaseBill.inStorageCode);
+                Common.getSupplierByIds([purchaseBill.supplierCode]).then(function (suppliers) {
+                    purchaseBill.supplierName = suppliers[0].supplierName;
+                    $uibModal.open({
+                        templateUrl: 'app/bill/procurement/modals/look.html',
+                        size: 'lg',
+                        controller: 'ProcurementLookCtrl',
+                        resolve: {
+                            params: {
+                                type: 'audit',
+                                purchaseBill: purchaseBill
+                            }
+                        }
+                    }).closed.then(function () {
+                        $scope.search();
+                    });
+                });
             });
         });
-    };
+    }
 
     // 打开修改界面
     function openEditModal(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            $uibModal.open({
-                templateUrl: 'app/bill/procurement/modals/edit.html',
-                size: 'lg',
-                controller: 'ProcurementEditCtrl',
-                resolve: {
-                    params: {
-                        type: 'edit',
-                        purchaseBill: purchaseBill
-                    }
-                }
-            }).closed.then(function () {
-                $scope.search();
+            Common.getStore(purchaseBill.inStationCode).then(function (storageList) {
+                Common.getSupplierByIds([purchaseBill.supplierCode]).then(function (suppliers) {
+                    purchaseBill.supplierName = suppliers[0].supplierName;
+                    $uibModal.open({
+                        templateUrl: 'app/bill/procurement/modals/edit.html',
+                        size: 'lg',
+                        controller: 'ProcurementEditCtrl',
+                        resolve: {
+                            params: {
+                                type: 'edit',
+                                purchaseBill: purchaseBill
+                            },
+                            cargoUnit: function () {
+                                return cargoUnit;
+                            },
+                            materialUnit: function () {
+                                return materialUnit;
+                            },
+                            storageList: function () {
+                                return storageList;
+                            }
+                        }
+                    }).closed.then(function () {
+                        $scope.search();
+                    });
+                });
             });
         });
-    };
+    }
 
     // 加载单条详情
     function loadCargo(billCode, cb) {
@@ -170,5 +241,5 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $uibMo
                 });
             }
         }, apiServiceError);
-    };
+    }
 });

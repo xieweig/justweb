@@ -15,7 +15,7 @@ var COMMON_URL = {
     oauth: location.origin + '/oauth'
 };
 
-if (false) {
+if (location.port === '8999') {
     COMMON_URL = {
         bill: 'http://192.168.21.141:15009',
         baseInfo: 'http://192.168.21.141:15006',
@@ -183,16 +183,19 @@ function generateMixed(n) {
  * (new Date()).format("yyyy-MM-dd EEE hh:mm:ss") ==> 2009-03-10 星期二 08:09:04
  * (new Date()).format("yyyy-M-d h:m:s.S") ==> 2006-7-2 8:9:4.18
  */
-Date.prototype.format = function (fmt) {
+function formatDate(date, fmt) {
+    if (!date) {
+        return '';
+    }
     var o = {
-        "M+": this.getMonth() + 1, //月份
-        "d+": this.getDate(), //日
-        "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12, //小时
-        "H+": this.getHours(), //小时
-        "m+": this.getMinutes(), //分
-        "s+": this.getSeconds(), //秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        "S": this.getMilliseconds() //毫秒
+        "M+": date.getMonth() + 1, //月份
+        "d+": date.getDate(), //日
+        "h+": date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, //小时
+        "H+": date.getHours(), //小时
+        "m+": date.getMinutes(), //分
+        "s+": date.getSeconds(), //秒
+        "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+        "S": date.getMilliseconds() //毫秒
     };
     var week = {
         "0": "/u65e5",
@@ -204,10 +207,10 @@ Date.prototype.format = function (fmt) {
         "6": "/u516d"
     };
     if (/(y+)/.test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
     }
     if (/(E+)/.test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[this.getDay() + ""]);
+        fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[date.getDay() + ""]);
     }
     for (var k in o) {
         if (new RegExp("(" + k + ")").test(fmt)) {
@@ -215,4 +218,60 @@ Date.prototype.format = function (fmt) {
         }
     }
     return fmt;
-};
+}
+
+// 输入数字
+function inputNumber(element, options) {
+    options = options ? options : {};
+    element.on({
+        compositionstart: function () {
+            var $this = $(this);
+            $this.unbind('input')
+        },
+        compositionend: function () {
+            inputFunction();
+            $(this).on('input', inputFunction);
+        },
+        input: inputFunction
+    });
+
+    function inputFunction() {
+        var val = element.val();
+        var reg = /\d+/g;
+        var result = reg.exec(val);
+        if (!result) {
+            element.val('');
+        } else {
+            val = parseInt(result[0]);
+            var maxNumber = parseInt(options.maxNumber);
+            var minNumber = parseInt(options.minNumber);
+            if (maxNumber && maxNumber < val) {
+                val = maxNumber
+            }
+            if (minNumber && minNumber > val) {
+                val = minNumber
+            }
+            if (val > 9999999) {
+                val = 9999999;
+            }
+            element.val(val);
+        }
+    }
+}
+
+function getKendoData(response) {
+    for (var name in response.result) {
+        var content = response.result[name];
+        if (content) {
+            if (content.hasOwnProperty("content")) {
+                return content.content;
+            } else if (content.hasOwnProperty("results")) {
+                return content.results;
+            } else {
+                return content;
+            }
+        } else {
+            return null;
+        }
+    }
+}

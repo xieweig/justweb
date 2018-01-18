@@ -94,6 +94,30 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                             });
                         });
                     }
+                } else if (item.kType) {
+                    switch (item.kType) {
+                        case 'number':
+                            item.editor = function (container, options) {
+                                var input = $("<input class='k-input k-textbox'/>");
+                                input.attr("name", options.field);
+                                inputNumber(input);
+                                input.appendTo(container);
+                            };
+                            break;
+                        case 'decimal':
+                            item.editor = function (container, options) {
+                                var input = $("<input class='k-input k-textbox'/>");
+                                input.attr("name", options.field);
+                                input.blur(function () {
+                                    var value = parseFloat(this.value);
+                                    value = value < 0 ? -value : value;
+                                    value = value > 9999999.99 ? 0 : value;
+                                    this.value = value === value ? value : '';
+                                });
+                                input.appendTo(container);
+                            };
+                            break;
+                    }
                 } else if (item.field) {
                     // 其他
                     var fieldName = item.field;
@@ -188,25 +212,7 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                 if (scope.options.dataSource && scope.options.dataSource.data) {
                     dataSource.schema.data = scope.options.dataSource.data;
                 } else {
-                    dataSource.schema.data = function (response) {
-                        for (var name in response.result) {
-                            var content = response.result[name];
-                            if (content) {
-                                if (content.hasOwnProperty("content")) {
-                                    return content.content;
-                                } else if (content.hasOwnProperty("results")) {
-                                    return content.results;
-                                } else {
-                                    return content;
-                                }
-                            } else {
-                                return null;
-                            }
-                        }
-                        if (_.isFunction(dataSource.data)) {
-                            dataSource.data(response);
-                        }
-                    }
+                    dataSource.schema.data = getKendoData
                 }
                 // 如果使用了分页
                 if (kendoSetting.pageable) {

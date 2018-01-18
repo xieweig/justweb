@@ -442,3 +442,25 @@ input[type="text"]:disabled {
 .kendo-link:hover {
     text-decoration: underline;
 }
+
+.k-tooltip-validation {
+    margin-top: 0 !important;
+    display: block;
+    position: static;
+    padding: 0;
+}
+
+.k-callout {
+    display: none;
+}
+
+.select-station-list span.fa {
+    color: red;
+}
+
+.select-station-list span.fa:hover {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+    transition: transform 300ms;
+    cursor: pointer;
+}

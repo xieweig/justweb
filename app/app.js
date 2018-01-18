@@ -268,11 +268,24 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     };
     // 根据原料id集合 获取原料明细
     this.getMaterialByIds = function (codes) {
-        return ApiService.post(COMMON_URL.baseInfo +'/api/v1/baseInfo/rawMaterial/findAvailableMaterialsByIds', codes, {hasHost: true}).then(function (response) {
+        return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/rawMaterial/findAvailableMaterialsByIds', codes, {hasHost: true}).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
                 return response.result.rawMaterialList;
+            }
+        }, apiServiceError);
+    };
+    // 根据原料id集合 获取原料明细
+    this.getSupplierByIds = function (codes) {
+        if (!codes) {
+            return [];
+        }
+        return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/supplier/findByListSupplierCode', codes, {hasHost: true}).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                return response.result.result;
             }
         }, apiServiceError);
     };
@@ -283,7 +296,12 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
         }
         return ApiService.get('/api/bill/purchase/queryStorageByStationCode?stationCode=' + stationCode).then(function (response) {
             if (response.code === '000') {
-                return response.result.content;
+                return _.map(response.result.content, function (item) {
+                    return {
+                        value: item.tempStorageCode,
+                        text: item.tempStorageName
+                    };
+                });
             } else {
                 swal('请求规格失败', response.message, 'error');
             }
@@ -297,13 +315,12 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
         }
         return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/configure/findByConfigureTypeForApi?configureType=' + configureType, {hasHost: true}).then(function (response) {
             if (response.code === '000') {
-                var configureList = _.map(response.result.configureList, function (item) {
+                return _.map(response.result.configureList, function (item) {
                     return {
                         value: item.configureCode,
                         text: item.configureName
                     }
-                })
-                return configureList;
+                });
             } else {
                 swal('请求规格失败', response.message, 'error');
             }

@@ -15,6 +15,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
         {key: 'InStorage', value: 'InStorage', text: '入库'}
     ];
 
+
     $rootScope.billType = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
         {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
@@ -23,12 +24,12 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
     ];
 
     $rootScope.outType = [
-        {key: 'NORMALLIBRARY', value: 'NORMALLIBRARY', text: '正常库'},
-        {key: 'STORAGELIBRARY', value: 'STORAGELIBRARY', text: '仓储库'},
-        {key: 'STOCKLIBRARY', value: 'STOCKLIBRARY', text: '进货库'},
-        {key: 'RETURNLIBRARY', value: 'RETURNLIBRARY', text: '退货库'},
-        {key: 'PASSAGELIBRARY', value: 'PASSAGELIBRARY', text: '在途库'},
-        {key: 'RESERVEDLIBRARY', value: 'RESERVEDLIBRARY', text: '预留库'}
+        {value: 'NORMAL', text: '正常库'},
+        {value: 'STORAGE', text: '仓储库'},
+        {value: 'IN_STORAGE', text: '进货库'},
+        {value: 'OUT_STORAGE', text: '退货库'},
+        {value: 'ON_STORAGE', text: '在途库'},
+        {value: 'RESERVE_STORAGE', text: '预留库'}
     ];
 
     $rootScope.submitStatus = [
@@ -52,6 +53,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
     var stationTypeMap = {station: {}, scopeStation: {}};
     // 拼接站点树结构
     $rootScope.getStationTree = function (stationType, isPermissions) {
+        console.log('站点类型:' + stationType);
         stationType = (!stationType ? 'All' : stationType);
         if (isPermissions ? !stationTypeMap.scopeStation[stationType] : !stationTypeMap.station[stationType]) {
             var stationTree = [];
@@ -68,7 +70,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
             var cityPos = {};
             _.each((isPermissions ? scopeStation : station), function (item) {
                 // 如果传入了stationType  则需要限制返回站点的类型
-                if (stationType !== 'All' && stationType !== undefined && stationType.indexOf(item.siteType) > -1) {
+                if (stationType !== 'All' && stationType !== undefined && stationType.toUpperCase().indexOf(item.siteType.toUpperCase()) < 0) {
                     return;
                 }
                 var currentStation = {key: item.key, value: item.value, text: item.text, type: 'station'};

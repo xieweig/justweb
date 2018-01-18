@@ -14,7 +14,7 @@ angular.module('app').controller('MaterialTreeCtrl', function ($scope, options, 
         }
     }
     $scope.treeViewOptions = {
-        url: $scope.hasChildren ? '/api/baseInfo/material/getMaterialAndGroup' : '/api/baseInfo/material/getMaterialGroup',
+        url: $scope.hasChildren ? COMMON_URL.baseInfo + '/api/v1/baseInfo/rawMaterial/getMaterialAndGroup' : COMMON_URL.baseInfo + '/api/v1/baseInfo/rawMaterial/getMaterialGroup',
         data: {id: '1'},
         schema: {
             type: "json",
@@ -23,15 +23,15 @@ angular.module('app').controller('MaterialTreeCtrl', function ($scope, options, 
                 hasChildren: "group"
             },
             data: function (data) {
-                if (data.result && data.result.list) {
-                    _.each(data.result.list, function (item) {
+                if (data.result && data.result.rawMaterialList) {
+                    _.each(data.result.rawMaterialList, function (item) {
                         if (item.group) {
                             item.imageUrl = './styles/img/treeView/folder.png';
                         } else {
                             item.imageUrl = './styles/img/treeView/file.png';
                         }
                     });
-                    return data.result.list;
+                    return data.result.rawMaterialList;
                 } else {
                     return [];
                 }
