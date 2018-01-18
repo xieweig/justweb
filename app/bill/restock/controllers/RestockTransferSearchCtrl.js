@@ -4,6 +4,16 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
     // 查询站点退库计划
     $scope.params = {};
     $scope.count = 0;
+
+    $scope.storageType = [
+        {value: 'NORMAL', text: '正常库'},
+        {value: 'STORAGE', text: '仓储库'},
+        {value: 'IN_STORAGE', text: '进货库'},
+        {value: 'OUT_STORAGE', text: '退货库'},
+        {value: 'ON_STORAGE', text: '在途库'},
+        {value: 'RESERVE_STORAGE', text: '预留库'}
+    ];
+
     // 搜索
     $scope.search = function () {
         $scope.stationGrid.kendoGrid.dataSource.page(1);
@@ -12,14 +22,14 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
     // 初始化计划列表
     $scope.stationGrid = {
         primaryId: 'billCode',
-        url: '/api/bill/restock/findAllotBillByConditions',
+        url: '/api/bill/restock/findAllotByConditions',
         params: $scope.params,
-        dataSource:{
-            data: function (response) {
-                //TODO: 处理库位
-                return response
-            }
-        },
+        // dataSource:{
+        //     data: function (response) {
+        //         //TODO: 处理库位
+        //         return response
+        //     }
+        // },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -31,27 +41,31 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
                         }
                     }],  locked: true, title: "操作", width: 80
                 },
-                {field: "createTime", title: "来源单号", locked: true, width: 210, template: function (item) {
-                        return '<a href="#" class="plan-btn-group">' + item.sourceCode + '</a>'
+                {field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
+                        return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
                     }},
                 {field: "billCode", title: "调拨单号", locked: true, width: 210},
                 {title: "单据属性", width: 100, template: function (item) {
-                        return getTextByVal($scope.billType, item.billType) + '转'
+                        return getTextByVal($scope.billType, item.specificBillType) + '转'
                     }},
                 {field: "createTime", title: "调拨时间", width: 100},
                 {field: "operatorName", title: "操作人", width: 60},
                 {
-                    field: "outStationCode", title: "入库单出库站点", width: 150, template: function (item) {
-                        return getTextByVal($scope.station, item.outLocation.stationCode)
+                    title: "入库单出库站点", width: 150, template: function (data) {
+                        return getTextByVal($scope.station, data.outLocation.stationCode)
                     }
                 },
                 {
-                    field: "inStationCode", title: "入库单入库站点", width: 150, template: function (item) {
+                    title: "入库单入库站点", width: 150, template: function (item) {
                         return getTextByVal($scope.station, item.inLocation.stationCode)
                     }
                 },
-                {field: "outStorageName", title: "调拨单调出库位", width: 100},
-                {field: "inStorageName", title: "调拨单调入库位", width: 100},
+                {field: "outStorageName", title: "调拨单调出库位", width: 100, template: function (data) {
+                        return getTextByVal($scope.storageType, data.inStorageBillInStationCode)
+                    }},
+                {field: "inStorageName", title: "调拨单调入库位", width: 100, template: function (data) {
+                        return getTextByVal($scope.storageType, data.inStorageBillOutStationCode)
+                    }},
                 {field: "totalAmount", title: "调拨数量", width: 60},
                 {field: "totalVarietyAmount", title: "调拨品种", width: 60},
                 {field: "totalPrice", title: "总进价", width: 60}

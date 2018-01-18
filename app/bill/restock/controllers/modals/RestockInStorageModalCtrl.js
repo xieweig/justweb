@@ -8,6 +8,15 @@ angular.module('app').controller('RestockInStorageModalCtrl', function ($scope, 
     $scope.cargoConfigure = data.cargoUnit;
     $scope.materialConfigure = data.materialUnit;
 
+    $scope.storageType = [
+        {value: 'NORMAL', text: '正常库'},
+        {value: 'STORAGE', text: '仓储库'},
+        {value: 'IN_STORAGE', text: '进货库'},
+        {value: 'OUT_STORAGE', text: '退货库'},
+        {value: 'ON_STORAGE', text: '在途库'},
+        {value: 'RESERVE_STORAGE', text: '预留库'}
+    ];
+
     $scope.MaterialGrid = {
         primaryId: 'materialCode',
         kendoSetting: {
@@ -74,10 +83,10 @@ angular.module('app').controller('RestockInStorageModalCtrl', function ($scope, 
     };
 
     // 查看单条计划详情
-    var getURL = '/api/bill/restock/findRestockInStorageBillByRestockBillCode';
-    ApiService.get(getURL + '?restockBillCode=' + data.billCode).then(function (response) {
+    var getURL = '/api/bill/restock/findInStorageByBillCode';
+    ApiService.get(getURL + '?billCode=' + data.billCode).then(function (response) {
         if (response.code = '000') {
-            var res = response.result.content;
+            var res = response.result.bill;
             _.each(['billCode', 'createTime', 'inWareHouseTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
                 'auditMemo', 'outStorageMemo'], function (name) {
                 $scope.params[name] = res[name]
@@ -86,26 +95,29 @@ angular.module('app').controller('RestockInStorageModalCtrl', function ($scope, 
             $scope.params.billType = getTextByVal($scope.billType, res.billType) + '转';
             $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
+            $scope.params.inStorageName = getTextByVal($scope.storageType, res.inLocation.storage.storageCode);
             // 查询相应站点的出库库位名称
-            Common.getStore(res.inLocation.stationCode).then(function (storageList) {
-                _.each(storageList, function (item) {
-                    if (item.tempStorageCode === res.inLocation.storage.storageCode) {
-                        $scope.params.inStorageName = item.tempStorageName
-                    }
-                })
-            });
-            Common.getStore(res.outLocation.stationCode).then(function (storageList) {
-                _.each(storageList, function (item) {
-                    if (item.tempStorageCode === res.outLocation.storage.storageCode) {
-                        $scope.params.outStorageName = item.tempStorageName
-                    }
-                })
-            });
+
+            // Common.getStore(res.inLocation.stationCode).then(function (storageList) {
+            //     _.each(storageList, function (item) {
+            //         if (item.tempStorageCode === res.inLocation.storage.storageCode) {
+            //             $scope.params.inStorageName = item.tempStorageName
+            //         }
+            //     })
+            // });
+            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode)
+            // Common.getStore(res.outLocation.stationCode).then(function (storageList) {
+            //     _.each(storageList, function (item) {
+            //         if (item.tempStorageCode === res.outLocation.storage.storageCode) {
+            //             $scope.params.outStorageName = item.tempStorageName
+            //         }
+            //     })
+            // });
 
             var billDetails = [], cargoList = [];
             if ($scope.showMaterial) {
                 // 取出单据信息
-                billDetails = res.billDetail;
+                billDetails = res.billDetails;
                 cargoList = _.map(billDetails, function (item) {
                     return item.rawMaterial.cargo.cargoCode
                 });
@@ -168,7 +180,7 @@ angular.module('app').controller('RestockInStorageModalCtrl', function ($scope, 
                     })
                 })
             } else {
-                billDetails = res.billDetail;
+                billDetails = res.billDetails;
                 cargoList = _.map(billDetails, function (item) {
                     return item.rawMaterial.cargo.cargoCode
                 });

@@ -6,6 +6,15 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
     $scope.cargoConfigure = data.cargoUnit;
     $scope.materialConfigure = data.materialUnit;
 
+    $scope.storageType = [
+        {value: 'NORMAL', text: '正常库'},
+        {value: 'STORAGE', text: '仓储库'},
+        {value: 'IN_STORAGE', text: '进货库'},
+        {value: 'OUT_STORAGE', text: '退货库'},
+        {value: 'ON_STORAGE', text: '在途库'},
+        {value: 'RESERVE_STORAGE', text: '预留库'}
+    ];
+
     $scope.inType = [];
     $scope.outType = [];
 
@@ -40,18 +49,15 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
 
     // 请求单条调剂单详情
     var getURL = '';
-    if($scope.show) {
-        getURL = '/api/bill/restock/findRestockInStorageBillByRestockBillCode?restockBillCode=';
-    }else{
-        getURL = '/api/bill/allotBill/findAllotBillByBillCode?billCode=';
+    if ($scope.show) {
+        getURL = '/api/bill/restock/findInStorageByBillCode?billCode=';
+    } else {
+        getURL = '/api/bill/restock/findAllotByBillCode?billCode=';
     }
     ApiService.get(getURL + data.billCode).then(function (response) {
         if (response.code === '000') {
-            if($scope.show) {
-                var res = response.result.content;
-            }else{
-                var res = response.result.allotBill;
-            }
+            var res = response.result.bill;
+
             $scope.params.billCode = res.billCode;
             $scope.params.createTime = res.createTime;
             $scope.params.basicEnum = res.basicEnum;
@@ -60,11 +66,7 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
             $scope.params.billProperty = res.billProperty;
             $scope.params.outStationName = getTextByVal($scope.station, res.inLocation.stationCode);
             $scope.params.inStationName = getTextByVal($scope.station, res.outLocation.stationCode);
-            if($scope.show) {
-                var billDetails = res.billDetail;
-            }else{
-                var billDetails = res.billDetails;
-            }
+            var billDetails = res.billDetails;
 
             var cargoList = _.map(billDetails, function (item) {
                 return item.rawMaterial.cargo.cargoCode
@@ -97,28 +99,33 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
                         })
                     });
                     // 获取出库站点的出库库位
-                    Common.getStore(res.inLocation.stationCode).then(function (storage) {
-                        _.each(storage, function (item) {
-                            $scope.inType.push({
-                                key: item.tempStorageCode,
-                                value: item.tempStorageCode,
-                                text: item.tempStorageName,
-                                type: item.storageType
-                            })
-                        });
-                        // TODO: 设置入库库位默认值
-                        $timeout(function () {
-                            $('#select-in').val($scope.inType[0].value).trigger('change')
-                        })
-
-                        Common.getStore(res.outLocation.stationCode).then(function (storage) {
-                            _.each(storage, function (item) {
-                                if (item.tempStorageCode === res.outLocation.storage.storageCode) {
-                                    $scope.params.outStorageName = item.tempStorageName
-                                }
-                            });
-                        })
+                    $timeout(function () {
+                        $('#select-in').val($scope.storageType[0].value).trigger('change');
+                        $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
                     })
+
+                    // Common.getStore(res.inLocation.stationCode).then(function (storage) {
+                    //     _.each(storage, function (item) {
+                    //         $scope.inType.push({
+                    //             key: item.tempStorageCode,
+                    //             value: item.tempStorageCode,
+                    //             text: item.tempStorageName,
+                    //             type: item.storageType
+                    //         })
+                    //     });
+                    //     // TODO: 设置入库库位默认值
+                    //     $timeout(function () {
+                    //         $('#select-in').val($scope.inType[0].value).trigger('change')
+                    //     })
+                    //
+                    //     Common.getStore(res.outLocation.stationCode).then(function (storage) {
+                    //         _.each(storage, function (item) {
+                    //             if (item.tempStorageCode === res.outLocation.storage.storageCode) {
+                    //                 $scope.params.outStorageName = item.tempStorageName
+                    //             }
+                    //         });
+                    //     })
+                    // })
                 })
             })
         } else {
@@ -137,7 +144,7 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
         bill.memo = '';
         bill.inStorageBillCode = $scope.params.billCode;
         bill.inStorageBillType = $scope.params.billProperty;
-        bill.details = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item){
+        bill.details = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
             return {
                 rawMaterial: {
                     rawMaterialCode: item.rawMaterialCode,

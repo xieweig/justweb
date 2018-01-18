@@ -5,8 +5,9 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
     $scope.params = {};
 
     $scope.billStatus = [
-        {value: '', text: '已调拨'},
-        {value: '', text: '未调拨'}
+        {value: 'ALLOT', text: '已调拨'},
+        {value: 'ALLOT', text: '调拨中'},
+        {value: 'NOT_ALLOT', text: '未调拨'}
     ];
 
     $scope.billState = [
@@ -34,11 +35,12 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
     // 初始化计划列表
     $scope.stationGrid = {
         primaryId: 'billCode',
-        url: '/api/bill/restock/findByConditionsToIn',
+        url: '/api/bill/restock/findInStorageByConditions',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
             pageable: true,
+            persistSelection: true,
             columns: [
                 {
                     command: [{
@@ -92,19 +94,17 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
     // 选择站点
     $scope.inStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.inStationCodes  = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.inStationCodeArray = array.join(',')
         }
     };
 
     $scope.outStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.outStationCodeArray = array.join(',')
         }
     };
 
@@ -143,15 +143,6 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
                 }
             }
         })
-        // ApiService.get('/api/bill/restock/findRestockBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
-        //     if (response.code === '000') {
-        //         console.log(response.result);
-        //         var restockCode = response.result.restockBill.billCode
-        //         openModal('view', {billCode: restockCode})
-        //     } else {
-        //         swal('请求失败', response.message, 'error');
-        //     }
-        // }, apiServiceError);
     }
 
     // 来源单号跳转
@@ -174,38 +165,10 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
         })
     });
 
-    // // 完成率跳转到出库单 改为弹窗
-    // grid.on('click', '.rate-btn-group', function (e) {
-    //     e.preventDefault();
-    //     var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-    //     ApiService.get('/api/bill/restock/findRestockBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
-    //         if (response.code === '000') {
-    //             console.log(response.result);
-    //             var restockCode = response.result.restockBill.billCode
-    //             openModal('view', {billCode: restockCode})
-    //         } else {
-    //             swal('请求失败', response.message, 'error');
-    //         }
-    //     }, apiServiceError);
-    // });
 
     // 重置表格
     $scope.reset = function () {
         // $state.params = {}
         $state.reload()
     };
-
-    // function openModal(data) {
-    //     $scope.outModal = $uibModal.open({
-    //         templateUrl: 'app/bill/restock/modals/outBillModal.html',
-    //         size: 'lg',
-    //         controller: 'outBillModalCtrl',
-    //         resolve: {
-    //             data: {
-    //                 billCode: data.billCode,
-    //                 cargoUnit: cargoUnit
-    //             }
-    //         }
-    //     })
-    // }
 });
