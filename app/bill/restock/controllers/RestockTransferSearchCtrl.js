@@ -15,9 +15,10 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
         url: '/api/bill/restock/findAllotBillByConditions',
         params: $scope.params,
         dataSource:{
-            // data: function (response) {
+            data: function (response) {
                 //TODO: 处理库位
-            // }
+                return response
+            }
         },
         kendoSetting: {
             autoBind: false,

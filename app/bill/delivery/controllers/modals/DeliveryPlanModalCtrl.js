@@ -1,29 +1,25 @@
 'use strict';
 
-angular.module('app').controller('PlanViewModalCtrl', function ($scope, $rootScope, $timeout, ApiService, Common, data) {
+angular.module('app').controller('DeliveryPlanViewModalCtrl', function ($scope, $rootScope, $timeout, ApiService, Common, data) {
     /**
-     查看站点退库计划弹窗
+     查看站点配送计划弹窗
      */
     $scope.params = {};
-    $scope.cargoConfigure = data.cargoUnit;
 
     $scope.cargoGrid = {
-        url: '/api/bill/restock/findPlanBillByBillCode?billCode=' + data.billCode,
         kendoSetting: {
             columns: [
                 {field: "cargoName", title: "货物名称"},
                 {field: "cargoCode", title: "货物编码"},
                 {field: "rawMaterialName", title: "所属原料"},
-                {title: "规格", template: function (data) {
-                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
-                    }, width: 120},
+                {title: "规格", template: "#: number #/#: standardUnitCode #", width: 120},
                 {field: "amount", title: "应拣数量"}
             ]
         }
     };
 
     // 请求单条计划详情
-    ApiService.post('/api/bill/restock/findPlanBillByBillCode?billCode=' + data.billCode).then(function (response) {
+    ApiService.post('/api/bill/returned/findPlanBillByBillCode?billCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
             var res = response.result.planBill;
             $scope.params.billCode = res.billCode;
@@ -61,7 +57,6 @@ angular.module('app').controller('PlanViewModalCtrl', function ($scope, $rootSco
                             rawMaterialName: item.material.materialName,
                             number: item.cargo.number,
                             standardUnitCode: item.cargo.standardUnitCode,
-                            measurementCode: item.cargo.measurementCode,
                             amount: item.amount
                         })
                     })

@@ -129,6 +129,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 rawMaterialName: item.rawMaterialName,
                 selfBarCode: item.selfBarCode,
                 standardUnitCode: item.standardUnitCode,
+                shippedAmount: item.shippedAmount,
                 updateTime: item.updateTime,
                 actualAmount: item.actualAmount
             };

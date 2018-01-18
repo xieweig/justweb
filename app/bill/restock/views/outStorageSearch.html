@@ -48,14 +48,14 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">录单日期</span>
                                                 <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="params.createStartTime">
+                                                       data-ng-model="kendoQueryCondition.createStartTime">
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="border-left: 0;">至</span>
                                                 <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="params.createEndTime">
+                                                       data-ng-model="kendoQueryCondition.createEndTime">
                                             </div>
                                         </div>
                                     </div>
@@ -64,28 +64,28 @@
                                     <div class="display-flex">
                                         <div class="flex-1">
                                             <div class="input-group">
-                                                <span class="input-group-addon">入库日期</span>
+                                                <span class="input-group-addon">出库日期</span>
                                                 <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="params.inStartTime">
+                                                       data-ng-model="kendoQueryCondition.outStorageStartTime">
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="border-left: 0;">至</span>
                                                 <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="params.inEndTime">
+                                                       data-ng-model="kendoQueryCondition.outStorageEndTime">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
                                     <span class="checkbox-label-fix">提交状态</span>
-                                    <span data-ng-repeat="sb in submitStateCode">
+                                    <span data-ng-repeat="sb in submitStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
                                                    value="{{ sb.value }}"
-                                                   data-ng-checked="kendoQueryCondition.submitStateCode.indexOf(sb.value)>-1"
+                                                   data-ng-checked="kendoQueryCondition.submitStates.indexOf(sb.value)>-1"
                                                    data-ng-click="toggleSubmit(sb.value, 'submit')">
                                             <span>{{ sb.text }}</span>
                                         </label>
@@ -93,12 +93,12 @@
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
                                     <span class="checkbox-label-fix">审核状态</span>
-                                    <span data-ng-repeat="ad in auditStateCode">
+                                    <span data-ng-repeat="ad in auditStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
                                                    value="{{ ad.value }}"
-                                                   data-ng-checked="kendoQueryCondition.auditStateCode.indexOf(ad.value)>-1"
+                                                   data-ng-checked="kendoQueryCondition.auditStates.indexOf(ad.value)>-1"
                                                    data-ng-click="toggleSubmit(ad.value, 'audit')"
                                             >
                                             <span>{{ ad.text }}</span>
@@ -118,12 +118,12 @@
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-16" style="margin-top: 12px">
                                     <span class="checkbox-label-fix">出库状态</span>
 
-                                    <span data-ng-repeat="os in inOrOutStateCode">
+                                    <span data-ng-repeat="os in inOrOutStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
                                                    value="{{ os.value }}"
-                                                   data-ng-checked="kendoQueryCondition.inOrOutStateCode.indexOf(os.value)>-1"
+                                                   data-ng-checked="kendoQueryCondition.inOrOutStates.indexOf(os.value)>-1"
                                                    data-ng-click="toggleSubmit(os.value, 'out')"
                                             >
                                             <span>{{ os.text }}</span>
@@ -136,14 +136,14 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">配送品种</span>
                                                 <input type="text" class="form-control"
-                                                       data-ng-model="params.startVariety">
+                                                       data-ng-model="kendoQueryCondition.varietyStart">
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="border-left: 0;">至</span>
                                                 <input type="text" class="form-control"
-                                                       data-ng-model="params.endVariety">
+                                                       data-ng-model="kendoQueryCondition.varietyEnd">
                                             </div>
                                         </div>
                                     </div>
@@ -154,14 +154,14 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">配送总价</span>
                                                 <input type="text" class="form-control"
-                                                       data-ng-model="params.startTotalPrice">
+                                                       data-ng-model="kendoQueryConditions.startTotalPrice">
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="border-left: 0;">至</span>
                                                 <input type="text" class="form-control"
-                                                       data-ng-model="params.endTotalPrice">
+                                                       data-ng-model="kendoQueryCondition.endTotalPrice">
                                             </div>
                                         </div>
                                     </div>
@@ -177,7 +177,7 @@
                         <div class="col-lg-6 col-sm-6 col-xs-12">
                             <h5 style="padding-left: 5px;">
                                 <small>
-                                    退货出库单列表
+                                    退库出库单列表
                                 </small>
 
                             </h5>

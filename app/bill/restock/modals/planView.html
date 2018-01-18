@@ -66,7 +66,12 @@
         <div class="widget-body no-padding">
             <div class="padding-10">
                 <div class="text-center"><h3 class="margin-top-0">站点退库计划明细</h3></div>
-                <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
+                <span data-ng-if="showMaterial">
+                    <div class="margin-top-10" data-kendo-grids data-options="materialGrid"></div>
+                </span>
+                <span data-ng-if="!showMaterial">
+                    <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
+                </span>
             </div>
         </div>
     </div>

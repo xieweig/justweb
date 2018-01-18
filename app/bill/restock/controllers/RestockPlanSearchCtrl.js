@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
+angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
     // 查询站点退库计划
     $scope.params = {};
 
@@ -12,7 +12,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
     // 初始化计划列表
     $scope.stationGrid = {
         primaryId: 'billCode',
-        url: '/api/bill/restock/findPlanBillByConditions',
+        url: '/api/bill/restock/findPlanByConditions',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
@@ -94,10 +94,10 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
     function viewOutStorageBill(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        ApiService.get('/api/bill/restock/findRestockBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
+        ApiService.get('/api/bill/restock/findBySourceCode?billTypeEnum=RESTOCK&sourceCode=' + dataItem.billCode).then(function (response) {
             if (response.code === '000') {
                 console.log(response.result);
-                var restockCode = response.result.restockBill.billCode
+                var restockCode = response.result.bill.billCode;
                 openModal('view', {billCode: restockCode})
             } else {
                 swal('请求失败', response.message, 'error');
@@ -113,7 +113,7 @@ angular.module('app').controller('PlanSearchCtrl', function ($scope, $rootScope,
         $scope.addModal = $uibModal.open({
             templateUrl: 'app/bill/restock/modals/planView.html',
             size: 'lg',
-            controller: 'PlanViewModalCtrl',
+            controller: 'RestockPlanViewModalCtrl',
             resolve: {
                 data: {
                     billCode: dataItem.billCode,

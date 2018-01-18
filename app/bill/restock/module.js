@@ -16,8 +16,8 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/plan/Search.html',
-                    controller: 'PlanSearchCtrl'
+                    templateUrl: 'app/bill/restock/views/planSearch.html',
+                    controller: 'RestockPlanSearchCtrl'
                 }
             },
             resolve: {
@@ -36,14 +36,13 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/pick/self.html',
-                    controller: 'selfPickCtrl'
+                    templateUrl: 'app/bill/restock/views/pickBySelf.html',
+                    controller: 'RestockPickBySelfCtrl'
                 }
             },
             resolve: {
                 station: function (Common) {
-                    var options = {type: 'LOGISTICS'};
-                    return Common.getStation(options);
+                    return Common.getStation();
                 },
                 cargoUnit: function (Common) {
                     return Common.getConfigure('CARGO_UNIT');
@@ -53,26 +52,26 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        .state('app.bill.restock.stationPick', {
-            url: '/bill/restock/station/pick/:pickId',
-            data: {
-                title: '站点退库计划拣货'
-            },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/restock/views/pick/station.html',
-                    controller: 'stationPickCtrl'
-                }
-            },
-            resolve: {
-                cargoUnit: function (Common) {
-                    return Common.getConfigure('CARGO_UNIT');
-                },
-                materialUnit: function (Common) {
-                    return Common.getConfigure('MATERIAL_UNIT');
-                }
-            }
-        })
+        // .state('app.bill.restock.stationPick', {
+        //     url: '/bill/restock/station/pick/:pickId',
+        //     data: {
+        //         title: '站点退库计划拣货'
+        //     },
+        //     views: {
+        //         "content@app": {
+        //             templateUrl: 'app/bill/restock/views/pick/station.html',
+        //             controller: 'stationPickCtrl'
+        //         }
+        //     },
+        //     resolve: {
+        //         cargoUnit: function (Common) {
+        //             return Common.getConfigure('CARGO_UNIT');
+        //         },
+        //         materialUnit: function (Common) {
+        //             return Common.getConfigure('MATERIAL_UNIT');
+        //         }
+        //     }
+        // })
         .state('app.bill.restock.outSearch', {
             url: '/bill/restock/out/search',
             data: {
@@ -80,8 +79,8 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/restock/views/out/Search.html',
-                    controller: 'outSearchCtrl'
+                    templateUrl: 'app/bill/restock/views/outStorageSearch.html',
+                    controller: 'RestockOutSearchCtrl'
                 }
             },
             resolve: {

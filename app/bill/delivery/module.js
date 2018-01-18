@@ -12,12 +12,12 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
         .state('app.bill.delivery.planList', {
             url: '/bill/delivery/planList',
             data: {
-                title: '添加运单'
+                title: '查询站点配送计划'
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/delivery/views/list.html',
-                    controller: 'DeliveryListCtrl'
+                    templateUrl: 'app/bill/delivery/views/planSearch.html',
+                    controller: 'DeliveryPlanSearchCtrl'
                 }
             }
         })
@@ -28,9 +28,21 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
             },
             views: {
                 "content@app": {
-                    templateUrl: 'app/bill/delivery/views/pick.html',
-                    controller: 'DeliveryPickCtrl'
+                    templateUrl: 'app/bill/delivery/views/pickBySelf.html',
+                    controller: 'DeliveryPickBySelfCtrl'
                 }
             }
-        });
+        })
+        .state('app.bill.delivery.outStorageSearch', {
+            url: '/bill/delivery/outStorageSearch',
+            data: {
+                title: '查询配送出库单'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/delivery/views/outStorageSearch.html',
+                    controller: 'DeliveryOutStorageSearchCtrl'
+                }
+            }
+        })
 });

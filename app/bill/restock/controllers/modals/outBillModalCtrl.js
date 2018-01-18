@@ -9,6 +9,15 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     $scope.modalType = data.type;
     $scope.materialResult = [];
 
+    $scope.storageType = [
+        {value: 'NORMAL', text: '正常库'},
+        {value: 'STORAGE', text: '仓储库'},
+        {value: 'IN_STORAGE', text: '进货库'},
+        {value: 'OUT_STORAGE', text: '退货库'},
+        {value: 'ON_STORAGE', text: '在途库'},
+        {value: 'RESERVE_STORAGE', text: '预留库'}
+    ];
+
     // 出库类型存储
     $scope.outState = [
         {value: 'NOT_OUT', text: '未出库'},
@@ -145,17 +154,17 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     // 查看单条计划详情
     var getURL = '';
     if ($scope.modalType !== 'audit') {
-        getURL = '/api/bill/restock/findByRestockBillCode'
+        getURL = '/api/bill/restock/findOutStorageByBillCode'
     } else {
-        getURL = '/api/bill/restock/openByRestockBillCode'
+        getURL = '/api/bill/restock/open'
     }
-    ApiService.get(getURL + '?restockBillCode=' + data.billCode).then(function (response) {
+    ApiService.get(getURL + '?billCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
-            var res = response.result.RestockBill;
+            var res = response.result.bill;
             _.each(['billCode', 'createTime', 'updateTime', 'inLocation', 'outLocation', 'planMemo','operatorName', 'totalVarietyAmount', 'totalAmount',
-                'auditMemo', 'outMemo'], function (name) {
+                'auditMemo', 'outStorageMemo', 'rootCode', 'sourceCode'], function (name) {
                 $scope.params[name] = res[name]
-            })
+            });
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
             $scope.params.billType = getTextByVal($scope.billType, res.billType) + '转';
             $scope.params.inOrOutState = getTextByVal($scope.outState, res.inOrOutState);
@@ -163,21 +172,14 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             $scope.params.submitState = getTextByVal($scope.submitStatus, res.submitState);
             $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
-            // 查询出库站点的出库库位名称
-            Common.getStore(res.outLocation.stationCode).then(function (storageList) {
-                _.each(storageList, function (item) {
-                    if (item.tempStorageCode === res.outLocation.storage.storageCode) {
-                        $scope.params.outStorageName = item.tempStorageName
-                    }
-                })
-            });
+            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
 
             // 定义变量方便之后调用和修改
             var billDetails = [], cargoList = [];
             if ($scope.showMaterial) {
                 billDetails = res.billDetails;
                 cargoList = _.map(billDetails, function (item) {
-                    return item.goods.cargo.cargoCode
+                    return item.rawMaterial.cargo.cargoCode
                 });
                 // 异步加载货物信息
                 $timeout(function () {
@@ -190,8 +192,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                         var materialList = [];
                         _.each(billDetails, function (item) {
                             // 将相应货物信息添加进billDetails
-                            item.cargo = cargoObject[item.goods.cargo.cargoCode];
-                            materialList.push(item.goods.rawMaterialCode)
+                            item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                            materialList.push(item.rawMaterial.rawMaterialCode)
                         });
                         Common.getMaterialByCodes(materialList).then(function (materialList) {
                             // materialList: 原料详细信息
@@ -200,7 +202,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                             }), materialList);
                             _.each(billDetails, function (item) {
                                 // 将相应原料信息添加进billDetails
-                                item.material = materialObject[item.goods.rawMaterialCode];
+                                item.material = materialObject[item.rawMaterial.rawMaterialCode];
                                 // 往CargoGrid中添加数据
                                 $scope.CargoGrid.kendoGrid.dataSource.add({
                                     cargoName: item.cargo.cargoName,
@@ -213,10 +215,11 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                                     actualAmount: item.actualAmount,
                                     measurementCode: item.cargo.measurementCode
                                 });
+                                console.log('sssssss',item)
                                 // 原料列表的去重，可能需要重构
                                 var isExist = false;
                                 $scope.materialResult = _.map($scope.materialResult, function (result) {
-                                    if (result.materialCode === item.goods.rawMaterialCode) {
+                                    if (result.materialCode === item.rawMaterial.rawMaterialCode) {
                                         isExist = true;
                                         // 累加已拣数量
                                         result.actualAmount += (parseInt(item.actualAmount) * parseInt(item.cargo.number))
@@ -229,7 +232,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                                         pg = parseFloat(aa / parseInt(sa) * 100).toFixed(2) + '%';
                                     $scope.materialResult.push({
                                         materialName: item.material.materialName,
-                                        materialCode: item.goods.rawMaterialCode,
+                                        materialCode: item.rawMaterial.rawMaterialCode,
                                         shippedAmount: sa,
                                         actualAmount: aa,
                                         progress: pg
@@ -247,7 +250,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                 // 按货物
                 billDetails = res.billDetails;
                 cargoList = _.map(billDetails, function (item) {
-                    return item.goods.cargo.cargoCode
+                    return item.rawMaterial.cargo.cargoCode
                 });
                 Common.getCargoByCodes(cargoList).then(function (cargoList) {
                     // cargoList: 货物详细信息
@@ -258,8 +261,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     var materialList = [];
                     _.each(billDetails, function (item) {
                         // 将相应货物信息添加进billDetails
-                        item.cargo = cargoObject[item.goods.cargo.cargoCode];
-                        materialList.push(item.goods.rawMaterialCode)
+                        item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                        materialList.push(item.rawMaterial.rawMaterialCode)
                     });
                     Common.getMaterialByCodes(materialList).then(function (materialList) {
                         var materialObject = _.zipObject(_.map(materialList, function (item) {
@@ -267,8 +270,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                         }), materialList);
                         _.each(billDetails, function (item) {
                             // materialList: 原料详细信息
-                            item.material = materialObject[item.goods.rawMaterialCode];
-                            console.log(item)
+                            item.material = materialObject[item.rawMaterial.rawMaterialCode];
                             $scope.onlyCargoGrid.kendoGrid.dataSource.add({
                                 cargoName: item.cargo.cargoName,
                                 cargoCode: item.cargo.cargoCode,
@@ -417,28 +419,57 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         $scope.params.totalAmount = $scope.params.totalAmount - parseInt(dataItem.actualAmount);
     }
 
+    $scope.bill = {
+        billType: 'RESTOCK',
+        specificBillType: 'RESTOCK',
+        billPurpose: 'OUT_STORAGE'
+    };
+
     $scope.save = function () {
-        saveOrAudit('save', {})
+        saveOrAudit('save', _.cloneDeep($scope.bill))
     };
 
     $scope.submit = function () {
-        saveOrAudit('submit', {})
+        saveOrAudit('submit', _.cloneDeep($scope.bill))
     };
 
     // 保存和提交
     function saveOrAudit(type, bill) {
         var url = '';
         if (type === 'save') {
-            url = '/api/bill/restock/updateRestockBillToSave'
+            url = '/api/bill/restock/save'
         } else {
-            url = '/api/bill/restock/updateRestockBillToSubmit'
+            url = '/api/bill/restock/submit'
         }
         bill.billCode = $scope.params.billCode;
-        bill.outMemo = $scope.params.outMemo;
+        bill.sourceCode = $scope.params.billCode;
+        bill.rootCode = $scope.params.rootCode;
+
+        bill.outStorageMemo = $scope.params.outStorageMemo;
+
+        bill.outLocation = {
+            stationCode: $scope.params.outLocation.stationCode,
+            stationName: $scope.params.outLocation.stationName,
+            // stationType: $.cookie('STORE'),
+            storage: {
+                storageCode: $scope.params.outLocation.storage.storageCode,
+                storageName: $scope.params.outLocation.storage.storageName
+            }
+        };
+        bill.inLocation = {
+            stationCode: $scope.params.inLocation.stationCode,
+            stationName: $scope.params.inLocation.stationName,
+            // stationType: 'LOGISTICS',
+            storage: {
+                storageCode: $scope.params.inLocation.storage.storageCode,
+                storageName: $scope.params.inLocation.storage.storageName
+            }
+        };
+
         if($scope.showMaterial) {
             // 按原料
+            bill.basicEnum = 'BY_MATERIAL';
             bill.billDetails = _.map($scope.CargoGrid.kendoGrid.dataSource.data(), function (item) {
-
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -454,8 +485,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             })
         }else{
             // 按货物
+            bill.basicEnum = 'BY_CARGO';
             bill.billDetails = _.map($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
-                console.log('++', item)
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -470,6 +501,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                 }
             });
         }
+        console.log(bill)
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
@@ -489,7 +521,11 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         } else {
             url = '/api/bill/restock/auditFailure'
         }
-        ApiService.post(url + '?restockBillCode=' + $scope.params.billCode).then(function (response) {
+        var bill = {
+            billCode:$scope.params.billCode,
+            auditMemo: $scope.params.auditMemo
+        };
+        ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
