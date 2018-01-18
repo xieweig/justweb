@@ -52,26 +52,6 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        // .state('app.bill.restock.stationPick', {
-        //     url: '/bill/restock/station/pick/:pickId',
-        //     data: {
-        //         title: '站点退库计划拣货'
-        //     },
-        //     views: {
-        //         "content@app": {
-        //             templateUrl: 'app/bill/restock/views/pick/station.html',
-        //             controller: 'stationPickCtrl'
-        //         }
-        //     },
-        //     resolve: {
-        //         cargoUnit: function (Common) {
-        //             return Common.getConfigure('CARGO_UNIT');
-        //         },
-        //         materialUnit: function (Common) {
-        //             return Common.getConfigure('MATERIAL_UNIT');
-        //         }
-        //     }
-        // })
         .state('app.bill.restock.outSearch', {
             url: '/bill/restock/out/search',
             data: {
@@ -92,42 +72,6 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        // .state('app.bill.restock.outView', {
-        //     url: '/bill/restock/out/view/:outId',
-        //     data: {
-        //         title: '查看退库出库单'
-        //     },
-        //     views: {
-        //         "content@app": {
-        //             templateUrl: 'app/bill/restock/views/out/View.html',
-        //             controller: 'outViewCtrl'
-        //         }
-        //     }
-        // })
-        // .state('app.bill.restock.outEdit', {
-        //     url: '/bill/restock/out/edit/:outId',
-        //     data: {
-        //         title: '修改退库出库单'
-        //     },
-        //     views: {
-        //         "content@app": {
-        //             templateUrl: 'app/bill/restock/views/out/Edit.html',
-        //             controller: 'outEditCtrl'
-        //         }
-        //     }
-        // })
-        // .state('app.bill.restock.outCheck', {
-        //     url: '/bill/restock/out/check/:outId',
-        //     data: {
-        //         title: '审核退库出库单'
-        //     },
-        //     views: {
-        //         "content@app": {
-        //             templateUrl: 'app/bill/restock/views/out/Check.html',
-        //             controller: 'outCheckCtrl'
-        //         }
-        //     }
-        // })
         .state('app.bill.restock.inSearch', {
             url: '/bill/restock/in/search',
             data: {
