@@ -1,45 +1,23 @@
 'use strict';
 
-angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common) {
+angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
-    $scope.cargoList = {};
-    $scope.outType = []
-    // 获取当前站点
-    Common.getStore().then(function (storage) {
-        $scope.storage = storage
-        _.each(storage, function (item) {
-            $scope.outType.push({
-                key: item.tempStorageCode,
-                value: item.tempStorageCode,
-                text: item.tempStorageName,
-                type: item.storageType
-            })
-        })
-        // 设置当前站点默认值
-        $timeout(function () {
-            $('#select-out').val($scope.outType[0].value).trigger('change')
-        })
-    })
+    $scope.cargoConfigure = cargoUnit;
+    $scope.materialConfigure = materialUnit;
 
-    $scope.bill = {
-        billProperty: 'NOPLAN',
-        basicEnum: 'BY_CARGO',
-        billCode: '',
-        fromBillCode: '',
-        planMemo: '',
-        outMemo: '',
-        operatorCode: ''
-    }
-
-    // $scope.outType = [
-    //     // {key: '1', value: '1', text: '正常库'},
-    //     {key: '2', value: '2', text: '仓储库'},
-    //     {key: '3', value: '3', text: '进货库'},
-    //     {key: '4', value: '4', text: '退货库'},
-    //     {key: '5', value: '5', text: '在途库'},
-    //     {key: '6', value: '6', text: '预留库'}
-    // ];
-
+    $scope.storageType = [
+        {value: 'NORMAL', text: '正常库'},
+        {value: 'STORAGE', text: '仓储库'},
+        {value: 'IN_STORAGE', text: '进货库'},
+        {value: 'OUT_STORAGE', text: '退货库'},
+        {value: 'ON_STORAGE', text: '在途库'},
+        {value: 'RESERVE_STORAGE', text: '预留库'}
+    ];
+    $timeout(function () {
+        $('#select-out').val($scope.storageType[1].value).trigger('change');
+    });
+    // $scope.cargoList = {};
+    // 设置当前站点默认值
     $scope.CargoListGrid = {
         primaryId: 'cargoCode',
         kendoSetting: {
@@ -54,35 +32,31 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                 {field: "rawMaterialName", title: "所属原料"},
                 {field: "actualAmount", title: "货物数量"}, // 对应添加货物的实拣数量
                 {field: "number", title: "标准单位数量"},
-                {field: "standardUnitCode", title: "标准单位"},
+                {
+                    field: "standardUnitCode", title: "标准单位", template: function (data) {
+                        return getTextByVal($scope.materialConfigure, data.standardUnitCode);
+                    }
+                },
                 {field: "memo", title: "备注"}
             ]
         }
     };
 
-    $scope.inStationParams = {
+    $scope.supplierParams = {
         single: true,
+        type: 'supplier',
         callback: function (data) {
-            $scope.params.inStationCode = data
+            $scope.params.supplier = data
         }
     };
 
-    // 数据监控，警告库位修改
-    $scope.$watch('params.outStationType', function (newVal, oldVal) {
-        var isChange = true;
-        var storageName = '';
-        _.each($scope.storage, function (item) {
-            // TODO: 后端数据拼错，应为 NORMAL
-            if(item.tempStorageCode === newVal && item.storageType === 'NORAML'){
-                isChange = false;
-                storageName = item.tempStorageName
-            }
-        })
-        if (!isChange || oldVal === undefined) {
-            // $scope.params.outStationType = $scope.outType[0].value
-        } else {
+// 数据监控，警告库位修改
+    $scope.$watch('params.outStorageType', function (newVal, oldVal) {
+
+        if (newVal === 'NORMAL' || oldVal === undefined) {
+        }else {
             swal({
-                title: '已将出库库位修改为' + storageName,
+                title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
                 type: 'warning',
                 confirmButtonText: '是的',
                 showCancelButton: true
@@ -90,66 +64,64 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                 if (res.value) {
                 } else if (res.dismiss === 'cancel') {
                     // 重置选项为初始
-                    $('#select-out').val($scope.outType[0].value).trigger('change')
+                    $('#select-out').val($scope.storageType[0].value).trigger('change')
                 }
             })
         }
     });
 
-    // 保存出库单
+    $scope.bill = {
+        billType: 'RETURNED',
+        specificBillType: 'NO_PLAN',
+        basicEnum: 'BY_CARGO',
+        billPurpose: 'OUT_STORAGE'
+    };
+
+// 保存出库单
     $scope.save = function () {
         saveOrAudit('save', _.cloneDeep($scope.bill))
     };
 
-    // 提交出库单
+// 提交出库单
     $scope.submit = function () {
         saveOrAudit('submit', _.cloneDeep($scope.bill))
     };
 
-    // 保存和提交合并
+// 保存和提交合并
     function saveOrAudit(type, bill) {
         var url = '';
         if (type === 'save') {
-            url = '/api/bill/restock/saveRestockBillBySelf'
+            url = '/api/bill/returned/saveBySelf'
         } else {
-            url = '/api/bill/restock/submitRestockBillBySelf'
+            url = '/api/bill/returned/submitBySelf'
         }
-        bill.basicEnum = 'BY_CARGO';
-        bill.planMemo = $scope.params.memo;
-        bill.operatorCode = $.cookie('userCode');
-        bill.totalPrice = '12345';
+        bill.outStorageMemo = $scope.params.outStorageMemo;
+        bill.totalAmount = 1;
+        bill.totalVarietyAmount = 1;
         // 获取当前库位
-        bill.outStation = {
+        bill.outLocation = {
             stationCode: $.cookie('currentStationCode'),
-            stationName: '',
-            stationType: $.cookie('STORE'),
+            stationName: $.cookie('currentStationName'),
+            // stationType: $.cookie('STORE'),
             storage: {
-                storageCode: $scope.params.outStationType,
-                storageName: ''
+                storageCode: $scope.params.outStorageType,
+                storageName: getTextByVal($scope.storageType, $scope.params.outStorageType)
             }
         };
         // 获取选择站点的在途库
-        var inStationCode = $scope.params.inStationCode.stationCode;
-        var tmpStorageCode = '';
-        Common.getStore(inStationCode).then(function (storageList) {
-            var jump = true;
-            _.each(storageList, function (item) {
-                // 取第一个在途库
-                if (jump && item.storageType === 'PASSAGELIBRARY') { // 数据的Type没加 所以站点没了
-                    tmpStorageCode = item.tempStorageCode;
-                    jump = false
-                }
-            })
-        });
-        bill.inStation = {
-            stationCode: inStationCode,
-            stationName: '',
-            stationType: 'LOGISTICS',
-            storage: {
-                storageCode: tmpStorageCode,
-                storageName: ''
-            }
-        };
+        // bill.inLocation = {
+        //     stationCode: $scope.params.inStationCode.stationCode,
+        //     stationName: getTextByVal($scope.station, $scope.params.inStationCode.stationCode),
+        //     stationType: 'LOGISTICS',
+        //     storage: {
+        //         storageCode: 'ON_STORAGE',
+        //         storageName: getTextByVal($scope.storageType, 'ON_STORAGE')
+        //     }
+        // };
+        bill.supplier = {
+            supplierCode: $scope.params.supplier.supplierCode
+        }
+
         bill.billDetails = _.map($scope.CargoListGrid.kendoGrid.dataSource.data(), function (item) {
             return {
                 rawMaterial: {
@@ -168,24 +140,18 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.restock.outSearch');
+                $state.go('app.bill.returned.outSearch');
             }
         }, apiServiceError)
     }
 
 
-    // 重置选项
+// 重置选项
     $scope.reset = function () {
-        $scope.params = {
-            outStationType: '1'
-        };
-        $scope.CargoListGrid.kendoGrid.dataSource.data([]);
-        $timeout(function () {
-            $('#select-out').val('1').trigger('change')
-        }, 100)
+        $state.reload()
     };
 
-    // 添加货物
+// 添加货物
     $scope.addCargo = function () {
         var dataSource = $scope.CargoListGrid.kendoGrid.dataSource;
         editCargoList(dataSource)
@@ -203,10 +169,9 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
             resolve: {
                 cb: function () {
                     return function (data) {
-                        console.log(data)
                         $scope.cargoList = data;
                         var dataSource = $scope.CargoListGrid.kendoGrid.dataSource;
-                        dataSource.data([])
+                        dataSource.data([]);
                         for (var i = 0; i < data.length; i++) {
                             dataSource.add(data[i])
                         }
@@ -214,7 +179,9 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                     }
                 },
                 data: {
-                    cl: $scope.CargoListGrid.kendoGrid.dataSource.data()
+                    cl: $scope.CargoListGrid.kendoGrid.dataSource.data(),
+                    cargoUnit: $scope.cargoConfigure,
+                    materialUnit: $scope.materialConfigure
                 }
             }
         });
@@ -232,4 +199,5 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
         }
     };
 
-});
+})
+;

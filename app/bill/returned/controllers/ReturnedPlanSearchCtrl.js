@@ -54,6 +54,7 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
 
     // 选择站点
     $scope.inStationParams = {
+        type: 'supplier',
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
@@ -74,9 +75,9 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/pickByPlanModal.html',
+            templateUrl: 'app/bill/returned/modals/pickByPlanModal.html',
             size: 'lg',
-            controller: 'RestockPickByPlanModalCtrl',
+            controller: 'ReturnedPickByPlanModalCtrl',
             resolve: {
                 data: {
                     billCode: dataItem.billCode,
@@ -90,7 +91,7 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
     function viewOutStorageBill(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        ApiService.get('/api/bill/returned/findPlanByConditions?sourceCode=' + dataItem.billCode).then(function (response) {
+        ApiService.get('/api/bill/returned/findBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
             if (response.code === '000') {
                 console.log(response.result);
                 var returnedCode = response.result.bill.billCode;

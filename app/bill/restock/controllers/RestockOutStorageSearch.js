@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $state, $uibModal, ApiService, cargoUnit) {
+angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
     $scope.params = {};
     $scope.cargoConfigure = cargoUnit;
+    $scope.materialConfigure = materialUnit;
     $scope.kendoQueryCondition = {
-        operatorName: '',
+        // operatorName: '',
         submitStates: [],
         auditStates: [],
         inOrOutStates: []
@@ -60,7 +61,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
     ];
 
     $scope.outBillGrid = {
-        primaryId: 'code',
+        primaryId: 'billCode',
         url: '/api/bill/restock/findOutStorageByConditions',
         params: $scope.kendoQueryCondition,
         kendoSetting: {
@@ -80,7 +81,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
                             name: 'e', text: "修改", click: edit, visible: function (dataItem) {
                                 var state = dataItem.billState === 'AUDIT_FAILURE'; // 已提交，审核不通过
                                 state = state || dataItem.billState === "SUBMITTED";
-                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE")
+                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE");
                                 state = state || dataItem.submitState === 'UNCOMMITTED';
                                 return state
                             }
@@ -191,7 +192,8 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
                 data: {
                     billCode: data.billCode,
                     type: type,
-                    cargoUnit: $scope.cargoConfigure
+                    cargoUnit: $scope.cargoConfigure,
+                    materialUnit: $scope.materialConfigure
                 }
             }
         });
@@ -221,8 +223,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
 
     // 重置表格
     $scope.reset = function () {
-        $scope.kendoQueryCondition = {};
-        $scope.outBillGrid.kendoGrid.dataSource.data([])
+        $state.reload()
     };
 
     // 查询

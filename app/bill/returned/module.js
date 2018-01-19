@@ -38,20 +38,28 @@ angular.module('app.bill.returned', ['ui.router']).config(function ($stateProvid
                     templateUrl: 'app/bill/returned/views/pickBySelf.html',
                     controller: 'ReturnedPickBySelfCtrl'
                 }
-            }
-        })
-        .state('app.bill.returned.stationPick', {
-            url: '/bill/returned/station/pick/:pickId',
-            data: {
-                title: '站点退货计划拣货'
             },
-            views: {
-                "content@app": {
-                    templateUrl: 'app/bill/returned/views/pickByPlan.html',
-                    controller: 'ReturnedPickByPlanCtrl'
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })
+        // .state('app.bill.returned.stationPick', {
+        //     url: '/bill/returned/station/pick/:pickId',
+        //     data: {
+        //         title: '站点退货计划拣货'
+        //     },
+        //     views: {
+        //         "content@app": {
+        //             templateUrl: 'app/bill/returned/views/pickByPlan.html',
+        //             controller: 'ReturnedPickByPlanCtrl'
+        //         }
+        //     }
+        // })
         .state('app.bill.returned.outSearch', {
             url: '/bill/returned/out/search',
             data: {
@@ -61,6 +69,14 @@ angular.module('app.bill.returned', ['ui.router']).config(function ($stateProvid
                 "content@app": {
                     templateUrl: 'app/bill/returned/views/outStorageSearch.html',
                     controller: 'ReturnedOutStorageSearchCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })

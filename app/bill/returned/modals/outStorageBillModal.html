@@ -1,6 +1,6 @@
 <div class="uib-modal">
     <h1 class="uib-modal-title">
-        <span>查看退库出库单</span>
+        <span>查看退货出库单</span>
         <span class="option">
             <span ng-if="modalType === 'view'">
                 <input type="button" class="btn btn-primary" value="导出" data-ng-click="export()">
@@ -53,7 +53,7 @@
                 <dd data-ng-bind="params.checkName">王菲</dd>
             </dl>
 
-            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+            <dl class="col-lg-4 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库站点</dt>
                 <dd data-ng-bind="params.outStationName">重庆北城店</dd>
             </dl>
@@ -63,7 +63,7 @@
                 <dd data-ng-bind="params.outStorageName"></dd>
             </dl>
 
-            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+            <dl class="col-lg-4 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>入库站点</dt>
                 <dd data-ng-bind="params.inStationName"></dd>
             </dl>
@@ -118,7 +118,7 @@
                         </span>
                         <span ng-if="modalType !== 'edit'">
                             <textarea type="text" rows="1" class="form-control custom-scroll"
-                                      data-ng-model="params.outMemo" disabled></textarea>
+                                      data-ng-model="params.outStorageMemo" disabled></textarea>
                         </span>
                     </div>
                 </div>

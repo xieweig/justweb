@@ -135,7 +135,8 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
                 data: {
                     billCode: data.billCode,
                     type: type,
-                    cargoUnit: cargoUnit
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         })

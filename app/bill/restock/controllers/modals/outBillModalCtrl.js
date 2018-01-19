@@ -6,6 +6,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
      */
     $scope.params = {};
     $scope.cargoConfigure = data.cargoUnit;
+    $scope.materialConfigure = data.materialUnit;
     $scope.modalType = data.type;
     $scope.materialResult = [];
 
@@ -27,7 +28,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         {value: 'OUT_FAILURE', text: '出库失败'},
         {value: 'OUT_SUCCESS', text: '出库成功'},
         {value: 'IN_FAILURE', text: '入库失败'},
-        {value: 'IN_SUCCESS', text: '入库成功'},
+        {value: 'IN_SUCCESS', text: '入库成功'}
     ];
 
     $scope.MaterialGrid = {
@@ -52,8 +53,16 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     {field: "cargoName", title: "货物名称"},
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
-                    {field: "standardUnitCode", title: "标准单位"},
-                    {title: "规格", template: "#: number #/#: standardUnitCode #"},
+                    {
+                        field: "standardUnitCode", title: "标准单位", template: function (data) {
+                            return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                        }
+                    },
+                    {
+                        title: "规格", template: function (data) {
+                            return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                        }
+                    },
                     {field: "actualAmount", title: "实拣数量"},
                     {field: "number", title: "标准单位数量"}
                 ]
@@ -66,15 +75,23 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     {field: "cargoName", title: "货物名称"},
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
-                    {field: "standardUnitCode", title: "标准单位"},
-                    {title: "规格", template: function (data) {
+                    {
+                        field: "standardUnitCode", title: "标准单位", template: function (data) {
+                            return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                        }
+                    },
+                    {
+                        title: "规格", template: function (data) {
                             return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
-                    }},
+                        }
+                    },
                     {field: "shippedAmount", title: "应拣数量"},
                     {field: "actualAmount", title: "实拣数量"},
-                    {title: "标准单位数量", template: function (data) {
+                    {
+                        title: "标准单位数量", template: function (data) {
                             return parseInt(data.number) * parseInt(data.actualAmount)
-                        }}
+                        }
+                    }
                 ]
             }
         };
@@ -93,14 +110,22 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     {field: "cargoName", title: "货物名称"},
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
-                    {field: "standardUnit", title: "标准单位"},
-                    {title: "规格", template: function (data) {
+                    {
+                        field: "standardUnitCode", title: "标准单位", template: function (data) {
+                            return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                        }
+                    },
+                    {
+                        title: "规格", template: function (data) {
                             return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
-                    }},
+                        }
+                    },
                     {field: "actualAmount", title: "实拣数量", editable: true},
-                    {title: "标准单位数量", template: function (data) {
+                    {
+                        title: "标准单位数量", template: function (data) {
                             return parseInt(data.number) * parseInt(data.actualAmount)
-                    }}
+                        }
+                    }
                 ],
                 save: function (e) {
                     // 每次保存都重新计算总的和原料的拣货数量
@@ -133,15 +158,23 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     {field: "cargoName", title: "货物名称"},
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
-                    {field: "standardUnitCode", title: "标准单位"},
-                    {title: "规格", template: function (data) {
+                    {
+                        field: "standardUnitCode", title: "标准单位", template: function (data) {
+                            return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                        }
+                    },
+                    {
+                        title: "规格", template: function (data) {
                             return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
-                        }},
+                        }
+                    },
                     {field: "shippedAmount", title: "应拣数量"},
                     {field: "actualAmount", title: "实拣数量", editable: true},
-                    {title: "标准单位数量", template: function (data) {
+                    {
+                        title: "标准单位数量", template: function (data) {
                             return parseInt(data.number) * parseInt(data.actualAmount)
-                    }}
+                        }
+                    }
                 ]
             }
         };
@@ -151,7 +184,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     /**
      查看退库出库单
      */
-    // 查看单条计划详情
+        // 查看单条计划详情
     var getURL = '';
     if ($scope.modalType !== 'audit') {
         getURL = '/api/bill/restock/findOutStorageByBillCode'
@@ -161,8 +194,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     ApiService.get(getURL + '?billCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
             var res = response.result.bill;
-            _.each(['billCode', 'createTime', 'updateTime', 'inLocation', 'outLocation', 'planMemo','operatorName', 'totalVarietyAmount', 'totalAmount',
-                'auditMemo', 'outStorageMemo', 'rootCode', 'sourceCode'], function (name) {
+            _.each(['billCode', 'createTime', 'updateTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
+                'auditMemo', 'auditPersonName', 'outStorageMemo', 'rootCode', 'sourceCode'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
@@ -215,7 +248,6 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                                     actualAmount: item.actualAmount,
                                     measurementCode: item.cargo.measurementCode
                                 });
-                                console.log('sssssss',item)
                                 // 原料列表的去重，可能需要重构
                                 var isExist = false;
                                 $scope.materialResult = _.map($scope.materialResult, function (result) {
@@ -322,7 +354,6 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                             _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (item) {
                                 item.pick = 0;
                                 _.each(data, function (dataItem) {
-                                    console.log(item, '==',dataItem)
                                     if (item.materialCode.toString() === dataItem.rawMaterialCode.toString()) {
                                         item.pick += parseInt(dataItem.number) * parseInt(dataItem.pick);
                                     }
@@ -466,7 +497,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             }
         };
 
-        if($scope.showMaterial) {
+        if ($scope.showMaterial) {
             // 按原料
             bill.basicEnum = 'BY_MATERIAL';
             bill.billDetails = _.map($scope.CargoGrid.kendoGrid.dataSource.data(), function (item) {
@@ -483,7 +514,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     shippedAmount: item.shippedAmount
                 }
             })
-        }else{
+        } else {
             // 按货物
             bill.basicEnum = 'BY_CARGO';
             bill.billDetails = _.map($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
@@ -522,7 +553,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             url = '/api/bill/restock/auditFailure'
         }
         var bill = {
-            billCode:$scope.params.billCode,
+            billCode: $scope.params.billCode,
             auditMemo: $scope.params.auditMemo
         };
         ApiService.post(url, bill).then(function (response) {
@@ -532,6 +563,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                 // alert('success')
                 $scope.addModal.close()
             }
-        })
+        });
+        $scope.$close();
     };
 });

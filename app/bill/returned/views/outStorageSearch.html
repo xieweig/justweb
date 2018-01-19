@@ -39,7 +39,7 @@
                                 <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                                     <div class="input-group">
                                         <span class="input-group-addon">入库站点</span>
-                                        <span data-station-tree data-select-modal="inStationParams"></span>
+                                        <span data-select-tree data-select-modal="inStationParams"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
@@ -80,12 +80,12 @@
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
                                     <span class="checkbox-label-fix">提交状态</span>
-                                    <span data-ng-repeat="sb in submitStateCode">
+                                    <span data-ng-repeat="sb in submitStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
                                                    value="{{ sb.value }}"
-                                                   data-ng-checked="kendoQueryCondition.submitStateCode.indexOf(sb.value)>-1"
+                                                   data-ng-checked="kendoQueryCondition.submitStates.indexOf(sb.value)>-1"
                                                    data-ng-click="toggleSubmit(sb.value, 'submit')">
                                             <span>{{ sb.text }}</span>
                                         </label>
@@ -93,12 +93,12 @@
                                 </div>
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
                                     <span class="checkbox-label-fix">审核状态</span>
-                                    <span data-ng-repeat="ad in auditStateCode">
+                                    <span data-ng-repeat="ad in auditStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
                                                    value="{{ ad.value }}"
-                                                   data-ng-checked="kendoQueryCondition.auditStateCode.indexOf(ad.value)>-1"
+                                                   data-ng-checked="kendoQueryCondition.auditStates.indexOf(ad.value)>-1"
                                                    data-ng-click="toggleSubmit(ad.value, 'audit')"
                                             >
                                             <span>{{ ad.text }}</span>
@@ -118,12 +118,12 @@
                                 <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-16" style="margin-top: 12px">
                                     <span class="checkbox-label-fix">出库状态</span>
 
-                                    <span data-ng-repeat="os in inOrOutStateCode">
+                                    <span data-ng-repeat="os in inOrOutStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
                                                    value="{{ os.value }}"
-                                                   data-ng-checked="kendoQueryCondition.inOrOutStateCode.indexOf(os.value)>-1"
+                                                   data-ng-checked="kendoQueryCondition.inOrOutStates.indexOf(os.value)>-1"
                                                    data-ng-click="toggleSubmit(os.value, 'out')"
                                             >
                                             <span>{{ os.text }}</span>

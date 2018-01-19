@@ -1,37 +1,39 @@
 'use strict';
 
-angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scope, $state, $uibModal, ApiService) {
+angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scope, $state, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
+    $scope.cargoConfigure = cargoUnit;
+    $scope.materialConfigure = materialUnit;
     $scope.kendoQueryCondition = {
-        submitStateCode: [],
-        auditStateCode: [],
-        inOrOutStateCode: [],
-        billProperty: []
+        submitStates: [],
+        auditStates: [],
+        inOrOutStates: []
+        // billProperty: []
     };
 
-    $scope.submitStateCode = [
-        {value: 'SAVED', text: '未提交'},
-        {value: 'SUBMITTED', text: '已提交'}
-    ];
+    // $scope.submitStateCode = [
+    //     {value: 'SAVED', text: '未提交'},
+    //     {value: 'SUBMITTED', text: '已提交'}
+    // ];
 
-    $scope.auditStateCode = [
+    $scope.auditStates = [
         {value: 'UN_REVIEWED', text: '未审核'},
         {value: 'AUDIT_SUCCESS', text: '审核通过'},
         {value: 'AUDIT_FAILURE', text: '审核不通过'},
         {value: 'AUDIT_ING', text: '审核中'}
     ];
 
-    $scope.inOrOutStateCode = [
+    $scope.inOrOutStates = [
         {value: 'NOT_OUT', text: '未出库'},
         {value: 'OUT_SUCCESS', text: '出库成功'},
         {value: 'OUT_FAILURE', text: '出库失败'}
-    ]
+    ];
 
     $scope.billAttr = [
         {value: 'DELIVERY', text: '配送计划转'},
         {value: 'ADJUST', text: '调剂计划转'},
         {value: 'RETURNED', text: '退货计划转'},
-        {value: 'NOPLAN', text: '无计划计划转'}
+        {value: 'NO_PLAN', text: '无计划计划转'}
     ];
 
     // 类型存储
@@ -46,7 +48,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
         {value: 'IN_SUCCESS', text: '入库成功'},
     ];
 
-    $scope.submitState = [
+    $scope.submitStates = [
         {value: 'UNCOMMITTED', text: '未提交'},
         {value: 'SUBMITTED', text: '已提交'}
     ];
@@ -60,8 +62,33 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
 
     $scope.outBillGrid = {
         primaryId: 'billCode',
-        url: '/api/bill/returned/findByConditions',
+        url: '/api/bill/returned/findOutStorageByConditions',
         params: $scope.kendoQueryCondition,
+        dataSource: {
+            data: function (response) {
+                var data = getKendoData(response);
+                var supplierCodes = [];
+                _.each(data, function (item) {
+                    supplierCodes.push(item.supplier.supplierCode);
+                });
+                // 回显供应商
+                Common.getSupplierByIds(supplierCodes).then(function (supplierList) {
+                    var supplierObj = _.zipObject(_.map(supplierList, function (item) {
+                        return item.supplierCode;
+                    }), supplierList);
+                    var dataSource = $scope.outBillGrid.kendoGrid.dataSource;
+                    _.each(dataSource.data(), function (item, index) {
+                        var supplier = supplierObj[item.supplier.get('supplierCode')];
+                        if (supplier) {
+                            item.supplier.set('supplierName', supplier.supplierName);
+                        }else{
+                            item.supplier.set('supplierName', '');
+                        }
+                    });
+                });
+                return data
+            }
+        },
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
@@ -79,13 +106,13 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
                             name: 'e', text: "修改", click: edit, visible: function (dataItem) {
                                 var state = dataItem.billState === 'AUDIT_FAILURE'; // 已提交，审核不通过
                                 state = state || dataItem.billState === "SUBMITTED";
-                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE")
+                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE");
                                 state = state || dataItem.submitState === 'UNCOMMITTED';
                                 return state
                             }
                         }, {
                             name: 't', text: "审核", click: audit, visible: function (dataItem) {
-                                return dataItem.submitState === 'SUBMITTED' && (dataItem.auditState === 'UN_REVIEWED' || dataItem.auditState === 'AUDIT_FAILURE' || dataItem.auditState === 'AUDIT_ING')
+                                return dataItem.submitState === 'SUBMITTED' && (dataItem.auditState === 'UN_REVIEWED' || dataItem.auditState === 'AUDIT_ING')
                             }
                         }],
                     locked: true,
@@ -108,43 +135,33 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
                 },
                 {
                     title: "出库状态", width: 150, template: function (data) {
-                        var str = '';
-                        _.each($scope.outState, function (item) {
-                            if (item.value === data.inOrOutState) {
-                                str = item.text
-                            }
-                        });
-                        return str
+                        return getTextByVal($scope.outState, data.inOrOutState)
                     }
                 },
                 {
                     title: "提交状态", width: 150, template: function (data) {
-                        var str = '';
-                        _.each($scope.submitState, function (item) {
-                            if (item.value === data.submitState) {
-                                str = item.text
-                            }
-                        });
-                        return str
+                        return getTextByVal($scope.submitStates, data.submitState)
                     }
                 },
                 {
                     title: "审核状态", width: 150, template: function (data) {
-                        var str = '';
-                        _.each($scope.auditState, function (item) {
-                            if (item.value === data.auditState) {
-                                str = item.text
-                            }
-                        });
-                        return str
+                        return getTextByVal($scope.auditState, data.auditState)
                     }
-                },//
+                },
                 {field: "createTime", title: "录单时间", width: 150},
                 {field: "inWareHouseTime", title: "出库时间", width: 150},
                 {field: "operatorName", title: "录单人", width: 150}, //
-                {field: "auditPersonName", title: "审核人", width: 150}, //
-                {field: "amount", title: "配送数量", width: 150},
-                {field: "variety", title: "配送品种数", width: 150}
+                {field: "auditPersonName", title: "审核人", width: 150},
+                {
+                    field: "outStationCode", title: "出库站点", width: 150, template: function (data) {
+                        return getTextByVal($scope.station, data.outLocation.stationCode)
+                    }
+                },
+                {title: "入库站点", width: 150, template: function (data) {
+                        return data.supplier.supplierName
+                    }},
+                {field: "totalAmount", title: "配送数量", width: 150},
+                {field: "totalVarietyAmount", title: "配送品种数", width: 150}
 
             ]
         }
@@ -152,20 +169,19 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
 
     // 选择站点
     $scope.inStationParams = {
+        type: 'supplier',
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.inStationCodeArray = array.join(',')
         }
     };
 
     $scope.outStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.outStationCodeArray = array.join(',')
         }
     };
 
@@ -195,11 +211,13 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
             templateUrl: 'app/bill/returned/modals/outStorageBillModal.html',
             size: 'lg',
             controller: 'ReturnedOutStorageModalCtrl',
-            scope: $scope,
+            // scope: $scope,
             resolve: {
                 data: {
                     billCode: data.billCode,
-                    type: type
+                    type: type,
+                    cargoUnit: $scope.cargoConfigure,
+                    materialUnit: $scope.materialConfigure
                 }
             }
         });
@@ -215,7 +233,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
         $scope.addModal = $uibModal.open({
             templateUrl: 'app/bill/returned/modals/planView.html',
             size: 'lg',
-            controller: 'PlanViewModalCtrl',
+            controller: 'ReturnedPlanViewModalCtrl',
             resolve: {
                 data: {
                     billCode: dataItem.sourceCode
@@ -229,8 +247,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
 
     // 重置表格
     $scope.reset = function () {
-        $scope.kendoQueryCondition = {};
-        $scope.outBillGrid.kendoGrid.dataSource.data([])
+        $state.reload()
     };
 
     // 查询

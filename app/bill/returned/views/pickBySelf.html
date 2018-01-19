@@ -21,8 +21,8 @@
                                         <div class="input-group">
                                             <span class="input-group-addon">出库库位</span>
                                             <select smart-select2 id="select-out" class="width-full"
-                                                    data-ng-model="params.outStationType">
-                                                <option data-ng-repeat="item in outType" data-ng-value="item.key">
+                                                    data-ng-model="params.outStorageType">
+                                                <option data-ng-repeat="item in outType" data-ng-value="item.value">
                                                     {{item.text}}
                                                 </option>
                                             </select>
@@ -33,7 +33,7 @@
                                     <div class="col-lg-3 col-sm-4 col-xs-12">
                                         <div class="input-group">
                                             <span class="input-group-addon">调入站点</span>
-                                            <span data-station-tree data-select-modal="inStationParams"></span>
+                                            <span data-select-tree data-select-modal="supplierParams"></span>
                                         </div>
                                     </div>
                                 </div>
