@@ -291,6 +291,7 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     };
     // 根据站点code获取库位信息
     this.getStore = function (stationCode) {
+        return [];
         if (!stationCode) {
             stationCode = $.cookie('currentStationCode');
         }
