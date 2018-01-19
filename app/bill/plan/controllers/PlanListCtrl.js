@@ -31,7 +31,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
         $scope.planList.kendoGrid.dataSource.page(1);
     };
     $scope.planList = {
-        url: '/api/bill/planBill/hq/findPlanBillByConditions',
+        url: '/api/bill/plan/hq/findByConditions',
         params: $scope.params,
         dataSource: {
             parameterMap: function (data) {

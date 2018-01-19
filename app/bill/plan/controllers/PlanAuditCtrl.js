@@ -3,7 +3,7 @@
 angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, params, Common) {
     $scope.type = params.type;
 
-    ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + params.billCode).then(function (response) {
+    ApiService.get('/api/bill/plan/hq/findByBillCode?billCode=' + params.billCode).then(function (response) {
         if (response.code !== '000') {
             swal('', response.message, 'error');
         } else {
