@@ -212,7 +212,9 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
             controller: 'PlanViewModalCtrl',
             resolve: {
                 data: {
-                    billCode: dataItem.sourceCode
+                    billCode: dataItem.sourceCode,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         });

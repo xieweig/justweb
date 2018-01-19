@@ -18,15 +18,15 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
     });
     $scope.cargoList = {};
 
-    $scope.bill = {
-        billProperty: 'NO_PLAN',
-        basicEnum: 'BY_CARGO',
-        billCode: '',
-        fromBillCode: '',
-        planMemo: '',
-        outMemo: '',
-        operatorCode: ''
-    };
+    // $scope.bill = {
+    //     billProperty: 'NO_PLAN',
+    //     basicEnum: 'BY_CARGO',
+    //     billCode: '',
+    //     fromBillCode: '',
+    //     planMemo: '',
+    //     outMemo: '',
+    //     operatorCode: ''
+    // };
 
     $scope.cargoListGrid = {
         primaryId: 'cargoCode',

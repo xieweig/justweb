@@ -81,7 +81,8 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
             resolve: {
                 data: {
                     billCode: dataItem.billCode,
-
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         })

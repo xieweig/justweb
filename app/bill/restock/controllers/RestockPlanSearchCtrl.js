@@ -81,7 +81,8 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
             resolve: {
                 data: {
                     billCode: dataItem.billCode,
-
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         })
