@@ -1,10 +1,184 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="uib-modal">
+    <h1 class="uib-modal-title">
+        <span ng-if="modalType !== 'inview'">
+            <span>查看配送出库单</span>
+        </span>
+        <span ng-if="modalType === 'inview'">
+            <span>查看配送入库单</span>
+        </span>
+        <span class="option">
+            <span ng-if="modalType === 'view'">
+                <input type="button" class="btn btn-primary" value="导出" data-ng-click="export()">
+                <input type="button" class="btn btn-default" value="返回" data-ng-click="$close()">
+            </span>
+            <span ng-if="modalType === 'edit'">
+                <input type="button" class="btn btn-default widget-header-btn" value="返回" data-ng-click="$close()">
+                <input type="button" class="btn btn-default widget-header-btn" value="提交审核" data-ng-click="submit()">
+                <input type="button" class="btn btn-default widget-header-btn" value="保存" data-ng-click="save()">
+            </span>
+            <span ng-if="modalType === 'audit'">
+                <input type="button" class="btn btn-default widget-header-btn" value="返回" data-ng-click="$close()">
+            <input type="button" class="btn btn-default widget-header-btn" value="审核不通过"
+                   data-ng-click="audit('failure')"
+                   style="width: 100px">
+            <input type="button" class="btn btn-default widget-header-btn" value="审核通过"
+                   data-ng-click="audit('success')">
+            </span>
+            <span ng-if="modalType === 'inview'">
+                <input type="button" class="btn btn-primary" value="导出" data-ng-click="export()">
+                <input type="button" class="btn btn-default" value="返回" data-ng-click="$close()">
+            </span>
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row modal-dl">
 
-</body>
-</html>
+            <dl class="col-lg-4 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>单号</dt>
+                <dd data-ng-bind="params.billCode"></dd>
+            </dl>
+
+            <dl class="col-lg-4 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>录单时间</dt>
+                <dd data-ng-bind="params.createTime"></dd>
+            </dl>
+
+            <dl class="col-lg-4 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>出库时间</dt>
+                <dd data-ng-bind="params.outWareHouseTime"></dd>
+            </dl>
+
+            <dl class="col-lg-2 col-sm-2 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>录单人</dt>
+                <dd data-ng-bind="params.operatorName">王菲</dd>
+            </dl>
+
+            <dl class="col-lg-2 col-sm-2 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>审核人</dt>
+                <dd data-ng-bind="params.auditPersonName">王菲</dd>
+            </dl>
+
+            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>出库站点</dt>
+                <dd data-ng-bind="params.outStationName">重庆北城店</dd>
+            </dl>
+
+            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>出库库位</dt>
+                <dd data-ng-bind="params.outStorageName"></dd>
+            </dl>
+
+            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>入库站点</dt>
+                <dd data-ng-bind="params.inStationName"></dd>
+            </dl>
+
+            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>单据属性</dt>
+                <dd data-ng-bind="params.billType"></dd>
+            </dl>
+
+            <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>出库状态</dt>
+                <dd data-ng-bind="params.inOrOutState"></dd>
+            </dl>
+
+            <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>提交状态</dt>
+                <dd data-ng-bind="params.submitState"></dd>
+            </dl>
+
+            <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>审核状态</dt>
+                <dd data-ng-bind="params.auditState"></dd>
+            </dl>
+
+            <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>退库数量</dt>
+                <dd data-ng-bind="params.totalAmount"></dd>
+            </dl>
+
+            <dl class="col-lg-2 col-sm-3 col-xs-12 margin-bottom-10 dl-horizontal">
+                <dt>退库品种</dt>
+                <dd data-ng-bind="params.totalVarietyAmount"></dd>
+            </dl>
+
+            <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="col-lg-10 col-sm-10 col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">计划备注</span>
+                        <textarea type="text" rows="1" class="form-control custom-scroll"
+                                  data-ng-model="params.planMemo" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="col-lg-10 col-sm-10 col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">出库备注</span>
+                        <span ng-if="modalType === 'edit'">
+                            <textarea type="text" rows="1" class="form-control custom-scroll"
+                                      data-ng-model="params.outStorageMemo"></textarea>
+                        </span>
+                        <span ng-if="modalType !== 'edit'">
+                            <textarea type="text" rows="1" class="form-control custom-scroll"
+                                      data-ng-model="params.outStorageMemo" disabled></textarea>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12 col-xs-12 margin-bottom-10">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">审核意见</span>
+                        <span ng-if="modalType === 'audit'">
+                        <textarea type="text" rows="1" class="form-control custom-scroll"
+                                  data-ng-model="params.auditMemo"></textarea>
+                        </span>
+                        <span ng-if="modalType !== 'audit'">
+                        <textarea type="text" rows="1" class="form-control custom-scroll"
+                                  data-ng-model="params.auditMemo" disabled></textarea>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="gray-line">
+        <div class="widget-body no-padding">
+            <div class="padding-10">
+                <div ng-if="showMaterial">
+                    <div class="row text-align-center">
+                        <h5 style="padding-left: 5px;">
+                            原料拣货情况
+                        </h5>
+                    </div>
+                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="MaterialGrid"></div>
+                    <div class="row text-align-center">
+                        <h5 style="padding-left: 5px;">
+                            货物拣货情况
+                        </h5>
+                        <span ng-if="modalType === 'edit'">
+                            <input type="button" class="btn btn-default width-80" value="添加货物"
+                                   data-ng-click="addCargo()">
+                        </span>
+                    </div>
+                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="CargoGrid"></div>
+                </div>
+                <div ng-if="!showMaterial">
+                    <div class="row text-align-center">
+                        <h5 style="padding-left: 5px;">
+                            货物拣货情况
+                        </h5>
+                        <span ng-if="modalType === 'edit'">
+                            <input type="button" class="btn btn-default width-80" value="添加货物"
+                                   data-ng-click="addOnlyCargo()">
+                        </span>
+                    </div>
+                    <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="onlyCargoGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

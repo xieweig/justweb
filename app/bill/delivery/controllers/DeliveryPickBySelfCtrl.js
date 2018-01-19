@@ -1,58 +1,202 @@
 'use strict';
 
-angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $uibModal, $timeout, ApiService) {
+angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $state, $uibModal, $timeout, ApiService, cargoUnit, materialUnit) {
     $scope.params = {};
-    // 搜索条件中的出库站点选择
-    $scope.outStationParams = {
-        single: true,
-        callback: function (data) {
-            $scope.params.inStationCode = _.map(data, function (item) {
-                return item.stationCode;
-            });
-        }
-    };
+    $scope.cargoConfigure = cargoUnit;
+    $scope.materialConfigure = materialUnit;
 
-    // 搜索条件中的入库站点选择
-    $scope.inStationParams = {
-        single: true,
-        callback: function (data) {
-            $scope.params.outStationCode = _.map(data, function (item) {
-                return item.stationCode;
-            });
-        }
-    };
+    $scope.storageType = [
+        {value: 'NORMAL', text: '正常库'},
+        {value: 'STORAGE', text: '仓储库'},
+        {value: 'IN_STORAGE', text: '进货库'},
+        {value: 'OUT_STORAGE', text: '退货库'},
+        {value: 'ON_STORAGE', text: '在途库'},
+        {value: 'RESERVE_STORAGE', text: '预留库'}
+    ];
+    $timeout(function () {
+        $('#select-out').val($scope.storageType[0].value).trigger('change');
+    });
 
-    // 搜索
-    $scope.search = function () {
-        $scope.planGrid.kendoGrid.dataSource.page(1);
-    };
+    $scope.cargoList = {};
 
-    $scope.planGrid = {
-        url: '/api/bill/waybill/findWayBillByConditions',
-        params: $scope.params,
-        dataSource: {
-            data: function () {
-                return [{}, {}];
-            }
-        },
+    $scope.cargoListGrid = {
+        primaryId: 'cargoCode',
         kendoSetting: {
             autoBind: false,
+            persistSelection: true,
+            editable: true,
             pageable: true,
             columns: [
                 {selectable: true},
-                {field: "xxxxx", title: "货物名称", width: 120},
-                {field: "xxxxx", title: "货物编码", width: 120},
-                {field: "xxxxx", title: "所属原料", width: 120},
-                {field: "xxxxx", title: "货物数量", width: 120},
-                {field: "xxxxx", title: "货物规格", width: 120},
-                {field: "xxxxx", title: "标准单位数量", width: 120},
-                {field: "xxxxx", title: "标准单位", width: 120},
-                {field: "xxxxx", title: "备注", width: 120}
+                {field: "cargoName", title: "货物名称"},
+                {field: "cargoCode", title: "货物编码"},
+                {field: "rawMaterialName", title: "所属原料"},
+                {field: "actualAmount", title: "货物数量"}, // 对应添加货物的实拣数量
+                {field: "number", title: "标准单位数量"},
+                {
+                    field: "standardUnitCode", title: "标准单位", template: function (data) {
+                        return getTextByVal($scope.materialConfigure, data.standardUnitCode);
+                    }
+                },
+                {field: "memo", title: "备注"}
             ]
         }
     };
 
-    $scope.addCargo = function () {
+    $scope.inStationParams = {
+        single: true,
+        // 物流属性站点
+        type: 'BOOKSTORE,CAFE',
+        callback: function (data) {
+            $scope.params.inStationCode = data
+        }
+    };
 
+    // 警告库位修改
+    $scope.$watch('params.outStorageType', function (newVal, oldVal) {
+        if (newVal === 'NORMAL' || oldVal === undefined) {
+        } else {
+            swal({
+                title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
+                type: 'warning',
+                confirmButtonText: '是的',
+                showCancelButton: true
+            }).then(function (res) {
+                if (res.value) {
+                } else if (res.dismiss === 'cancel') {
+                    // 重置选项为初始
+                    $('#select-out').val($scope.storageType[0].value).trigger('change')
+                }
+            })
+        }
+    });
+
+    $scope.bill = {
+        billType: 'DELIVERY',
+        specificBillType: 'NO_PLAN',
+        basicEnum: 'BY_CARGO',
+        billPurpose: 'OUT_STORAGE'
+    };
+
+    // 保存出库单
+    $scope.save = function () {
+        saveOrSubmit('save', _.cloneDeep($scope.bill))
+    };
+
+    // 提交出库单
+    $scope.submit = function () {
+        saveOrSubmit('submit', _.cloneDeep($scope.bill))
+    };
+
+    // 保存和提交合并
+    function saveOrSubmit(type, bill) {
+        var url = '';
+        if (type === 'save') {
+            url = '/api/bill/delivery/saveBySelf'
+        } else {
+            url = '/api/bill/delivery/submitBySelf'
+        }
+        bill.outStorageMemo = $scope.params.outStorageMemo;
+        bill.totalAmount = 1;
+        bill.totalVarietyAmount = 1;
+        // 自检拣货不用传
+        // bill.sourceCode = '';
+        // bill.rootCode = '';
+        // 暂时无用的总价
+        // bill.totalPrice = '';
+        // 获取当前库位
+        bill.outLocation = {
+            stationCode: $.cookie('currentStationCode'),
+            stationName: $.cookie('currentStationName'),
+            // stationType: $.cookie('STORE'),
+            storage: {
+                storageCode: $scope.params.outStorageType,
+                storageName: getTextByVal($scope.storageType, $scope.params.outStorageType)
+            }
+        };
+
+        bill.inLocation = {
+            stationCode: $scope.params.inStationCode.stationCode,
+            stationName: getTextByVal($scope.station, $scope.params.inStationCode.stationCode),
+            stationType: 'LOGISTICS',
+            storage: {
+                storageCode: 'ON_STORAGE',
+                storageName: getTextByVal($scope.storageType, 'ON_STORAGE')
+            }
+        };
+        bill.billDetails = _.map($scope.cargoListGrid.kendoGrid.dataSource.data(), function (item) {
+            return {
+                rawMaterial: {
+                    rawMaterialCode: item.rawMaterialCode,
+                    rawMaterialName: item.rawMaterialName,
+                    cargo: {
+                        cargoCode: item.cargoCode,
+                        cargoName: item.cargoName
+                    }
+                },
+                actualAmount: item.actualAmount,
+                shippedAmount: item.actualAmount // 站点自己拣货,实拣和应拣一致
+            }
+        });
+        ApiService.post(url, bill).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                $state.go('app.bill.delivery.outSearch');
+            }
+        }, apiServiceError)
     }
+
+    // 重置选项
+    $scope.reset = function () {
+        $state.reload()
+    };
+
+    // 添加货物
+    $scope.addCargo = function () {
+        var dataSource = $scope.cargoListGrid.kendoGrid.dataSource;
+        editCargoList(dataSource)
+    };
+
+    function editCargoList(data) {
+        initCargoEdit(data)
+    }
+
+    function initCargoEdit(data) {
+        $scope.addModal = $uibModal.open({
+            templateUrl: 'app/bill/common/modals/addCargoWithMaterial.html',
+            size: 'lg',
+            controller: 'AddCargoWithMaterialCtrl',
+            resolve: {
+                cb: function () {
+                    return function (data) {
+                        $scope.cargoList = data;
+                        var dataSource = $scope.cargoListGrid.kendoGrid.dataSource;
+                        dataSource.data([]);
+                        for (var i = 0; i < data.length; i++) {
+                            dataSource.add(data[i])
+                        }
+                        $scope.addModal.close()
+                    }
+                },
+                data: {
+                    cl: $scope.cargoListGrid.kendoGrid.dataSource.data(),
+                    cargoUnit: $scope.cargoConfigure,
+                    materialUnit: $scope.materialConfigure
+                }
+            }
+        });
+    }
+
+    $scope.delCargo = function () {
+        var selectId = $scope.cargoListGrid.kendoGrid.selectedKeyNames();
+        var dataSource = $scope.cargoListGrid.kendoGrid.dataSource;
+        for (var j in selectId) {
+            for (var i = 0; i < dataSource._total; i++) {
+                if (dataSource.at(i).cargoCode.toString() === selectId[j]) {
+                    dataSource.remove(dataSource.at(i));
+                }
+            }
+        }
+    };
 });

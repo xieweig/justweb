@@ -19,6 +19,14 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
                     templateUrl: 'app/bill/delivery/views/planSearch.html',
                     controller: 'DeliveryPlanSearchCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         })
         .state('app.bill.delivery.pick', {
@@ -31,10 +39,18 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
                     templateUrl: 'app/bill/delivery/views/pickBySelf.html',
                     controller: 'DeliveryPickBySelfCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         })
         .state('app.bill.delivery.outStorageSearch', {
-            url: '/bill/delivery/outStorageSearch',
+            url: '/bill/delivery/outSearch',
             data: {
                 title: '查询配送出库单'
             },
@@ -42,6 +58,54 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
                 "content@app": {
                     templateUrl: 'app/bill/delivery/views/outStorageSearch.html',
                     controller: 'DeliveryOutStorageSearchCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
+            }
+        })
+        .state('app.bill.delivery.inStorageSearch', {
+            url: '/bill/delivery/inSearch',
+            data: {
+                title: '查询配送入库单'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/delivery/views/inStorageSearch.html',
+                    controller: 'DeliveryInStorageSearchCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
+            }
+        })
+        .state('app.bill.delivery.transfer', {
+            url: '/bill/delivery/transfer/search',
+            data: {
+                title: '查询配送调拨单'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/delivery/views/transferSearch.html',
+                    controller: 'DeliveryTransferSearchCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })

@@ -1,18 +1,23 @@
 'use strict';
 
-angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService) {
+angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
     $scope.params = {};
+
+    // 搜索
+    $scope.search = function () {
+        $scope.planGrid.kendoGrid.dataSource.page(1);
+    };
 
     // 初始化计划列表
     $scope.planGrid = {
         primaryId: 'billCode',
-        url: '/api/bill/waybill/findWayBillByConditions',
+        url: '/api/bill/delivery/findPlanByConditions',
         params: $scope.params,
-        dataSource: {
-            data: function () {
-                return [{}, {}];
-            }
-        },
+        // dataSource: {
+        //     data: function () {
+        //         return [{}, {}];
+        //     }
+        // },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -37,14 +42,12 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
                 {field: "operatorName", title: "录单人", width: 60},
                 {
                     field: "outStationCode", title: "调出站点", template: function (data) {
-                        // return getTextByVal($scope.station, data.outLocation.stationCode)
-                        return data
+                        return getTextByVal($scope.station, data.outStationCode)
                     }
                 },
                 {
                     field: "inStationCode", title: "调入站点", template: function (data) {
-                        // return getTextByVal($scope.station, data.inLocation.stationCode)
-                        return data
+                        return getTextByVal($scope.station, data.inStationCode)
                     }
                 },
                 {field: "totalAmount", title: "数量", width: 60},
@@ -57,44 +60,49 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
     // 搜索条件中的入库站点选择
     $scope.inStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.inStationCodeArray = array.join(',')
         }
     };
 
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.outStationCodeArray = array.join(',')
         }
-    };
-
-    // 搜索
-    $scope.search = function () {
-        $scope.planGrid.kendoGrid.dataSource.page(1);
     };
 
     // 拣货跳转
     function jumpToPick(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        console.log(dataItem);
-        $state.go('app.bill.returned.stationPick', {pickId: dataItem.billCode})
+        $uibModal.open({
+            templateUrl: 'app/bill/delivery/modals/pickByPlanModal.html',
+            size: 'lg',
+            controller: 'DeliveryPickByPlanModalCtrl',
+            resolve: {
+                data: {
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
+                }
+            }
+        })
+
+        // $state.go('app.bill.returned.stationPick', {pickId: dataItem.billCode})
     }
 
     function viewOutStorageBill(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        ApiService.get('/api/bill/returned/findReturnedBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
+        ApiService.get('/api/bill/delivery/findBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
             if (response.code === '000') {
                 console.log(response.result);
-                var returnedCode = response.result.returnedBill.billCode;
-                openModal('view', {billCode: returnedCode})
+                var deliveryCode = response.result.bill.billCode;
+                openModal('view', {billCode: deliveryCode})
             } else {
                 swal('请求失败', response.message, 'error');
             }
@@ -107,12 +115,14 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
         e.preventDefault();
         var dataItem = $scope.planGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
         $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/delivery/modals/planModal.html',
+            templateUrl: 'app/bill/delivery/modals/planView.html',
             size: 'lg',
-            controller: 'DeliveryPlanModalCtrl',
+            controller: 'DeliveryPlanViewModalCtrl',
             resolve: {
                 data: {
-                    billCode: dataItem.billCode
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         })
@@ -125,13 +135,15 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
 
     function openModal(type, data) {
         $scope.outModal = $uibModal.open({
-            templateUrl: 'app/bill/returned/modals/outBillModal.html',
+            templateUrl: 'app/bill/delivery/modals/outStorageModal.html',
             size: 'lg',
-            controller: 'ReturnedPlanViewModalCtrl',
+            controller: 'DeliveryOutStorageModalCtrl',
             resolve: {
                 data: {
                     billCode: data.billCode,
-                    type: type
+                    type: type,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         })
