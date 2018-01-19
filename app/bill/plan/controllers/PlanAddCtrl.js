@@ -2,7 +2,7 @@
 
 angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $state, $uibModal, ApiService, $stateParams, Common, cargoUnit, materialUnit) {
     if ($stateParams.billCode) {
-        ApiService.get('/api/bill/planBill/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
+        ApiService.get('/api/bill/plan/hq/findByBillCode?billCode=' + $stateParams.billCode).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
