@@ -178,8 +178,8 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                alert('success')
-                // $state.go('app.bill.restock.outSearch');
+                // alert('success')
+                $state.go('app.bill.restock.transfer');
             }
         }, apiServiceError)
         $scope.$close();

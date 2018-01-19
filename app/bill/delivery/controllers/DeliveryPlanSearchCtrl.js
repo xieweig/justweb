@@ -146,6 +146,6 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
                     materialUnit: materialUnit
                 }
             }
-        })
+        });
     }
 });

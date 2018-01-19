@@ -142,7 +142,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.delivery.outSearch');
+                $state.go('app.bill.delivery.outStorageSearch');
             }
         }, apiServiceError)
     }

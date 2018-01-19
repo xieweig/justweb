@@ -130,7 +130,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
                 {field: "billCode", locked: true, title: "出库单号", width: 150},
                 {
                     title: "单据属性", width: 150, template: function (data) {
-                        return getTextByVal($scope.billType, data.billType) + '转'
+                        return getTextByVal($scope.billType, data.specificBillType) + '转'
                     }
                 },
                 {
