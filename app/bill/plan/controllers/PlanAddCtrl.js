@@ -362,9 +362,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     function sendHttpReques(type, plan) {
         var url = '';
         if (type === 'save') {
-            url = '/api/bill/planBill/create';
+            url = '/api/bill/plan/save';
         } else {
-            url = '/api/bill/planBill/submit';
+            url = '/api/bill/plan/submit';
         }
         ApiService.post(url, plan).then(function (response) {
             if (response.code !== '000') {
