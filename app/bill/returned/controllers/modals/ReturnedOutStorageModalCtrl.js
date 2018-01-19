@@ -193,7 +193,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
     ApiService.get(getURL + '?billCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
             var res = response.result.bill;
-            _.each(['billCode', 'createTime', 'updateTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
+            _.each(['billCode', 'createTime', 'outWareHouseTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
                 'auditMemo', 'outStorageMemo', 'rootCode', 'sourceCode'], function (name) {
                 $scope.params[name] = res[name]
             });
@@ -211,7 +211,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
                     return item.supplierCode;
                 }), supplierList);
                 $scope.params.inStationName = supplierObj[res.supplier.supplierCode].supplierName
-            })
+            });
 
             // 定义变量方便之后调用和修改
             var billDetails = [], cargoList = [];
@@ -455,10 +455,10 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
         // 修改数量
         $scope.params.totalAmount = $scope.params.totalAmount - parseInt(dataItem.actualAmount);
     }
-    // TODO:
+
     $scope.bill = {
-        billType: 'RESTOCK',
-        specificBillType: 'RESTOCK',
+        billType: 'RETURNED',
+        specificBillType: 'RETURNED',
         billPurpose: 'OUT_STORAGE'
     };
 
@@ -494,15 +494,18 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
             }
         };
 
-        bill.inLocation = {
-            stationCode: $scope.params.inLocation.stationCode,
-            stationName: $scope.params.inLocation.stationName,
-            // stationType: 'LOGISTICS',
-            storage: {
-                storageCode: $scope.params.inLocation.storage.storageCode,
-                storageName: $scope.params.inLocation.storage.storageName
-            }
-        };
+        bill.supplier = {
+            supplierCode: $scope.supplier.supplierCode
+        }
+        // bill.inLocation = {
+        //     stationCode: $scope.params.inLocation.stationCode,
+        //     stationName: $scope.params.inLocation.stationName,
+        //     // stationType: 'LOGISTICS',
+        //     storage: {
+        //         storageCode: $scope.params.inLocation.storage.storageCode,
+        //         storageName: $scope.params.inLocation.storage.storageName
+        //     }
+        // };
 
         if ($scope.showMaterial) {
             // 按原料

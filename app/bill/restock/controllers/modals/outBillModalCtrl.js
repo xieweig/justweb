@@ -194,7 +194,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     ApiService.get(getURL + '?billCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
             var res = response.result.bill;
-            _.each(['billCode', 'createTime', 'updateTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
+            _.each(['billCode', 'createTime', 'outWareHouseTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
                 'auditMemo', 'auditPersonName', 'outStorageMemo', 'rootCode', 'sourceCode'], function (name) {
                 $scope.params[name] = res[name]
             });

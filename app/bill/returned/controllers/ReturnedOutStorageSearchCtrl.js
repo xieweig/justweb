@@ -149,7 +149,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
                     }
                 },
                 {field: "createTime", title: "录单时间", width: 150},
-                {field: "inWareHouseTime", title: "出库时间", width: 150},
+                {field: "outWareHouseTime", title: "出库时间", width: 150},
                 {field: "operatorName", title: "录单人", width: 150}, //
                 {field: "auditPersonName", title: "审核人", width: 150},
                 {
