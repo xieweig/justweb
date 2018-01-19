@@ -19,7 +19,7 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
     $scope.cargoList = {};
 
     $scope.bill = {
-        billProperty: 'NOPLAN',
+        billProperty: 'NO_PLAN',
         basicEnum: 'BY_CARGO',
         billCode: '',
         fromBillCode: '',
@@ -82,7 +82,7 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
 
     $scope.bill = {
         billType: 'RESTOCK',
-        specificBillType: 'NOPLAN',
+        specificBillType: 'NO_PLAN',
         basicEnum: 'BY_CARGO',
         billPurpose: 'OUT_STORAGE'
     };

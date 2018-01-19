@@ -18,6 +18,14 @@ angular.module('app.bill.returned', ['ui.router']).config(function ($stateProvid
                     templateUrl: 'app/bill/returned/views/planSearch.html',
                     controller: 'ReturnedPlanSearchCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         })
         .state('app.bill.returned.selfPick', {

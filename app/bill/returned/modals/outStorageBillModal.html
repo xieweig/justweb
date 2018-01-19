@@ -1,11 +1,6 @@
 <div class="uib-modal">
     <h1 class="uib-modal-title">
-        <span ng-if="modalType !== 'inview'">
-            <span>查看退库出库单</span>
-        </span>
-        <span ng-if="modalType === 'inview'">
-            <span>查看退库入库单</span>
-        </span>
+        <span>查看退库出库单</span>
         <span class="option">
             <span ng-if="modalType === 'view'">
                 <input type="button" class="btn btn-primary" value="导出" data-ng-click="export()">

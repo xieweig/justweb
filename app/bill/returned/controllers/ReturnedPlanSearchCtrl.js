@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService) {
+angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
     $scope.params = {};
 
     // 搜索
@@ -11,7 +11,7 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
     // 初始化计划列表
     $scope.stationGrid = {
         primaryId: 'billCode',
-        url: '/api/bill/returned/findPlanBillByConditions',
+        url: '/api/bill/returned/findPlanByConditions',
         params: $scope.params,
         kendoSetting: {
             autoBind: false,
@@ -63,7 +63,7 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
 
     $scope.outStationParams = {
         callback: function (data) {
-            $scope.params.outStationCode = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -112,7 +112,9 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
             controller: 'ReturnedPlanViewModalCtrl',
             resolve: {
                 data: {
-                    billCode: dataItem.billCode
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         })
@@ -126,13 +128,14 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
 
     function openModal(type, data) {
         $scope.outModal = $uibModal.open({
-            templateUrl: 'app/bill/returned/modals/outBillModal.html',
+            templateUrl: 'app/bill/returned/modals/outStorageBillModal.html',
             size: 'lg',
-            controller: 'ReturnedPlanViewModalCtrl',
+            controller: 'ReturnedOutStorageModalCtrl',
             resolve: {
                 data: {
                     billCode: data.billCode,
-                    type: type
+                    type: type,
+                    cargoUnit: cargoUnit
                 }
             }
         })

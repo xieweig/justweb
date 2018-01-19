@@ -32,7 +32,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
         {value: 'DELIVERY', text: '配送计划转'},
         {value: 'ADJUST', text: '调剂计划转'},
         {value: 'RETURNED', text: '退货计划转'},
-        {value: 'NOPLAN', text: '无计划计划转'}
+        {value: 'NO_PLAN', text: '无计划计划转'}
     ];
 
     // 类型存储
