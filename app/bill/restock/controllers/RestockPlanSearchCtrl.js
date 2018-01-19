@@ -56,19 +56,17 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
     // 选择站点
     $scope.inStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.inStationCodeArray = array.join(',')
         }
     };
 
     $scope.outStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.outStationCodeArray = array.join(',')
         }
     };
 
@@ -76,8 +74,6 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
     function jumpToPick(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        // console.log(dataItem);
-        // $state.go('app.bill.restock.stationPick', {pickId: dataItem.billCode})
         $uibModal.open({
             templateUrl: 'app/bill/restock/modals/pickByPlanModal.html',
             size: 'lg',
@@ -124,24 +120,9 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
         })
     });
 
-    // // 完成率跳转到出库单 改为弹窗
-    // grid.on('click', '.rate-btn-group', function (e) {
-    //     e.preventDefault();
-    //     var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-    //     ApiService.get('/api/bill/restock/findRestockBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
-    //         if (response.code === '000') {
-    //             console.log(response.result);
-    //             var restockCode = response.result.restockBill.billCode
-    //             openModal('view', {billCode: restockCode})
-    //         } else {
-    //             swal('请求失败', response.message, 'error');
-    //         }
-    //     }, apiServiceError);
-    // });
-
     // 重置表格
     $scope.reset = function () {
-        $state.params = {}
+        $state.params = {};
         $state.reload()
     };
 

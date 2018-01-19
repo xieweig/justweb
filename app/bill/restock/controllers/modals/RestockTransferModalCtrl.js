@@ -136,29 +136,17 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
     $scope.bill = {};
 
     $scope.transfer = function () {
-        var url = '/api/bill/allotBill/create';
+        var url = '/api/bill/allot/save';
         var bill = _.cloneDeep($scope.bill);
 
+        // bill.billType = '';
+        bill.billPurpose = 'MOVE_STORAGE';
+        bill.specificBillType = 'RESTOCK';
+        bill.allowMemo = '';
         bill.basicEnum = $scope.params.basicEnum;
         bill.sourceCode = $scope.params.billCode;
-        bill.memo = '';
         bill.inStorageBillCode = $scope.params.billCode;
         bill.inStorageBillType = $scope.params.billProperty;
-        bill.details = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
-            return {
-                rawMaterial: {
-                    rawMaterialCode: item.rawMaterialCode,
-                    rawMaterialName: item.rawMaterialName,
-                    cargo: {
-                        cargoCode: item.cargoCode,
-                        cargoName: item.cargoName
-                    }
-                },
-                actualAmount: item.realAmount, // 入库数量为入库单的实际数量
-                shippedAmount: item.actualAmount // 实调数量
-            }
-        });
-
         bill.outStation = {
             stationCode: $scope.params.outLocation.stationCode,
             storage: {
@@ -172,6 +160,20 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
             }
         };
 
+        bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
+            return {
+                rawMaterial: {
+                    rawMaterialCode: item.rawMaterialCode,
+                    rawMaterialName: item.rawMaterialName,
+                    cargo: {
+                        cargoCode: item.cargoCode,
+                        cargoName: item.cargoName
+                    }
+                },
+                actualAmount: item.realAmount, // 入库数量为入库单的实际数量
+                shippedAmount: item.actualAmount // 实调数量
+            }
+        });
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
@@ -180,6 +182,7 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
                 // $state.go('app.bill.restock.outSearch');
             }
         }, apiServiceError)
+        $scope.$close();
     }
 
 });

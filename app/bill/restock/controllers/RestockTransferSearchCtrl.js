@@ -135,16 +135,6 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
                 }
             }
         })
-        // $scope.addModal = $uibModal.open({
-        //     templateUrl: 'app/bill/restock/modals/planView.html',
-        //     size: 'lg',
-        //     controller: 'PlanViewModalCtrl',
-        //     resolve: {
-        //         data: {
-        //             billCode: dataItem.billCode
-        //         }
-        //     }
-        // })
     });
 
     // 重置表格

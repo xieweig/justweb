@@ -228,7 +228,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
     // 查询
     $scope.search = function () {
         $scope.outBillGrid.kendoGrid.dataSource.page(1);
-    }
+    };
 
     // 状态修改
     $scope.toggleSubmit = function (status, type) {

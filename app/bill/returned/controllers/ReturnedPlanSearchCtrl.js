@@ -55,19 +55,17 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
     // 选择站点
     $scope.inStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.inStationCodeArray = array.join(',')
         }
     };
 
     $scope.outStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.outStationCode = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.outStationCodeArray = array.join(',')
         }
     };
 
@@ -75,17 +73,27 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
     function jumpToPick(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        console.log(dataItem);
-        $state.go('app.bill.returned.stationPick', {pickId: dataItem.billCode})
+        $uibModal.open({
+            templateUrl: 'app/bill/restock/modals/pickByPlanModal.html',
+            size: 'lg',
+            controller: 'RestockPickByPlanModalCtrl',
+            resolve: {
+                data: {
+                    billCode: dataItem.billCode,
+
+                }
+            }
+        })
+        // $state.go('app.bill.returned.stationPick', {pickId: dataItem.billCode})
     }
 
     function viewOutStorageBill(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        ApiService.get('/api/bill/returned/findReturnedBillBySourceCode?sourceCode=' + dataItem.billCode).then(function (response) {
+        ApiService.get('/api/bill/returned/findPlanByConditions?sourceCode=' + dataItem.billCode).then(function (response) {
             if (response.code === '000') {
                 console.log(response.result);
-                var returnedCode = response.result.returnedBill.billCode;
+                var returnedCode = response.result.bill.billCode;
                 openModal('view', {billCode: returnedCode})
             } else {
                 swal('请求失败', response.message, 'error');

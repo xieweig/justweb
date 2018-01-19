@@ -501,14 +501,14 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                 }
             });
         }
-        console.log(bill)
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
                 $scope.addModal.close()
             }
-        }, apiServiceError)
+        }, apiServiceError);
+        $scope.$close();
     }
 
     /**

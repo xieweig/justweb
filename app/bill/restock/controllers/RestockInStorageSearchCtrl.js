@@ -168,7 +168,6 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
 
     // 重置表格
     $scope.reset = function () {
-        // $state.params = {}
         $state.reload()
     };
 });

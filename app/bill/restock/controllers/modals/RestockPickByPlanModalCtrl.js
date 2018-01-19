@@ -242,7 +242,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     $scope.addCargo = function (index) {
         // $scope.index = index
         initCargoModal(index)
-    }
+    };
 
     function initCargoModal(index) {
         $scope.addModal = $uibModal.open({
@@ -370,7 +370,8 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             } else {
                 $state.go('app.bill.restock.outSearch');
             }
-        }, apiServiceError)
+        }, apiServiceError);
+        $scope.$close();
     }
 
     //判断提交类型

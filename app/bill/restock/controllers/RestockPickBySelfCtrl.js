@@ -181,7 +181,6 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
                 cb: function () {
                     return function (data) {
                         $scope.cargoList = data;
-                        console.log(data)
                         var dataSource = $scope.cargoListGrid.kendoGrid.dataSource;
                         dataSource.data([]);
                         for (var i = 0; i < data.length; i++) {
