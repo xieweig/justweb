@@ -129,7 +129,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
                 updateTime: item.updateTime,
                 dateInProduced: item.productDate,
                 unitPrice: item.purchasePrice,
-                amount: item.amount
+                actualAmount: item.amount
             };
         });
         cb(result);

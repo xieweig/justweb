@@ -1,18 +1,24 @@
 'use strict';
 
-angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibModal, $timeout, $state, params, ApiService, cargoUnit, materialUnit, storageList) {
-    $scope.storageList = storageList;
+angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibModal, $timeout, $state, params, ApiService, cargoUnit, materialUnit) {
     // 页面类型 查看or审核
     $scope.type = params.type;
-    $scope.bill = params.purchaseBill;
-    params.purchaseBill.supplier = {
-        supplierCode: params.purchaseBill.supplierCode,
-        supplierName: params.purchaseBill.supplierName
-    };
+    if (params.purchaseBill) {
+        $scope.bill = params.purchaseBill;
+        params.purchaseBill.supplier = {
+            supplierCode: params.purchaseBill.supplier.supplierCode,
+            supplierName: params.purchaseBill.supplier.supplierName
+        };
 
-    $timeout(function () {
-        $('#inStorageCode').val(params.purchaseBill.inStorageCode).trigger('change');
-    });
+        $timeout(function () {
+            $('#inStorageCode').val(params.purchaseBill.inLocation.storage.storageCode).trigger('change');
+        });
+    } else {
+        params.purchaseBill = {
+            billDetails: [],
+            supplier: {}
+        }
+    }
 
     $scope.procurementGrid = {
         primaryId: 'cargoCode',
@@ -23,39 +29,44 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             columns: [
                 {selectable: true},
                 {title: "操作", width: 160, command: [{name: 'edit', text: "编辑"}]},
-                {field: "cargo.cargoName", title: "货物名称", width: 120},
-                {field: "cargo.cargoCode", title: "货物编码", width: 120},
-                {field: "cargo.rawMaterialId", title: "所属原料", width: 120},
+                {field: "cargoName", title: "货物名称", width: 120},
+                {field: "cargoCode", title: "货物编码", width: 120},
+                {field: "rawMaterialId", title: "所属原料", width: 120},
                 {
                     title: "标准单位", width: 120,
                     template: function (data) {
-                        return getTextByVal(materialUnit, data.cargo.measurementCode);
+                        return getTextByVal(materialUnit, data.measurementCode);
                     }
                 },
                 {
                     title: "规格", width: 120,
                     template: function (data) {
-                        return data.cargo.number + '/' + getTextByVal(cargoUnit, data.cargo.standardUnitCode);
+                        return data.number + '/' + getTextByVal(cargoUnit, data.standardUnitCode);
                     }
                 },
-                {field: "cargo.dateInProduced", title: "生产日期", width: 160, WdatePicker: true},
-                {field: "cargo.unitPrice", title: "单位进价", width: 120, kType: 'decimal'},
-                {field: "cargo.amount", title: "发货数量", width: 120, kType: 'number'},
-                {field: "shippedNumber", title: "实收数量", width: 120, kType: 'number', editable: true},
+                {field: "dateInProduced", title: "生产日期", width: 160},
+                {field: "unitPrice", title: "单位进价", width: 120},
+                {field: "actualAmount", title: "发货数量", width: 120},
+                {field: "shippedAmount", title: "实收数量", width: 120, editable: true},
                 {field: "differenceNumber", title: "数量差额", width: 120},
-                {field: "differencePrice", title: "总价差值", width: 120}
+                {
+                    field: "differencePrice", title: "总价差值", width: 120,
+                    template: function (data) {
+                        return (parseFloat(data.unitPrice) * data.differenceNumber).toFixed(2);
+                    }
+                }
             ],
             save: function (e) {
                 // 计算数量差额和总价值差
                 var model = e.model;
-                model.shippedNumber = parseInt(model.shippedNumber);
-                model.shippedNumber !== model.shippedNumber ? model.shippedNumber = 0 : '';
+                model.shippedAmount = parseInt(model.shippedAmount);
+                model.shippedAmount !== model.shippedAmount ? model.shippedAmount = 0 : '';
 
-                model.cargo.amount = parseInt(model.cargo.amount);
-                model.differenceNumber = model.shippedNumber - model.cargo.amount;
+                model.actualAmount = parseInt(model.actualAmount);
+                model.differenceNumber = model.shippedAmount - model.actualAmount;
                 model.differenceNumber !== model.differenceNumber ? model.differenceNumber = 0 : '';
 
-                model.differencePrice = (parseFloat(model.cargo.unitPrice) * model.differenceNumber).toFixed(2);
+                model.differencePrice = (parseFloat(model.unitPrice) * model.differenceNumber).toFixed(2);
                 model.differencePrice !== model.differencePrice ? model.differencePrice = 0 : '';
                 return e;
             }
@@ -113,11 +124,11 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                     return function (data) {
                         var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
                         var cargoCodes = _.map(dataSource.data(), function (item) {
-                            return item.cargo;
+                            return item.cargoCode;
                         });
                         _.each(data, function (item) {
                             if (_.indexOf(cargoCodes, item.cargoCode) < 0) {
-                                dataSource.add({cargoCode: item.cargoCode, cargo: item});
+                                dataSource.add(item);
                             }
                         });
                     }
@@ -141,7 +152,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         if (!bill.freightCode) {
             swal('请输入运单单号', '', 'warning');
             return
-        } else if (!bill.storage || !bill.storage.storageCode) {
+        } else if (!bill.inLocation) {
             swal('请选择入库库位', '', 'warning');
             return
         } else if (!bill.shippedAmount) {
@@ -166,18 +177,11 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         if (initSubmitData(type, bill)) {
             var url = '';
             if (type === 'save') {
-                if ($scope.type === 'edit') {
-                    url = '/api/bill/purchase/updatePurchaseBillToSave';
-                } else {
-                    url = '/api/bill/purchase/savePurchaseBill';
-                }
+                url = '/api/bill/purchase/save';
             } else {
-                if ($scope.type === 'edit') {
-                    url = '/api/bill/purchase/updatePurchaseBillToSubmit';
-                } else {
-                    url = '/api/bill/purchase/submitPurchaseBill';
-                }
+                url = '/api/bill/purchase/submit';
             }
+            bill.billPurpose = 'IN_STORAGE';
             ApiService.post(url, bill).then(function (response) {
                 if (response.code !== '000') {
                     swal('', response.message, 'error');
@@ -186,9 +190,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                         if (params.type === 'add') {
                             $state.go('app.bill.procurement.list');
                         } else {
-                            $scope.$close(function () {
-                                console.log(213);
-                            });
+                            $scope.$close();
                         }
                     });
                 }
@@ -198,40 +200,42 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
 
     // 组装提交的数据
     function initSubmitData(type, bill) {
-        bill.station = {
-            stationCode: $.cookie('currentStationCode'),
-            stationName: $.cookie('currentStationName')
-        };
+        if (!bill.inLocation) {
+            bill.inLocation = {};
+        }
+        bill.inLocation.stationCode = $.cookie('currentStationCode');
+        bill.inLocation.stationName = $.cookie('currentStationName');
+
         bill.operatorCode = 'YGADMIN';
         bill.billDetails = [];
         var errorItem = _.find($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
-            if (type !== 'save' && ( !item.cargo.dateInProduced || !item.cargo.unitPrice || !item.cargo.amount || !item.shippedNumber)) {
+            if (type !== 'save' && ( !item.dateInProduced || !item.unitPrice || !item.actualAmount || !item.shippedAmount)) {
                 swal('表格信息填写不完整', '', 'warning');
                 return true;
             } else {
                 bill.billDetails.push({
                     packageCode: item.packageCode,
                     rawMaterial: {
-                        rawMaterialCode: item.cargo.rawMaterialId,
+                        rawMaterialCode: item.rawMaterialId,
                         rawMaterialName: '',
                         cargo: {
-                            cargoCode: item.cargo.cargoCode,
-                            cargoName: item.cargo.cargoName
+                            cargoCode: item.cargoCode,
+                            cargoName: item.cargoName
                         }
                     },
-                    dateInProduced: item.cargo.dateInProduced,
-                    unitPrice: item.cargo.unitPrice,
-                    shippedNumber: item.cargo.shippedNumber,
-                    amount: item.cargo.amount,
+                    dateInProduced: item.dateInProduced,
+                    unitPrice: item.unitPrice,
+                    shippedAmount: item.shippedAmount,
+                    actualAmount: item.actualAmount,
                     differenceNumber: item.differenceNumber,
-                    differencePrice: item.differencePrice
+                    totalDifferencePrice: item.differencePrice
                 });
             }
             return false;
         });
         if (errorItem) {
             return false
-        } else if (bill.billDetails.length === 0) {
+        } else if (type !== 'save' && bill.billDetails.length === 0) {
             swal('请添加货物', '', 'warning');
             return false;
         }

@@ -278,8 +278,15 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     };
     // 根据原料id集合 获取原料明细
     this.getSupplierByIds = function (codes) {
-        if (!codes) {
-            return [];
+        codes = _.filter(codes, function (item) {
+            return item;
+        });
+        if (!codes || codes.length === 0) {
+            return {
+                then: function (callback) {
+                    callback([]);
+                }
+            };
         }
         return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/supplier/findByListSupplierCode', codes, {hasHost: true}).then(function (response) {
             if (response.code !== '000') {
