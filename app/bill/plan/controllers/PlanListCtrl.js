@@ -8,9 +8,9 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
     // 出库查询
     $scope.outStationParams = {
         callback: function (data) {
-            $scope.params.outStationCodeArray = _.chain(data).map(function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
-            }).join().value();
+            });
         }
     };
 
@@ -21,9 +21,9 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
     // 入库查询
     $scope.inStationParams = {
         callback: function (data) {
-            $scope.params.inStationCodeArray = _.chain(data).map(function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
-            }).join().value();
+            });
         }
     };
     $scope.params = {};
@@ -69,7 +69,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                                 return item.billSubmitState === 'UNCOMMITTED';
                             }
                         },
-                        {name: 'd', text: "删除"},
+                        // {name: 'd', text: "删除"},
                         {
                             name: 'a', text: "审核", click: auditPlan,
                             visible: function (item) {
@@ -126,6 +126,8 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                     billCode: dataItem.billCode
                 }
             }
+        }).closed.then(function () {
+            $scope.planList.kendoGrid.dataSource.read();
         });
     }
 
@@ -143,6 +145,8 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                     billCode: dataItem.billCode
                 }
             }
+        }).closed.then(function () {
+            $scope.planList.kendoGrid.dataSource.read();
         });
     }
 });
