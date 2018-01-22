@@ -164,7 +164,7 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
 
     // 重置选项
     $scope.reset = function () {
-        $state.reload()
+        $state.reload($state.current.name)
     };
 
     // 添加货物

@@ -220,7 +220,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
 
     // 重置表格
     $scope.reset = function () {
-        $state.reload()
+        $state.reload($state.current.name)
     };
 
     // 查询

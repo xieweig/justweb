@@ -278,7 +278,7 @@ angular.module('app').controller('ReturnedPickByPlanCtrl', function ($scope, $st
     };
 
     $scope.reset = function () {
-        $state.reload();
+        $state.reload($state.current.name);
     };
 
     function saveOrAudit(type, bill) {

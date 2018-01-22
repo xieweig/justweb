@@ -140,7 +140,7 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
     // 重置表格
     $scope.reset = function () {
         $state.params = {}
-        $state.reload()
+        $state.reload($state.current.name)
     };
 
     function openModal(type, data) {

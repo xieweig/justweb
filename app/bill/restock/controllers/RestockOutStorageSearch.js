@@ -225,7 +225,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
 
     // 重置表格
     $scope.reset = function () {
-        $state.reload()
+        $state.reload($state.current.name)
     };
 
     // 查询

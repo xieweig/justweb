@@ -130,7 +130,7 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
 
     // 重置表格
     $scope.reset = function () {
-        $state.reload()
+        $state.reload($state.current.name)
     };
 
     function openModal(type, data) {
