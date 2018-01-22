@@ -378,10 +378,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     // 获取货物或者原料的列表
     function getItemObject(type, plan) {
         plan.billDetails = [];
-        var stations = [];
+        var stations = null;
         if ($scope.materialMap.length === 0) {
             plan.basicEnum = 'BY_CARGO';
             var errorItem = _.find($scope.cargoMap, function (item) {
+                stations = [];
                 if (type === 'submit' && (!item.cargo || !item.cargo.cargoCode)) {
                     swal('存在未选择货物的项目', '', 'warning');
                     return true;
