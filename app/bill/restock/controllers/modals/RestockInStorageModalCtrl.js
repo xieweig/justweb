@@ -45,7 +45,7 @@ angular.module('app').controller('RestockInStorageModalCtrl', function ($scope, 
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                     }
                 },
-                {field: "shippedAmount", title: "应拣数量"},
+                // {field: "shippedAmount", title: "应拣数量"},
                 {field: "actualAmount", title: "实拣数量"},
                 {
                     title: "标准单位数量", template: function (data) {

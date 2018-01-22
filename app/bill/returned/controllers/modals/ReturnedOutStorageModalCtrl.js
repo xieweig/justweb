@@ -63,7 +63,9 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
                         }
                     },
                     {field: "actualAmount", title: "实拣数量"},
-                    {field: "number", title: "标准单位数量"}
+                    {title: "标准单位数量", template: function (data) {
+                            return data.number * data.actualAmount
+                        }}
                 ]
             }
         };

@@ -38,7 +38,9 @@ angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $s
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                     }
                 },
-                {field: "number", title: "标准单位数量"},
+                {title: "标准单位数量", template: function (data) {
+                        return data.number * data.actualAmount
+                    }},
                 {
                     field: "standardUnitCode", title: "标准单位", template: function (data) {
                         return getTextByVal($scope.materialConfigure, data.standardUnitCode);
