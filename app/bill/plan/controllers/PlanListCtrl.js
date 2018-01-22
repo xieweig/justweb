@@ -15,7 +15,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
     };
 
     $scope.resetPage = function () {
-        $state.reload();
+        $state.reload(true);
     };
 
     // 入库查询
