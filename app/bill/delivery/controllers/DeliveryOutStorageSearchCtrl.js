@@ -6,6 +6,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
     $scope.materialConfigure = materialUnit;
 
     $scope.kendoQueryCondition = {
+        specificBillType: [],
         submitStates: [],
         auditStates: [],
         inOrOutStates: []

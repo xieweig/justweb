@@ -4,17 +4,13 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
     $scope.params = {};
     $scope.cargoConfigure = cargoUnit;
     $scope.materialConfigure = materialUnit;
+    
     $scope.kendoQueryCondition = {
-        // operatorName: '',
+        specificBillType: [],
         submitStates: [],
         auditStates: [],
         inOrOutStates: []
     };
-
-    // $scope.submitStates = [
-    //     {value: 'SAVED', text: '未提交'},
-    //     {value: 'SUBMITTED', text: '已提交'}
-    // ];
 
     $scope.auditStates = [
         {value: 'UN_REVIEWED', text: '未审核'},

@@ -4,17 +4,13 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
     $scope.params = {};
     $scope.cargoConfigure = cargoUnit;
     $scope.materialConfigure = materialUnit;
+
     $scope.kendoQueryCondition = {
+        specificBillType: [],
         submitStates: [],
         auditStates: [],
         inOrOutStates: []
-        // billProperty: []
     };
-
-    // $scope.submitStateCode = [
-    //     {value: 'SAVED', text: '未提交'},
-    //     {value: 'SUBMITTED', text: '已提交'}
-    // ];
 
     $scope.auditStates = [
         {value: 'UN_REVIEWED', text: '未审核'},
@@ -81,7 +77,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
                         var supplier = supplierObj[item.supplier.get('supplierCode')];
                         if (supplier) {
                             item.supplier.set('supplierName', supplier.supplierName);
-                        }else{
+                        } else {
                             item.supplier.set('supplierName', '');
                         }
                     });
@@ -157,9 +153,11 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
                         return getTextByVal($scope.station, data.outLocation.stationCode)
                     }
                 },
-                {title: "入库站点", width: 150, template: function (data) {
+                {
+                    title: "入库站点", width: 150, template: function (data) {
                         return data.supplier.supplierName
-                    }},
+                    }
+                },
                 {field: "totalAmount", title: "配送数量", width: 150},
                 {field: "totalVarietyAmount", title: "配送品种数", width: 150}
 
