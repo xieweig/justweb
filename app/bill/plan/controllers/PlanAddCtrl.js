@@ -138,7 +138,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                     return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
-                            {field: "amount", title: "调剂数量(点击修改)", editable: true}
+                            {field: "amount", title: "调剂数量(点击修改)", kType: 'number', editable: true}
                         ]
                     }
                 }
@@ -387,7 +387,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     return true;
                 }
                 var exist = _.find(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
-                    if (type === 'submit' && !stationItem.amount) {
+                    if (type === 'submit' && !stationItem.amount || stationItem.amount === '0') {
                         swal('存在未输入调剂数量的站点', '', 'warning');
                         return true;
                     }
@@ -431,7 +431,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     return true;
                 }
                 var exist = _.find(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
-                    if (type === 'submit' && !stationItem.amount) {
+                    if (type === 'submit' && !stationItem.amount || stationItem.amount === '0') {
                         swal('存在未输入调剂数量的站点', '', 'warning');
                         return true;
                     }
