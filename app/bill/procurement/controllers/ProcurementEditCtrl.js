@@ -134,7 +134,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                     }
                 },
                 data: function () {
-                    return _.cloneDeep($scope.procurementGrid.kendoGrid.dataSource.data());
+                    return _.toArray($scope.procurementGrid.kendoGrid.dataSource.data());
                 },
                 cargoUnit: function () {
                     return cargoUnit;
@@ -158,7 +158,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         if (!bill.freightCode) {
             swal('请输入运单单号', '', 'warning');
             return
-        } else if (!bill.inLocation) {
+        } else if (!bill.inLocation || !bill.inLocation.storage || !bill.inLocation.storage.storageCode) {
             swal('请选择入库库位', '', 'warning');
             return
         } else if (!bill.shippedAmount) {
