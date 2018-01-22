@@ -8,6 +8,7 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
             swal('', response.message, 'error');
         } else {
             $scope.plan = response.result.bill;
+            $scope.plan.planMemo = $scope.plan.planMemo || $scope.plan.memo;
             $scope.plan.billTypeName = getTextByVal($scope.billType, $scope.plan.billType);
             var isCargo = $scope.plan.basicEnum === 'BY_CARGO';
             var goodsCodes = _.map($scope.plan.planBillDetails, function (item) {
