@@ -343,6 +343,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         } else if (!plan.specificBillType) {
             swal('请选择计划类型', '', 'warning');
             return;
+        } else if (!plan.planMemo) {
+            swal('请填写备注信息', '', 'warning');
+            return;
         }
         if (!getItemObject('submit', plan)) {
             if (plan.billDetails.length === 0) {
