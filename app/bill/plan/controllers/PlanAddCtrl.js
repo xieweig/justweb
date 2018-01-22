@@ -135,7 +135,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
+                                    if (planBill.billType === 'RETURNED') {
+                                        return data.inLocation.stationCode
+                                    }
+                                    return getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
                             {field: "amount", title: "调剂数量(点击修改)", kType: 'number', editable: true}
