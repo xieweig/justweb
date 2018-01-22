@@ -50,7 +50,14 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 var data = getKendoData(response);
                 var supplierCodes = [];
                 _.each(data, function (item) {
-                    supplierCodes.push(item.supplierCode);
+                    if (!item.inLocation) {
+                        item.inLocation = {storage: {}};
+                    }
+                    if (!item.supplier) {
+                        item.supplier = {};
+                    } else {
+                        supplierCodes.push(item.supplier.supplierCode);
+                    }
                 });
 
                 // 回显供应商
@@ -60,9 +67,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                     }), supplierList);
                     var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
                     _.each(dataSource.data(), function (item, index) {
-                        var supplier = supplierObj[item.get('supplierCode')];
+                        var supplier = supplierObj[item.get('supplier.supplierCode')];
                         if (supplier) {
-                            item.set('supplierCode', supplier.supplierName);
+                            item.set('supplier.supplierCode', supplier.supplierName);
                         }
                     });
                 });
@@ -101,24 +108,31 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 {
                     title: "入库站点", width: 120,
                     template: function (data) {
-                        return getTextByVal($scope.station, data.inStationCode)
+                        return getTextByVal($scope.station, data.inLocation.stationCode)
                     }
                 },
-                {field: "inStorageCode", title: "入库库房", width: 120},
-                {field: "amount", title: "实收数量", width: 120},
-                {field: "differenceNumber", title: "数量差值", width: 120},
-                {field: "inTotalPrice", title: "进货实洋", width: 120},
-                {field: "differencePrice", title: "总价值差", width: 120},
-                {field: "supplierCode", title: "供应商", width: 120, editable: true},
                 {
-                    title: "提交状态", width: 120, template: function (data) {
-                    return getTextByVal($scope.auditStatus, data.auditState);
-                }
+                    title: "入库库房", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.outType, data.inLocation.storage.storageCode)
+                    }
+                },
+                {field: "actualAmount", title: "实收数量", width: 120},
+                {field: "differenceAmount", title: "数量差值", width: 120},
+                {field: "inTotalPrice", title: "进货实洋", width: 120},
+                {field: "totalPriceDifferenceAmount", title: "总价值差", width: 120},
+                {field: "supplier.supplierCode", title: "供应商", width: 120, editable: true},
+                {
+                    title: "提交状态", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.auditStatus, data.auditState);
+                    }
                 },
                 {
-                    title: "审核状态", width: 120, template: function (data) {
-                    return getTextByVal($scope.submitStatus, data.submitState);
-                }
+                    title: "审核状态", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.submitStatus, data.submitState);
+                    }
                 },
                 {field: "memo", title: "备注", width: 120}
             ]
