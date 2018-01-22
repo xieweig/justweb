@@ -1,7 +1,9 @@
 'use strict';
 
-angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $rootScope, $timeout, ApiService, Common, data) {
-    $scope.params = {};
+angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $rootScope, $state, $timeout, ApiService, Common, data) {
+    $scope.params = {
+        outStorageName: '在途库'
+    };
     $scope.show = data.type === 'transfer'; // transfer 入库单调拨 view 查看调拨单
     $scope.cargoConfigure = data.cargoUnit;
     $scope.materialConfigure = data.materialUnit;
@@ -64,8 +66,18 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
             $scope.params.inLocation = res.inLocation;
             $scope.params.outLocation = res.outLocation;
             $scope.params.billProperty = res.billProperty;
+            $scope.params.specificBillType = res.specificBillType;
             $scope.params.outStationName = getTextByVal($scope.station, res.inLocation.stationCode);
             $scope.params.inStationName = getTextByVal($scope.station, res.outLocation.stationCode);
+            $scope.params.outStorageName = '在途库';
+            if (!$scope.show) {
+                console.log(res.inStorageBillInStationCode)
+                $scope.params.inStorageName = getTextByVal($scope.storageType, res.inStorageBillInStationCode)
+            }else{
+                $timeout(function () {
+                    $('#select-in').val($scope.storageType[0].value).trigger('change');
+                });
+            }
             var billDetails = res.billDetails;
 
             var cargoList = _.map(billDetails, function (item) {
@@ -90,6 +102,7 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
                         $scope.cargoGrid.kendoGrid.dataSource.add({
                             cargoName: item.cargo.cargoName,
                             cargoCode: item.cargo.cargoCode,
+                            rawMaterialCode: item.material.materialCode,
                             rawMaterialName: item.material.materialName,
                             number: item.cargo.number,
                             standardUnitCode: item.cargo.standardUnitCode,
@@ -98,34 +111,6 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
                             realAmount: item.actualAmount
                         })
                     });
-                    // 获取出库站点的出库库位
-                    $timeout(function () {
-                        $('#select-in').val($scope.storageType[0].value).trigger('change');
-                        $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
-                    })
-
-                    // Common.getStore(res.inLocation.stationCode).then(function (storage) {
-                    //     _.each(storage, function (item) {
-                    //         $scope.inType.push({
-                    //             key: item.tempStorageCode,
-                    //             value: item.tempStorageCode,
-                    //             text: item.tempStorageName,
-                    //             type: item.storageType
-                    //         })
-                    //     });
-                    //     // TODO: 设置入库库位默认值
-                    //     $timeout(function () {
-                    //         $('#select-in').val($scope.inType[0].value).trigger('change')
-                    //     })
-                    //
-                    //     Common.getStore(res.outLocation.stationCode).then(function (storage) {
-                    //         _.each(storage, function (item) {
-                    //             if (item.tempStorageCode === res.outLocation.storage.storageCode) {
-                    //                 $scope.params.outStorageName = item.tempStorageName
-                    //             }
-                    //         });
-                    //     })
-                    // })
                 })
             })
         } else {
@@ -136,10 +121,12 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
     $scope.bill = {};
 
     $scope.transfer = function () {
-        var url = '/api/bill/allot/save';
+        var url = '/api/bill/restock/allotSave';
         var bill = _.cloneDeep($scope.bill);
 
         // bill.billType = '';
+
+        bill.self = $scope.params.specificBillType === 'NO_PLAN';
         bill.billPurpose = 'MOVE_STORAGE';
         bill.specificBillType = 'RESTOCK';
         bill.allowMemo = '';
@@ -147,18 +134,23 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
         bill.sourceCode = $scope.params.billCode;
         bill.inStorageBillCode = $scope.params.billCode;
         bill.inStorageBillType = $scope.params.billProperty;
-        bill.outStation = {
+
+        bill.outLocation = {
             stationCode: $scope.params.outLocation.stationCode,
             storage: {
                 storageCode: $scope.params.outLocation.storage.storageCode
             }
         };
-        bill.inStation = {
+        bill.inLocation = {
             stationCode: $scope.params.inLocation.stationCode,
             storage: {
                 storageCode: $scope.params.inLocation.storage.storageCode
             }
         };
+
+        // 默认出库是在途库
+        bill.inStorageBillInStationCode = $scope.params.inStationType;
+        bill.inStorageBillOutStationCode = 'ON_STORAGE';
 
         bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
             return {
@@ -179,9 +171,10 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
                 swal('', response.message, 'error');
             } else {
                 // alert('success')
-                $state.go('app.bill.restock.transfer');
+                $state.go('app.bill.restock.transferList');
             }
-        }, apiServiceError)
+        }, apiServiceError);
+        $scope.cargoGrid.kendoGrid.refresh();
         $scope.$close();
     }
 
