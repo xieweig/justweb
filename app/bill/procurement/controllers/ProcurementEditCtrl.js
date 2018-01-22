@@ -51,7 +51,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 {field: "dateInProduced", title: "生产日期", width: 160},
                 {field: "unitPrice", title: "单位进价", width: 120},
                 {field: "actualAmount", title: "发货数量", width: 120},
-                {field: "shippedAmount", title: "实收数量", width: 120, editable: true},
+                {field: "shippedAmount", title: "实收数量", width: 120, kType: 'number', editable: true},
                 {field: "differenceNumber", title: "数量差额", width: 120},
                 {
                     field: "differencePrice", title: "总价差值", width: 120,
