@@ -2,11 +2,13 @@
 
 angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
     // 查询站点退库计划
-    $scope.params = {};
+    $scope.params = {
+        specificBillType:[]
+    };
 
     $scope.billStatus = [
         {value: 'ALLOT', text: '已调拨'},
-        {value: 'ALLOT', text: '调拨中'},
+        // {value: 'ALLOT', text: '调拨中'},
         {value: 'NOT_ALLOT', text: '未调拨'}
     ];
 
@@ -21,12 +23,12 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
         {value: 'DONE', text: '完成'}
     ]
 
-    $scope.billAttr = [
-        {value: 'DELIVERY', text: '配送计划转'},
-        {value: 'ADJUST', text: '调剂计划转'},
-        {value: 'RETURNED', text: '退货计划转'},
-        {value: 'NO_PLAN', text: '无计划计划转'}
-    ];
+    // $scope.billAttr = [
+    //     {value: 'DELIVERY', text: '配送计划转'},
+    //     {value: 'ADJUST', text: '调剂计划转'},
+    //     {value: 'RETURNED', text: '退货计划转'},
+    //     {value: 'NO_PLAN', text: '无计划计划转'}
+    // ];
     // 搜索
     $scope.search = function () {
         $scope.stationGrid.kendoGrid.dataSource.page(1);
@@ -41,6 +43,7 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
             autoBind: false,
             pageable: true,
             persistSelection: true,
+            height: 300,
             columns: [
                 {
                     command: [{
@@ -69,7 +72,7 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
                         return getTextByVal($scope.billState, data.billState)
                     }},
                 {title: "单据属性", width: 100, template: function (data) {
-                        return getTextByVal($scope.billType, data.specificBillType) + '转'
+                        return getTextByVal($scope.specificType, data.specificBillType) + '转'
                     }},
                 {field: "createTime", title: "录单时间", width: 150},
                 {field: "inWareHouseTime", title: "入库时间", width: 150},

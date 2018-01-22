@@ -11,7 +11,7 @@ angular.module('app.bill', [
     'app.bill.delivery',
     'app.bill.mistake',
     'app.bill.adjust',
-    'app.bill.others'
+    'app.bill.inoutself'
 ]).config(function ($stateProvider) {
     $stateProvider
         .state('app.bill', {

@@ -25,13 +25,6 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
         {value: 'OUT_FAILURE', text: '出库失败'}
     ];
 
-    $scope.billAttr = [
-        {value: 'DELIVERY', text: '配送计划转'},
-        {value: 'ADJUST', text: '调剂计划转'},
-        {value: 'RETURNED', text: '退货计划转'},
-        {value: 'NO_PLAN', text: '无计划计划转'}
-    ];
-
     // 类型存储
     $scope.outState = [
         {value: 'NOT_OUT', text: '未出库'},
@@ -41,7 +34,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
         {value: 'OUT_FAILURE', text: '出库失败'},
         {value: 'OUT_SUCCESS', text: '出库成功'},
         {value: 'IN_FAILURE', text: '入库失败'},
-        {value: 'IN_SUCCESS', text: '入库成功'},
+        {value: 'IN_SUCCESS', text: '入库成功'}
     ];
 
     $scope.submitStates = [
@@ -101,7 +94,8 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
                 {field: "billCode", locked: true, title: "出库单号", width: 150},
                 {
                     title: "单据属性", width: 150, template: function (data) {
-                        return getTextByVal($scope.billType, data.specificBillType) + '转'
+                        console.log(data.specificBillType)
+                        return getTextByVal($scope.specificType, data.specificBillType) + '转'
                     }
                 },
                 {

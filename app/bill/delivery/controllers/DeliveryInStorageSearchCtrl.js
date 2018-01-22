@@ -2,7 +2,9 @@
 
 angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
     // 查询站点退库计划
-    $scope.params = {};
+    $scope.params = {
+        specificBillType: []
+    };
 
     $scope.billStatus = [
         {value: 'ALLOT', text: '已调拨'},
@@ -69,7 +71,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                         return getTextByVal($scope.billState, data.billState)
                     }},
                 {title: "单据属性", width: 100, template: function (data) {
-                        return getTextByVal($scope.billType, data.specificBillType) + '转'
+                        return getTextByVal($scope.specificType, data.specificBillType) + '转'
                     }},
                 {field: "createTime", title: "录单时间", width: 150},
                 {field: "inWareHouseTime", title: "入库时间", width: 150},
