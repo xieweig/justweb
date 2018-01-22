@@ -9,7 +9,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
     $scope.curAuditStatus = {};
 
     $scope.resetPage = function () {
-        $state.reload();
+        $state.reload($state.current.name);
     };
 
     $scope.toList = function () {
