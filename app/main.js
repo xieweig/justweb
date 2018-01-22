@@ -15,7 +15,8 @@ var COMMON_URL = {
     oauth: location.origin + '/oauth'
 };
 
-if (location.port === '8999') {
+var is8999 = (location.port === '8999');
+if (is8999) {
     COMMON_URL = {
         bill: 'http://192.168.21.141:15009',
         baseInfo: 'http://192.168.21.141:15006',
@@ -24,13 +25,61 @@ if (location.port === '8999') {
     document.cookie = "userCode=YGADMIN; userName=超级管理员; paymentUrl=/payment; currentStationName=%E6%80%BB%E9%83%A8; currentStationCode=HDQA00; stationClass=CQ";
 }
 
-$(function () {
 
+// 菜单对象
+var MENU_OBJECT = {};
+var MENU_MAP = [];
+$(function () {
     // moment.js default language
-    moment.locale('zh');
-    angular.bootstrap(document, ['app']);
+    if (is8999) {
+        moment.locale('zh');
+        angular.bootstrap(document, ['app']);
+    } else {
+        loadMenu(function () {
+            moment.locale('zh');
+            angular.bootstrap(document, ['app']);
+        });
+    }
 
 });
+
+function loadMenu(callback) {
+    $.ajax({
+        url: "/oauth/api/oauth/jurisdiction/findUserJurisdictionByUserCode?userCode=" + $.cookie("userCode"),
+        dataType: 'json',
+        success: function (result) {
+            if (result.code !== "000") {
+                if (result.message) {
+                    swal('提示', result.message, 'error');
+                } else {
+                    swal('提示', result.result.message, 'error');
+                }
+            } else {
+                MENU_MAP = result.result.jurisdictionList;
+                _.each(MENU_MAP, function (item) {
+                    // 判断权限
+                    var auth = item.symbol.split('');
+                    item.needValidation = (item.symbol.indexOf('1') > -1);
+                    // 获取是否展示菜单
+                    item.show = (auth[0] === '1' || auth[1] === '1' || auth[3] === '1');
+
+                    MENU_OBJECT[item.jurisdictionId] = {
+                        code: item.jurisdictionCode,
+                        urlAddress: item.urlAddress,
+                        symbol: item.symbol,
+                        name: item.jurisdictionName,
+                        needValidation: item.needValidation,
+                        id: item.jurisdictionId,
+                        needToken: item.needToken
+                    };
+                });
+                if (_.isFunction(callback)) {
+                    callback();
+                }
+            }
+        }
+    });
+}
 
 
 /**

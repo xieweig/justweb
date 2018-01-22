@@ -10,78 +10,107 @@
         traditional href="" links. See documentation for details.
         -->
 
-        <ul data-smart-menu>
-            <li><a data-ui-sref="app.home" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">{{getWord('Home')}}</span></a></li>
-            <li data-menu-collapse>
-                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">总部计划中心</span></a>
-                <ul>
-                    <li><a data-ui-sref="app.bill.plan.add" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加总部计划</span></a></li>
-                    <li><a data-ui-sref="app.bill.plan.list" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询总部计划</span></a></li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">进货</span></a>
-                <ul>
-                    <li><a data-ui-sref="app.bill.procurement.add" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">进货录单</span></a></li>
-                    <li><a data-ui-sref="app.bill.procurement.list" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询进货入库单</span></a></li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">运单跟踪</span></a>
-                <ul>
-                    <li><a data-ui-sref="app.bill.trace.list" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询列表</span></a></li>
-                    <li><a data-ui-sref="app.bill.trace.add" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加运单</span></a></li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">退库</span></a>
-                <ul>
-                    <li><a data-ui-sref="app.bill.restock.planSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询站点退库计划</span></a></li>
-                    <li><a data-ui-sref="app.bill.restock.selfPick" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">站点退库拣货</span></a></li>
-                    <li><a data-ui-sref="app.bill.restock.outSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询退库出库单</span></a></li>
-                    <li><a data-ui-sref="app.bill.restock.inSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询退库入库单</span></a></li>
-                    <li><a data-ui-sref="app.bill.restock.transfer" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询调剂调拨单</span></a></li>
 
+        <ul data-smart-menu>
+            <li data-menu-collapse data-ng-repeat="system in ::menuList">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-lg fa-fw fa-user"></i>
+                    <span class="menu-item-parent">{{system.text}}</span>
+                </a>
+                <ul data-ng-if="system.items">
+                    <li data-menu-collapse data-ng-repeat="item in ::system.items" data-ui-sref-active="active">
+                        <a href="#">
+                            <i class="fa fa-lg fa-fw fa-user"></i>
+                            <span class="menu-item-parent">{{item.text}}</span>
+                        </a>
+                        <ul data-ng-if="item.items">
+                            <li data-ng-repeat="child in ::item.items" data-ng-if="child.show" data-ui-sref-active="active">
+                                <a data-ng-if="child.urlAddress.indexOf('app') >= 0" data-ng-click="routerChange(child)" href="javascript:void(0)" data-guide-router>
+                                    {{child.text}}
+                                </a>
+                                <a data-ng-if="child.urlAddress.indexOf('app') < 0" href="{{child.urlAddress}}" target="_blank">
+                                    {{child.text}}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li data-menu-collapse>
-                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">退货</span></a>
+                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">单据没有权限的菜单</span></a>
                 <ul>
-                    <li><a data-ui-sref="app.bill.returned.planSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询站点退货计划</span></a></li>
-                    <li><a data-ui-sref="app.bill.returned.selfPick" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">站点退货拣货</span></a></li>
-                    <li><a data-ui-sref="app.bill.returned.outSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询退货出库单</span></a></li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">配送</span></a>
-                <ul>
-                    <li><a data-ui-sref="app.bill.delivery.planList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询站点配送计划</span></a></li>
-                    <li><a data-ui-sref="app.bill.delivery.pick" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">站点配送拣货</span></a></li>
-                    <li><a data-ui-sref="app.bill.delivery.outStorageSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询配送出库单</span></a></li>
-                    <li><a data-ui-sref="app.bill.delivery.inStorageSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询配送入库单</span></a></li>
-                    <li><a data-ui-sref="app.bill.delivery.transfer" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询配送调拨单</span></a></li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">调剂</span></a>
-                <ul>
-                    <li><a data-ui-sref="app.bill.adjust.planList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询站点调剂计划</span></a></li>
-                    <li><a data-ui-sref="app.bill.adjust.pick" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">站点调剂拣货</span></a></li>
-                    <li><a data-ui-sref="app.bill.adjust.outStorageList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询调剂出库单</span></a></li>
-                    <li><a data-ui-sref="app.bill.adjust.inStorageList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">调剂入库单查询</span></a></li>
-                    <li><a data-ui-sref="app.bill.adjust.transferList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">调剂调拨单查询</span></a></li>
-                </ul>
-            </li>
-            <li data-menu-collapse>
-                <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">误差管理</span></a>
-                <ul>
-                    <li><a data-ui-sref="app.bill.mistake.overflowAdd" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加报溢单</span></a></li>
-                    <li><a data-ui-sref="app.bill.mistake.overflowList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询报溢单</span></a></li>
-                    <li><a data-ui-sref="app.bill.mistake.lossAdd" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加报损单</span></a></li>
-                    <li><a data-ui-sref="app.bill.mistake.lossList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询报损单</span></a></li>
-                    <li><a data-ui-sref="app.bill.mistake.adyMistakeAdd" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加日常误差单</span></a></li>
-                    <li><a data-ui-sref="app.bill.mistake.adyMistakeList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询日常误差单</span></a></li>
-                    <li><a data-ui-sref="app.bill.mistake.list" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询流转误差单</span></a></li>
+                    <li><a data-ui-sref="app.home" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">{{getWord('Home')}}</span></a></li>
+                    <li data-menu-collapse>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">总部计划中心</span></a>
+                        <ul>
+                            <li><a data-ui-sref="app.bill.plan.add" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加总部计划</span></a></li>
+                            <li><a data-ui-sref="app.bill.plan.list" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询总部计划</span></a></li>
+                        </ul>
+                    </li>
+                    <li data-menu-collapse>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">进货</span></a>
+                        <ul>
+                            <li><a data-ui-sref="app.bill.procurement.add" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">进货录单</span></a></li>
+                            <li><a data-ui-sref="app.bill.procurement.list" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询进货入库单</span></a></li>
+                        </ul>
+                    </li>
+                    <li data-menu-collapse>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">运单跟踪</span></a>
+                        <ul>
+                            <li><a data-ui-sref="app.bill.trace.list" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询列表</span></a></li>
+                            <li><a data-ui-sref="app.bill.trace.add" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加运单</span></a></li>
+                        </ul>
+                    </li>
+                    <li data-menu-collapse>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">退库</span></a>
+                        <ul>
+                            <li><a data-ui-sref="app.bill.restock.planSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询站点退库计划</span></a></li>
+                            <li><a data-ui-sref="app.bill.restock.selfPick" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">站点退库拣货</span></a></li>
+                            <li><a data-ui-sref="app.bill.restock.outSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询退库出库单</span></a></li>
+                            <li><a data-ui-sref="app.bill.restock.inSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询退库入库单</span></a></li>
+                            <li><a data-ui-sref="app.bill.restock.transfer" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询调剂调拨单</span></a></li>
+                        </ul>
+                    </li>
+                    <li data-menu-collapse>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">退货</span></a>
+                        <ul>
+                            <li><a data-ui-sref="app.bill.returned.planSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询站点退货计划</span></a></li>
+                            <li><a data-ui-sref="app.bill.returned.selfPick" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">站点退货拣货</span></a></li>
+                            <li><a data-ui-sref="app.bill.returned.outSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询退货出库单</span></a></li>
+                        </ul>
+                    </li>
+                    <li data-menu-collapse>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">配送</span></a>
+                        <ul>
+                            <li><a data-ui-sref="app.bill.delivery.planList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询站点配送计划</span></a></li>
+                            <li><a data-ui-sref="app.bill.delivery.pick" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">站点配送拣货</span></a></li>
+                            <li><a data-ui-sref="app.bill.delivery.outStorageSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询配送出库单</span></a></li>
+                            <li><a data-ui-sref="app.bill.delivery.inStorageSearch" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询配送入库单</span></a></li>
+                            <li><a data-ui-sref="app.bill.delivery.transfer" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询配送调拨单</span></a></li>
+                        </ul>
+                    </li>
+                    <li data-menu-collapse>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">调剂</span></a>
+                        <ul>
+                            <li><a data-ui-sref="app.bill.adjust.planList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询站点调剂计划</span></a></li>
+                            <li><a data-ui-sref="app.bill.adjust.pick" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">站点调剂拣货</span></a></li>
+                            <li><a data-ui-sref="app.bill.adjust.outStorageList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询调剂出库单</span></a></li>
+                            <li><a data-ui-sref="app.bill.adjust.inStorageList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">调剂入库单查询</span></a></li>
+                            <li><a data-ui-sref="app.bill.adjust.transferList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">调剂调拨单查询</span></a></li>
+                        </ul>
+                    </li>
+                    <li data-menu-collapse>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">误差管理</span></a>
+                        <ul>
+                            <li><a data-ui-sref="app.bill.mistake.overflowAdd" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加报溢单</span></a></li>
+                            <li><a data-ui-sref="app.bill.mistake.overflowList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询报溢单</span></a></li>
+                            <li><a data-ui-sref="app.bill.mistake.lossAdd" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加报损单</span></a></li>
+                            <li><a data-ui-sref="app.bill.mistake.lossList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询报损单</span></a></li>
+                            <li><a data-ui-sref="app.bill.mistake.adyMistakeAdd" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">添加日常误差单</span></a></li>
+                            <li><a data-ui-sref="app.bill.mistake.adyMistakeList" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询日常误差单</span></a></li>
+                            <li><a data-ui-sref="app.bill.mistake.list" title="Outlook"> <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">查询流转误差单</span></a></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
         </ul>

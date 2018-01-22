@@ -26,7 +26,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
             });
         }
     };
-    $scope.params = {};
+    $scope.params = {specificBillType: ''};
     $scope.search = function () {
         $scope.planList.kendoGrid.dataSource.page(1);
     };
