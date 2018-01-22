@@ -201,7 +201,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                 $scope.params[name] = res[name]
             });
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
-            $scope.params.billType = getTextByVal($scope.billType, res.billType) + '转';
+            $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
             $scope.params.inOrOutState = getTextByVal($scope.outState, res.inOrOutState);
             $scope.params.auditState = getTextByVal($scope.auditStatus, res.auditState);
             $scope.params.submitState = getTextByVal($scope.submitStatus, res.submitState);
