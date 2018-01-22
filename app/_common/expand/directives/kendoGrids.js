@@ -89,11 +89,12 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                             enableKeyboard: false,
                             enableInputMask: false
                         };
-                        if (item.WdatePicker === true) {
-                            dateOption.dateFmt = 'yyyy-MM-dd HH:mm:ss';
-                        } else if (typeof item.WdatePicker === 'string') {
+                        if (typeof item.WdatePicker === 'string') {
                             dateOption.dateFmt = item.WdatePicker;
-                        } else if (_.isObject(item.WdatePicker)) {
+                        } else {
+                            dateOption.dateFmt = 'yyyy-MM-dd HH:mm:ss';
+                        }
+                        if (_.isObject(item.WdatePicker)) {
                             _.extend(dateOption, item.WdatePicker);
                         }
                         input.click(function () {
