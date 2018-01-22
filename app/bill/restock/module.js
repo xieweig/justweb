@@ -9,8 +9,8 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 title: '退库'
             }
         })
-        .state('app.bill.restock.planSearch', {
-            url: '/bill/restock/plan/search',
+        .state('app.bill.restock.planList', {
+            url: '/bill/restock/planList',
             data: {
                 title: '查询站点退库计划'
             },
@@ -29,8 +29,8 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        .state('app.bill.restock.selfPick', {
-            url: '/bill/restock/station/selfpick',
+        .state('app.bill.restock.pick', {
+            url: '/bill/restock/station/pick',
             data: {
                 title: '站点退库拣货'
             },
@@ -52,8 +52,8 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        .state('app.bill.restock.outSearch', {
-            url: '/bill/restock/out/search',
+        .state('app.bill.restock.outStorageList', {
+            url: '/bill/restock/outStorageList',
             data: {
                 title: '查询退库出库单'
             },
@@ -72,8 +72,8 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        .state('app.bill.restock.inSearch', {
-            url: '/bill/restock/in/search',
+        .state('app.bill.restock.inStorageList', {
+            url: '/bill/restock/inStorageList',
             data: {
                 title: '查询退库入库单'
             },
@@ -92,8 +92,8 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
                 }
             }
         })
-        .state('app.bill.restock.transfer', {
-            url: '/bill/restock/transfer/search',
+        .state('app.bill.restock.transferList', {
+            url: '/bill/restock/transferList',
             data: {
                 title: '查询调剂调拨单'
             },
