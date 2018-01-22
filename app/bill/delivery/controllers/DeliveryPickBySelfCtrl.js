@@ -37,9 +37,11 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                     }
                 },
-                {title: "标准单位数量", template: function (data) {
+                {
+                    title: "标准单位数量", template: function (data) {
                         return data.number * data.actualAmount
-                    }},
+                    }
+                },
                 {
                     field: "standardUnitCode", title: "标准单位", template: function (data) {
                         return getTextByVal($scope.materialConfigure, data.standardUnitCode);
@@ -98,7 +100,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
     // 保存和提交合并
     function saveOrSubmit(type, bill) {
         // 如果调入站点为空则不能保存提交
-        if (!$scope.params.inStationCode){
+        if (!$scope.params.inStationCode) {
             swal('参数错误', '调入站点不能为空', 'error');
             return
         }
@@ -138,6 +140,10 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
             }
         };
         bill.billDetails = _.map($scope.cargoListGrid.kendoGrid.dataSource.data(), function (item) {
+            if(item.actualAmount === undefined){
+                swal('参数错误','货物数量不能为空','error');
+                return
+            }
             return {
                 rawMaterial: {
                     rawMaterialCode: item.rawMaterialCode,
@@ -155,6 +161,11 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
+                if (type === 'save') {
+                    swal('操作成功', '', 'success');
+                } else {
+                    swal('提交成功', '', 'success');
+                }
                 $state.go('app.bill.delivery.outStorageList');
             }
         }, apiServiceError)

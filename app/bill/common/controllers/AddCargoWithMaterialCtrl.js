@@ -16,6 +16,25 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCondition',
         params: $scope.params,
         primaryId: 'cargoCode',
+        dataSource: {
+            data: function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    var result = [];
+                    if (response.result && response.result.result.content) {
+                        result = response.result.result.content;
+                        if (result.length === 1) {
+                            result[0].actualAmount = 0;
+                            $timeout(function () {
+                                $scope.addCargo(result[0].cargoCode);
+                            });
+                        }
+                    }
+                }
+                return result;
+            }
+        },
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
@@ -92,8 +111,12 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
     }, 100);
 
     // 增加货物
-    $scope.addCargo = function () {
-        var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
+    $scope.addCargo = function (selectIds) {
+        if(!selectIds) {
+            var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
+        }else{
+            selectIds = [selectIds]
+        }
         var dataSource = $scope.cargoList.kendoGrid.dataSource;
         var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
         var cargoCodeList = _.map(currentDataSource.data(), function (item) {
@@ -145,7 +168,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 standardUnitCode: item.standardUnitCode,
                 shippedAmount: item.shippedAmount,
                 updateTime: item.updateTime,
-                actualAmount: item.actualAmount
+                actualAmount: item.actualAmount || 0
             };
         });
         cb(result);
