@@ -8,8 +8,8 @@ angular.module('app.bill.returned', ['ui.router']).config(function ($stateProvid
                 title: '退货'
             }
         })
-        .state('app.bill.returned.planSearch', {
-            url: '/bill/returned/plan/search',
+        .state('app.bill.returned.planList', {
+            url: '/bill/returned/planList',
             data: {
                 title: '查询站点退货计划'
             },
@@ -28,8 +28,8 @@ angular.module('app.bill.returned', ['ui.router']).config(function ($stateProvid
                 }
             }
         })
-        .state('app.bill.returned.selfPick', {
-            url: '/bill/returned/station/selfpick',
+        .state('app.bill.returned.pick', {
+            url: '/bill/returned/pick',
             data: {
                 title: '站点退货拣货'
             },
@@ -60,8 +60,8 @@ angular.module('app.bill.returned', ['ui.router']).config(function ($stateProvid
         //         }
         //     }
         // })
-        .state('app.bill.returned.outSearch', {
-            url: '/bill/returned/out/search',
+        .state('app.bill.returned.outStorageList', {
+            url: '/bill/returned/outStorageList',
             data: {
                 title: '查询退货出库单'
             },

@@ -49,8 +49,8 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
                 }
             }
         })
-        .state('app.bill.delivery.outStorageSearch', {
-            url: '/bill/delivery/outSearch',
+        .state('app.bill.delivery.outStorageList', {
+            url: '/bill/delivery/outStorageList',
             data: {
                 title: '查询配送出库单'
             },
@@ -69,8 +69,8 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
                 }
             }
         })
-        .state('app.bill.delivery.inStorageSearch', {
-            url: '/bill/delivery/inSearch',
+        .state('app.bill.delivery.inStorageList', {
+            url: '/bill/delivery/inStorageList',
             data: {
                 title: '查询配送入库单'
             },
@@ -89,8 +89,8 @@ angular.module('app.bill.delivery', ['ui.router']).config(function ($stateProvid
                 }
             }
         })
-        .state('app.bill.delivery.transfer', {
-            url: '/bill/delivery/transfer/search',
+        .state('app.bill.delivery.transferList', {
+            url: '/bill/delivery/transferList',
             data: {
                 title: '查询配送调拨单'
             },

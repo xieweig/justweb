@@ -9,7 +9,9 @@
             <span ng-if="modalType === 'edit'">
                 <input type="button" class="btn btn-default widget-header-btn" value="返回" data-ng-click="$close()">
                 <input type="button" class="btn btn-default widget-header-btn" value="提交审核" data-ng-click="submit()">
-                <input type="button" class="btn btn-default widget-header-btn" value="保存" data-ng-click="save()">
+                <span data-ng-if="params.submitState === '未提交'">
+                    <input type="button" class="btn btn-default widget-header-btn" value="保存" data-ng-click="save()">
+                </span>
             </span>
             <span ng-if="modalType === 'audit'">
                 <input type="button" class="btn btn-default widget-header-btn" value="返回" data-ng-click="$close()">

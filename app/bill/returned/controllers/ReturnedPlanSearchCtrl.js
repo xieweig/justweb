@@ -20,11 +20,11 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
                 {
                     command: [{
                         name: 'select', text: "拣货", click: jumpToPick, visible: function (data) {
-                            return data.operationState === 'NOOPERATION';
+                            return !data.operationState || data.operationState === 'NOOPERATION';
                         }
                     }, {
                         name: 'view', text: '查看', click: viewOutStorageBill, visible: function (data) {
-                            return data.operationState !== 'NOOPERATION';
+                            return data.opdata.operationState  && data.operationState !== 'NOOPERATION';
                         }
                     }], title: "操作", width: 80
                 },
