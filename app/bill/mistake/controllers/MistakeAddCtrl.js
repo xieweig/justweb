@@ -2,12 +2,12 @@
 
 angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParams, $uibModal) {
     $scope.typeName = $stateParams.typeName;
+    $scope.bill = {};
 
     $scope.stationOpt = {
+        single: true,
         callback: function (data) {
-            $scope.params.inStationCode = _.map(data, function (item) {
-                return item.stationCode;
-            });
+            $scope.bill.inStationCode = data.stationCode;
         }
     };
 

@@ -104,5 +104,17 @@ angular.module('app.bill.mistake', ['ui.router']).config(function ($stateProvide
                     controller: 'MistakeAddCtrl'
                 }
             }
+        })
+        .state('app.bill.mistake.list', {
+            url: '/bill/mistake/list',
+            data: {
+                title: '查询流转误差单'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/mistake/views/turnoverList.html',
+                    controller: 'TurnoverListCtrl'
+                }
+            }
         });
 });
