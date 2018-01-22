@@ -561,7 +561,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                 swal('', response.message, 'error');
             } else {
                 // alert('success')
-                $scope.addModal.close()
+                $scope.$close()
             }
         });
         $scope.$close();
