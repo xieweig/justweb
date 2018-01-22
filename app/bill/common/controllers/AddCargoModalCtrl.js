@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
+angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data, cargoUnit, materialUnit) {
     $scope.params = {};
     $scope.search = function () {
         $scope.cargoList.kendoGrid.dataSource.page(1);
@@ -39,8 +39,18 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
                 {field: "barCode", title: "货物条码", width: 120},
                 {field: "selfBarCode", title: "自定义条码", width: 120},
                 {field: "effectiveTime", title: "保质期(天)", width: 120},
-                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
-                {field: "standardUnitCode", title: "最小标准单位", width: 120},
+                {
+                    title: "规格", width: 120,
+                    template: function (data) {
+                        return data.number + getTextByVal(cargoUnit, data.measurementCode);
+                    }
+                },
+                {
+                    title: "最小标准单位", width: 120,
+                    template: function (data) {
+                        return getTextByVal(materialUnit, data.standardUnitCode);
+                    }
+                },
                 {field: "createTime", title: "建档时间", width: 120},
                 {field: "memo", title: "备注", width: 200}
             ]
@@ -53,16 +63,27 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
         persistSelection: true,
         kendoSetting: {
             editable: 'inline',
+            dataSource: data,
             columns: [
                 {title: "操作", command: [{name: 'edit', text: "编辑"}, {name: 'del', text: "删除", click: deleteCurrentCargo}], width: 160},
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},
-                {field: "standardUnitCode", title: "标准单位", width: 120},
-                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
-                {field: "productDate", title: "生产日期", width: 120, WdatePicker: true, editable: true},
-                {field: "purchasePrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
-                {field: "amount", title: "发货数量", width: 200, kType: 'number', editable: true}
+                {
+                    title: "规格", width: 120,
+                    template: function (data) {
+                        return data.number + getTextByVal(cargoUnit, data.measurementCode);
+                    }
+                },
+                {
+                    title: "最小标准单位", width: 120,
+                    template: function (data) {
+                        return getTextByVal(materialUnit, data.standardUnitCode);
+                    }
+                },
+                {field: "dateInProduced", title: "生产日期", width: 120, WdatePicker: {maxDate: formatDate(new Date(), 'yyyy-MM-dd')}, editable: true},
+                {field: "unitPrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
+                {field: "actualAmount", title: "发货数量", width: 200, kType: 'number', editable: true}
             ]
         }
     };
@@ -71,13 +92,22 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
     function deleteCurrentCargo(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var dataSource = $scope.currentCargoList.kendoGrid.dataSource;
-        _.find(dataSource.data(), function (item, index) {
-            if (item.cargoCode === dataItem.cargoCode) {
-                dataSource.remove(dataSource.at(index));
-                return true;
+        swal({
+            title: '确定要删除该项?',
+            type: 'warning',
+            confirmButtonText: '是的',
+            showCancelButton: true
+        }).then(function (res) {
+            if (res.value) {
+                var dataSource = $scope.currentCargoList.kendoGrid.dataSource;
+                _.find(dataSource.data(), function (item, index) {
+                    if (item.cargoCode === dataItem.cargoCode) {
+                        dataSource.remove(dataSource.at(index));
+                        return true;
+                    }
+                    return false;
+                });
             }
-            return false;
         });
     }
 
@@ -108,31 +138,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
         if (!dataSource) {
             dataSource = $scope.currentCargoList.kendoGrid.dataSource.data();
         }
-        var result = _.map(dataSource, function (item) {
-            return {
-                barCode: item.barCode,
-                cargoCode: item.cargoCode,
-                cargoId: item.cargoId,
-                cargoName: item.cargoName,
-                cargoType: item.cargoType,
-                createTime: item.createTime,
-                effectiveTime: item.effectiveTime,
-                logicStatus: item.logicStatus,
-                measurementCode: item.measurementCode,
-                memo: item.memo,
-                number: item.number,
-                originalName: item.originalName,
-                rawMaterialId: item.rawMaterialId,
-                rawMaterialName: item.rawMaterialName,
-                selfBarCode: item.selfBarCode,
-                standardUnitCode: item.standardUnitCode,
-                updateTime: item.updateTime,
-                dateInProduced: item.productDate,
-                unitPrice: item.purchasePrice,
-                actualAmount: item.amount
-            };
-        });
-        cb(result);
+        cb(dataSource);
         $scope.$close();
     };
 });

@@ -85,13 +85,21 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                         var input = $("<input class='k-input k-textbox' onchange='' readonly/>");
                         input.attr("name", options.field);
                         input.appendTo(container);
+                        var dateOption = {
+                            enableKeyboard: false,
+                            enableInputMask: false
+                        };
+                        if (typeof item.WdatePicker === 'string') {
+                            dateOption.dateFmt = item.WdatePicker;
+                        } else {
+                            dateOption.dateFmt = 'yyyy-MM-dd HH:mm:ss';
+                        }
+                        if (_.isObject(item.WdatePicker)) {
+                            _.extend(dateOption, item.WdatePicker);
+                        }
                         input.click(function () {
-                            WdatePicker({
-                                el: this,
-                                dateFmt: item.WdatePicker === true ? 'yyyy-MM-dd HH:mm:ss' : item.WdatePicker,
-                                enableKeyboard: false,
-                                enableInputMask: false
-                            });
+                            dateOption.el = this;
+                            WdatePicker(dateOption);
                         });
                     }
                 } else if (item.kType) {

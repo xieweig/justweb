@@ -1,6 +1,6 @@
 <div class="uib-modal">
     <h1 class="uib-modal-title">
-        <span>添加货物明细</span>
+        <span>计划详情</span>
         <span class="option" data-ng-if="type==='look'">
             <input type="button" class="btn btn-primary" value="导出">
             <input type="button" class="btn btn-default" value="返回" data-ng-click="$close();">
@@ -66,7 +66,7 @@
             <div class="input-group">
                 <span class="input-group-addon">计划备注</span>
                 <textarea type="text" rows="1" class="form-control custom-scroll" disabled
-                          data-ng-model="plan.memo"></textarea>
+                          data-ng-model="plan.planMemo"></textarea>
             </div>
         </div>
     </div>
@@ -88,15 +88,15 @@
                     </dl>
                     <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>原料编码</dt>
-                        <dd data-ng-bind="item.material.cargoCode"></dd>
+                        <dd data-ng-bind="item.material.materialCode"></dd>
                     </dl>
                     <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>所属原料分类</dt>
-                        <dd data-ng-bind="item.material.barCode"></dd>
+                        <dd data-ng-bind="item.material.materialTypeName"></dd>
                     </dl>
                     <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>最小标准单位</dt>
-                        <dd data-ng-bind="item.material.selfBarCode"></dd>
+                        <dd data-ng-bind="item.material.standardUnitName"></dd>
                     </dl>
                 </div>
                 <div class="row" data-ng-if="item.cargo">
@@ -118,15 +118,15 @@
                     </dl>
                     <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>所属原料</dt>
-                        <dd data-ng-bind="item.cargo.materialName"></dd>
+                        <dd data-ng-bind="item.cargo.rawMaterialName"></dd>
                     </dl>
                     <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>规格</dt>
-                        <dd data-ng-bind="item.cargo.number + item.cargo.measurementName"></dd>
+                        <dd data-ng-bind="item.cargo.number + item.cargo.configureName"></dd>
                     </dl>
                     <dl class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10 dl-horizontal no-padding">
                         <dt>分类</dt>
-                        <dd data-ng-bind="item.cargo.class"></dd>
+                        <dd data-ng-bind="item.cargo.rawMaterialTypeName"></dd>
                     </dl>
                 </div>
                 <hr class="gary-line">

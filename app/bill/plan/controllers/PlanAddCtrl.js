@@ -138,7 +138,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                     return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
-                            {field: "amount", title: "调剂数量(点击修改)", editable: true}
+                            {field: "amount", title: "调剂数量(点击修改)", kType: 'number', editable: true}
                         ]
                     }
                 }
@@ -267,7 +267,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             controller: 'PlanAddStationCtrl',
             resolve: {
                 billType: function () {
-                    return $scope.plan.billType;
+                    return $scope.plan.specificBillType;
                 },
                 cb: function () {
                     return function (data) {
@@ -343,6 +343,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         } else if (!plan.specificBillType) {
             swal('请选择计划类型', '', 'warning');
             return;
+        } else if (!plan.planMemo) {
+            swal('请填写备注信息', '', 'warning');
+            return;
         }
         if (!getItemObject('submit', plan)) {
             if (plan.billDetails.length === 0) {
@@ -365,7 +368,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             if (response.code !== '000') {
                 swal('', response.message, 'error')
             } else {
-                swal('操作成功', '', 'success').then(function () {
+                swal('操作成功', '生成计划编号:' + response.result.billCode, 'success').then(function () {
                     $state.go('app.bill.plan.list');
                 });
             }
@@ -384,7 +387,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     return true;
                 }
                 var exist = _.find(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
-                    if (type === 'submit' && !stationItem.amount) {
+                    if (type === 'submit' && !stationItem.amount || stationItem.amount === '0') {
                         swal('存在未输入调剂数量的站点', '', 'warning');
                         return true;
                     }
@@ -410,7 +413,8 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     rawMaterial: {
                         cargo: {
                             cargoCode: item.cargo.cargoCode
-                        }
+                        },
+                        rawMaterialCode: item.cargo.rawMaterialCode
                     },
                     planBillStationDTOS: stations
                 });
@@ -427,7 +431,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     return true;
                 }
                 var exist = _.find(item.stationGrid.kendoGrid.dataSource.data(), function (stationItem) {
-                    if (type === 'submit' && !stationItem.amount) {
+                    if (type === 'submit' && !stationItem.amount || stationItem.amount === '0') {
                         swal('存在未输入调剂数量的站点', '', 'warning');
                         return true;
                     }

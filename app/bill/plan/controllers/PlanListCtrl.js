@@ -66,14 +66,14 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                         {
                             name: 'e', text: "修改", click: editPlan,
                             visible: function (item) {
-                                return item.billSubmitState === 'UNCOMMITTED';
+                                return item.billSubmitState === 'UNCOMMITTED' || item.auditState === 'AUDIT_FAILURE';
                             }
                         },
                         // {name: 'd', text: "删除"},
                         {
                             name: 'a', text: "审核", click: auditPlan,
                             visible: function (item) {
-                                return item.auditState === 'UN_REVIEWED' && item.billSubmitState === 'SUBMITTED';
+                                return (item.auditState === 'UN_REVIEWED' || item.auditState === 'AUDIT_ING') && item.billSubmitState === 'SUBMITTED';
                             }
                         },
                         {name: 's', text: "查看", click: lookPlan}

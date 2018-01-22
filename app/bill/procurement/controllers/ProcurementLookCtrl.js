@@ -11,9 +11,19 @@ angular.module('app').controller('ProcurementLookCtrl', function ($scope, $state
             columns: [
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
-                {field: "rawMaterialId", title: "所属原料", width: 120},
-                {field: "measurementCode", title: "标准单位", width: 120},
-                {template: "#: cargo.number #/#: cargo.standardUnitCode #", title: "规格", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
+                {
+                    title: "标准单位", width: 120,
+                    template: function (data) {
+                        return getTextByVal(params.materialUnit, data.standardUnitCode)
+                    }
+                },
+                {
+                    title: "规格", width: 120,
+                    template: function (data) {
+                        return data.number + getTextByVal(params.cargoUnit, data.measurementCode)
+                    }
+                },
                 {field: "dateInProduced", title: "生产日期", width: 160},
                 {field: "unitPrice", title: "单位进价", width: 120},
                 {field: "actualAmount", title: "实收数量", width: 120},

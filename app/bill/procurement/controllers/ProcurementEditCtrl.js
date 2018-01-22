@@ -9,16 +9,20 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             supplierCode: params.purchaseBill.supplier.supplierCode,
             supplierName: params.purchaseBill.supplier.supplierName
         };
-
-        $timeout(function () {
-            $('#inStorageCode').val(params.purchaseBill.inLocation.storage.storageCode).trigger('change');
-        });
     } else {
         params.purchaseBill = {
             billDetails: [],
-            supplier: {}
-        }
+            supplier: {},
+            inLocation: {
+                storage: {
+                    storageCode: 'IN_STORAGE'
+                }
+            }
+        };
     }
+    $timeout(function () {
+        $('#inStorageCode').val(params.purchaseBill.inLocation.storage.storageCode).trigger('change');
+    });
 
     $scope.procurementGrid = {
         primaryId: 'cargoCode',
@@ -31,43 +35,35 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 {title: "操作", width: 160, command: [{name: 'edit', text: "编辑"}]},
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
-                {field: "rawMaterialId", title: "所属原料", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
                 {
                     title: "标准单位", width: 120,
                     template: function (data) {
-                        return getTextByVal(materialUnit, data.measurementCode);
+                        return getTextByVal(materialUnit, data.standardUnitCode);
                     }
                 },
                 {
                     title: "规格", width: 120,
                     template: function (data) {
-                        return data.number + '/' + getTextByVal(cargoUnit, data.standardUnitCode);
+                        return data.number + getTextByVal(cargoUnit, data.measurementCode);
                     }
                 },
                 {field: "dateInProduced", title: "生产日期", width: 160},
                 {field: "unitPrice", title: "单位进价", width: 120},
                 {field: "actualAmount", title: "发货数量", width: 120},
-                {field: "shippedAmount", title: "实收数量", width: 120, editable: true},
+                {field: "shippedAmount", title: "实收数量", width: 120, kType: 'number', editable: true},
                 {field: "differenceNumber", title: "数量差额", width: 120},
-                {
-                    field: "differencePrice", title: "总价差值", width: 120,
-                    template: function (data) {
-                        return (parseFloat(data.unitPrice) * data.differenceNumber).toFixed(2);
-                    }
-                }
+                {field: "differencePrice", title: "总价差值", width: 120}
             ],
             save: function (e) {
                 // 计算数量差额和总价值差
-                var model = e.model;
-                model.shippedAmount = parseInt(model.shippedAmount);
-                model.shippedAmount !== model.shippedAmount ? model.shippedAmount = 0 : '';
+                var item = e.model;
+                item.shippedAmount = parseInt(item.shippedAmount);
+                item.shippedAmount !== item.shippedAmount ? item.shippedAmount = 0 : '';
 
-                model.actualAmount = parseInt(model.actualAmount);
-                model.differenceNumber = model.shippedAmount - model.actualAmount;
-                model.differenceNumber !== model.differenceNumber ? model.differenceNumber = 0 : '';
 
-                model.differencePrice = (parseFloat(model.unitPrice) * model.differenceNumber).toFixed(2);
-                model.differencePrice !== model.differencePrice ? model.differencePrice = 0 : '';
+                item.differenceNumber = parseInt(item.actualAmount) - parseInt(item.shippedAmount);
+                item.differencePrice = item.differenceNumber * parseFloat(item.unitPrice);
                 return e;
             }
         }
@@ -87,21 +83,23 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
 
     // 批量删除
     $scope.batchDelete = function () {
+        var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
+        var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
+        // 循环需要删除的索引的反序
+        var cargoNames = [];
+        var indexPos = _.chain(dataSource.data()).map(function (item, index) {
+            if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
+                cargoNames.push(item.cargoName);
+                return index;
+            }
+        }).reverse().value();
         swal({
-            title: '确定要删除选中的项目吗',
+            title: '确定要删除' + cargoNames.join() + '吗',
             type: 'warning',
             confirmButtonText: '是的',
             showCancelButton: true
         }).then(function (res) {
             if (res.value) {
-                var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
-                var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
-                // 循环需要删除的索引的反序
-                var indexPos = _.chain(dataSource.data()).map(function (item, index) {
-                    if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
-                        return index;
-                    }
-                }).reverse().value();
                 // 根据反序  从最后一条开始删除
                 _.each(indexPos, function (item) {
                     if (_.isNumber(item) && item >= 0) {
@@ -123,18 +121,38 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 cb: function () {
                     return function (data) {
                         var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
-                        var cargoCodes = _.map(dataSource.data(), function (item) {
-                            return item.cargoCode;
-                        });
                         _.each(data, function (item) {
-                            if (_.indexOf(cargoCodes, item.cargoCode) < 0) {
-                                dataSource.add(item);
+                            if (!item.unitPrice) {
+                                item.unitPrice = 0;
                             }
+                            if (!item.actualAmount) {
+                                item.actualAmount = 0;
+                            }
+                            if (!item.shippedAmount) {
+                                item.shippedAmount = 0;
+                            }
+                            item.differenceNumber = parseInt(item.actualAmount) - parseInt(item.shippedAmount);
+                            item.differencePrice = item.differenceNumber * parseFloat(item.unitPrice);
                         });
+                        dataSource.data(data);
+                        // var cargoCodes = _.map(dataSource.data(), function (item) {
+                        //     return item.cargoCode;
+                        // });
+                        // _.each(data, function (item) {
+                        //     if (_.indexOf(cargoCodes, item.cargoCode) < 0) {
+                        //         dataSource.add(item);
+                        //     }
+                        // });
                     }
                 },
                 data: function () {
-                    return $scope.procurementGrid.kendoGrid.dataSource.data();
+                    return _.toArray($scope.procurementGrid.kendoGrid.dataSource.data());
+                },
+                cargoUnit: function () {
+                    return cargoUnit;
+                },
+                materialUnit: function () {
+                    return materialUnit;
                 }
             }
         });
@@ -152,7 +170,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         if (!bill.freightCode) {
             swal('请输入运单单号', '', 'warning');
             return
-        } else if (!bill.inLocation) {
+        } else if (!bill.inLocation || !bill.inLocation.storage || !bill.inLocation.storage.storageCode) {
             swal('请选择入库库位', '', 'warning');
             return
         } else if (!bill.shippedAmount) {

@@ -50,7 +50,29 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 var data = getKendoData(response);
                 var supplierCodes = [];
                 _.each(data, function (item) {
-                    supplierCodes.push(item.supplierCode);
+                    // 站点及库位
+                    if (!item.inLocation) {
+                        item.inLocation = {storage: {}};
+                    }
+                    // 供应商
+                    if (!item.supplier) {
+                        item.supplier = {};
+                    } else {
+                        supplierCodes.push(item.supplier.supplierCode);
+                    }
+                    // 表格中的实收 差值等计算
+                    item.statistical = {actualAmount: 0, differenceAmount: 0, actualPrice: 0, differencePrice: 0};
+                    _.each(item.billDetails, function (billItem) {
+                        var actualAmount = parseInt(billItem.actualAmount);
+                        var shippedAmount = parseInt(billItem.shippedAmount);
+                        var differenceNumber = shippedAmount - actualAmount;
+                        var unitPrice = parseFloat(billItem.unitPrice);
+
+                        item.statistical.actualAmount += actualAmount;
+                        item.statistical.differenceAmount += differenceNumber;
+                        item.statistical.actualPrice += actualAmount * unitPrice;
+                        item.statistical.differencePrice += differenceNumber * unitPrice;
+                    });
                 });
 
                 // 回显供应商
@@ -60,9 +82,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                     }), supplierList);
                     var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
                     _.each(dataSource.data(), function (item, index) {
-                        var supplier = supplierObj[item.get('supplierCode')];
+                        var supplier = supplierObj[item.get('supplier.supplierCode')];
                         if (supplier) {
-                            item.set('supplierCode', supplier.supplierName);
+                            item.set('supplier.supplierCode', supplier.supplierName);
                         }
                     });
                 });
@@ -81,7 +103,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                             name: 'e', text: "修改",
                             click: openEditModal,
                             visible: function (dataItem) {
-                                return dataItem.submitState !== 'SUBMITTED';
+                                return dataItem.submitState !== 'SUBMITTED' || dataItem.auditState !== 'AUDIT_FAILURE';
                             }
                         },
                         {
@@ -101,24 +123,31 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 {
                     title: "入库站点", width: 120,
                     template: function (data) {
-                        return getTextByVal($scope.station, data.inStationCode)
+                        return getTextByVal($scope.station, data.inLocation.stationCode)
                     }
                 },
-                {field: "inStorageCode", title: "入库库房", width: 120},
-                {field: "amount", title: "实收数量", width: 120},
-                {field: "differenceNumber", title: "数量差值", width: 120},
-                {field: "inTotalPrice", title: "进货实洋", width: 120},
-                {field: "differencePrice", title: "总价值差", width: 120},
-                {field: "supplierCode", title: "供应商", width: 120, editable: true},
                 {
-                    title: "提交状态", width: 120, template: function (data) {
-                    return getTextByVal($scope.auditStatus, data.auditState);
-                }
+                    title: "入库库房", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.outType, data.inLocation.storage.storageCode)
+                    }
+                },
+                {field: "statistical.actualAmount", title: "实收数量", width: 120},
+                {field: "statistical.differenceAmount", title: "数量差值", width: 120},
+                {field: "statistical.actualPrice", title: "进货实洋", width: 120},
+                {field: "statistical.differencePrice", title: "总价值差", width: 120},
+                {field: "supplier.supplierCode", title: "供应商", width: 120, editable: true},
+                {
+                    title: "提交状态", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.auditStatus, data.auditState);
+                    }
                 },
                 {
-                    title: "审核状态", width: 120, template: function (data) {
-                    return getTextByVal($scope.submitStatus, data.submitState);
-                }
+                    title: "审核状态", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.submitStatus, data.submitState);
+                    }
                 },
                 {field: "memo", title: "备注", width: 120}
             ]
@@ -137,7 +166,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 resolve: {
                     params: {
                         type: 'look',
-                        purchaseBill: purchaseBill
+                        purchaseBill: purchaseBill,
+                        cargoUnit: cargoUnit,
+                        materialUnit: materialUnit
                     }
                 }
             }).closed.then(function () {
@@ -158,7 +189,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 resolve: {
                     params: {
                         type: 'audit',
-                        purchaseBill: purchaseBill
+                        purchaseBill: purchaseBill,
+                        cargoUnit: cargoUnit,
+                        materialUnit: materialUnit
                     }
                 }
             }).closed.then(function () {
@@ -224,6 +257,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                             item.cargo = {};
                         }
                     });
+                    if (!purchase.inLocation) {
+                        purchase.inLocation = {};
+                    }
                     // 库位
                     purchase.inStorageName = getTextByVal($scope.outType, purchase.inLocation.storage ? purchase.inLocation.storage.storageCode : '');
                     if (!purchase.supplier) {
