@@ -53,25 +53,17 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 {field: "actualAmount", title: "发货数量", width: 120},
                 {field: "shippedAmount", title: "实收数量", width: 120, kType: 'number', editable: true},
                 {field: "differenceNumber", title: "数量差额", width: 120},
-                {
-                    field: "differencePrice", title: "总价差值", width: 120,
-                    template: function (data) {
-                        return (parseFloat(data.unitPrice) * data.differenceNumber).toFixed(2);
-                    }
-                }
+                {field: "differencePrice", title: "总价差值", width: 120}
             ],
             save: function (e) {
                 // 计算数量差额和总价值差
-                var model = e.model;
-                model.shippedAmount = parseInt(model.shippedAmount);
-                model.shippedAmount !== model.shippedAmount ? model.shippedAmount = 0 : '';
+                var item = e.model;
+                item.shippedAmount = parseInt(item.shippedAmount);
+                item.shippedAmount !== item.shippedAmount ? item.shippedAmount = 0 : '';
 
-                model.actualAmount = parseInt(model.actualAmount);
-                model.differenceNumber = model.shippedAmount - model.actualAmount;
-                model.differenceNumber !== model.differenceNumber ? model.differenceNumber = 0 : '';
 
-                model.differencePrice = (parseFloat(model.unitPrice) * model.differenceNumber).toFixed(2);
-                model.differencePrice !== model.differencePrice ? model.differencePrice = 0 : '';
+                item.differenceNumber = parseInt(item.actualAmount) - parseInt(item.shippedAmount);
+                item.differencePrice = item.differenceNumber * parseFloat(item.unitPrice);
                 return e;
             }
         }
@@ -127,14 +119,28 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 cb: function () {
                     return function (data) {
                         var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
-                        var cargoCodes = _.map(dataSource.data(), function (item) {
-                            return item.cargoCode;
-                        });
                         _.each(data, function (item) {
-                            if (_.indexOf(cargoCodes, item.cargoCode) < 0) {
-                                dataSource.add(item);
+                            if (!item.unitPrice) {
+                                item.unitPrice = 0;
                             }
+                            if (!item.actualAmount) {
+                                item.actualAmount = 0;
+                            }
+                            if (!item.shippedAmount) {
+                                item.shippedAmount = 0;
+                            }
+                            item.differenceNumber = parseInt(item.actualAmount) - parseInt(item.shippedAmount);
+                            item.differencePrice = item.differenceNumber * parseFloat(item.unitPrice);
                         });
+                        dataSource.data(data);
+                        // var cargoCodes = _.map(dataSource.data(), function (item) {
+                        //     return item.cargoCode;
+                        // });
+                        // _.each(data, function (item) {
+                        //     if (_.indexOf(cargoCodes, item.cargoCode) < 0) {
+                        //         dataSource.add(item);
+                        //     }
+                        // });
                     }
                 },
                 data: function () {

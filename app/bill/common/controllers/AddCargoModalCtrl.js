@@ -81,9 +81,9 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data
                         return getTextByVal(materialUnit, data.standardUnitCode);
                     }
                 },
-                {field: "productDate", title: "生产日期", width: 120, WdatePicker: {maxDate: formatDate(new Date(), 'yyyy-MM-dd')}, editable: true},
-                {field: "purchasePrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
-                {field: "amount", title: "发货数量", width: 200, kType: 'number', editable: true}
+                {field: "dateInProduced", title: "生产日期", width: 120, WdatePicker: {maxDate: formatDate(new Date(), 'yyyy-MM-dd')}, editable: true},
+                {field: "unitPrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
+                {field: "actualAmount", title: "发货数量", width: 200, kType: 'number', editable: true}
             ]
         }
     };
@@ -138,31 +138,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data
         if (!dataSource) {
             dataSource = $scope.currentCargoList.kendoGrid.dataSource.data();
         }
-        var result = _.map(dataSource, function (item) {
-            return {
-                barCode: item.barCode,
-                cargoCode: item.cargoCode,
-                cargoId: item.cargoId,
-                cargoName: item.cargoName,
-                cargoType: item.cargoType,
-                createTime: item.createTime,
-                effectiveTime: item.effectiveTime,
-                logicStatus: item.logicStatus,
-                measurementCode: item.measurementCode,
-                memo: item.memo,
-                number: item.number,
-                originalName: item.originalName,
-                rawMaterialId: item.rawMaterialId,
-                rawMaterialName: item.rawMaterialName,
-                selfBarCode: item.selfBarCode,
-                standardUnitCode: item.standardUnitCode,
-                updateTime: item.updateTime,
-                dateInProduced: item.productDate,
-                unitPrice: item.purchasePrice,
-                actualAmount: item.amount
-            };
-        });
-        cb(result);
+        cb(dataSource);
         $scope.$close();
     };
 });
