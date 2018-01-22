@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, cargoUnit, materialUnit) {
+angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data, cargoUnit, materialUnit) {
     $scope.params = {};
     $scope.search = function () {
         $scope.cargoList.kendoGrid.dataSource.page(1);
@@ -63,6 +63,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, carg
         persistSelection: true,
         kendoSetting: {
             editable: 'inline',
+            dataSource: data,
             columns: [
                 {title: "操作", command: [{name: 'edit', text: "编辑"}, {name: 'del', text: "删除", click: deleteCurrentCargo}], width: 160},
                 {field: "cargoName", title: "货物名称", width: 120},
@@ -80,7 +81,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, carg
                         return getTextByVal(materialUnit, data.standardUnitCode);
                     }
                 },
-                {field: "productDate", title: "生产日期", width: 120, WdatePicker: true, editable: true},
+                {field: "productDate", title: "生产日期", width: 120, WdatePicker: {maxDate: new Date()}, editable: true},
                 {field: "purchasePrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
                 {field: "amount", title: "发货数量", width: 200, kType: 'number', editable: true}
             ]

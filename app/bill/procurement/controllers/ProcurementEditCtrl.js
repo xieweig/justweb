@@ -134,7 +134,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                     }
                 },
                 data: function () {
-                    return $scope.procurementGrid.kendoGrid.dataSource.data();
+                    return _.cloneDeep($scope.procurementGrid.kendoGrid.dataSource.data());
                 },
                 cargoUnit: function () {
                     return cargoUnit;
