@@ -9,16 +9,20 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             supplierCode: params.purchaseBill.supplier.supplierCode,
             supplierName: params.purchaseBill.supplier.supplierName
         };
-
-        $timeout(function () {
-            $('#inStorageCode').val(params.purchaseBill.inLocation.storage.storageCode).trigger('change');
-        });
     } else {
         params.purchaseBill = {
             billDetails: [],
-            supplier: {}
-        }
+            supplier: {},
+            inLocation: {
+                storage: {
+                    storageCode: 'IN_STORAGE'
+                }
+            }
+        };
     }
+    $timeout(function () {
+        $('#inStorageCode').val(params.purchaseBill.inLocation.storage.storageCode).trigger('change');
+    });
 
     $scope.procurementGrid = {
         primaryId: 'cargoCode',
