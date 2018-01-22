@@ -35,7 +35,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 {title: "操作", width: 160, command: [{name: 'edit', text: "编辑"}]},
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
-                {field: "rawMaterialId", title: "所属原料", width: 120},
+                {field: "rawMaterialName", title: "所属原料", width: 120},
                 {
                     title: "标准单位", width: 120,
                     template: function (data) {
