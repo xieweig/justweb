@@ -536,7 +536,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $scope.addModal.close()
+                $scope.$close()
             }
         }, apiServiceError);
         $scope.$close();

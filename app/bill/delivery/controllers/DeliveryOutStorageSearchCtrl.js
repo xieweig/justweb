@@ -11,11 +11,6 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
         inOrOutStates: []
     };
 
-    // $scope.submitStateCode = [
-    //     {value: 'SAVED', text: '未提交'},
-    //     {value: 'SUBMITTED', text: '已提交'}
-    // ];
-
     $scope.auditStates = [
         {value: 'UN_REVIEWED', text: '未审核'},
         {value: 'AUDIT_SUCCESS', text: '审核通过'},

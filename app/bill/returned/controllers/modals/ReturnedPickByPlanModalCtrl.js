@@ -54,7 +54,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
             if (res.basicEnum === 'BY_CARGO') {
                 // 按货物拣货
                 $timeout(function () {
-                    var billDetails = res.billDetails;
+                    var billDetails = res.childPlanBillDetails;
                     var cargoCodeList = _.map(billDetails, function (item) {
                         return item.rawMaterial.cargo.cargoCode
                     });

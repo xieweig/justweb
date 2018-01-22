@@ -54,7 +54,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             if (res.basicEnum === 'BY_CARGO') {
                 // 按货物拣货
                 $timeout(function () {
-                    var billDetails = res.billDetails;
+                    var billDetails = res.childPlanBillDetails; // billDetails
                     var cargoCodeList = _.map(billDetails, function (item) {
                         return item.rawMaterial.cargo.cargoCode
                     });
@@ -294,6 +294,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     $scope.submit = function () {
         saveOrSubmit('submit', _.cloneDeep($scope.bill))
     };
+
     function saveOrSubmit(type, bill) {
         var url = '';
         if (type === 'save') {
@@ -301,7 +302,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
         } else {
             url = '/api/bill/restock/submit'
         }
-        _.each([ 'planMemo', 'outStorageMemo', 'sourceCode'], function (name) {
+        _.each(['planMemo', 'outStorageMemo', 'sourceCode'], function (name) {
             bill[name] = $scope.params[name]
         });
         // bill.billProperty = 'RESTOCK';
