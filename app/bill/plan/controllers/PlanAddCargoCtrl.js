@@ -69,6 +69,7 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
             "memo": dataItem.memo,
             "number": dataItem.number,
             "rawMaterialId": dataItem.rawMaterialId,
+            "rawMaterialCode": dataItem.rawMaterialCode,
             "cargoType": dataItem.cargoType,
             "rawMaterialName": dataItem.rawMaterialName,
             "rawMaterialTypeName": dataItem.rawMaterialTypeName

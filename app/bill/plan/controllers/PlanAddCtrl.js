@@ -413,7 +413,8 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     rawMaterial: {
                         cargo: {
                             cargoCode: item.cargo.cargoCode
-                        }
+                        },
+                        rawMaterialCode: item.cargo.rawMaterialCode
                     },
                     planBillStationDTOS: stations
                 });

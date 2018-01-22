@@ -73,7 +73,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                         {
                             name: 'a', text: "审核", click: auditPlan,
                             visible: function (item) {
-                                return item.auditState === 'UN_REVIEWED' && item.billSubmitState === 'SUBMITTED';
+                                return (item.auditState === 'UN_REVIEWED' || item.auditState === 'AUDIT_ING') && item.billSubmitState === 'SUBMITTED';
                             }
                         },
                         {name: 's', text: "查看", click: lookPlan}
