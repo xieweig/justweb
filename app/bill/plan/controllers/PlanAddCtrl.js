@@ -267,7 +267,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             controller: 'PlanAddStationCtrl',
             resolve: {
                 billType: function () {
-                    return $scope.plan.billType;
+                    return $scope.plan.specificBillType;
                 },
                 cb: function () {
                     return function (data) {
