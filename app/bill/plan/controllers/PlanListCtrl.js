@@ -66,7 +66,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
                         {
                             name: 'e', text: "修改", click: editPlan,
                             visible: function (item) {
-                                return item.billSubmitState === 'UNCOMMITTED';
+                                return item.billSubmitState === 'UNCOMMITTED' || item.auditState === 'AUDIT_FAILURE';
                             }
                         },
                         // {name: 'd', text: "删除"},
