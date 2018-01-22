@@ -41,7 +41,7 @@ angular.module('app').controller('DeliveryPlanViewModalCtrl', function ($scope, 
     };
 
     // 请求单条计划详情
-    ApiService.post('/api/bill/delivery/findPlanByBillCode?billCode=' + data.billCode).then(function (response) {
+    ApiService.get('/api/bill/delivery/findPlanByBillCode?billCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
             var res = response.result.bill;
             $scope.params.billCode = res.billCode;
