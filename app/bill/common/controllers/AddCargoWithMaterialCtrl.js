@@ -4,7 +4,6 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
     $scope.params = {};
     $scope.cargoConfigure = data.cargoUnit;
     $scope.materialConfigure = data.materialUnit;
-    console.log($scope.materialConfigure)
     $scope.material = {};
     $scope.show = data.hasOwnProperty('m');
 
@@ -61,7 +60,18 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                 }},
                 {field: "actualAmount", title: "货物数量", width: 120, editable: true}
-            ]
+            ],
+            save: function (e) {
+                // 每次保存都重新计算完成度
+                $timeout(function () {
+                    $scope.material.actualAmount = 0;
+                    _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
+                        $scope.material.actualAmount += parseInt(item.actualAmount) * parseInt(item.number);
+                    });
+                    $scope.material.progress = parseFloat($scope.material.actualAmount / $scope.material.shippedAmount * 100).toFixed(2) + '%';
+                });
+                return e
+            }
         }
     };
 
@@ -84,9 +94,11 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
         var dataSource = $scope.cargoList.kendoGrid.dataSource;
         var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
+        var cargoCodeList = _.map(currentDataSource.data(), function (item) {
+            return item.cargoCode
+        });
         _.each(dataSource.data(), function (item, index) {
-            if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
-                console.log($scope.material.rawMaterialCode, item.rawMaterialCode)
+            if (_.indexOf(selectIds, '' + item.cargoCode) > -1 && _.indexOf(cargoCodeList, '' + item.cargoCode) === -1) {
                 // 判断是否需要区分原料
                 if ($scope.show) {
                     if (item.rawMaterialCode.toString() === $scope.material.rawMaterialCode) {
