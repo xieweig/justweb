@@ -83,21 +83,23 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
 
     // 批量删除
     $scope.batchDelete = function () {
+        var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
+        var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
+        // 循环需要删除的索引的反序
+        var cargoNames = [];
+        var indexPos = _.chain(dataSource.data()).map(function (item, index) {
+            if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
+                cargoNames.push(item.cargoName);
+                return index;
+            }
+        }).reverse().value();
         swal({
-            title: '确定要删除选中的项目吗',
+            title: '确定要删除' + cargoNames.join() + '吗',
             type: 'warning',
             confirmButtonText: '是的',
             showCancelButton: true
         }).then(function (res) {
             if (res.value) {
-                var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
-                var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
-                // 循环需要删除的索引的反序
-                var indexPos = _.chain(dataSource.data()).map(function (item, index) {
-                    if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
-                        return index;
-                    }
-                }).reverse().value();
                 // 根据反序  从最后一条开始删除
                 _.each(indexPos, function (item) {
                     if (_.isNumber(item) && item >= 0) {
