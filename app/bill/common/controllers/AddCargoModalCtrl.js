@@ -81,7 +81,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data
                         return getTextByVal(materialUnit, data.standardUnitCode);
                     }
                 },
-                {field: "productDate", title: "生产日期", width: 120, WdatePicker: {maxDate: new Date()}, editable: true},
+                {field: "productDate", title: "生产日期", width: 120, WdatePicker: {maxDate: formatDate(new Date(), 'yyyy-MM-dd')}, editable: true},
                 {field: "purchasePrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
                 {field: "amount", title: "发货数量", width: 200, kType: 'number', editable: true}
             ]
