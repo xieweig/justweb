@@ -36,15 +36,15 @@
     };
 })(jQuery);
 
-angular.module('SmartAdmin.Layout').directive('smartMenu', function ($state, $rootScope) {
+angular.module('SmartAdmin.Layout').directive('smartMenu', function ($state, $rootScope, $timeout) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
             var $body = $('body');
+            var $collapsible = null;
 
-            var $collapsible = element.find('li[data-menu-collapse]');
-
-            var bindEvents = function(){
+            var bindEvents = function () {
+                $collapsible = element.find('li[data-menu-collapse]');
                 $collapsible.each(function (idx, li) {
                     var $li = $(li);
                     $li
@@ -72,22 +72,22 @@ angular.module('SmartAdmin.Layout').directive('smartMenu', function ($state, $ro
                     }
                 });
             };
-            bindEvents();
+            $timeout(function () {
+                bindEvents();
+                // click on route link
+                element.on('click', 'a[data-guide-router]', function (e) {
+                    // collapse all siblings to element parents and remove active markers
+                    $(this)
+                        .parents('li').addClass('active')
+                        .each(function () {
+                            $(this).siblings('li.open').smartCollapseToggle();
+                            $(this).siblings('li').removeClass('active')
+                        });
 
-
-            // click on route link
-            element.on('click', 'a[data-ui-sref]', function (e) {
-                // collapse all siblings to element parents and remove active markers
-                $(this)
-                    .parents('li').addClass('active')
-                    .each(function () {
-                        $(this).siblings('li.open').smartCollapseToggle();
-                        $(this).siblings('li').removeClass('active')
-                    });
-
-                if ($body.hasClass('mobile-view-activated')) {
-                    $rootScope.$broadcast('requestToggleMenu');
-                }
+                    if ($body.hasClass('mobile-view-activated')) {
+                        $rootScope.$broadcast('requestToggleMenu');
+                    }
+                });
             });
 
 

@@ -6,11 +6,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                var planBill = response.result.planBill;
+                var planBill = response.result.bill;
                 $scope.plan = {
                     billName: planBill.billName,
                     billCode: planBill.billCode,
-                    memo: planBill.memo
+                    planMemo: planBill.planMemo
                 };
                 var goodsCode = _.map(planBill.planBillDetails, function (billItem) {
                     return billItem.goodsCode;
@@ -30,10 +30,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         $scope.cargoMap = _.map(planBill.planBillDetails, function (item) {
                             return pushCargo(item, !isCargo);
                         });
-
-                        $timeout(function () {
-                            $('#billType').val(planBill.billType).trigger('change');
-                        });
                     });
                 } else {
                     Common.getMaterialByCodes(goodsCode).then(function (materialList) {
@@ -49,12 +45,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         $scope.materialMap = _.map(planBill.planBillDetails, function (item) {
                             return pushCargo(item, !isCargo);
                         });
-
-                        $timeout(function () {
-                            $('#billType').val(planBill.billType).trigger('change');
-                        });
                     });
                 }
+                $timeout(function () {
+                    $('#billType').val(planBill.billType).trigger('change');
+                });
             }
         }, apiServiceError);
     } else {
@@ -262,7 +257,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
 
     // 添加站点
     $scope.addStation = function (item, index) {
-        if (!$scope.plan.billType) {
+        if (!$scope.plan.specificBillType) {
             swal('请选择计划类型', '', 'warning');
             return;
         }
@@ -345,12 +340,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         if (!plan.billName) {
             swal('请选择计划名称', '', 'warning');
             return;
-        } else if (!plan.billType) {
+        } else if (!plan.specificBillType) {
             swal('请选择计划类型', '', 'warning');
             return;
         }
         if (!getItemObject('submit', plan)) {
-            if (plan.planBillDetailDTOS.length === 0) {
+            if (plan.billDetails.length === 0) {
                 swal('请添加项目', '', 'warning');
             } else {
                 sendHttpReques('submit', plan);
@@ -379,7 +374,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
 
     // 获取货物或者原料的列表
     function getItemObject(type, plan) {
-        plan.planBillDetailDTOS = [];
+        plan.billDetails = [];
         var stations = [];
         if ($scope.materialMap.length === 0) {
             plan.basicEnum = 'BY_CARGO';
@@ -411,8 +406,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     swal('存在未选择站点的项目', '', 'warning');
                     return true;
                 }
-                plan.planBillDetailDTOS.push({
-                    cargoCode: item.cargo.cargoCode,
+                plan.billDetails.push({
+                    rawMaterial: {
+                        cargo: {
+                            cargoCode: item.cargo.cargoCode
+                        }
+                    },
                     planBillStationDTOS: stations
                 });
                 return false;
@@ -450,8 +449,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     swal('存在未选择站点的项目', '', 'warning');
                     return true;
                 }
-                plan.planBillDetailDTOS.push({
-                    rawMaterialCode: item.material.materialCode,
+                plan.billDetails.push({
+                    rawMaterial: {
+                        rawMaterialCode: item.material.materialCode
+                    },
                     planBillStationDTOS: stations
                 });
                 return false;

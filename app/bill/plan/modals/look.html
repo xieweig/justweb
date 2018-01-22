@@ -35,11 +35,11 @@
             </div>
             <dl class="dl-horizontal">
                 <dt>计划备注</dt>
-                <dd class="ng-binding">{{plan.memo}}</dd>
+                <dd class="ng-binding">{{plan.planMemo}}</dd>
             </dl>
-            <dl class="dl-horizontal">
+            <dl class="dl-horizontal" data-ng-if="type!=='audit'">
                 <dt>审核意见</dt>
-                <dd class="ng-binding">{{plan.memo}}</dd>
+                <dd class="ng-binding">{{plan.auditMemo}}</dd>
             </dl>
         </div>
         <div data-ng-if="type==='audit'">
@@ -135,9 +135,9 @@
         </div>
     </div>
     <hr class="gray-line">
-    <div class="input-group">
+    <div class="input-group" data-ng-if="type==='audit'">
         <span class="input-group-addon">审核意见</span>
-        <textarea type="text" rows="3" class="form-control custom-scroll" data-ng-disabled="type!=='audit'"
+        <textarea type="text" rows="3" class="form-control custom-scroll"
                   data-ng-model="plan.auditMemo"></textarea>
     </div>
 </div>

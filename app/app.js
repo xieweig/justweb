@@ -104,7 +104,7 @@ app.factory('MainFactory', function () {
         host: COMMON_URL.bill,
         downloadUrl: 'http://192.168.21.141:2222/report/',
         exportExcelHost: 'http://192.168.21.141:15005',
-        system: 'baseInfo',
+        system: 'bill',
         timeout: 10000,
         headers: function (otherHeader, dataType) {
             var headers = {
@@ -278,8 +278,15 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
     };
     // 根据原料id集合 获取原料明细
     this.getSupplierByIds = function (codes) {
-        if (!codes) {
-            return [];
+        codes = _.filter(codes, function (item) {
+            return item;
+        });
+        if (!codes || codes.length === 0) {
+            return {
+                then: function (callback) {
+                    callback([]);
+                }
+            };
         }
         return ApiService.post(COMMON_URL.baseInfo + '/api/v1/baseInfo/supplier/findByListSupplierCode', codes, {hasHost: true}).then(function (response) {
             if (response.code !== '000') {

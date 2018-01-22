@@ -19,9 +19,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
     $scope.supplierTreeOpt = {
         type: 'supplier',
         callback: function (data) {
-            $scope.params.supplierCode = _.chain(data).map(function (item) {
+            $scope.params.supplierCodes = _.map(data, function (item) {
                 return item.supplierCode
-            }).join().value();
+            });
         }
     };
 
@@ -29,20 +29,20 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
         $scope.procurementGrid.kendoGrid.dataSource.page(1);
     };
     $scope.procurementGrid = {
-        url: '/api/bill/purchase/findByConditions',
+        url: '/api/bill/purchase/findPurchaseByConditions',
         params: $scope.params,
         dataSource: {
             parameterMap: function (params) {
-                params.submitStatus = [];
+                params.submitStates = [];
                 _.each($scope.curSubmitStatus, function (item, key) {
                     if (item) {
-                        params.submitStatus.push(key);
+                        params.submitStates.push(key);
                     }
                 });
-                params.auditStatus = [];
+                params.auditStates = [];
                 _.each($scope.curAuditStatus, function (item, key) {
                     if (item) {
-                        params.auditStatus.push(key);
+                        params.auditStates.push(key);
                     }
                 });
             },
@@ -88,7 +88,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                             name: 'audit', text: "审核",
                             click: openAuditModal,
                             visible: function (dataItem) {
-                                return dataItem.auditState === 'UN_REVIEWED' && dataItem.submitState === 'SUBMITTED';
+                                return (dataItem.auditState === 'UN_REVIEWED' || dataItem.auditState === 'AUDIT_ING') && dataItem.submitState === 'SUBMITTED';
                             }
                         }
                     ]
@@ -130,24 +130,18 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            Common.getStore(purchaseBill.inStationCode).then(function (storage) {
-                purchaseBill.inStorageName = getTextByVal(storage, purchaseBill.inStorageCode);
-                Common.getSupplierByIds([purchaseBill.supplierCode]).then(function (suppliers) {
-                    purchaseBill.supplierName = suppliers[0].supplierName;
-                    $uibModal.open({
-                        templateUrl: 'app/bill/procurement/modals/look.html',
-                        size: 'lg',
-                        controller: 'ProcurementLookCtrl',
-                        resolve: {
-                            params: {
-                                type: 'look',
-                                purchaseBill: purchaseBill
-                            }
-                        }
-                    }).closed.then(function () {
-                        $scope.search();
-                    });
-                });
+            $uibModal.open({
+                templateUrl: 'app/bill/procurement/modals/look.html',
+                size: 'lg',
+                controller: 'ProcurementLookCtrl',
+                resolve: {
+                    params: {
+                        type: 'look',
+                        purchaseBill: purchaseBill
+                    }
+                }
+            }).closed.then(function () {
+                $scope.procurementGrid.kendoGrid.dataSource.read();
             });
         });
     }
@@ -157,26 +151,20 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            Common.getStore(purchaseBill.inStationCode).then(function (storage) {
-                purchaseBill.inStorageName = getTextByVal(storage, purchaseBill.inStorageCode);
-                Common.getSupplierByIds([purchaseBill.supplierCode]).then(function (suppliers) {
-                    purchaseBill.supplierName = suppliers[0].supplierName;
-                    $uibModal.open({
-                        templateUrl: 'app/bill/procurement/modals/look.html',
-                        size: 'lg',
-                        controller: 'ProcurementLookCtrl',
-                        resolve: {
-                            params: {
-                                type: 'audit',
-                                purchaseBill: purchaseBill
-                            }
-                        }
-                    }).closed.then(function () {
-                        $scope.search();
-                    });
-                });
+            $uibModal.open({
+                templateUrl: 'app/bill/procurement/modals/look.html',
+                size: 'lg',
+                controller: 'ProcurementLookCtrl',
+                resolve: {
+                    params: {
+                        type: 'audit',
+                        purchaseBill: purchaseBill
+                    }
+                }
+            }).closed.then(function () {
+                $scope.procurementGrid.kendoGrid.dataSource.read();
             });
-        });
+        }, true);
     }
 
     // 打开修改界面
@@ -184,43 +172,43 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         loadCargo(dataItem.billCode, function (purchaseBill) {
-            Common.getStore(purchaseBill.inStationCode).then(function (storageList) {
-                Common.getSupplierByIds([purchaseBill.supplierCode]).then(function (suppliers) {
-                    purchaseBill.supplierName = suppliers[0].supplierName;
-                    $uibModal.open({
-                        templateUrl: 'app/bill/procurement/modals/edit.html',
-                        size: 'lg',
-                        controller: 'ProcurementEditCtrl',
-                        resolve: {
-                            params: {
-                                type: 'edit',
-                                purchaseBill: purchaseBill
-                            },
-                            cargoUnit: function () {
-                                return cargoUnit;
-                            },
-                            materialUnit: function () {
-                                return materialUnit;
-                            },
-                            storageList: function () {
-                                return storageList;
-                            }
-                        }
-                    }).closed.then(function () {
-                        $scope.search();
-                    });
-                });
+            $uibModal.open({
+                templateUrl: 'app/bill/procurement/modals/edit.html',
+                size: 'lg',
+                controller: 'ProcurementEditCtrl',
+                resolve: {
+                    params: {
+                        type: 'edit',
+                        purchaseBill: purchaseBill
+                    },
+                    cargoUnit: function () {
+                        return cargoUnit;
+                    },
+                    materialUnit: function () {
+                        return materialUnit;
+                    }
+                }
+            }).closed.then(function () {
+                $scope.procurementGrid.kendoGrid.dataSource.read();
             });
         });
     }
 
     // 加载单条详情
-    function loadCargo(billCode, cb) {
-        ApiService.get('/api/bill/purchase/findByPurchaseBillCode?purchaseBillCode=' + billCode).then(function (response) {
+    function loadCargo(billCode, cb, isAdjust) {
+        var url = '';
+        if (isAdjust) {
+            url = '/api/bill/purchase/open?billCode=' + billCode;
+        } else {
+            url = '/api/bill/purchase/findPurchaseBill?billCode=' + billCode;
+        }
+        ApiService.get(url).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                var billDetails = response.result.purchaseBill.billDetails;
+                // 详情中的货物
+                var purchase = response.result.bill;
+                var billDetails = purchase.billDetails;
                 var cargoList = _.map(billDetails, function (item) {
                     return item.rawMaterial ? item.rawMaterial.cargo.cargoCode : '';
                 });
@@ -230,14 +218,21 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                     }), cargoList);
                     _.each(billDetails, function (item) {
                         if (item.rawMaterial) {
-                            item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                            _.extend(item, cargoObject[item.rawMaterial.cargo.cargoCode]);
                         }
                         if (!item.cargo) {
                             item.cargo = {};
                         }
-                        item.cargoCode = generateMixed(10); //item.cargo.cargoCode;
                     });
-                    cb(response.result.purchaseBill);
+                    // 库位
+                    purchase.inStorageName = getTextByVal($scope.outType, purchase.inLocation.storage ? purchase.inLocation.storage.storageCode : '');
+                    if (!purchase.supplier) {
+                        purchase.supplier = {};
+                    }
+                    Common.getSupplierByIds([purchase.supplier.supplierCode]).then(function (suppliers) {
+                        purchase.supplier.supplierName = suppliers[0] ? suppliers[0].supplierName : '';
+                        cb(purchase);
+                    });
                 });
             }
         }, apiServiceError);

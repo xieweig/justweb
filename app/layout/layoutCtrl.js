@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, MainFactory, largeArea, city, station, scopeStation, store) {
+angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, $state, MainFactory, largeArea, city, station, scopeStation, store) {
     $rootScope.largeArea = largeArea;
     $rootScope.city = city;
     $rootScope.station = station;
@@ -195,5 +195,87 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, Mai
     $scope.downloadFile = function (url) {
         url = MainFactory.downloadUrl + url;
         window.open(url);
+    };
+
+
+    // 获取菜单树
+    $scope.menuList = (function (data) {
+        var pos = {};
+        var tree = [];
+        var i = 0;
+        while (data.length !== 0) {
+            if (!data[i].parentJurisdiction) {
+                tree.push({
+                    id: data[i].jurisdictionId,
+                    text: data[i].jurisdictionName,
+                    urlAddress: data[i].urlAddress,
+                    needValidation: data[i].needValidation,
+                    show: data[i].show
+                });
+                pos[data[i].jurisdictionId] = [tree.length - 1];
+                data.splice(i, 1);
+                i--;
+            } else {
+                var posArr = pos[data[i].parentJurisdiction.jurisdictionId];
+                if (posArr) {
+                    var obj = tree[posArr[0]];
+                    for (var j = 1; j < posArr.length; j++) {
+                        obj = obj.items[posArr[j]];
+                    }
+                    if (!obj.items)
+                        obj.items = [];
+                    obj.items.push({
+                        id: data[i].jurisdictionId,
+                        text: data[i].jurisdictionName,
+                        urlAddress: data[i].urlAddress,
+                        needValidation: data[i].needValidation,
+                        show: data[i].show
+                    });
+                    pos[data[i].jurisdictionId] = posArr.concat([obj.items.length - 1]);
+                    data.splice(i, 1);
+                    i--;
+                } else if (data[i].frequency && data[i].frequency >= 5) {
+                    data.splice(i, 1);
+                    i--;
+                }
+                else {
+                    if (data[i].frequency) {
+                        data[i].frequency += 1;
+                    } else {
+                        data[i].frequency = 1;
+                    }
+                }
+            }
+            i++;
+            if (i > data.length - 1) {
+                i = 0;
+            }
+        }
+        return tree;
+    })(MENU_MAP);
+
+    // 菜单改变
+    var routerTips = [
+        '/prepaidCard/operation/recharge',
+        '/prepaidCard/operation/batchRecharge',
+        '/memberInfo/create',
+        '/member/memberInfo/changeMember'
+    ];
+
+    $scope.routerChange = function (item) {
+        if (item.urlAddress.indexOf('app.' + MainFactory.system) < 0) {
+            // 查找系统(如baseInfo 会自动加上app.判断) 如果不存在  则跳转
+            alert(item.urlAddress.split('.')[1] + '系统');
+            return;
+            window.open('/' + item.urlAddress.split('.')[1] + '/');
+        } else {
+            if (_.indexOf(routerTips, $state.current.url) >= 0) {
+                if (confirm('当前页面包含支付功能!是否确定交易完毕并离开当前页面?')) {
+                    $state.go(item.urlAddress);
+                }
+            } else {
+                $state.go(item.urlAddress);
+            }
+        }
     };
 });

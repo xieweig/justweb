@@ -7,7 +7,7 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
         if (response.code !== '000') {
             swal('', response.message, 'error');
         } else {
-            $scope.plan = response.result.planBill;
+            $scope.plan = response.result.bill;
             $scope.plan.billTypeName = getTextByVal($scope.billType, $scope.plan.billType);
             var isCargo = $scope.plan.basicEnum === 'BY_CARGO';
             var goodsCodes = _.map($scope.plan.planBillDetails, function (item) {
@@ -85,9 +85,9 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
     $scope.auditBill = function (pass) {
         var url = '';
         if (pass) {
-            url = '/api/bill/planBill/pass';
+            url = '/api/bill/plan/auditSuccess';
         } else {
-            url = '/api/bill/planBill/unpass';
+            url = '/api/bill/plan/auditFailure';
         }
         var auditParams = {
             billCode: params.billCode,
