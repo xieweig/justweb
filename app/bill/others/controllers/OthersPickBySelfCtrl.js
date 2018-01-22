@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common, cargoUnit, materialUnit) {
+angular.module('app').controller('OthersPickBySelfCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
     $scope.cargoConfigure = cargoUnit;
     $scope.materialConfigure = materialUnit;
@@ -13,20 +13,12 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
         {value: 'ON_STORAGE', text: '在途库'},
         {value: 'RESERVE_STORAGE', text: '预留库'}
     ];
+
     $timeout(function () {
         $('#select-out').val($scope.storageType[0].value).trigger('change');
     });
-    $scope.cargoList = {};
 
-    // $scope.bill = {
-    //     billProperty: 'NO_PLAN',
-    //     basicEnum: 'BY_CARGO',
-    //     billCode: '',
-    //     fromBillCode: '',
-    //     planMemo: '',
-    //     outMemo: '',
-    //     operatorCode: ''
-    // };
+    $scope.cargoList = {};
 
     $scope.cargoListGrid = {
         primaryId: 'cargoCode',
@@ -60,30 +52,29 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
     $scope.inStationParams = {
         single: true,
         // 物流属性站点
-        type: 'LOGISTICS',
         callback: function (data) {
             $scope.params.inStationCode = data
         }
     };
 
-    // 警告库位修改
-    $scope.$watch('params.outStorageType', function (newVal, oldVal) {
-        if (newVal === 'NORMAL' || oldVal === undefined) {
-        } else {
-            swal({
-                title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
-                type: 'warning',
-                confirmButtonText: '是的',
-                showCancelButton: true
-            }).then(function (res) {
-                if (res.value) {
-                } else if (res.dismiss === 'cancel') {
-                    // 重置选项为初始
-                    $('#select-out').val($scope.storageType[0].value).trigger('change')
-                }
-            })
-        }
-    });
+    // 警告库位修改 其他不警告
+    // $scope.$watch('params.outStorageType', function (newVal, oldVal) {
+    //     if (newVal === 'NORMAL' || oldVal === undefined) {
+    //     } else {
+    //         swal({
+    //             title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
+    //             type: 'warning',
+    //             confirmButtonText: '是的',
+    //             showCancelButton: true
+    //         }).then(function (res) {
+    //             if (res.value) {
+    //             } else if (res.dismiss === 'cancel') {
+    //                 // 重置选项为初始
+    //                 $('#select-out').val($scope.storageType[0].value).trigger('change')
+    //             }
+    //         })
+    //     }
+    // });
 
     $scope.bill = {
         billType: 'RESTOCK',

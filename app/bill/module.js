@@ -10,7 +10,8 @@ angular.module('app.bill', [
     'app.bill.procurement',
     'app.bill.delivery',
     'app.bill.mistake',
-    'app.bill.adjust'
+    'app.bill.adjust',
+    'app.bill.others'
 ]).config(function ($stateProvider) {
     $stateProvider
         .state('app.bill', {

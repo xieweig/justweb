@@ -32,7 +32,17 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                 {field: "cargoCode", title: "货物编码"},
                 {field: "rawMaterialName", title: "所属原料"},
                 {field: "actualAmount", title: "货物数量"}, // 对应添加货物的实拣数量
+                {
+                    title: "货物规格", template: function (data) {
+                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                    }
+                },
                 {field: "number", title: "标准单位数量"},
+                {
+                    title: "规格", template: function (data) {
+                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                    }
+                },
                 {
                     field: "standardUnitCode", title: "标准单位", template: function (data) {
                         return getTextByVal($scope.materialConfigure, data.standardUnitCode);
