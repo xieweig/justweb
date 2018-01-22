@@ -94,6 +94,11 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
 
 // 保存和提交合并
     function saveOrAudit(type, bill) {
+        if (!$scope.params.supplier){
+            swal('参数错误', '调入站点不能为空', 'error');
+            return
+        }
+
         var url = '';
         if (type === 'save') {
             url = '/api/bill/returned/saveBySelf'
@@ -113,19 +118,10 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                 storageName: getTextByVal($scope.storageType, $scope.params.outStorageType)
             }
         };
-        // 获取选择站点的在途库
-        // bill.inLocation = {
-        //     stationCode: $scope.params.inStationCode.stationCode,
-        //     stationName: getTextByVal($scope.station, $scope.params.inStationCode.stationCode),
-        //     stationType: 'LOGISTICS',
-        //     storage: {
-        //         storageCode: 'ON_STORAGE',
-        //         storageName: getTextByVal($scope.storageType, 'ON_STORAGE')
-        //     }
-        // };
+
         bill.supplier = {
             supplierCode: $scope.params.supplier.supplierCode
-        }
+        };
 
         bill.billDetails = _.map($scope.CargoListGrid.kendoGrid.dataSource.data(), function (item) {
             return {

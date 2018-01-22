@@ -18,16 +18,6 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
     });
     $scope.cargoList = {};
 
-    // $scope.bill = {
-    //     billProperty: 'NO_PLAN',
-    //     basicEnum: 'BY_CARGO',
-    //     billCode: '',
-    //     fromBillCode: '',
-    //     planMemo: '',
-    //     outMemo: '',
-    //     operatorCode: ''
-    // };
-
     $scope.cargoListGrid = {
         primaryId: 'cargoCode',
         kendoSetting: {
@@ -104,6 +94,12 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
 
     // 保存和提交合并
     function saveOrSubmit(type, bill) {
+        // 如果调入站点为空则不能保存提交
+        if (!$scope.params.inStationCode){
+            swal('参数错误', '调入站点不能为空', 'error');
+            return
+        }
+
         var url = '';
         if (type === 'save') {
             url = '/api/bill/restock/saveBySelf'

@@ -100,6 +100,12 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
 
     // 保存和提交合并
     function saveOrSubmit(type, bill) {
+        // 如果调入站点为空则不能保存提交
+        if (!$scope.params.inStationCode){
+            swal('参数错误', '调入站点不能为空', 'error');
+            return
+        }
+
         var url = '';
         if (type === 'save') {
             url = '/api/bill/delivery/saveBySelf'
@@ -128,7 +134,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
         bill.inLocation = {
             stationCode: $scope.params.inStationCode.stationCode,
             stationName: getTextByVal($scope.station, $scope.params.inStationCode.stationCode),
-            stationType: 'LOGISTICS',
+            // stationType: 'LOGISTICS',
             storage: {
                 storageCode: 'ON_STORAGE',
                 storageName: getTextByVal($scope.storageType, 'ON_STORAGE')
