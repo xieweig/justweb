@@ -91,7 +91,7 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
         }
         var auditParams = {
             billCode: params.billCode,
-            auditMemo: $scope.auditMemo
+            auditMemo: $scope.plan.auditMemo
         };
         ApiService.post(url, auditParams).then(function (response) {
             if (response.code !== '000') {
