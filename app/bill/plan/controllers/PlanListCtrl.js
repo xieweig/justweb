@@ -26,7 +26,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
             });
         }
     };
-    $scope.params = {specificBillType: ''};
+    $scope.params = {specificBillType: []};
     $scope.search = function () {
         $scope.planList.kendoGrid.dataSource.page(1);
     };
@@ -115,19 +115,25 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
     // 审核
     function auditPlan(e) {
         e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $uibModal.open({
-            templateUrl: 'app/bill/plan/modals/look.html',
-            size: 'lg',
-            controller: 'PlanAuditCtrl',
-            resolve: {
-                params: {
-                    type: 'audit',
-                    billCode: dataItem.billCode
-                }
+        var billCode = this.dataItem($(e.currentTarget).closest("tr")).billCode;
+        ApiService.get('/api/bill/plan/open?billCode=' + billCode).then(function (response) {
+            if (response.code !== '000') {
+                swal('请求失败', response.message, 'error');
+            } else {
+                $uibModal.open({
+                    templateUrl: 'app/bill/plan/modals/look.html',
+                    size: 'lg',
+                    controller: 'PlanAuditCtrl',
+                    resolve: {
+                        params: {
+                            type: 'audit',
+                            billCode: billCode
+                        }
+                    }
+                }).closed.then(function () {
+                    $scope.planList.kendoGrid.dataSource.read();
+                });
             }
-        }).closed.then(function () {
-            $scope.planList.kendoGrid.dataSource.read();
         });
     }
 
