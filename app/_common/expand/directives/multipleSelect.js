@@ -16,6 +16,12 @@ angular.module('SmartAdmin.Expand').directive('multipleSelect', function ($timeo
                     placeholder: "请选择",
                     onClick: function () {
                         scope.multipleModel = element.multipleSelect('getSelects');
+                    },
+                    onCheckAll: function () {
+                        scope.multipleModel = element.multipleSelect('getSelects');
+                    },
+                    onUncheckAll: function () {
+                        scope.multipleModel = element.multipleSelect('getSelects');
                     }
                 });
             });
