@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
+angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, cargoUnit, materialUnit) {
     $scope.params = {};
     $scope.search = function () {
         $scope.cargoList.kendoGrid.dataSource.page(1);
@@ -39,8 +39,18 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
                 {field: "barCode", title: "货物条码", width: 120},
                 {field: "selfBarCode", title: "自定义条码", width: 120},
                 {field: "effectiveTime", title: "保质期(天)", width: 120},
-                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
-                {field: "standardUnitCode", title: "最小标准单位", width: 120},
+                {
+                    title: "规格", width: 120,
+                    template: function (data) {
+                        return data.number + getTextByVal(cargoUnit, data.measurementCode);
+                    }
+                },
+                {
+                    title: "最小标准单位", width: 120,
+                    template: function (data) {
+                        return getTextByVal(materialUnit, data.standardUnitCode);
+                    }
+                },
                 {field: "createTime", title: "建档时间", width: 120},
                 {field: "memo", title: "备注", width: 200}
             ]
@@ -58,8 +68,18 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},
-                {field: "standardUnitCode", title: "标准单位", width: 120},
-                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
+                {
+                    title: "规格", width: 120,
+                    template: function (data) {
+                        return data.number + getTextByVal(cargoUnit, data.measurementCode);
+                    }
+                },
+                {
+                    title: "最小标准单位", width: 120,
+                    template: function (data) {
+                        return getTextByVal(materialUnit, data.standardUnitCode);
+                    }
+                },
                 {field: "productDate", title: "生产日期", width: 120, WdatePicker: true, editable: true},
                 {field: "purchasePrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
                 {field: "amount", title: "发货数量", width: 200, kType: 'number', editable: true}

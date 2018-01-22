@@ -35,13 +35,13 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 {
                     title: "标准单位", width: 120,
                     template: function (data) {
-                        return getTextByVal(materialUnit, data.measurementCode);
+                        return getTextByVal(materialUnit, data.standardUnitCode);
                     }
                 },
                 {
                     title: "规格", width: 120,
                     template: function (data) {
-                        return data.number + '/' + getTextByVal(cargoUnit, data.standardUnitCode);
+                        return data.number + getTextByVal(cargoUnit, data.measurementCode);
                     }
                 },
                 {field: "dateInProduced", title: "生产日期", width: 160},
@@ -135,6 +135,12 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 },
                 data: function () {
                     return $scope.procurementGrid.kendoGrid.dataSource.data();
+                },
+                cargoUnit: function () {
+                    return cargoUnit;
+                },
+                materialUnit: function () {
+                    return materialUnit;
                 }
             }
         });
