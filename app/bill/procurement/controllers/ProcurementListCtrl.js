@@ -151,7 +151,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 resolve: {
                     params: {
                         type: 'look',
-                        purchaseBill: purchaseBill
+                        purchaseBill: purchaseBill,
+                        cargoUnit: cargoUnit,
+                        materialUnit: materialUnit
                     }
                 }
             }).closed.then(function () {
@@ -172,7 +174,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 resolve: {
                     params: {
                         type: 'audit',
-                        purchaseBill: purchaseBill
+                        purchaseBill: purchaseBill,
+                        cargoUnit: cargoUnit,
+                        materialUnit: materialUnit
                     }
                 }
             }).closed.then(function () {
@@ -238,6 +242,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                             item.cargo = {};
                         }
                     });
+                    if (!purchase.inLocation) {
+                        purchase.inLocation = {};
+                    }
                     // 库位
                     purchase.inStorageName = getTextByVal($scope.outType, purchase.inLocation.storage ? purchase.inLocation.storage.storageCode : '');
                     if (!purchase.supplier) {
