@@ -365,7 +365,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             if (response.code !== '000') {
                 swal('', response.message, 'error')
             } else {
-                swal('操作成功', '', 'success').then(function () {
+                swal('操作成功', '生成计划编号:' + response.result.billCode, 'success').then(function () {
                     $state.go('app.bill.plan.list');
                 });
             }

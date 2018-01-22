@@ -71,13 +71,22 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb) {
     function deleteCurrentCargo(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var dataSource = $scope.currentCargoList.kendoGrid.dataSource;
-        _.find(dataSource.data(), function (item, index) {
-            if (item.cargoCode === dataItem.cargoCode) {
-                dataSource.remove(dataSource.at(index));
-                return true;
+        swal({
+            title: '确定要删除该项?',
+            type: 'warning',
+            confirmButtonText: '是的',
+            showCancelButton: true
+        }).then(function (res) {
+            if (res.value) {
+                var dataSource = $scope.currentCargoList.kendoGrid.dataSource;
+                _.find(dataSource.data(), function (item, index) {
+                    if (item.cargoCode === dataItem.cargoCode) {
+                        dataSource.remove(dataSource.at(index));
+                        return true;
+                    }
+                    return false;
+                });
             }
-            return false;
         });
     }
 
