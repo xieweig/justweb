@@ -23,6 +23,14 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, $st
         {key: 'RETURNED', value: 'RETURNED', text: '退货计划'}
     ];
 
+    $rootScope.specificType = [
+        {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
+        {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
+        {key: 'RESTOCK', value: 'RESTOCK', text: '退库计划'},
+        {key: 'RETURNED', value: 'RETURNED', text: '退货计划'},
+        {key: 'NO_PLAN', value: 'NO_PLAN', text: '无计划'}
+    ];
+
     $rootScope.outType = [
         {value: 'NORMAL', text: '正常库'},
         {value: 'STORAGE', text: '仓储库'},

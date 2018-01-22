@@ -25,7 +25,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
             autoBind: false,
             persistSelection: true,
             editable: true,
-            pageable: true,
+            // pageable: true,
             columns: [
                 {selectable: true},
                 {field: "cargoName", title: "货物名称"},
@@ -37,12 +37,9 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                     }
                 },
-                {field: "number", title: "标准单位数量"},
-                {
-                    title: "规格", template: function (data) {
-                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
-                    }
-                },
+                {title: "标准单位数量", template: function (data) {
+                        return data.number * data.actualAmount
+                    }},
                 {
                     field: "standardUnitCode", title: "标准单位", template: function (data) {
                         return getTextByVal($scope.materialConfigure, data.standardUnitCode);

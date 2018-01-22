@@ -43,12 +43,18 @@
                         <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">入库库位</span>
-                                <select smart-select2 id="select-in" class="width-full"
-                                        data-ng-model="params.inStationType">
-                                    <option data-ng-repeat="item in storageType" data-ng-value="item.key">
-                                        {{item.text}}
-                                    </option>
-                                </select>
+                                <span data-ng-if="!show">
+                                    <input type="text" class="form-control" data-ng-model="params.inStorageName"
+                                           disabled>
+                                </span>
+                                <span data-ng-if="show">
+                                    <select smart-select2 id="select-in" class="width-full"
+                                            data-ng-model="params.inStationType">
+                                        <option data-ng-repeat="item in storageType" data-ng-value="item.value">
+                                            {{item.text}}
+                                        </option>
+                                    </select>
+                                </span>
                             </div>
                         </div>
                     </div>

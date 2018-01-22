@@ -2,11 +2,13 @@
 
 angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
     // 查询站点退库计划
-    $scope.params = {};
+    $scope.params = {
+        specificBillType: []
+    };
 
     $scope.billStatus = [
         {value: 'ALLOT', text: '已调拨'},
-        {value: 'ALLOT', text: '调拨中'},
+        // {value: 'ALLOT', text: '调拨中'},
         {value: 'NOT_ALLOT', text: '未调拨'}
     ];
 
@@ -21,12 +23,12 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
         {value: 'DONE', text: '完成'}
     ]
 
-    $scope.billAttr = [
-        {value: 'DELIVERY', text: '配送计划转'},
-        {value: 'ADJUST', text: '调剂计划转'},
-        {value: 'RETURNED', text: '退货计划转'},
-        {value: 'NO_PLAN', text: '无计划计划转'}
-    ];
+    // $scope.billAttr = [
+    //     {value: 'DELIVERY', text: '配送计划转'},
+    //     {value: 'ADJUST', text: '调剂计划转'},
+    //     {value: 'RETURNED', text: '退货计划转'},
+    //     {value: 'NO_PLAN', text: '无计划计划转'}
+    // ];
     // 搜索
     $scope.search = function () {
         $scope.stationGrid.kendoGrid.dataSource.page(1);
@@ -41,17 +43,20 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
             autoBind: false,
             pageable: true,
             persistSelection: true,
+            height: 300,
             columns: [
                 {
-                    command: [{
-                        name: 'select', text: "调拨", click: jumpToPick, visible: function (data) {
-                            return true;
+                    command: [
+                        {
+                            name: 'view', text: '查看', click: viewInStorageBill, visible: function (data) {
+                                return true;
+                            }
+                        }, {
+                            name: 'select', text: "调拨", click: jumpToPick, visible: function (data) {
+                                return data.allotStatus === 'NOT_ALLOT';
+                            }
                         }
-                    }, {
-                        name: 'view', text: '查看', click: viewInStorageBill, visible: function (data) {
-                            return true;
-                        }
-                    }],
+                    ],
                     locked: true,
                     title: "操作",
                     width: 160
@@ -61,16 +66,22 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
                 //         return ;'<a href="#" class="plan-btn-group">' + data.billCode + '</a>'
                 //     }
                 // },
-                {field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
-                        return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
-                    }},
+                {
+                    field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
+                        return '<a href="#" class="plan-btn-group">' + data.sourceCode || '' + '</a>'
+                    }
+                },
                 {field: "billCode", title: "入库单号", locked: true, width: 210},
-                {title: "单据状态", width: 100, template: function (data) {
-                        return getTextByVal($scope.billState, data.billState)
-                    }},
-                {title: "单据属性", width: 100, template: function (data) {
-                        return getTextByVal($scope.billType, data.specificBillType) + '转'
-                    }},
+                {
+                    title: "单据状态", width: 100, template: function (data) {
+                        return getTextByVal($scope.billStatus, data.allotStatus)
+                    }
+                },
+                {
+                    title: "单据属性", width: 100, template: function (data) {
+                        return getTextByVal($scope.specificType, data.specificBillType) + '转'
+                    }
+                },
                 {field: "createTime", title: "录单时间", width: 150},
                 {field: "inWareHouseTime", title: "入库时间", width: 150},
                 {field: "operatorName", title: "入库人", width: 100},
@@ -94,7 +105,7 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
     // 选择站点
     $scope.inStationParams = {
         callback: function (data) {
-            $scope.params.inStationCodes  = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }

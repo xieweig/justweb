@@ -24,15 +24,10 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
         primaryId: 'billCode',
         url: '/api/bill/restock/findAllotByConditions',
         params: $scope.params,
-        // dataSource:{
-        //     data: function (response) {
-        //         //TODO: 处理库位
-        //         return response
-        //     }
-        // },
         kendoSetting: {
             autoBind: false,
             pageable: true,
+            height:300,
             columns: [
                 {
                     command: [{
@@ -48,7 +43,7 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
                 {title: "单据属性", width: 100, template: function (item) {
                         return getTextByVal($scope.billType, item.specificBillType) + '转'
                     }},
-                {field: "createTime", title: "调拨时间", width: 100},
+                {field: "createTime", title: "调拨时间", width: 150},
                 {field: "operatorName", title: "操作人", width: 60},
                 {
                     title: "入库单出库站点", width: 150, template: function (data) {

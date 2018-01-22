@@ -20,7 +20,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
             autoBind: false,
             persistSelection: true,
             pageable: true,
-            height: 300,
+            height: 250,
             columns: [
                 {selectable: true},
                 {field: "cargoCode", title: "货物编码", width: 120},
@@ -46,8 +46,10 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         primaryId: 'cargoCode',
         persistSelection: true,
         kendoSetting: {
-            editable: true,
             autoBind: false,
+            editable: true,
+            height: 200,
+            persistSelection: true,
             columns: [
                 {title: "操作", locked: true, command: [{name: 'select', text: "删除", click: delCurCargo}], width: 80},
                 {field: "cargoName", title: "货物名称", width: 120},

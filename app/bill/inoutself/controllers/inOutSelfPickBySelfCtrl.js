@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('OthersPickBySelfCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common, cargoUnit, materialUnit) {
+angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $state, $rootScope, $uibModal, $timeout, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
     $scope.cargoConfigure = cargoUnit;
     $scope.materialConfigure = materialUnit;
@@ -38,7 +38,9 @@ angular.module('app').controller('OthersPickBySelfCtrl', function ($scope, $stat
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                     }
                 },
-                {field: "number", title: "标准单位数量"},
+                {title: "标准单位数量", template: function (data) {
+                        return data.number * data.actualAmount
+                    }},
                 {
                     field: "standardUnitCode", title: "标准单位", template: function (data) {
                         return getTextByVal($scope.materialConfigure, data.standardUnitCode);
@@ -57,27 +59,8 @@ angular.module('app').controller('OthersPickBySelfCtrl', function ($scope, $stat
         }
     };
 
-    // 警告库位修改 其他不警告
-    // $scope.$watch('params.outStorageType', function (newVal, oldVal) {
-    //     if (newVal === 'NORMAL' || oldVal === undefined) {
-    //     } else {
-    //         swal({
-    //             title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
-    //             type: 'warning',
-    //             confirmButtonText: '是的',
-    //             showCancelButton: true
-    //         }).then(function (res) {
-    //             if (res.value) {
-    //             } else if (res.dismiss === 'cancel') {
-    //                 // 重置选项为初始
-    //                 $('#select-out').val($scope.storageType[0].value).trigger('change')
-    //             }
-    //         })
-    //     }
-    // });
-
     $scope.bill = {
-        billType: 'RESTOCK',
+        billType: 'IN_OUT_SELF',
         specificBillType: 'NO_PLAN',
         basicEnum: 'BY_CARGO',
         billPurpose: 'OUT_STORAGE'
@@ -95,11 +78,16 @@ angular.module('app').controller('OthersPickBySelfCtrl', function ($scope, $stat
 
     // 保存和提交合并
     function saveOrSubmit(type, bill) {
+        if (!$scope.params.inStationCode){
+            swal('参数错误', '调入站点不能为空', 'error');
+            return
+        }
+
         var url = '';
         if (type === 'save') {
-            url = '/api/bill/restock/saveBySelf'
+            url = '/api/bill/inOutSelf/saveBySelf'
         } else {
-            url = '/api/bill/restock/submitBySelf'
+            url = '/api/bill/inOutSelf/submitBySelf'
         }
         bill.outStorageMemo = $scope.params.outStorageMemo;
         bill.totalAmount = 1;
@@ -155,7 +143,7 @@ angular.module('app').controller('OthersPickBySelfCtrl', function ($scope, $stat
 
     // 重置选项
     $scope.reset = function () {
-        $state.reload()
+        $state.reload($state.current.name)
     };
 
     // 添加货物

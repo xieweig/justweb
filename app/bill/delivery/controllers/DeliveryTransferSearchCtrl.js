@@ -33,6 +33,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
         kendoSetting: {
             autoBind: false,
             pageable: true,
+            height:300,
             columns: [
                 {
                     command: [{
