@@ -1,0 +1,193 @@
+<div id="content">
+    <div jarvis-widget data-widget-editbutton="false">
+        <header class="custom-header">
+            <h2>{{ $state.current.data.title }}</h2>
+            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="reset()">
+            <input type="button" class="btn btn-default btn-header" value="查询" data-ng-click="search()">
+        </header>
+        <div>
+            <div class="widget-body no-padding">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="margin-top-10 padding-top-0">
+                            <h5 class="padding-rl-10">
+                                <small>
+                                    查询条件
+                                </small>
+                            </h5>
+                            <div class="row padding-rl-10">
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">录单人</span>
+                                        <input type="text" class="form-control"
+                                               data-ng-model="params.operatorName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">出库单号</span>
+                                        <input type="text" class="form-control"
+                                               data-ng-model="params.billCode">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">出库站点</span>
+                                        <span data-station-tree data-select-modal="outStationParams"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">入库站点</span>
+                                        <span data-station-tree data-select-modal="inStationParams"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                                    <div class="display-flex">
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">录单日期</span>
+                                                <input type="text" class="form-control" data-datepicker
+                                                       data-ng-model="params.createStartTime">
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" style="border-left: 0;">至</span>
+                                                <input type="text" class="form-control" data-datepicker
+                                                       data-ng-model="params.createEndTime">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                                    <div class="display-flex">
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">出库日期</span>
+                                                <input type="text" class="form-control" data-datepicker
+                                                       data-ng-model="params.outStorageStartTime">
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" style="border-left: 0;">至</span>
+                                                <input type="text" class="form-control" data-datepicker
+                                                       data-ng-model="params.outStorageEndTime">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
+                                    <span class="checkbox-label-fix">提交状态</span>
+                                    <span data-ng-repeat="sb in submitStates">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="checkbox-inline"
+                                                   class="checkbox style-2"
+                                                   value="{{ sb.value }}"
+                                                   data-ng-checked="params.submitStates.indexOf(sb.value)>-1"
+                                                   data-ng-click="toggleSubmit(sb.value, 'submit')">
+                                            <span>{{ sb.text }}</span>
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
+                                    <span class="checkbox-label-fix">审核状态</span>
+                                    <span data-ng-repeat="ad in auditStates">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="checkbox-inline"
+                                                   class="checkbox style-2"
+                                                   value="{{ ad.value }}"
+                                                   data-ng-checked="params.auditStates.indexOf(ad.value)>-1"
+                                                   data-ng-click="toggleSubmit(ad.value, 'audit')"
+                                            >
+                                            <span>{{ ad.text }}</span>
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="col-sm-6 col-xs-12 margin-bottom-10 margin-top-5">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">单据属性</span>
+                                        <select data-multiple-select data-multiple-model="params.specificBillType">
+                                            <option ng-repeat="attr in billAttr" value="{{attr.value}}">
+                                                {{attr.text}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-16" style="margin-top: 12px">
+                                    <span class="checkbox-label-fix">出库状态</span>
+
+                                    <span data-ng-repeat="os in inOrOutStates">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="checkbox-inline"
+                                                   class="checkbox style-2"
+                                                   value="{{ os.value }}"
+                                                   data-ng-checked="params.inOrOutStates.indexOf(os.value)>-1"
+                                                   data-ng-click="toggleSubmit(os.value, 'out')"
+                                            >
+                                            <span>{{ os.text }}</span>
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                                    <div class="display-flex">
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">配送品种</span>
+                                                <input type="text" class="form-control"
+                                                       data-ng-model="params.varietyStart">
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" style="border-left: 0;">至</span>
+                                                <input type="text" class="form-control"
+                                                       data-ng-model="params.varietyEnd">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                                    <div class="display-flex">
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">配送总价</span>
+                                                <input type="text" class="form-control"
+                                                       data-ng-model="params.startTotalPrice">
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" style="border-left: 0;">至</span>
+                                                <input type="text" class="form-control"
+                                                       data-ng-model="params.endTotalPrice">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="gray-line">
+                <div class="padding-10">
+
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-xs-12">
+                            <h5 style="padding-left: 5px;">
+                                <small>
+                                    出库单列表
+                                </small>
+
+                            </h5>
+                        </div>
+                    </div>
+                    <section id="grid">
+                        <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="outBillGrid"></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
