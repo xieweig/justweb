@@ -12,6 +12,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     billCode: planBill.billCode,
                     planMemo: planBill.planMemo
                 };
+                $scope.billType = planBill.billType;
                 var goodsCode = _.map(planBill.planBillDetails, function (billItem) {
                     return billItem.goodsCode;
                 });
@@ -135,7 +136,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    if ($scope.planBill.billType === 'RETURNED') {
+                                    if ($scope.billType === 'RETURNED') {
                                         return data.inLocation.stationCode
                                     }
                                     return getTextByVal($scope.station, data.inLocation.stationCode)
