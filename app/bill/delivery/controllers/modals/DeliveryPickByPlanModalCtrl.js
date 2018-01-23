@@ -19,7 +19,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
 
     $scope.outType = $scope.storageType;
     $timeout(function () {
-        $('#select-out').val($scope.storageType[0].value).trigger('change');
+        $('#select-out').val($scope.storageType[2].value).trigger('change');
     });
 
     // 屏蔽按原料拣货时触发的操作
