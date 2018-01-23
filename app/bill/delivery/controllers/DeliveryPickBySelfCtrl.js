@@ -99,6 +99,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
 
     // 保存和提交合并
     function saveOrSubmit(type, bill) {
+        var flag = true; // 货物数据是否正确的标志
         // 如果调入站点为空则不能保存提交
         if (!$scope.params.inStationCode) {
             swal('参数错误', '调入站点不能为空', 'error');
@@ -142,6 +143,12 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
         bill.billDetails = _.map($scope.cargoListGrid.kendoGrid.dataSource.data(), function (item) {
             if (item.actualAmount === undefined) {
                 swal('参数错误', '货物数量不能为空', 'error');
+                flag = false;
+                return
+            }
+            if(!checkNumber(item.actualAmount)){
+                swal('参数错误', '货物数量错误', 'error');
+                flag = false;
                 return
             }
             return {
@@ -157,6 +164,9 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                 shippedAmount: item.actualAmount // 站点自己拣货,实拣和应拣一致
             }
         });
+        if(!flag){
+            return
+        }
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');

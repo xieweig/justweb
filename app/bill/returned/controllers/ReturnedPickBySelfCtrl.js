@@ -98,6 +98,7 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
 
 // 保存和提交合并
     function saveOrAudit(type, bill) {
+        var flag = true; // 货物数据是否正确的标志
         if (!$scope.params.supplier) {
             swal('参数错误', '调入站点不能为空', 'error');
             return
@@ -128,6 +129,11 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
         };
 
         bill.billDetails = _.map($scope.CargoListGrid.kendoGrid.dataSource.data(), function (item) {
+            if(!checkNumber(item.actualAmount)){
+                swal('参数错误', '货物数量错误', 'error');
+                flag = false;
+                return
+            }
             return {
                 rawMaterial: {
                     rawMaterialCode: item.rawMaterialCode,
@@ -141,6 +147,9 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                 shippedAmount: item.actualAmount // 站点自己拣货,实拣和应拣一致
             }
         });
+        if(!flag){
+            return
+        }
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');

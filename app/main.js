@@ -369,3 +369,20 @@ function getKendoData(response) {
         }
     }
 }
+
+function checkNumber(val, options) {
+    options = options ? options : {
+        min: 1,
+        max: 9999999
+    };
+
+    if(isNaN(val) && parseInt(val) != val){
+        return false
+    }
+    if(parseInt(val) < options.min || parseInt(val) > options.max){
+        return false
+    }
+    return true
+
+
+}
