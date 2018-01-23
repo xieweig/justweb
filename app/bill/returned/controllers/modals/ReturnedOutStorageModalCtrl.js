@@ -208,6 +208,8 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
             $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
 
+            $scope.specificBillType = res.specificBillType;
+
             Common.getSupplierByIds([res.supplier.supplierCode]).then(function (supplierList) {
                 var supplierObj = _.zipObject(_.map(supplierList, function (item) {
                     return item.supplierCode;
@@ -482,7 +484,12 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
             url = '/api/bill/returned/submit'
         }
         bill.billCode = $scope.params.billCode;
-        bill.sourceCode = $scope.params.billCode;
+        // bill.sourceCode = $scope.params.billCode;
+        if($scope.specificBillType !== 'NO_PLAN'){
+            bill.sourceCode = $scope.params.sourceCode
+        }else{
+            bill.sourceCode = ''
+        }
         bill.rootCode = $scope.params.rootCode;
 
         bill.outStorageMemo = $scope.params.outStorageMemo;
