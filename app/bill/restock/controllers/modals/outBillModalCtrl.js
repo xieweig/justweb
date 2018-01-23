@@ -479,8 +479,6 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         bill.billCode = $scope.params.billCode;
         if($scope.specificBillType !== 'NO_PLAN'){
             bill.sourceCode = $scope.params.sourceCode
-        }else{
-            bill.sourceCode = ''
         }
         bill.rootCode = $scope.params.rootCode;
 

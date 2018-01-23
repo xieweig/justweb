@@ -480,8 +480,6 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
         // bill.sourceCode = $scope.params.billCode;
         if($scope.specificBillType !== 'NO_PLAN'){
             bill.sourceCode = $scope.params.sourceCode
-        }else{
-            bill.sourceCode = ''
         }
         bill.rootCode = $scope.params.rootCode;
 
