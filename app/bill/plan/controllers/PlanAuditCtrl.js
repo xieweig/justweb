@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, params, Common) {
+angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, params, Common, $timeout) {
     $scope.type = params.type;
 
     ApiService.get('/api/bill/plan/hq/findByBillCode?billCode=' + params.billCode).then(function (response) {
@@ -14,30 +14,63 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
             var goodsCodes = _.map($scope.plan.planBillDetails, function (item) {
                 return item.goodsCode;
             });
-            // 根据code查找货物/原料
-            if (isCargo) {
-                Common.getCargoByCodes(goodsCodes).then(function (cargoList) {
-                    var cargoObject = _.zipObject(_.map(cargoList, function (item) {
-                        return item.cargoCode
-                    }), cargoList);
-                    _.each($scope.plan.planBillDetails, function (item) {
-                        item.cargo = cargoObject[item.goodsCode];
+            // 判断是否需要获取供应商名称
+            getSupplierName($scope.plan.planBillDetails, function () {
+                // 根据code查找货物/原料
+                if (isCargo) {
+                    Common.getCargoByCodes(goodsCodes).then(function (cargoList) {
+                        var cargoObject = _.zipObject(_.map(cargoList, function (item) {
+                            return item.cargoCode
+                        }), cargoList);
+                        _.each($scope.plan.planBillDetails, function (item) {
+                            item.cargo = cargoObject[item.goodsCode];
+                        });
+                        getPanel(isCargo);
                     });
-                    getPanel(isCargo);
-                });
-            } else {
-                Common.getMaterialByCodes(goodsCodes).then(function (materialList) {
-                    var materialObject = _.zipObject(_.map(materialList, function (item) {
-                        return item.materialCode
-                    }), materialList);
-                    _.each($scope.plan.planBillDetails, function (item) {
-                        item.material = materialObject[item.goodsCode];
+                } else {
+                    Common.getMaterialByCodes(goodsCodes).then(function (materialList) {
+                        var materialObject = _.zipObject(_.map(materialList, function (item) {
+                            return item.materialCode
+                        }), materialList);
+                        _.each($scope.plan.planBillDetails, function (item) {
+                            item.material = materialObject[item.goodsCode];
+                        });
+                        getPanel(isCargo);
                     });
-                    getPanel(isCargo);
-                });
-            }
+                }
+            });
         }
     });
+
+    // 获取供应商名称
+    function getSupplierName(data, cb) {
+        if ($scope.plan.billType === 'RETURNED') {
+            _.each(data, function (dataItem) {
+                var supplierCodes = _.map(dataItem.resultPlanBillDetailDTOSet, function (item) {
+                    return item.inLocation.stationCode;
+                });
+                // 回显供应商
+                Common.getSupplierByIds(supplierCodes).then(function (supplierList) {
+                    var supplierObj = _.zipObject(_.map(supplierList, function (item) {
+                        return item.supplierCode;
+                    }), supplierList);
+                    _.each(dataItem.resultPlanBillDetailDTOSet, function (item) {
+                        var supplier = supplierObj[item.inLocation.stationCode];
+                        if (supplier) {
+                            item.inStationName = supplier.supplierName;
+                        }
+                    });
+                });
+            });
+        } else {
+            _.each(data, function (dataItem, index) {
+                _.each(dataItem.resultPlanBillDetailDTOSet, function (item) {
+                    item.inStationName = getTextByVal($scope.station, item.inLocation.stationCode);
+                });
+            });
+        }
+        cb();
+    }
 
     // 获取展示面包
     function getPanel(isCargo) {
@@ -56,15 +89,12 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
                     dataSource: item.resultPlanBillDetailDTOSet,
                     columns: [
                         {
+                            title: "调出站点",
                             template: function (data) {
                                 return getTextByVal($scope.station, data.outLocation.stationCode)
-                            }, title: "调出站点"
+                            }
                         },
-                        {
-                            template: function (data) {
-                                return getTextByVal($scope.station, data.inLocation.stationCode)
-                            }, title: "调入站点"
-                        },
+                        {field: 'inStationName', title: "调入站点"},
                         {field: "amount", title: "调剂数量"}
                     ]
                 }
