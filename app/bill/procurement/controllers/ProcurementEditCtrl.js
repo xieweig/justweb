@@ -137,7 +137,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                             if (!item.shippedAmount) {
                                 item.shippedAmount = 0;
                             }
-                            item.differenceNumber = parseInt(item.actualAmount) - parseInt(item.shippedAmount);
+                            item.differenceNumber = parseInt(item.shippedAmount) - parseInt(item.actualAmount);
                             item.differencePrice = item.differenceNumber * parseFloat(item.unitPrice);
                         });
                         dataSource.data(data);
