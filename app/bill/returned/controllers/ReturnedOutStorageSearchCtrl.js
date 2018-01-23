@@ -170,7 +170,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
         type: 'supplier',
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
-                return item.stationCode;
+                return item.supplierCode;
             });
         }
     };

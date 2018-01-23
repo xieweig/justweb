@@ -95,7 +95,7 @@ angular.module('app.bill.restock', ['ui.router']).config(function ($stateProvide
         .state('app.bill.restock.transferList', {
             url: '/bill/restock/transferList',
             data: {
-                title: '查询调剂调拨单'
+                title: '查询退库调拨单'
             },
             views: {
                 "content@app": {
