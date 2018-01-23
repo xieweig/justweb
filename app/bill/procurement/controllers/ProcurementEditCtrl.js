@@ -271,32 +271,42 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         bill.inLocation.stationCode = $.cookie('currentStationCode');
         bill.inLocation.stationName = $.cookie('currentStationName');
 
-        bill.operatorCode = 'YGADMIN';
+        bill.operatorCode = $.cookie('userCode');
         bill.billDetails = [];
         var errorItem = _.find($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
-            if (type !== 'save' && ( !item.dateInProduced || !item.unitPrice || !item.actualAmount || !item.shippedAmount)) {
-                swal('表格信息填写不完整', '', 'warning');
-                return true;
-            } else {
-                var differenceNumber = parseInt(item.shippedAmount) - parseInt(item.actualAmount);
-                bill.billDetails.push({
-                    packageCode: item.packageCode,
-                    rawMaterial: {
-                        rawMaterialCode: item.rawMaterialId,
-                        rawMaterialName: '',
-                        cargo: {
-                            cargoCode: item.cargoCode,
-                            cargoName: item.cargoName
-                        }
-                    },
-                    dateInProduced: item.dateInProduced,
-                    unitPrice: item.unitPrice,
-                    shippedAmount: item.shippedAmount,
-                    actualAmount: item.actualAmount,
-                    differenceNumber: differenceNumber,
-                    totalDifferencePrice: differenceNumber * parseFloat(item.unitPrice)
-                });
+            if (type !== 'save') {
+                if (!item.dateInProduced) {
+                    swal(item.cargoName + '的生产日期不能为空', '', 'warning');
+                    return true;
+                } else if (!item.unitPrice && item.unitPrice !== 0) {
+                    swal(item.cargoName + '的单位进价不能为空', '', 'warning');
+                    return true;
+                } else if (!item.shippedAmount) {
+                    swal(item.cargoName + '的发货数量不能为空', '', 'warning');
+                    return true;
+                } else if (!item.actualAmount) {
+                    swal(item.cargoName + '的实收数量不能为空', '', 'warning');
+                    return true;
+                }
             }
+            var differenceNumber = parseInt(item.shippedAmount) - parseInt(item.actualAmount);
+            bill.billDetails.push({
+                packageCode: item.packageCode,
+                rawMaterial: {
+                    rawMaterialCode: item.rawMaterialId,
+                    rawMaterialName: '',
+                    cargo: {
+                        cargoCode: item.cargoCode,
+                        cargoName: item.cargoName
+                    }
+                },
+                dateInProduced: item.dateInProduced,
+                unitPrice: item.unitPrice,
+                shippedAmount: item.shippedAmount,
+                actualAmount: item.actualAmount,
+                differenceNumber: differenceNumber,
+                totalDifferencePrice: differenceNumber * parseFloat(item.unitPrice)
+            });
             return false;
         });
         if (errorItem) {
