@@ -48,9 +48,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         single: true,
         callback: function (data) {
             $scope.otmOutStation = data;
-            if (billType === 'ADJUST' && $scope.otmInStationOpt.type !== 'supplier') {
-                $scope.otmInStationOpt.type = data.siteType;
-            }
+            // if (billType === 'ADJUST' && $scope.otmInStationOpt.type !== 'supplier') {
+            //     $scope.otmInStationOpt.type = data.siteType;
+            // }
         }
     };
     $scope.otmInStation = [];
@@ -69,9 +69,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                         };
                     })
                 }
-                if (billType === 'ADJUST' && $scope.otmInStation[0]) {
-                    $scope.otmOutStationOpt.type = $scope.otmInStation[0].siteType;
-                }
+                // if (billType === 'ADJUST' && $scope.otmInStation[0]) {
+                //     $scope.otmOutStationOpt.type = $scope.otmInStation[0].siteType;
+                // }
             }
         }
     };
@@ -115,9 +115,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: outStationType,
         callback: function (data) {
             $scope.mtoOutStation = data;
-            if (billType === 'ADJUST' && $scope.mtoInStationOpt.type !== 'supplier') {
-                $scope.mtoInStationOpt.type = data.siteType;
-            }
+            // if (billType === 'ADJUST' && $scope.mtoInStationOpt.type !== 'supplier') {
+            //     $scope.mtoInStationOpt.type = data.siteType;
+            // }
         }
     };
     $scope.mtoInStation = [];
@@ -134,9 +134,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                     stationType: 'supplier'
                 }
             }
-            if (billType === 'ADJUST' && $scope.mtoInStation[0]) {
-                $scope.mtoOutStationOpt.type = $scope.mtoInStation[0].siteType;
-            }
+            // if (billType === 'ADJUST' && $scope.mtoInStation[0]) {
+            //     $scope.mtoOutStationOpt.type = $scope.mtoInStation[0].siteType;
+            // }
         }
     };
 
@@ -182,9 +182,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: outStationType,
         callback: function (data) {
             $scope.otoOutStation = data;
-            if (billType === 'ADJUST' && data[0] && $scope.otoInStationOpt.type !== 'supplier') {
-                $scope.otoInStationOpt.type = data[0].siteType;
-            }
+            // if (billType === 'ADJUST' && data[0] && $scope.otoInStationOpt.type !== 'supplier') {
+            //     $scope.otoInStationOpt.type = data[0].siteType;
+            // }
         }
     };
     $scope.otoInStation = [];
@@ -204,9 +204,9 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                     };
                 });
             }
-            if (billType === 'ADJUST' && $scope.otoInStation[0]) {
-                $scope.otoOutStationOpt.type = $scope.otoInStation[0].siteType;
-            }
+            // if (billType === 'ADJUST' && $scope.otoInStation[0]) {
+            //     $scope.otoOutStationOpt.type = $scope.otoInStation[0].siteType;
+            // }
         }
     };
     // 一对一添加站点

@@ -333,10 +333,19 @@ function inputDecimal(element, options) {
         if (minNumber && minNumber > valNumber) {
             valNumber = minNumber
         }
-        if (valNumber > 10000000) {
+        if (valNumber >= 10000000) {
             valNumber += '';
             valNumber = valNumber.substring(0, valNumber.length - 1);
         }
+        valNumber += '';
+        var valArray = valNumber.split('.');
+        if (valArray[0].length > 7) {
+            valArray[0] = valArray[0].substring(0, 7);
+        }
+        if (valArray[1] && valArray[1].length > 2) {
+            valArray[1] = valArray[1].substring(0, 2);
+        }
+        valNumber = valArray.join('.');
         if (val.indexOf('.') === val.length - 1) {
             valNumber += '.';
         }
