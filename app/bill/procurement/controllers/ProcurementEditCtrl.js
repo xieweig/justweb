@@ -55,7 +55,12 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 {field: "shippedAmount", title: "发货数量", width: 120},
                 {field: "actualAmount", title: "实收数量", width: 120, kType: 'number', editable: true},
                 {field: "differenceNumber", title: "数量差额", width: 120},
-                {field: "differencePrice", title: "总价差值", width: 120}
+                {
+                    field: "differencePrice", title: "总价差值", width: 120,
+                    template: function (data) {
+                        return (parseFloat(data.unitPrice) * data.differenceNumber).toFixed(2);
+                    }
+                }
             ],
             save: function (e) {
                 // 计算数量差额和总价值差
