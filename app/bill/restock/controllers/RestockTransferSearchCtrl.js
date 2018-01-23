@@ -72,19 +72,17 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
     $scope.inStationParams = {
         type: 'LOGISTICS',
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.inStationCodeArray = array.join(',')
         }
     };
 
     $scope.outStationParams = {
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.outStationCodeArray = array.join(',')
         }
     };
 

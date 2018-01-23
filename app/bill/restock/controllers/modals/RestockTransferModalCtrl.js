@@ -23,7 +23,7 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
     $scope.cargoGrid = {
         primaryId: 'cargoCode',
         kendoSetting: {
-            editable: true,
+            editable: $scope.show,
             columns: [
                 {field: "cargoName", title: "货物名称"},
                 {field: "cargoCode", title: "货物编码"},
