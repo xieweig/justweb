@@ -20,6 +20,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
 
     // 入库查询
     $scope.inStationParams = {
+        isSupplier: true,
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
