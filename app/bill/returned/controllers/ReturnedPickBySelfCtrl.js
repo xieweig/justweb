@@ -22,9 +22,9 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
         primaryId: 'cargoCode',
         kendoSetting: {
             autoBind: false,
-            persistSelection: true,
+            // persistSelection: true,
             editable: true,
-            pageable: true,
+            // pageable: true,
             columns: [
                 {selectable: true},
                 {field: "cargoName", title: "货物名称"},
@@ -36,9 +36,11 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                     }
                 },
-                {title: "标准单位数量", template: function (data) {
+                {
+                    title: "标准单位数量", template: function (data) {
                         return data.number * data.actualAmount
-                    }},
+                    }
+                },
                 {
                     field: "standardUnitCode", title: "标准单位", template: function (data) {
                         return getTextByVal($scope.materialConfigure, data.standardUnitCode);
@@ -61,7 +63,7 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
     $scope.$watch('params.outStorageType', function (newVal, oldVal) {
 
         if (newVal === 'NORMAL' || oldVal === undefined) {
-        }else {
+        } else {
             swal({
                 title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
                 type: 'warning',
@@ -96,7 +98,7 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
 
 // 保存和提交合并
     function saveOrAudit(type, bill) {
-        if (!$scope.params.supplier){
+        if (!$scope.params.supplier) {
             swal('参数错误', '调入站点不能为空', 'error');
             return
         }
@@ -191,8 +193,9 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
     }
 
     $scope.delCargo = function () {
-        var selectId = $scope.CargoListGrid.kendoGrid.selectedKeyNames();
-        var dataSource = $scope.CargoListGrid.kendoGrid.dataSource;
+        var grid = $scope.cargoListGrid.kendoGrid;
+        var selectId = grid.selectedKeyNames();
+        var dataSource = grid.dataSource;
         for (var j in selectId) {
             for (var i = 0; i < dataSource._total; i++) {
                 if (dataSource.at(i).cargoCode.toString() === selectId[j]) {
@@ -200,9 +203,14 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                 }
             }
         }
+        grid._selectedIds = {};
+        grid.clearSelection();
         if (selectId.length !== 0) {
             swal('删除成功', '', 'success')
+        } else {
+            swal('请选择要批量删除的货物', '', 'warning')
         }
+        grid.refresh();
     };
 
 })
