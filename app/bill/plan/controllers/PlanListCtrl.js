@@ -23,7 +23,7 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
         isSupplier: true,
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
-                return item.stationCode;
+                return item.stationCode || item.supplierCode;
             });
         }
     };
