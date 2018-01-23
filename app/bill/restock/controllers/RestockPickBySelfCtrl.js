@@ -211,5 +211,8 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
                 }
             }
         }
+        if (selectId.length !== 0) {
+            swal('删除成功', '', 'success')
+        }
     };
 });

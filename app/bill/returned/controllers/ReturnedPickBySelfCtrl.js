@@ -200,6 +200,9 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                 }
             }
         }
+        if (selectId.length !== 0) {
+            swal('删除成功', '', 'success')
+        }
     };
 
 })
