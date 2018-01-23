@@ -76,7 +76,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
 
     // 选择站点
     $scope.inStationParams = {
-        type: 'BOOKSTORE,CAFE',
+        type: 'BOOKSTORE,CAFE,WHOLESALE,STAPLE',
         callback: function (data) {
             var array = _.map(data, function (item) {
                 return item.stationCode;

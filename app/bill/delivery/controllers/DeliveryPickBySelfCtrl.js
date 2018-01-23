@@ -55,7 +55,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
     $scope.inStationParams = {
         single: true,
         // 物流属性站点
-        type: 'BOOKSTORE,CAFE',
+        type: 'BOOKSTORE,CAFE,WHOLESALE,STAPLE',
         callback: function (data) {
             $scope.params.inStationCode = data
         }
