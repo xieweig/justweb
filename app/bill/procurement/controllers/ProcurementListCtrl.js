@@ -103,7 +103,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                             name: 'e', text: "修改",
                             click: openEditModal,
                             visible: function (dataItem) {
-                                return dataItem.submitState !== 'SUBMITTED' || (dataItem.submitState === 'SUBMITTED' && dataItem.auditState !== 'AUDIT_FAILURE');
+                                return dataItem.submitState !== 'SUBMITTED' || (dataItem.submitState === 'SUBMITTED' && dataItem.auditState === 'AUDIT_FAILURE');
                             }
                         },
                         {
