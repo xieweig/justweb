@@ -12,7 +12,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     billCode: planBill.billCode,
                     planMemo: planBill.planMemo
                 };
-                $scope.billType = planBill.billType;
                 var goodsCode = _.map(planBill.planBillDetails, function (billItem) {
                     return billItem.goodsCode;
                 });
