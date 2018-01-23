@@ -231,6 +231,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 swal('表格信息填写不完整', '', 'warning');
                 return true;
             } else {
+                var differenceNumber = parseInt(item.shippedAmount) - parseInt(item.actualAmount);
                 bill.billDetails.push({
                     packageCode: item.packageCode,
                     rawMaterial: {
@@ -245,8 +246,8 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                     unitPrice: item.unitPrice,
                     shippedAmount: item.shippedAmount,
                     actualAmount: item.actualAmount,
-                    differenceNumber: item.differenceNumber,
-                    totalDifferencePrice: item.differencePrice
+                    differenceNumber: differenceNumber,
+                    totalDifferencePrice: differenceNumber * parseFloat(item.unitPrice)
                 });
             }
             return false;
