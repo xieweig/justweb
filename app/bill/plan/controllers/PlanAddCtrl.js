@@ -141,8 +141,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                     return getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
-                            {field: "inStationType", title: "站点类型"},
-                            {field: "outStationType", title: "站点类型"},
                             {field: "amount", title: "调剂数量(点击修改)", kType: 'number', editable: true}
                         ]
                     }
@@ -171,8 +169,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                     return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
-                            {field: "inLocation.stationType", title: "站点类型"},
-                            {field: "outLocation.stationType", title: "站点类型"},
                             {field: "amount", title: "调剂数量(点击修改)", editable: true, kType: 'number'}
                         ]
                     }
