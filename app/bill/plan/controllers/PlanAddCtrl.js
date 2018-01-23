@@ -135,12 +135,14 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    if (planBill.billType === 'RETURNED') {
+                                    if ($scope.planBill.billType === 'RETURNED') {
                                         return data.inLocation.stationCode
                                     }
                                     return getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
+                            {field: "inStationType", title: "站点类型"},
+                            {field: "outStationType", title: "站点类型"},
                             {field: "amount", title: "调剂数量(点击修改)", kType: 'number', editable: true}
                         ]
                     }
@@ -169,9 +171,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                     return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
                                 }
                             },
-                            {
-                                field: "amount", title: "调剂数量(点击修改)", editable: true, kType: 'number'
-                            }
+                            {field: "inLocation.stationType", title: "站点类型"},
+                            {field: "outLocation.stationType", title: "站点类型"},
+                            {field: "amount", title: "调剂数量(点击修改)", editable: true, kType: 'number'}
                         ]
                     }
                 }
@@ -288,10 +290,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                                     amount: dataItem.number,
                                     inLocation: {
                                         stationCode: dataItem.inStationCode,
+                                        stationType: dataItem.inStationType,
                                         stationName: dataItem.inStationName || getTextByVal($scope.station, dataItem.inStationCode)
                                     },
                                     outLocation: {
                                         stationCode: dataItem.outStationCode,
+                                        stationType: dataItem.outStationType,
                                         stationName: dataItem.outStationName || getTextByVal($scope.station, dataItem.outStationCode)
                                     }
                                 });
@@ -398,10 +402,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     stations.push({
                         amount: stationItem.amount,
                         inStation: {
-                            stationCode: stationItem.inLocation.stationCode
+                            stationCode: stationItem.inLocation.stationCode,
+                            stationType: stationItem.inLocation.stationType
                         },
                         outStation: {
-                            stationCode: stationItem.outLocation.stationCode
+                            stationCode: stationItem.outLocation.stationCode,
+                            stationType: stationItem.outLocation.stationType
                         }
                     });
                     return false;
@@ -442,10 +448,12 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     stations.push({
                         amount: stationItem.amount,
                         inStation: {
-                            stationCode: stationItem.inLocation.stationCode
+                            stationCode: stationItem.inLocation.stationCode,
+                            stationType: stationItem.inLocation.stationType
                         },
                         outStation: {
-                            stationCode: stationItem.outLocation.stationCode
+                            stationCode: stationItem.outLocation.stationCode,
+                            stationType: stationItem.outLocation.stationType
                         }
                     });
                     return false;

@@ -17,13 +17,13 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             break;
         case 'RETURNED':
             // 退货
-            outStationType = 'LOGISTICS';
+            outStationType = 'LOGISTICS,BOOKSTORE,CAFE';
             $scope.inStationIsSupplier = true;
             break;
         case 'ADJUST':
             // 调剂
-            outStationType = 'BOOKSTORE,CAFE';
-            inStationType = 'BOOKSTORE,CAFE';
+            outStationType = 'BOOKSTORE,CAFE,LOGISTICS';
+            inStationType = 'BOOKSTORE,CAFE,LOGISTICS';
             break;
     }
 
@@ -58,13 +58,14 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
             if (data.length > 0) {
-                if (data[0].stationCode) {
+                if (!$scope.inStationIsSupplier) {
                     $scope.otmInStation = data;
                 } else {
                     $scope.otmInStation = _.map(data, function (item) {
                         return {
                             stationCode: item.supplierCode,
-                            stationName: item.supplierName
+                            stationName: item.supplierName,
+                            stationType: 'supplier'
                         };
                     })
                 }
@@ -91,8 +92,10 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             data.push({
                 outStationCode: $scope.otmOutStation.stationCode,
                 outStationName: $scope.otmOutStation.stationName,
+                outStationType: $scope.otmOutStation.siteType,
                 inStationCode: item.stationCode,
                 inStationName: item.stationName,
+                inStationType: item.siteType,
                 number: 0
             });
             return false;
@@ -122,12 +125,13 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         single: true,
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
-            if (data.stationCode) {
+            if ($scope.inStationIsSupplier) {
                 $scope.mtoInStation = data;
             } else {
                 $scope.mtoInStation = {
                     stationCode: data.supplierCode,
-                    stationName: data.supplierName
+                    stationName: data.supplierName,
+                    stationType: 'supplier'
                 }
             }
             if (billType === 'ADJUST' && $scope.mtoInStation[0]) {
@@ -152,8 +156,10 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             data.push({
                 outStationCode: item.stationCode,
                 outStationName: item.stationName,
+                outStationType: item.siteType,
                 inStationCode: $scope.mtoInStation.stationCode,
                 inStationName: $scope.mtoInStation.stationName,
+                inStationType: $scope.mtoInStation.stationType,
                 number: 0
             });
             return false;
@@ -187,13 +193,14 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         onlyLear: true,
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
-            if (data.stationCode) {
+            if ($scope.inStationIsSupplier) {
                 $scope.otoInStation = data;
             } else {
                 $scope.otoInStation = _.map(data, function (item) {
                     return {
                         stationCode: item.supplierCode || item.stationCode,
-                        stationName: item.supplierName || item.stationName
+                        stationName: item.supplierName || item.stationName,
+                        stationType: 'supplier'
                     };
                 });
             }
@@ -217,8 +224,10 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             data.push({
                 outStationCode: item.stationCode,
                 outStationName: item.stationName,
+                outStationType: item.stationType,
                 inStationCode: inStation.stationCode,
                 inStationName: inStation.stationName,
+                inStationType: inStation.stationType,
                 number: 0
             });
             return false;
@@ -260,8 +269,10 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             return {
                 outStationCode: item.outStationCode,
                 outStationName: item.outStationName,
+                outStationType: item.outStationType,
                 inStationCode: item.inStationCode,
                 inStationName: item.inStationName,
+                inStationType: item.inStationType,
                 number: item.number
             }
         });
