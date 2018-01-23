@@ -94,7 +94,15 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
                                 return getTextByVal($scope.station, data.outLocation.stationCode)
                             }
                         },
-                        {field: 'inStationName', title: "调入站点"},
+                        {
+                            title: "调入站点",
+                            template: function (data) {
+                                if (data.inLocation.stationType === 'SUPPLIER') {
+                                    return data.inLocation.stationCode;
+                                }
+                                return getTextByVal($scope.station, data.inLocation.stationCode);
+                            }
+                        },
                         {field: "amount", title: "调剂数量"}
                     ]
                 }
