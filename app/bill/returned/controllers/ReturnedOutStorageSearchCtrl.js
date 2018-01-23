@@ -258,11 +258,11 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
         var query = $scope.kendoQueryCondition;
         var arr = [];
         if (type === 'submit') {
-            arr = query.submitStateCode
+            arr = query.submitStates
         } else if (type === 'audit') {
-            arr = query.auditStateCode
+            arr = query.auditStates
         } else if (type === 'out') {
-            arr = query.inOrOutStateCode
+            arr = query.inOrOutStates
         }
         var index = arr.indexOf(status);
         if (index > -1) {
