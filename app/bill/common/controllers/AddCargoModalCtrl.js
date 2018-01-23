@@ -83,7 +83,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data
                 },
                 {field: "dateInProduced", title: "生产日期", width: 120, WdatePicker: {maxDate: formatDate(new Date(), 'yyyy-MM-dd')}, editable: true},
                 {field: "unitPrice", title: "单位进价", width: 120, editable: true, kType: 'decimal'},
-                {field: "actualAmount", title: "发货数量", width: 200, kType: 'number', editable: true}
+                {field: "shippedAmount", title: "发货数量", width: 200, kType: 'number', editable: true}
             ]
         }
     };

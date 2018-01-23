@@ -21,7 +21,9 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         };
     }
     $timeout(function () {
-        $('#inStorageCode').val(params.purchaseBill.inLocation.storage.storageCode).trigger('change');
+        if (params.purchaseBill.inLocation && params.purchaseBill.inLocation.storage) {
+            $('#inStorageCode').val(params.purchaseBill.inLocation.storage.storageCode).trigger('change');
+        }
     });
 
     $scope.procurementGrid = {
@@ -50,8 +52,8 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 },
                 {field: "dateInProduced", title: "生产日期", width: 160},
                 {field: "unitPrice", title: "单位进价", width: 120},
-                {field: "actualAmount", title: "发货数量", width: 120},
-                {field: "shippedAmount", title: "实收数量", width: 120, kType: 'number', editable: true},
+                {field: "shippedAmount", title: "发货数量", width: 120},
+                {field: "actualAmount", title: "实收数量", width: 120, kType: 'number', editable: true},
                 {field: "differenceNumber", title: "数量差额", width: 120},
                 {field: "differencePrice", title: "总价差值", width: 120}
             ],
@@ -62,7 +64,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 item.shippedAmount !== item.shippedAmount ? item.shippedAmount = 0 : '';
 
 
-                item.differenceNumber = parseInt(item.actualAmount) - parseInt(item.shippedAmount);
+                item.differenceNumber = parseInt(item.shippedAmount) - parseInt(item.actualAmount);
                 item.differencePrice = item.differenceNumber * parseFloat(item.unitPrice);
                 return e;
             }
@@ -84,6 +86,10 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
     // 批量删除
     $scope.batchDelete = function () {
         var selectIds = $scope.procurementGrid.kendoGrid.selectedKeyNames();
+        if (selectIds.length === 0) {
+            swal('请选择需要删除的项', '', 'warning');
+            return;
+        }
         var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
         // 循环需要删除的索引的反序
         var cargoNames = [];
@@ -131,7 +137,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                             if (!item.shippedAmount) {
                                 item.shippedAmount = 0;
                             }
-                            item.differenceNumber = parseInt(item.actualAmount) - parseInt(item.shippedAmount);
+                            item.differenceNumber = parseInt(item.shippedAmount) - parseInt(item.actualAmount);
                             item.differencePrice = item.differenceNumber * parseFloat(item.unitPrice);
                         });
                         dataSource.data(data);
@@ -146,7 +152,37 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                     }
                 },
                 data: function () {
-                    return _.toArray($scope.procurementGrid.kendoGrid.dataSource.data());
+                    return _.map($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
+                        return {
+                            "createTime": item.createTime,
+                            "updateTime": item.updateTime,
+                            "logicStatus": item.logicStatus,
+                            "cargoId": item.cargoId,
+                            "cargoCode": item.cargoCode,
+                            "barCode": item.barCode,
+                            "selfBarCode": item.selfBarCode,
+                            "originalName": item.originalName,
+                            "cargoName": item.cargoName,
+                            "effectiveTime": item.effectiveTime,
+                            "measurementCode": item.measurementCode,
+                            "standardUnitCode": item.standardUnitCode,
+                            "memo": item.memo,
+                            "number": item.number,
+                            "rawMaterialId": item.rawMaterialId,
+                            "operatorCode": item.operatorCode,
+                            "cargoType": item.cargoType,
+                            "rawMaterialName": item.rawMaterialName,
+                            "rawMaterialCode": item.rawMaterialCode,
+                            "configureName": item.configureName,
+                            "rawMaterialTypeName": item.rawMaterialTypeName,
+                            "dateInProduced": item.dateInProduced,
+                            "unitPrice": item.unitPrice,
+                            "actualAmount": item.actualAmount,
+                            "shippedAmount": item.shippedAmount,
+                            "differenceNumber": item.differenceNumber,
+                            "differencePrice": item.differencePrice
+                        };
+                    });
                 },
                 cargoUnit: function () {
                     return cargoUnit;
