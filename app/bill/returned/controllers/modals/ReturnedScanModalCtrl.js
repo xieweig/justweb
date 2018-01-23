@@ -1,14 +1,14 @@
 'use strict';
 
-angular.module('app').controller('ReturnedScanModalCtrl', function ($scope) {
+angular.module('app').controller('ReturnedScanModalCtrl', function ($scope, data) {
     // 拣货的添加货物
-    $scope.item = $scope.cargoObject[$scope.params.scanCode];
+    $scope.item = data.cargo;
     $scope.item.addNumber = 0;
     $scope.item.subNumber = 0;
 
     var dataSource = $scope.cargoGrid.kendoGrid.dataSource;
     _.each(dataSource.data(), function (item, index) {
-        if (item.cargoCode === $scope.params.scanCode) {
+        if (item.cargoCode === $scope.item.cargoCode) {
             $scope.item.rawMaterialName = item.rawMaterialName
         }
     });
@@ -17,13 +17,13 @@ angular.module('app').controller('ReturnedScanModalCtrl', function ($scope) {
         if (isInt($scope.item.addNumber)) {
             if ($scope.item.type === 'add') {
                 _.each(dataSource.data(), function (item, index) {
-                    if (item.cargoCode === $scope.params.scanCode) {
+                    if (item.cargoCode === $scope.item.cargoCode) {
                         item.actualAmount = parseInt(item.actualAmount) + parseInt($scope.item.addNumber)
                     }
                 })
             } else if ($scope.item.type === 'sub') {
                 _.each(dataSource.data(), function (item, index) {
-                    if (item.cargoCode === $scope.params.scanCode) {
+                    if (item.cargoCode === $scope.item.cargoCode) {
                         item.actualAmount = parseInt(item.actualAmount) - parseInt($scope.item.subNumber)
                     }
                 })

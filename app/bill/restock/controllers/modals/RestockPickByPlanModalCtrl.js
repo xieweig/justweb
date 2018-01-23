@@ -187,21 +187,33 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     // 测试回车监听
     $scope.sendCode = function ($event) {
         if ($event.charCode === 13) {
-            console.log('-', $scope.params.scanCode)
-            if ($scope.cargoObject.hasOwnProperty($scope.params.scanCode)) {
-                initScanCargo()
-            } else {
-                swal('', '该货物不属于本次拣货范围', 'error');
-            }
+            Common.getCargoByBarCode($scope.params.scanCode).then(function (cargo) {
+                if (cargo) {
+                    initScanCargo(cargo)
+                } else {
+                    swal('', '该货物不属于本次拣货范围', 'error');
+                }
+            });
+            // console.log('-', $scope.params.scanCode)
+            // if ($scope.cargoObject.hasOwnProperty($scope.params.scanCode)) {
+            //     initScanCargo()
+            // } else {
+            //     swal('', '该货物不属于本次拣货范围', 'error');
+            // }
         }
     };
 
-    function initScanCargo() {
+    function initScanCargo(cargo) {
         $scope.addModal = $uibModal.open({
             templateUrl: 'app/bill/restock/modals/scan.html',
             scope: $scope,
             size: 'xs',
-            controller: 'ModalScanCtrl'
+            controller: 'ModalScanCtrl',
+            resolve: {
+                data: {
+                    cargo: cargo
+                }
+            }
         });
     }
 
