@@ -159,7 +159,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 outStationType: item.siteType,
                 inStationCode: $scope.mtoInStation.stationCode,
                 inStationName: $scope.mtoInStation.stationName,
-                inStationType: $scope.mtoInStation.stationType,
+                inStationType: $scope.mtoInStation.siteType,
                 number: 0
             });
             return false;
@@ -224,10 +224,10 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
             data.push({
                 outStationCode: item.stationCode,
                 outStationName: item.stationName,
-                outStationType: item.stationType,
+                outStationType: item.siteType,
                 inStationCode: inStation.stationCode,
                 inStationName: inStation.stationName,
-                inStationType: inStation.stationType,
+                inStationType: inStation.siteType,
                 number: 0
             });
             return false;
