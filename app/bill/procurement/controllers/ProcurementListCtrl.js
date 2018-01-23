@@ -54,6 +54,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                     if (!item.inLocation) {
                         item.inLocation = {storage: {}};
                     }
+                    if (!item.inLocation.storage) {
+                        item.inLocation.storage = {};
+                    }
                     // 供应商
                     if (!item.supplier) {
                         item.supplier = {};
