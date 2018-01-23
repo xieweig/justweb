@@ -1,10 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="uib-modal">
+    <h1 class="uib-modal-title">
+        <span>实物点数</span>
+        <span class="option">
+            <!--<input type="button" class="btn btn-primary" value="保存" data-ng-click="saveCargo()">-->
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- your contents here -->
+                <div class="padding-top-0">
+                    <div class="row">
 
-</body>
-</html>
+                        <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
+                            <div class="view-group">
+                                <span class="input-group-addon">货物名称<span>{{ item.cargoName }}</span></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
+                            <div class="view-group">
+                                <span class="input-group-addon">货物条码<span>{{ item.cargoCode }}</span></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
+                            <div class="view-group">
+                                <span class="input-group-addon">所属原料<span>{{ item.rawMaterialName }}</span></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10">
+                            <div class="view-group">
+                                <span class="input-group-addon">规格<span>{{ item.number }}/{{ item.standardUnitCode }}</span></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10 text-align-right">
+                            <label class="radio">
+                                <input type="radio" name="radio" value="add" data-ng-model="item.type">增加数量
+                            </label>
+                        </div>
+                        <div class="col-lg-3 col-sm-3 col-xs-12 margin-bottom-10 text-align-left"
+                             style="margin-top:6px;">
+                            <input type="text" class="form-control" data-ng-model="item.addNumber">
+                        </div>
+
+                        <div class="col-lg-6 col-sm-6 col-xs-12 margin-bottom-10 text-align-right">
+                            <label class="radio">
+                                <input type="radio" name="radio" value="sub" data-ng-model="item.type">减少数量
+                            </label>
+                        </div>
+                        <div class="col-lg-3 col-sm-3 col-xs-12 margin-bottom-10 text-align-left"
+                             style="margin-top:6px;">
+                            <input type="text" class="form-control" data-ng-model="item.subNumber">
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <input type="button" class="btn btn-primary width-80" value="确定" data-ng-click="submitByCargo()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

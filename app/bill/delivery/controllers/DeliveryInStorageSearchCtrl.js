@@ -45,15 +45,16 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
             persistSelection: true,
             columns: [
                 {
-                    command: [{
-                        name: 'select', text: "调拨", click: jumpToPick, visible: function (data) {
-                            return true;
-                        }
-                    }, {
-                        name: 'view', text: '查看', click: viewInStorageBill, visible: function (data) {
-                            return true;
-                        }
-                    }],
+                    command: [
+                        {
+                            name: 'view', text: '查看', click: viewInStorageBill, visible: function (data) {
+                                return true;
+                            }
+                        }, {
+                            name: 'select', text: "调拨", click: jumpToPick, visible: function (data) {
+                                return data.allotStatus === 'NOT_ALLOT';
+                            }
+                        }],
                     locked: true,
                     title: "操作",
                     width: 160
@@ -63,16 +64,22 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                 //         return ;'<a href="#" class="plan-btn-group">' + data.billCode + '</a>'
                 //     }
                 // },
-                {field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
+                {
+                    field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
-                    }},
+                    }
+                },
                 {field: "billCode", title: "入库单号", locked: true, width: 210},
-                {title: "单据状态", width: 100, template: function (data) {
+                {
+                    title: "单据状态", width: 100, template: function (data) {
                         return getTextByVal($scope.billStatus, data.data.allotStatus)
-                    }},
-                {title: "单据属性", width: 100, template: function (data) {
+                    }
+                },
+                {
+                    title: "单据属性", width: 100, template: function (data) {
                         return getTextByVal($scope.specificType, data.specificBillType) + '转'
-                    }},
+                    }
+                },
                 {field: "createTime", title: "录单时间", width: 150},
                 {field: "inWareHouseTime", title: "入库时间", width: 150},
                 {field: "operatorName", title: "入库人", width: 100},
@@ -96,7 +103,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
     // 选择站点
     $scope.inStationParams = {
         callback: function (data) {
-            $scope.params.inStationCodes  = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }

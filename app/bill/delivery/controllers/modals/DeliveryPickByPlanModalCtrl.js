@@ -184,10 +184,10 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
 
     function initScanCargo() {
         $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/delivery/modals/scan.html',
+            templateUrl: 'app/bill/delivery/modals/scanModal.html',
             scope: $scope,
             size: 'xs',
-            controller: 'ModalScanCtrl'
+            controller: 'DeliveryScanModalCtrl'
         });
     }
 
