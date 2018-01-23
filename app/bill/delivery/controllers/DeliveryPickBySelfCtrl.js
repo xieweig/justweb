@@ -140,8 +140,8 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
             }
         };
         bill.billDetails = _.map($scope.cargoListGrid.kendoGrid.dataSource.data(), function (item) {
-            if(item.actualAmount === undefined){
-                swal('参数错误','货物数量不能为空','error');
+            if (item.actualAmount === undefined) {
+                swal('参数错误', '货物数量不能为空', 'error');
                 return
             }
             return {
@@ -221,6 +221,9 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                     dataSource.remove(dataSource.at(i));
                 }
             }
+        }
+        if (selectId.length !== 0) {
+            swal('删除成功', '', 'success')
         }
     };
 });
