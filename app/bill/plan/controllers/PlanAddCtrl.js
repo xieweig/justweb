@@ -136,10 +136,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    if ($scope.billType === 'RETURNED') {
-                                        return data.inLocation.stationCode
+                                    if (data.inLocation.stationType === 'SUPPLIER') {
+                                        return data.inLocation.stationCode;
                                     }
-                                    return getTextByVal($scope.station, data.inLocation.stationCode)
+                                    return getTextByVal($scope.station, data.inLocation.stationCode);
                                 }
                             },
                             {field: "amount", title: "调剂数量(点击修改)", kType: 'number', editable: true}
@@ -167,7 +167,10 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    return data.inLocation.stationName || getTextByVal($scope.station, data.inLocation.stationCode)
+                                    if (data.inLocation.stationType === 'SUPPLIER') {
+                                        return data.inLocation.stationCode;
+                                    }
+                                    return getTextByVal($scope.station, data.inLocation.stationCode);
                                 }
                             },
                             {field: "amount", title: "调剂数量(点击修改)", editable: true, kType: 'number'}
@@ -433,6 +436,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
         } else {
             plan.basicEnum = 'BY_MATERIAL';
             var errorItem = _.find($scope.materialMap, function (item) {
+                stations = [];
                 if (type === 'submit' && (!item.material || !item.material.materialCode)) {
                     swal('存在未选择原料的项目', '', 'warning');
                     return true;
@@ -484,6 +488,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
             }
             return type;
         }
-        return '';
+        return 'SUPPLIER';
     }
 });
