@@ -55,11 +55,11 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
                         return getTextByVal($scope.station, item.inLocation.stationCode)
                     }
                 },
-                {field: "outStorageName", title: "调拨单调出库位", width: 100, template: function (data) {
-                        return getTextByVal($scope.storageType, data.inStorageBillInStationCode)
+                {title: "调拨单调出库位", width: 120, template: function (data) {
+                        return getTextByVal($scope.storageType, data.outLocation.storage.storageCode)
                     }},
-                {field: "inStorageName", title: "调拨单调入库位", width: 100, template: function (data) {
-                        return getTextByVal($scope.storageType, data.inStorageBillOutStationCode)
+                {title: "调拨单调入库位", width: 120, template: function (data) {
+                        return getTextByVal($scope.storageType, data.inLocation.storage.storageCode)
                     }},
                 {field: "totalAmount", title: "调拨数量", width: 60},
                 {field: "totalVarietyAmount", title: "调拨品种", width: 60},

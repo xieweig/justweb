@@ -61,8 +61,8 @@
                             <div class="input-group">
                                 <span class="input-group-addon">调拨单调出库位</span>
                                 <select smart-select2 id="select-out" class="width-full"
-                                        data-ng-model="params.outStationType">
-                                    <option data-ng-repeat="item in outType" data-ng-value="item.key">
+                                        data-ng-model="params.outStorageCode">
+                                    <option data-ng-repeat="item in storageType" data-ng-value="item.value">
                                         {{item.text}}
                                     </option>
                                 </select>
@@ -73,8 +73,8 @@
                             <div class="input-group">
                                 <span class="input-group-addon">调拨单调入库位</span>
                                 <select smart-select2 id="select-in" class="width-full"
-                                        data-ng-model="params.outStationType">
-                                    <option data-ng-repeat="item in outType" data-ng-value="item.key">
+                                        data-ng-model="params.inStorageCode">
+                                    <option data-ng-repeat="item in storageType" data-ng-value="item.value">
                                         {{item.text}}
                                     </option>
                                 </select>
