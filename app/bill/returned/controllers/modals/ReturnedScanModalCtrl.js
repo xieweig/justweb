@@ -3,6 +3,8 @@
 angular.module('app').controller('ReturnedScanModalCtrl', function ($scope) {
     // 拣货的添加货物
     $scope.item = $scope.cargoObject[$scope.params.scanCode];
+    $scope.item.addNumber = 0;
+    $scope.item.subNumber = 0;
 
     var dataSource = $scope.cargoGrid.kendoGrid.dataSource;
     _.each(dataSource.data(), function (item, index) {
@@ -22,7 +24,7 @@ angular.module('app').controller('ReturnedScanModalCtrl', function ($scope) {
             } else if ($scope.item.type === 'sub') {
                 _.each(dataSource.data(), function (item, index) {
                     if (item.cargoCode === $scope.params.scanCode) {
-                        item.actualAmount = parseInt(item.actualAmount) - parseInt($scope.item.addNumber)
+                        item.actualAmount = parseInt(item.actualAmount) - parseInt($scope.item.subNumber)
                     }
                 })
             }
