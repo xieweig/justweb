@@ -537,6 +537,12 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
             // 按货物
             bill.basicEnum = 'BY_CARGO';
             bill.billDetails = _.map($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
+                var sp = '';
+                if ($scope.specificBillType === 'NO_PLAN') {
+                    sp = item.actualAmount
+                } else {
+                    sp = item.shippedAmount
+                }
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -547,7 +553,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
                         }
                     },
                     actualAmount: item.actualAmount,
-                    shippedAmount: item.shippedAmount
+                    shippedAmount: sp
                 }
             });
         }

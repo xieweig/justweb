@@ -64,9 +64,11 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                         }
                     },
                     {field: "actualAmount", title: "实拣数量"},
-                    {field: "number", title: "标准单位数量", template: function (data) {
+                    {
+                        field: "number", title: "标准单位数量", template: function (data) {
                             return data.number * data.actualAmount
-                        }}
+                        }
+                    }
                 ]
             }
         };
@@ -477,7 +479,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             url = '/api/bill/restock/submit'
         }
         bill.billCode = $scope.params.billCode;
-        if($scope.specificBillType !== 'NO_PLAN'){
+        if ($scope.specificBillType !== 'NO_PLAN') {
             bill.sourceCode = $scope.params.sourceCode
         }
         bill.rootCode = $scope.params.rootCode;
@@ -507,6 +509,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             // 按原料
             bill.basicEnum = 'BY_MATERIAL';
             bill.billDetails = _.map($scope.CargoGrid.kendoGrid.dataSource.data(), function (item) {
+
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -524,6 +527,12 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             // 按货物
             bill.basicEnum = 'BY_CARGO';
             bill.billDetails = _.map($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
+                var sp = '';
+                if ($scope.specificBillType === 'NO_PLAN') {
+                    sp = item.actualAmount
+                } else {
+                    sp = item.shippedAmount
+                }
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -534,7 +543,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                         }
                     },
                     actualAmount: item.actualAmount,
-                    shippedAmount: item.shippedAmount
+                    shippedAmount: sp
                 }
             });
         }
