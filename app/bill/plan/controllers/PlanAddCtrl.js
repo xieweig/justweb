@@ -476,10 +476,13 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     }
 
     function getStationType(type) {
-        type = type.toUpperCase();
-        if (type === 'BOOKSTORE' || type === 'CAFE') {
-            return 'STORE';
+        if (type) {
+            type = type.toUpperCase();
+            if (type === 'BOOKSTORE' || type === 'CAFE') {
+                return 'STORE';
+            }
+            return type;
         }
-        return type;
+        return '';
     }
 });

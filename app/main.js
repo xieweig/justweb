@@ -336,6 +336,8 @@ function inputDecimal(element, options) {
         if (valNumber > 10000000) {
             valNumber += '';
             valNumber = valNumber.substring(0, valNumber.length - 1);
+        } else if (valNumber.length > 10) {
+            valNumber = valNumber.substring(0, 10);
         }
         if (val.indexOf('.') === val.length - 1) {
             valNumber += '.';
