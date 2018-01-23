@@ -210,7 +210,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
             $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
 
             $scope.specificBillType = res.specificBillType;
-            
+
             // 定义变量方便之后调用和修改
             var billDetails = [], cargoList = [];
             if ($scope.showMaterial) {
