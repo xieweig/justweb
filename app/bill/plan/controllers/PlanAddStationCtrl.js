@@ -65,7 +65,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                         return {
                             stationCode: item.supplierCode,
                             stationName: item.supplierName,
-                            stationType: 'supplier'
+                            stationType: 'SUPPLIER'
                         };
                     })
                 }
@@ -95,7 +95,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 outStationType: $scope.otmOutStation.siteType,
                 inStationCode: item.stationCode,
                 inStationName: item.stationName,
-                inStationType: item.siteType,
+                inStationType: item.stationType,
                 number: 0
             });
             return false;
@@ -131,7 +131,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 $scope.mtoInStation = {
                     stationCode: data.supplierCode,
                     stationName: data.supplierName,
-                    stationType: 'supplier'
+                    stationType: 'SUPPLIER'
                 }
             }
             // if (billType === 'ADJUST' && $scope.mtoInStation[0]) {
@@ -159,7 +159,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 outStationType: item.siteType,
                 inStationCode: $scope.mtoInStation.stationCode,
                 inStationName: $scope.mtoInStation.stationName,
-                inStationType: $scope.mtoInStation.siteType,
+                inStationType: $scope.mtoInStation.stationType,
                 number: 0
             });
             return false;
@@ -200,7 +200,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                     return {
                         stationCode: item.supplierCode || item.stationCode,
                         stationName: item.supplierName || item.stationName,
-                        stationType: 'supplier'
+                        stationType: 'SUPPLIER'
                     };
                 });
             }
@@ -227,7 +227,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
                 outStationType: item.siteType,
                 inStationCode: inStation.stationCode,
                 inStationName: inStation.stationName,
-                inStationType: inStation.siteType,
+                inStationType: inStation.stationType,
                 number: 0
             });
             return false;

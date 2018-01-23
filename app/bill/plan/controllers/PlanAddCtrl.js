@@ -12,7 +12,6 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                     billCode: planBill.billCode,
                     planMemo: planBill.planMemo
                 };
-                $scope.billType = planBill.billType;
                 var goodsCode = _.map(planBill.planBillDetails, function (billItem) {
                     return billItem.goodsCode;
                 });
@@ -136,8 +135,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    if (data.inLocation.stationType === 'SUPPLIER') {
-                                        return data.inLocation.stationCode;
+                                    // if (data.inLocation.stationType === 'SUPPLIER') {
+                                    if (data.inLocation.stationName) {
+                                        return data.inLocation.stationName;
                                     }
                                     return getTextByVal($scope.station, data.inLocation.stationCode);
                                 }
@@ -167,8 +167,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    if (data.inLocation.stationType === 'SUPPLIER') {
-                                        return data.inLocation.stationCode;
+                                    // if (data.inLocation.stationType === 'SUPPLIER') {
+                                    if (data.inLocation.stationName) {
+                                        return data.inLocation.stationName;
                                     }
                                     return getTextByVal($scope.station, data.inLocation.stationCode);
                                 }
@@ -483,7 +484,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
     function getStationType(type) {
         if (type) {
             type = type.toUpperCase();
-            if (type === 'BOOKSTORE' || type === 'CAFE') {
+            if (type === 'BOOKSTORE' || type === 'CAFE' || type === 'WHOLESALE' || type === 'STAPLE') {
                 return 'STORE';
             }
             return type;

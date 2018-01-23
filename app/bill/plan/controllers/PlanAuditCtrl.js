@@ -45,22 +45,29 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
     // 获取供应商名称
     function getSupplierName(data, cb) {
         if ($scope.plan.billType === 'RETURNED') {
+            var supplierCodes = [];
             _.each(data, function (dataItem) {
-                var supplierCodes = _.map(dataItem.resultPlanBillDetailDTOSet, function (item) {
+                supplierCodes = supplierCodes.concat(_.map(dataItem.resultPlanBillDetailDTOSet, function (item) {
                     return item.inLocation.stationCode;
-                });
-                // 回显供应商
-                Common.getSupplierByIds(supplierCodes).then(function (supplierList) {
-                    var supplierObj = _.zipObject(_.map(supplierList, function (item) {
-                        return item.supplierCode;
-                    }), supplierList);
+                }));
+            });
+            // 回显供应商
+            Common.getSupplierByIds(supplierCodes).then(function (supplierList) {
+                var supplierObj = _.zipObject(_.map(supplierList, function (item) {
+                    return item.supplierCode;
+                }), supplierList);
+                _.each(data, function (dataItem) {
                     _.each(dataItem.resultPlanBillDetailDTOSet, function (item) {
                         var supplier = supplierObj[item.inLocation.stationCode];
                         if (supplier) {
-                            item.inStationName = supplier.supplierName;
+                            if (!item.inLocation) {
+                                item.inLocation = {};
+                            }
+                            item.inLocation.stationName = supplier.supplierName;
                         }
                     });
                 });
+                cb();
             });
         } else {
             _.each(data, function (dataItem, index) {
@@ -68,8 +75,8 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
                     item.inStationName = getTextByVal($scope.station, item.inLocation.stationCode);
                 });
             });
+            cb();
         }
-        cb();
     }
 
     // 获取展示面包
@@ -97,8 +104,9 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
                         {
                             title: "调入站点",
                             template: function (data) {
-                                if (data.inLocation.stationType === 'SUPPLIER') {
-                                    return data.inLocation.stationCode;
+                                // if (data.inLocation.stationType === 'SUPPLIER') {
+                                if (data.inLocation.stationName) {
+                                    return data.inLocation.stationName;
                                 }
                                 return getTextByVal($scope.station, data.inLocation.stationCode);
                             }
