@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
+angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
 
     // 搜索
@@ -13,6 +13,34 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
         primaryId: 'billCode',
         url: '/api/bill/returned/findPlanByConditions',
         params: $scope.params,
+        dataSource: {
+            data: function (response) {
+                var data = getKendoData(response);
+                console.log('data', data)
+                var supplierCodes = [];
+                _.each(data, function (item) {
+                    item.supplier = {};
+                    item.supplier.supplierCode = item.inStationCode;
+                    supplierCodes.push(item.inStationCode);
+                });
+                // 回显供应商
+                Common.getSupplierByIds(supplierCodes).then(function (supplierList) {
+                    var supplierObj = _.zipObject(_.map(supplierList, function (item) {
+                        return item.supplierCode;
+                    }), supplierList);
+                    var dataSource = $scope.stationGrid.kendoGrid.dataSource;
+                    _.each(dataSource.data(), function (item, index) {
+                        var supplier = supplierObj[item.inStationCode];
+                        if (supplier) {
+                            item.supplier.set('supplierName', supplier.supplierName);
+                        } else {
+                            item.supplier.set('supplierName', '');
+                        }
+                    });
+                });
+                return data
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -24,7 +52,7 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
                         }
                     }, {
                         name: 'view', text: '查看', click: viewOutStorageBill, visible: function (data) {
-                            return data.operationState  && data.operationState !== 'NOOPERATION';
+                            return data.operationState && data.operationState !== 'NOOPERATION';
                         }
                     }], title: "操作", width: 80
                 },
@@ -42,7 +70,7 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
                 },
                 {
                     field: "inStationCode", title: "调入站点", template: function (data) {
-                        return getTextByVal($scope.station, data.inStationCode)
+                        return data.supplier.supplierName
                     }
                 },
                 {field: "totalAmount", title: "数量", width: 60},

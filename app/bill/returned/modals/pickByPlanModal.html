@@ -43,11 +43,11 @@
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">出库站点</span>
-                        <input type="text" class="form-control" data-ng-model="params.inStationName" disabled>
+                        <input type="text" class="form-control" data-ng-model="params.outStationName" disabled>
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">入库站点</span>
-                        <input type="text" class="form-control" data-ng-model="params.outStationName" disabled>
+                        <input type="text" class="form-control" data-ng-model="params.supplier.supplierName" disabled>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                     <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
                 </div>
                 <div class="tab-pane" id="tabs-2">
-                    <p class="text-center">配送计划拣货货物明细</p>
+                    <p class="text-center">退货计划拣货货物明细</p>
                     <div data-ng-repeat="item in itemMap" class="padding-10 margin-bottom-10" style="border: 1px dashed #ccc;">
                         <div class="row">
                             <div class="col-xs-12 col-sm-6 col-lg-3">

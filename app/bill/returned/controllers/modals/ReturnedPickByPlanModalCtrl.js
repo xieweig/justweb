@@ -49,7 +49,16 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
             $scope.params.outStationCode = res.outStationCode;
             $scope.params.inStationCode = res.inStationCode;
             $scope.params.outStationName = getTextByVal($scope.station, res.outStationCode);
-            $scope.params.inStationName = getTextByVal($scope.station, res.inStationCode);
+            // $scope.params.inStationName = getTextByVal($scope.station, res.inStationCode);
+            $scope.params.supplier = {};
+            $scope.params.supplier.supplierCode = res.inStationCode;
+
+            Common.getSupplierByIds([$scope.params.supplier.supplierCode]).then(function (supplierList) {
+                var supplierObj = _.zipObject(_.map(supplierList, function (item) {
+                    return item.supplierCode;
+                }), supplierList);
+                $scope.params.supplier.supplierName = supplierObj[$scope.params.supplier.supplierCode].supplierName;
+            });
 
             if (res.basicEnum === 'BY_CARGO') {
                 // 按货物拣货
@@ -316,15 +325,18 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
                 storageName: getTextByVal($scope.storageType, $scope.params.outStorageType)
             }
         };
-        bill.inLocation = {
-            stationCode: $scope.params.inStationCode,
-            stationName: $scope.params.inStationName,
-            // stationType: 'LOGISTICS',
-            storage: {
-                storageCode: 'ON_STORAGE',
-                storageName: ''
-            }
+        bill.supplier = {
+            supplierCode: $scope.params.supplier.supplierCode
         };
+        // bill.inLocation = {
+        //     stationCode: $scope.params.inStationCode,
+        //     stationName: $scope.params.inStationName,
+        //     // stationType: 'LOGISTICS',
+        //     storage: {
+        //         storageCode: 'ON_STORAGE',
+        //         storageName: ''
+        //     }
+        // };
 
         if (getActiveVal() === 'cargo') {
             bill.basicEnum = 'BY_CARGO';

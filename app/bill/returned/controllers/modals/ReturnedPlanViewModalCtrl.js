@@ -48,7 +48,15 @@ angular.module('app').controller('ReturnedPlanViewModalCtrl', function ($scope, 
             $scope.params.memo = res.memo;
             $scope.params.recordTime = res.createTime;
             $scope.params.outStationName = getTextByVal($scope.station, res.outStationCode);
-            $scope.params.inStationName = getTextByVal($scope.station, res.inStationCode);
+            // $scope.params.inStationName = getTextByVal($scope.station, res.inStationCode);
+
+            Common.getSupplierByIds([res.inStationCode]).then(function (supplierList) {
+                var supplierObj = _.zipObject(_.map(supplierList, function (item) {
+                    return item.supplierCode;
+                }), supplierList);
+                $scope.supplier = supplierObj[res.inStationCode];
+                $scope.params.inStationName = $scope.supplier.supplierName
+            });
 
             var billDetails = res.childPlanBillDetails;
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
