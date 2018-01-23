@@ -66,7 +66,7 @@
                 <div class="tab-pane active" id="tabs-1">
                     <p class="text-center">配送计划拣货货物明细</p>
                     <div>
-                        <input type="text" class="form-control" style="max-width: 315px;" placeholder="扫描货物编码" data-ng-keypress="sendCode($event)">
+                        <input type="text" class="form-control" style="max-width: 315px;" placeholder="扫描货物编码" data-ng-model="params.scanCode" data-ng-keypress="sendCode($event)">
                     </div>
                     <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
                 </div>

@@ -187,6 +187,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     // 测试回车监听
     $scope.sendCode = function ($event) {
         if ($event.charCode === 13) {
+            console.log('-', $scope.params.scanCode)
             if ($scope.cargoObject.hasOwnProperty($scope.params.scanCode)) {
                 initScanCargo()
             } else {
