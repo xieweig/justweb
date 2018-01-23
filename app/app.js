@@ -335,4 +335,17 @@ app.service("Common", function ($http, $q, MainFactory, ApiService) {
             return [];
         }, apiServiceError);
     };
+    this.getCargoByBarCode = function (barCode) {
+        if(!barCode){
+            return;
+        }
+        return ApiService.get(COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByBarCode?barCode=' + barCode, {hasHost:true}).then(function (response) {
+            if (response.code === '000') {
+                return response.result.cargo;
+            }else {
+                swal('请求货物失败', response.message, 'error');
+            }
+            return {};
+        }, apiServiceError)
+    }
 });

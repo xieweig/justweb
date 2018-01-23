@@ -80,7 +80,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 {title: "规格", width: 120, template: function (data) {
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                 }},
-                {field: "actualAmount", title: "货物数量", width: 120, editable: true}
+                {field: "actualAmount", title: "货物数量(点击修改)", width: 120, editable: true}
             ],
             save: function (e) {
                 // 每次保存都重新计算完成度
