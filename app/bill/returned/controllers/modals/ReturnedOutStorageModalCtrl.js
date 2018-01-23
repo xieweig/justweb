@@ -212,7 +212,8 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
                 var supplierObj = _.zipObject(_.map(supplierList, function (item) {
                     return item.supplierCode;
                 }), supplierList);
-                $scope.params.inStationName = supplierObj[res.supplier.supplierCode].supplierName
+                $scope.supplier = supplierObj[res.supplier.supplierCode];
+                $scope.params.inStationName = $scope.supplier.supplierName
             });
 
             // 定义变量方便之后调用和修改
@@ -498,7 +499,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
 
         bill.supplier = {
             supplierCode: $scope.supplier.supplierCode
-        }
+        };
         // bill.inLocation = {
         //     stationCode: $scope.params.inLocation.stationCode,
         //     stationName: $scope.params.inLocation.stationName,
