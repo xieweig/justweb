@@ -271,7 +271,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
         bill.inLocation.stationCode = $.cookie('currentStationCode');
         bill.inLocation.stationName = $.cookie('currentStationName');
 
-        bill.operatorCode = 'YGADMIN';
+        bill.operatorCode = $.cookie('userCode');
         bill.billDetails = [];
         var errorItem = _.find($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
             if (type !== 'save') {
