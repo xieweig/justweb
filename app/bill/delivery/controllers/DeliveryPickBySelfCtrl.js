@@ -213,8 +213,9 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
     }
 
     $scope.delCargo = function () {
-        var selectId = $scope.cargoListGrid.kendoGrid.selectedKeyNames();
-        var dataSource = $scope.cargoListGrid.kendoGrid.dataSource;
+        var grid = $scope.cargoListGrid.kendoGrid;
+        var selectId = grid.selectedKeyNames();
+        var dataSource = grid.dataSource;
         for (var j in selectId) {
             for (var i = 0; i < dataSource._total; i++) {
                 if (dataSource.at(i).cargoCode.toString() === selectId[j]) {
@@ -222,8 +223,13 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                 }
             }
         }
+        grid._selectedIds = {};
+        grid.clearSelection();
         if (selectId.length !== 0) {
             swal('删除成功', '', 'success')
+        } else {
+            swal('请选择要批量删除的货物', '', 'warning')
         }
+        grid.refresh();
     };
 });
