@@ -54,6 +54,9 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                     if (!item.inLocation) {
                         item.inLocation = {storage: {}};
                     }
+                    if (!item.inLocation.storage) {
+                        item.inLocation.storage = {};
+                    }
                     // 供应商
                     if (!item.supplier) {
                         item.supplier = {};
@@ -103,7 +106,7 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                             name: 'e', text: "修改",
                             click: openEditModal,
                             visible: function (dataItem) {
-                                return dataItem.submitState !== 'SUBMITTED' || (dataItem.submitState === 'SUBMITTED' && dataItem.auditState !== 'AUDIT_FAILURE');
+                                return dataItem.submitState !== 'SUBMITTED' || (dataItem.submitState === 'SUBMITTED' && dataItem.auditState === 'AUDIT_FAILURE');
                             }
                         },
                         {
