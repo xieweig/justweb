@@ -132,6 +132,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 cb: function () {
                     return function (data) {
                         var dataSource = $scope.procurementGrid.kendoGrid.dataSource;
+                        var dataGrid = [];
                         _.each(data, function (item) {
                             if (!item.unitPrice) {
                                 item.unitPrice = 0;
@@ -144,8 +145,9 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                             }
                             item.differenceNumber = parseInt(item.shippedAmount) - parseInt(item.actualAmount);
                             item.differencePrice = item.differenceNumber * parseFloat(item.unitPrice);
+                            dataGrid.push(combinationItem(item));
                         });
-                        dataSource.data(data);
+                        dataSource.data(dataGrid);
                         // var cargoCodes = _.map(dataSource.data(), function (item) {
                         //     return item.cargoCode;
                         // });
@@ -158,35 +160,7 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
                 },
                 data: function () {
                     return _.map($scope.procurementGrid.kendoGrid.dataSource.data(), function (item) {
-                        return {
-                            "createTime": item.createTime,
-                            "updateTime": item.updateTime,
-                            "logicStatus": item.logicStatus,
-                            "cargoId": item.cargoId,
-                            "cargoCode": item.cargoCode,
-                            "barCode": item.barCode,
-                            "selfBarCode": item.selfBarCode,
-                            "originalName": item.originalName,
-                            "cargoName": item.cargoName,
-                            "effectiveTime": item.effectiveTime,
-                            "measurementCode": item.measurementCode,
-                            "standardUnitCode": item.standardUnitCode,
-                            "memo": item.memo,
-                            "number": item.number,
-                            "rawMaterialId": item.rawMaterialId,
-                            "operatorCode": item.operatorCode,
-                            "cargoType": item.cargoType,
-                            "rawMaterialName": item.rawMaterialName,
-                            "rawMaterialCode": item.rawMaterialCode,
-                            "configureName": item.configureName,
-                            "rawMaterialTypeName": item.rawMaterialTypeName,
-                            "dateInProduced": item.dateInProduced,
-                            "unitPrice": item.unitPrice,
-                            "actualAmount": item.actualAmount,
-                            "shippedAmount": item.shippedAmount,
-                            "differenceNumber": item.differenceNumber,
-                            "differencePrice": item.differencePrice
-                        };
+                        return combinationItem(item);
                     });
                 },
                 cargoUnit: function () {
@@ -198,6 +172,38 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             }
         });
     };
+
+    function combinationItem(item) {
+        return {
+            "createTime": item.createTime,
+            "updateTime": item.updateTime,
+            "logicStatus": item.logicStatus,
+            "cargoId": item.cargoId,
+            "cargoCode": item.cargoCode,
+            "barCode": item.barCode,
+            "selfBarCode": item.selfBarCode,
+            "originalName": item.originalName,
+            "cargoName": item.cargoName,
+            "effectiveTime": item.effectiveTime,
+            "measurementCode": item.measurementCode,
+            "standardUnitCode": item.standardUnitCode,
+            "memo": item.memo,
+            "number": item.number,
+            "rawMaterialId": item.rawMaterialId,
+            "operatorCode": item.operatorCode,
+            "cargoType": item.cargoType,
+            "rawMaterialName": item.rawMaterialName,
+            "rawMaterialCode": item.rawMaterialCode,
+            "configureName": item.configureName,
+            "rawMaterialTypeName": item.rawMaterialTypeName,
+            "dateInProduced": item.dateInProduced,
+            "unitPrice": item.unitPrice,
+            "actualAmount": item.actualAmount,
+            "shippedAmount": item.shippedAmount,
+            "differenceNumber": item.differenceNumber,
+            "differencePrice": item.differencePrice
+        };
+    }
 
     // 保存
     $scope.save = function () {
