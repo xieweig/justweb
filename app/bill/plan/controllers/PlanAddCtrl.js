@@ -399,11 +399,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         amount: stationItem.amount,
                         inStation: {
                             stationCode: stationItem.inLocation.stationCode,
-                            stationType: stationItem.inLocation.stationType
+                            stationType: getStationType(stationItem.inLocation.stationType)
                         },
                         outStation: {
                             stationCode: stationItem.outLocation.stationCode,
-                            stationType: stationItem.outLocation.stationType
+                            stationType: getStationType(stationItem.outLocation.stationType)
                         }
                     });
                     return false;
@@ -445,11 +445,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         amount: stationItem.amount,
                         inStation: {
                             stationCode: stationItem.inLocation.stationCode,
-                            stationType: stationItem.inLocation.stationType
+                            stationType: getStationType(stationItem.inLocation.stationType)
                         },
                         outStation: {
                             stationCode: stationItem.outLocation.stationCode,
-                            stationType: stationItem.outLocation.stationType
+                            stationType: getStationType(stationItem.outLocation.stationType)
                         }
                     });
                     return false;
@@ -473,5 +473,13 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 return true;
             }
         }
+    }
+
+    function getStationType(type) {
+        type = type.toUpperCase();
+        if (type === 'BOOKSTORE' || type === 'CAFE') {
+            return 'STORE';
+        }
+        return type;
     }
 });
