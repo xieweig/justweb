@@ -116,12 +116,7 @@ angular.module('SmartAdmin.Expand').directive('kendoGrids', function ($timeout, 
                             item.editor = function (container, options) {
                                 var input = $("<input class='k-input k-textbox'/>");
                                 input.attr("name", options.field);
-                                input.blur(function () {
-                                    var value = parseFloat(this.value);
-                                    value = value < 0 ? -value : value;
-                                    value = value > 9999999.99 ? 0 : value;
-                                    this.value = value === value ? value : '';
-                                });
+                                inputDecimal(input);
                                 input.appendTo(container);
                             };
                             break;

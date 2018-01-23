@@ -308,6 +308,42 @@ function inputNumber(element, options) {
     }
 }
 
+function inputDecimal(element, options) {
+    options = options ? options : {};
+    element.on({
+        compositionstart: function () {
+            var $this = $(this);
+            $this.unbind('input')
+        },
+        compositionend: function () {
+            inputFunction();
+            $(this).on('input', inputFunction);
+        },
+        input: inputFunction
+    });
+
+    function inputFunction() {
+        var val = element.val();
+        var valNumber = parseFloat(val);
+        var maxNumber = parseFloat(options.maxNumber);
+        var minNumber = parseFloat(options.minNumber);
+        if (maxNumber && maxNumber < valNumber) {
+            valNumber = maxNumber
+        }
+        if (minNumber && minNumber > valNumber) {
+            valNumber = minNumber
+        }
+        if (valNumber > 10000000) {
+            valNumber += '';
+            valNumber = valNumber.substring(0, valNumber.length - 1);
+        }
+        if (val.indexOf('.') === val.length - 1) {
+            valNumber += '.';
+        }
+        element.val(valNumber);
+    }
+}
+
 function getKendoData(response) {
     for (var name in response.result) {
         var content = response.result[name];
