@@ -19,7 +19,12 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
         checkboxes: {
             checkChildren: true
         },
-        template: '#: item.text #<input class="stationId" type="hidden" value="#: item.key #"/><input class="stationCode" type="hidden" value="#: item.value #"/><input class="stationName" type="hidden" value="#: item.text #"/><input class="stationType" type="hidden" value="#: item.type #"/>'
+        template: '#: item.text #' +
+        '<input class="stationId" type="hidden" value="#: item.key #"/>' +
+        '<input class="stationCode" type="hidden" value="#: item.value #"/>' +
+        '<input class="stationName" type="hidden" value="#: item.text #"/>' +
+        '<input class="siteType" type="hidden" value="#: item.siteType #"/>' +
+        '<input class="stationType" type="hidden" value="#: item.type #"/>'
     };
     currentOption.checkboxes === false ? $scope.treeViewOptions.checkboxes = false : '';
     currentOption.check ? $scope.treeViewOptions.check = currentOption.check : '';
@@ -54,8 +59,8 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
         var filterName = $scope.filterName || '';
         var filterCode = $scope.filterCode || '';
         $scope.treeViewOptions.treeView.dataSource.filter([
-            { field: "text", operator: "contains", value: filterName },
-            { field: "value", operator: "contains", value: filterCode }
+            {field: "text", operator: "contains", value: filterName},
+            {field: "value", operator: "contains", value: filterCode}
         ]);
     }
 
@@ -66,7 +71,7 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
             $('#sortable .sortable').each(function (index) {
                 var index = $(this).attr('sortableIndex');
                 var item = $scope.sortableList[index];
-                options.modal.push({ stationId: item.stationId, type: item.type, stationCode: item.stationCode, stationName: item.stationName, cityName: item.cityName, cityCode: item.cityCode, regionCode: item.regionCode, regionName: item.regionName });
+                options.modal.push({stationId: item.stationId, type: item.type, siteType: item.siteType, stationCode: item.stationCode, stationName: item.stationName, cityName: item.cityName, cityCode: item.cityCode, regionCode: item.regionCode, regionName: item.regionName});
             });
             options.callback(options.modal);
         } else {
@@ -83,6 +88,7 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
                     stationId: selectNode.find('.stationId').val(),
                     stationCode: selectNode.find('.stationCode').val(),
                     stationName: selectNode.find('.stationName').val(),
+                    siteType: selectNode.find('.siteType').val(),
                     type: selectNode.find('.stationType').val()
                 };
                 // 判断是否选择了站点
@@ -106,7 +112,7 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
             if (item.hasChildren) {
                 checkedNodeIds(item.children.view(), checkedNodes);
             } else if (item.checked) {
-                checkedNodes.push({ stationId: item.key, type: item.type, stationCode: item.value, stationName: item.text, cityName: item.cityName, cityCode: item.cityCode, regionCode: item.regionCode, regionName: item.regionName });
+                checkedNodes.push({stationId: item.key, type: item.type, siteType: item.siteType, stationCode: item.value, stationName: item.text, cityName: item.cityName, cityCode: item.cityCode, regionCode: item.regionCode, regionName: item.regionName});
             }
         }
     }

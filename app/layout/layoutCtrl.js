@@ -81,7 +81,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, $st
                 if (stationType !== 'All' && stationType !== undefined && stationType.toUpperCase().indexOf(item.siteType.toUpperCase()) < 0) {
                     return;
                 }
-                var currentStation = {key: item.key, value: item.value, text: item.text, type: 'station'};
+                var currentStation = {key: item.key, value: item.value, text: item.text, type: 'station', siteType: item.siteType};
                 // 如果区域被禁用  则直接添加
                 if (item.regionStatus === 'DISABLED') {
                     stationTree.push(currentStation);
