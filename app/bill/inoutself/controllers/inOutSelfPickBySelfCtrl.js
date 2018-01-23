@@ -135,7 +135,7 @@ angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $s
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.restock.outSearch');
+                $state.go('app.bill.inoutself.outStorageList');
             }
         }, apiServiceError)
     }

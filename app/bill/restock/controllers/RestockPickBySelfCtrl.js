@@ -154,7 +154,7 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.restock.outSearch');
+                $state.go('app.bill.restock.outStorageList');
             }
         }, apiServiceError)
     }

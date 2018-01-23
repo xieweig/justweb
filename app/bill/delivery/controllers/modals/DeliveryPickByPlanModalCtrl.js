@@ -356,7 +356,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.delivery.outStorageSearch');
+                $state.go('app.bill.delivery.outStorageList');
             }
         }, apiServiceError);
         $scope.$close();

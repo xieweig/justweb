@@ -143,7 +143,7 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.returned.outSearch');
+                $state.go('app.bill.returned.outStorageList');
             }
         }, apiServiceError)
     }
