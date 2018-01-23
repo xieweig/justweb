@@ -125,7 +125,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         single: true,
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
-            if ($scope.inStationIsSupplier) {
+            if (!$scope.inStationIsSupplier) {
                 $scope.mtoInStation = data;
             } else {
                 $scope.mtoInStation = {
@@ -193,7 +193,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         onlyLear: true,
         type: $scope.inStationIsSupplier ? 'supplier' : inStationType,
         callback: function (data) {
-            if ($scope.inStationIsSupplier) {
+            if (!$scope.inStationIsSupplier) {
                 $scope.otoInStation = data;
             } else {
                 $scope.otoInStation = _.map(data, function (item) {
