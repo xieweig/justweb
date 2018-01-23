@@ -142,6 +142,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
 
     // 选择站点
     $scope.inStationParams = {
+        type: 'BOOKSTORE,CAFE',
         callback: function (data) {
             $scope.kendoQueryCondition.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
@@ -150,6 +151,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
     };
 
     $scope.outStationParams = {
+        type: 'LOGISTICS',
         callback: function (data) {
             $scope.kendoQueryCondition.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;

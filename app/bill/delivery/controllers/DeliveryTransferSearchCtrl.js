@@ -76,6 +76,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
 
     // 选择站点
     $scope.inStationParams = {
+        type: 'BOOKSTORE,CAFE',
         callback: function (data) {
             var array = _.map(data, function (item) {
                 return item.stationCode;
@@ -85,6 +86,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
     };
 
     $scope.outStationParams = {
+        type: 'LOGISTICS',
         callback: function (data) {
             var array = _.map(data, function (item) {
                 return item.stationCode;

@@ -135,6 +135,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
 
     // 选择站点
     $scope.inStationParams = {
+        type: 'LOGISTICS',
         callback: function (data) {
             $scope.kendoQueryCondition.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;

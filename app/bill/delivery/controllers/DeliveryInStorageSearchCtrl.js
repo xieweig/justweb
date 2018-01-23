@@ -102,6 +102,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
 
     // 选择站点
     $scope.inStationParams = {
+        type: 'BOOKSTORE,CAFE',
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
@@ -110,6 +111,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
     };
 
     $scope.outStationParams = {
+        type: 'LOGISTICS',
         callback: function (data) {
             $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;

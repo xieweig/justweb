@@ -68,6 +68,7 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
 
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
+        type: 'LOGISTICS',
         callback: function (data) {
             $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;

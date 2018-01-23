@@ -70,6 +70,7 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
 
     // 选择站点
     $scope.inStationParams = {
+        type: 'LOGISTICS',
         callback: function (data) {
             var array = _.map(data, function (item) {
                 return item.stationCode;
