@@ -135,8 +135,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    if (data.inLocation.stationType === 'SUPPLIER') {
-                                        return data.inLocation.stationCode;
+                                    // if (data.inLocation.stationType === 'SUPPLIER') {
+                                    if (data.inLocation.stationName) {
+                                        return data.inLocation.stationName;
                                     }
                                     return getTextByVal($scope.station, data.inLocation.stationCode);
                                 }
@@ -166,8 +167,9 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                             {
                                 title: "调入站点",
                                 template: function (data) {
-                                    if (data.inLocation.stationType === 'SUPPLIER') {
-                                        return data.inLocation.stationCode;
+                                    // if (data.inLocation.stationType === 'SUPPLIER') {
+                                    if (data.inLocation.stationName) {
+                                        return data.inLocation.stationName;
                                     }
                                     return getTextByVal($scope.station, data.inLocation.stationCode);
                                 }
