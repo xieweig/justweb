@@ -118,6 +118,7 @@ angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $s
             }
         };
         bill.billDetails = _.map($scope.cargoListGrid.kendoGrid.dataSource.data(), function (item) {
+            console.log(item)
             return {
                 rawMaterial: {
                     rawMaterialCode: item.rawMaterialCode,
@@ -131,13 +132,13 @@ angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $s
                 shippedAmount: item.actualAmount // 站点自己拣货,实拣和应拣一致
             }
         });
-        ApiService.post(url, bill).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error');
-            } else {
-                $state.go('app.bill.inoutself.outStorageList');
-            }
-        }, apiServiceError)
+        // ApiService.post(url, bill).then(function (response) {
+        //     if (response.code !== '000') {
+        //         swal('', response.message, 'error');
+        //     } else {
+        //         $state.go('app.bill.inoutself.outStorageList');
+        //     }
+        // }, apiServiceError)
     }
 
 

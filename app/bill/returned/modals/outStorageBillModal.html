@@ -1,6 +1,14 @@
 <div class="uib-modal">
     <h1 class="uib-modal-title">
-        <span>查看退货出库单</span>
+        <span ng-if="modalType === 'edit'">
+            <span>修改退货出库单</span>
+        </span>
+        <span ng-if="modalType !== 'edit'">
+            <span>查看退货出库单</span>
+        </span>
+        <span ng-if="modalType === 'audit'">
+            <span>审核退货出库单</span>
+        </span>
         <span class="option">
             <span ng-if="modalType === 'view'">
                 <input type="button" class="btn btn-primary" value="导出" data-ng-click="export()">

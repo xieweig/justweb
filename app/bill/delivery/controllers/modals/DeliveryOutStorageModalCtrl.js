@@ -209,6 +209,8 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
             $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
 
+            $scope.specificBillType = res.specificBillType;
+
             // 定义变量方便之后调用和修改
             var billDetails = [], cargoList = [];
             if ($scope.showMaterial) {
@@ -475,7 +477,10 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
             url = '/api/bill/delivery/submit'
         }
         bill.billCode = $scope.params.billCode;
-        bill.sourceCode = $scope.params.billCode;
+        // bill.sourceCode = $scope.params.billCode;
+        if($scope.specificBillType !== 'NO_PLAN'){
+            bill.sourceCode = $scope.params.sourceCode
+        }
         bill.rootCode = $scope.params.rootCode;
 
         bill.outStorageMemo = $scope.params.outStorageMemo;

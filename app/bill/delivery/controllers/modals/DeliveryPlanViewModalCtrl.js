@@ -45,7 +45,7 @@ angular.module('app').controller('DeliveryPlanViewModalCtrl', function ($scope, 
         if (response.code === '000') {
             var res = response.result.bill;
             $scope.params.billCode = res.billCode;
-            $scope.params.memo = res.memo;
+            $scope.params.planMemo = res.planMemo;
             $scope.params.recordTime = res.createTime;
             $scope.params.outStationName = getTextByVal($scope.station, res.outStationCode);
             $scope.params.inStationName = getTextByVal($scope.station, res.inStationCode);
