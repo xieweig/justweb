@@ -198,7 +198,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
         $scope.addModal = $uibModal.open({
             templateUrl: 'app/bill/restock/modals/planView.html',
             size: 'lg',
-            controller: 'PlanViewModalCtrl',
+            controller: 'RestockPlanViewModalCtrl',
             resolve: {
                 data: {
                     billCode: dataItem.sourceCode,
