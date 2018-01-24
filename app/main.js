@@ -22,7 +22,11 @@ if (is8999) {
         baseInfo: 'http://192.168.21.141:15006',
         oauth: 'http://192.168.21.141:16001'
     };
-    document.cookie = "userCode=CKGAA263; userName=周俊; paymentUrl=/payment; currentStationName=%E6%80%BB%E9%83%A8; currentStationCode=HDQA00; stationClass=CQ";
+    $.cookie('currentStationCode', 'HDQA00');
+    $.cookie('currentStationName', '%E6%80%BB%E9%83%A8');
+    $.cookie('stationClass', 'CQ');
+    $.cookie('userCode', 'CKGAA263');
+    $.cookie('userName', '周俊');
 }
 
 
@@ -387,5 +391,9 @@ function checkNumber(val, options) {
     }
     return true
 
-
 }
+
+// 百分比
+Number.prototype.toPercent = function () {
+    return (Math.round(this * 10000) / 100).toFixed(2) + '%';
+};

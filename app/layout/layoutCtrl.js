@@ -5,6 +5,16 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, $st
     $rootScope.city = city;
     $rootScope.station = station;
 
+    (function () {
+        var currentStationCode = $.cookie('currentStationCode');
+        var currentStation = _.find(station, function (item) {
+            return item.value === currentStationCode;
+        });
+        if (currentStation) {
+            $.cookie('currentStationType', currentStation.siteType)
+        }
+    }());
+
     $rootScope.location = _.map(store, function (item) {
         return {key: item.tempStorageId, value: item.tempStorageCode, text: item.tempStorageName};
     });

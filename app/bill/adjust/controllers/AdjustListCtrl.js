@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, ApiService, $timeout) {
+angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
         callback: function (data) {
-            $scope.params.inStationCode = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -14,7 +14,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
     // 搜索条件中的入库站点选择
     $scope.inStationParams = {
         callback: function (data) {
-            $scope.params.outStationCode = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -66,30 +66,15 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         getDetails(dataItem.billCode, function (bill) {
-            $scope.planDetails = bill;
-            $scope.planDetailsGrid = {
-                kendoSetting: {
-                    dataSource: bill.childPlanBillDetails,
-                    columns: [
-                        {field: "xxxxx", title: "货物名称", width: 120},
-                        {field: "xxxxx", title: "货物编码", width: 120},
-                        {field: "xxxxx", title: "所属原料", width: 120},
-                        {field: "xxxxx", title: "规格", width: 120},
-                        {field: "xxxxx", title: "应拣数量", width: 120},
-                        {field: "xxxxx", title: "调入站点", width: 120},
-                        {field: "xxxxx", title: "数量", width: 120},
-                        {field: "xxxxx", title: "规格品种", width: 120},
-                        {field: "xxxxx", title: "备注", width: 120}
-                    ]
-                }
-            };
             $uibModal.open({
                 templateUrl: 'app/bill/adjust/modals/planPick.html',
                 controller: 'AdjustPlanPickCtrl',
                 size: 'lg',
                 resolve: {
                     params: {
-                        bill: bill
+                        bill: bill,
+                        cargoUnit: cargoUnit,
+                        materialUnit: materialUnit
                     }
                 }
             });
@@ -122,7 +107,26 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
             if (response.code !== '000') {
                 swal('请求失败', response.message, 'error');
             } else {
-                cb(response.result.bill);
+                var bill = response.result.bill;
+                bill.inStationName = getTextByVal($scope.station, bill.inStationCode);
+                bill.outStationName = getTextByVal($scope.station, bill.outStationCode);
+
+                // 回显原料名称
+                var materialCodes = _.map(bill.childPlanBillDetails, function (item) {
+                    return item.rawMaterial.rawMaterialCode;
+                });
+                Common.getMaterialByCodes(materialCodes).then(function (materialList) {
+                    var materialObject = _.zipObject(_.map(materialList, function (item) {
+                        return item.materialCode
+                    }), materialList);
+
+                    _.each(bill.childPlanBillDetails, function (item) {
+                        var material = materialObject[item.rawMaterial.rawMaterialCode] || {};
+                        item.rawMaterial.rawMaterialName = material.materialName;
+                    });
+                    cb(bill);
+                });
+
             }
         }, apiServiceError);
     }
