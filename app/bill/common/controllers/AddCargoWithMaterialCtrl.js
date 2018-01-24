@@ -48,12 +48,16 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 {field: "barCode", title: "货物条码", width: 120},
                 {field: "selfBarCode", title: "自定义条码", width: 120},
                 {field: "effectiveTime", title: "保质期(天)", width: 120},
-                {title: "规格", width: 120, template: function (data) {
-                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
-                }},
-                {title: "最小标准单位", width: 120, template: function (data) {
-                        return getTextByVal($scope.materialConfigure, data.standardUnitCode)
-                    }},
+                {
+                    title: "规格", width: 120, template: function (data) {
+                    return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                }
+                },
+                {
+                    title: "最小标准单位", width: 120, template: function (data) {
+                    return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                }
+                },
                 {field: "createTime", title: "建档时间", width: 120},
                 {field: "memo", title: "备注", width: 200}
             ]
@@ -74,13 +78,17 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},
-                {title: "标准单位", width: 120, template: function (data) {
-                        return getTextByVal($scope.materialConfigure, data.standardUnitCode)
-                    }},
-                {title: "规格", width: 120, template: function (data) {
-                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
-                }},
-                {field: "actualAmount", title: "货物数量(点击修改)", width: 120, editable: true}
+                {
+                    title: "标准单位", width: 120, template: function (data) {
+                    return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                }
+                },
+                {
+                    title: "规格", width: 120, template: function (data) {
+                    return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                }
+                },
+                {field: "actualAmount", title: "货物数量(点击修改)", width: 120, kType: 'number', editable: true}
             ],
             save: function (e) {
                 // 每次保存都重新计算完成度
@@ -112,9 +120,9 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
 
     // 增加货物
     $scope.addCargo = function (selectIds) {
-        if(!selectIds) {
+        if (!selectIds) {
             var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
-        }else{
+        } else {
             selectIds = [selectIds]
         }
         var dataSource = $scope.cargoList.kendoGrid.dataSource;

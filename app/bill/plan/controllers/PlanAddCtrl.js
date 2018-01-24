@@ -30,6 +30,13 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                         $scope.cargoMap = _.map(planBill.planBillDetails, function (item) {
                             return pushCargo(item, !isCargo);
                         });
+                        // 判断禁用计划
+                        _.find($scope.cargoMap, function (cargoItem) {
+                            if (cargoItem.stationGrid.kendoSetting.dataSource && cargoItem.stationGrid.kendoSetting.dataSource.length > 0) {
+                                $scope.isDisableType = true;
+                                return true;
+                            }
+                        });
                     });
                 } else {
                     Common.getMaterialByCodes(goodsCode).then(function (materialList) {
@@ -44,6 +51,13 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
 
                         $scope.materialMap = _.map(planBill.planBillDetails, function (item) {
                             return pushCargo(item, !isCargo);
+                        });
+                        // 判断禁用计划
+                        _.find($scope.materialMap, function (materialItem) {
+                            if (materialItem.stationGrid.kendoSetting.dataSource && materialItem.stationGrid.kendoSetting.dataSource.length > 0) {
+                                $scope.isDisableType = true;
+                                return true;
+                            }
                         });
                     });
                 }
@@ -324,7 +338,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 return item.stationGrid.kendoGrid.dataSource.data().length !== 0;
             });
         } else {
-            station = _.find($scope.cargoMap, function (item) {
+            station = _.find($scope.materialMap, function (item) {
                 return item.stationGrid.kendoGrid.dataSource.data().length !== 0;
             });
         }
@@ -483,7 +497,7 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
 
     function getStationType(type) {
         if (type) {
-            type = type.toUpperCase();
+            type = (type + '').toUpperCase();
             if (type === 'BOOKSTORE' || type === 'CAFE' || type === 'WHOLESALE' || type === 'STAPLE') {
                 return 'STORE';
             }
