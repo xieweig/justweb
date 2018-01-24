@@ -5,6 +5,7 @@ angular.module('app').controller('ReturnedScanModalCtrl', function ($scope, data
     $scope.item = data.cargo;
     $scope.item.addNumber = 0;
     $scope.item.subNumber = 0;
+    $scope.item.standardUnitName = getTextByVal($scope.cargoConfigure, $scope.item.measurementCode);
 
     var dataSource = $scope.cargoGrid.kendoGrid.dataSource;
     _.each(dataSource.data(), function (item, index) {

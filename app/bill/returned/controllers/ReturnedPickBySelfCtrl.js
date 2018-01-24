@@ -22,7 +22,7 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
         primaryId: 'cargoCode',
         kendoSetting: {
             autoBind: false,
-            // persistSelection: true,
+            persistSelection: true,
             editable: true,
             // pageable: true,
             columns: [
@@ -202,9 +202,10 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
     }
 
     $scope.delCargo = function () {
-        var grid = $scope.cargoListGrid.kendoGrid;
+        var grid = $scope.CargoListGrid.kendoGrid;
         var selectId = grid.selectedKeyNames();
         var dataSource = grid.dataSource;
+        console.log(selectId)
         for (var j in selectId) {
             for (var i = 0; i < dataSource._total; i++) {
                 if (dataSource.at(i).cargoCode.toString() === selectId[j]) {

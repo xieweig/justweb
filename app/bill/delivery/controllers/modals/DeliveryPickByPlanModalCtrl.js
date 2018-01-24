@@ -73,6 +73,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                                     rawMaterialCode: item.material.materialCode,
                                     number: item.cargo.number,
                                     standardUnitCode: item.cargo.standardUnitCode,
+                                    measurementCode: item.cargo.measurementCode,
                                     actualAmount: 0,
                                     shippedAmount: item.amount
                                 })
@@ -166,7 +167,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                 },
                 {field: "shippedAmount", title: "应拣数量"},
                 {field: "actualAmount", title: "实拣数量"},
-                {field: "memo", title: "备注", editable: true}
+                {field: "memo", title: "备注(点击修改)", editable: true}
             ]
         }
     };
@@ -276,8 +277,8 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
     }
 
     $scope.bill = {
-        billType: 'RESTOCK',
-        specificBillType: 'RESTOCK',
+        billType: 'DELIVERY',
+        specificBillType: 'DELIVERY',
         billPurpose: 'OUT_STORAGE'
     };
 
@@ -290,6 +291,8 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
     };
 
     function saveOrSubmit(type, bill) {
+        var flag = true; // 货物数据是否正确的标志
+
         var url = '';
         if (type === 'save') {
             url = '/api/bill/delivery/save'
@@ -326,6 +329,11 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
             bill.basicEnum = 'BY_CARGO';
             // 按货物拣货
             bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
+                if(!checkNumber(item.actualAmount)){
+                    swal('参数错误', '货物数量错误', 'error');
+                    flag = false;
+                    return
+                }
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -344,6 +352,11 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
             bill.billDetails = [];
             _.each($scope.itemMap, function (item) {
                 _.each(item.cargoGrid.kendoGrid.dataSource.data(), function (data) {
+                    if(!checkNumber(data.actualAmount)){
+                        swal('参数错误', '货物实拣数量错误', 'error');
+                        flag = false;
+                        return
+                    }
                     bill.billDetails.push({
                         rawMaterial: {
                             rawMaterialCode: data.rawMaterialCode,
@@ -358,6 +371,9 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                     })
                 })
             })
+        }
+        if(!flag){
+            return
         }
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {

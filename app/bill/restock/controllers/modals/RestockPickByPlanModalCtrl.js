@@ -21,19 +21,6 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     $timeout(function () {
         $('#select-out').val($scope.storageType[0].value).trigger('change');
     });
-    // Common.getStore().then(function (storage) {
-    //     _.each(storage, function (item) {
-    //         $scope.outType.push({
-    //             key: item.tempStorageCode,
-    //             value: item.tempStorageCode,
-    //             text: item.tempStorageName
-    //         })
-    //     });
-    //     // 设置默认值
-    //     $timeout(function () {
-    //         $('#select-out').val($scope.outType[0].value).trigger('change')
-    //     })
-    // });
 
     // 屏蔽按原料拣货时触发的操作
     $scope.change = function () {
@@ -179,7 +166,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                 },
                 {field: "shippedAmount", title: "应拣数量"},
                 {field: "actualAmount", title: "实拣数量"},
-                {field: "memo", title: "备注", editable: true}
+                {field: "memo", title: "备注(点击修改)", editable: true}
             ]
         }
     };
@@ -194,12 +181,6 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                     swal('', '该货物不属于本次拣货范围', 'error');
                 }
             });
-            // console.log('-', $scope.params.scanCode)
-            // if ($scope.cargoObject.hasOwnProperty($scope.params.scanCode)) {
-            //     initScanCargo()
-            // } else {
-            //     swal('', '该货物不属于本次拣货范围', 'error');
-            // }
         }
     };
 
@@ -309,6 +290,8 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     };
 
     function saveOrSubmit(type, bill) {
+        var flag = true; // 货物数据是否正确的标志
+
         var url = '';
         if (type === 'save') {
             url = '/api/bill/restock/save'
@@ -345,6 +328,11 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             bill.basicEnum = 'BY_CARGO';
             // 按货物拣货
             bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
+                if(!checkNumber(item.actualAmount)){
+                    swal('参数错误', '货物数量错误', 'error');
+                    flag = false;
+                    return
+                }
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -363,6 +351,11 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             bill.billDetails = [];
             _.each($scope.itemMap, function (item) {
                 _.each(item.cargoGrid.kendoGrid.dataSource.data(), function (data) {
+                    if(!checkNumber(data.actualAmount)){
+                        swal('参数错误', '货物实拣数量错误', 'error');
+                        flag = false;
+                        return
+                    }
                     bill.billDetails.push({
                         rawMaterial: {
                             rawMaterialCode: data.rawMaterialCode,
@@ -377,6 +370,9 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                     })
                 })
             })
+        }
+        if(!flag){
+            return
         }
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {
