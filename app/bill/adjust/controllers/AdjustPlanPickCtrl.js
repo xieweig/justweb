@@ -153,29 +153,33 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
     // 保存拣货
     $scope.savePick = function () {
         var bill = getParams('save');
-        ApiService.post('/api/bill/adjust/save', bill).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error');
-            } else {
-                swal('操作成功!', '', 'success').then(function () {
-                    $scope.$close();
-                });
-            }
-        }, apiServiceError);
+        if (bill) {
+            ApiService.post('/api/bill/adjust/save', bill).then(function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    swal('操作成功!', '', 'success').then(function () {
+                        $scope.$close();
+                    });
+                }
+            }, apiServiceError);
+        }
     };
 
     // 提交拣货
     $scope.submitPick = function () {
         var bill = getParams('submit');
-        ApiService.post('/api/bill/adjust/submit', bill).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error');
-            } else {
-                swal('操作成功!', '', 'success').then(function () {
-                    $scope.$close();
-                });
-            }
-        }, apiServiceError);
+        if (bill) {
+            ApiService.post('/api/bill/adjust/submit', bill).then(function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error');
+                } else {
+                    swal('操作成功!', '', 'success').then(function () {
+                        $scope.$close();
+                    });
+                }
+            }, apiServiceError);
+        }
     };
 
     function getParams() {
