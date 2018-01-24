@@ -194,12 +194,6 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                     swal('', '该货物不属于本次拣货范围', 'error');
                 }
             });
-            // console.log('-', $scope.params.scanCode)
-            // if ($scope.cargoObject.hasOwnProperty($scope.params.scanCode)) {
-            //     initScanCargo()
-            // } else {
-            //     swal('', '该货物不属于本次拣货范围', 'error');
-            // }
         }
     };
 
@@ -309,6 +303,8 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     };
 
     function saveOrSubmit(type, bill) {
+        var flag = true; // 货物数据是否正确的标志
+
         var url = '';
         if (type === 'save') {
             url = '/api/bill/restock/save'
@@ -345,6 +341,11 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             bill.basicEnum = 'BY_CARGO';
             // 按货物拣货
             bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
+                if(!checkNumber(item.actualAmount)){
+                    swal('参数错误', '货物数量错误', 'error');
+                    flag = false;
+                    return
+                }
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -363,6 +364,11 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             bill.billDetails = [];
             _.each($scope.itemMap, function (item) {
                 _.each(item.cargoGrid.kendoGrid.dataSource.data(), function (data) {
+                    if(!checkNumber(data.actualAmount)){
+                        swal('参数错误', '货物实拣数量错误', 'error');
+                        flag = false;
+                        return
+                    }
                     bill.billDetails.push({
                         rawMaterial: {
                             rawMaterialCode: data.rawMaterialCode,
@@ -377,6 +383,9 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                     })
                 })
             })
+        }
+        if(!flag){
+            return
         }
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {

@@ -37,7 +37,27 @@ angular.module('app.bill.inoutself', ['ui.router']).config(function ($stateProvi
             views: {
                 "content@app": {
                     templateUrl: 'app/bill/inoutself/views/outStorageSearch.html',
-                    controller: 'inOutSelfOutSearchCtrl'
+                    controller: 'InOutSelfOutStorageSearchCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
+            }
+        })
+        .state('app.bill.inoutself.inStorageList', {
+            url: '/bill/inoutself/inStorageList',
+            data: {
+                title: '查询其他入库单'
+            },
+            views: {
+                "content@app": {
+                    templateUrl: 'app/bill/inoutself/views/inStorageSearch.html',
+                    controller: 'InOutSelfInStorageSearchCtrl'
                 }
             },
             resolve: {

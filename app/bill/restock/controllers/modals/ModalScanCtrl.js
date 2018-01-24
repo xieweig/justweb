@@ -5,6 +5,7 @@ angular.module('app').controller('ModalScanCtrl', function ($scope, data) {
     $scope.item = data.cargo;
     $scope.item.addNumber = 0;
     $scope.item.subNumber = 0;
+    $scope.item.standardUnitName = getTextByVal($scope.cargoConfigure, $scope.item.measurementCode);
 
     var dataSource = $scope.cargoGrid.kendoGrid.dataSource;
     _.each(dataSource.data(), function (item, index) {
@@ -34,8 +35,7 @@ angular.module('app').controller('ModalScanCtrl', function ($scope, data) {
         } else {
             swal('拣货数量错误', '', 'error');
         }
-
-    }
+    };
 
     function isInt(number) {
         return (parseInt(number) == number && parseInt(number) <= 10000 && parseInt(number) >= 0)

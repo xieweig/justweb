@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('inOutSelfOutSearchCtrl', function ($scope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
+angular.module('app').controller('InOutSelfOutStorageSearchCtrl', function ($scope, $state, $uibModal, ApiService, cargoUnit, materialUnit) {
     $scope.params = {
         specificBillType: [],
         submitStates: [],
