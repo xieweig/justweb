@@ -77,6 +77,8 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                         materialUnit: materialUnit
                     }
                 }
+            }).closed.then(function () {
+                $scope.planGrid.kendoGrid.dataSource.read();
             });
         });
     }
