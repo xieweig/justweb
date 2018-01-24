@@ -66,10 +66,10 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             $scope.params.billProperty = res.billProperty;
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
             $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
-            $scope.params.outStorageName = '在途库';
+            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);;
             if (!$scope.show) {
                 console.log(res.inStorageBillInStationCode)
-                $scope.params.inStorageName = getTextByVal($scope.storageType, res.inStorageBillInStationCode)
+                $scope.params.inStorageName = getTextByVal($scope.storageType, res.inLocation.storage.storageCode)
             }else{
                 $timeout(function () {
                     $('#select-in').val($scope.storageType[0].value).trigger('change');

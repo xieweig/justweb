@@ -13,7 +13,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
         {value: 'STORAGE', text: '仓储库'},
         {value: 'IN_STORAGE', text: '进货库'},
         {value: 'OUT_STORAGE', text: '退货库'},
-        {value: 'ON_STORAGE', text: '在途库'},
+        // {value: 'ON_STORAGE', text: '在途库'},
         {value: 'RESERVE_STORAGE', text: '预留库'}
     ];
 

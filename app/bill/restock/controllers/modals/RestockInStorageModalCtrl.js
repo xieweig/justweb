@@ -105,7 +105,7 @@ angular.module('app').controller('RestockInStorageModalCtrl', function ($scope, 
             //         }
             //     })
             // });
-            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode)
+            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
             // Common.getStore(res.outLocation.stationCode).then(function (storageList) {
             //     _.each(storageList, function (item) {
             //         if (item.tempStorageCode === res.outLocation.storage.storageCode) {
