@@ -64,8 +64,8 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             $scope.params.inLocation = res.inLocation;
             $scope.params.outLocation = res.outLocation;
             $scope.params.billProperty = res.billProperty;
-            $scope.params.outStationName = getTextByVal($scope.station, res.inLocation.stationCode);
-            $scope.params.inStationName = getTextByVal($scope.station, res.outLocation.stationCode);
+            $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
+            $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
             $scope.params.outStorageName = '在途库';
             if (!$scope.show) {
                 console.log(res.inStorageBillInStationCode)

@@ -72,7 +72,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                 {field: "billCode", title: "入库单号", locked: true, width: 210},
                 {
                     title: "单据状态", width: 100, template: function (data) {
-                        return getTextByVal($scope.billStatus, data.data.allotStatus)
+                        return getTextByVal($scope.billStatus, data.allotStatus)
                     }
                 },
                 {

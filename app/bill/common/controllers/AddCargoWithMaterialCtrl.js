@@ -30,6 +30,9 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                                 $scope.addCargo(result[0].cargoCode);
                             });
                         }
+                        if(result.length === 0){
+                            swal('', '该货物不属于本次应拣目标', 'warning')
+                        }
                     }
                 }
                 return result;
@@ -43,7 +46,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
             columns: [
                 {selectable: true},
                 {field: "cargoCode", title: "货物编码", width: 120},
-                {field: "originalName", title: "货物内部名称", width: 120},
+                {field: "cargoName", title: "货物内部名称", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},
                 {field: "barCode", title: "货物条码", width: 120},
                 {field: "selfBarCode", title: "自定义条码", width: 120},
@@ -67,7 +70,6 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
     // 已选中货物列表
     $scope.currentCargoList = {
         primaryId: 'cargoCode',
-        persistSelection: true,
         kendoSetting: {
             autoBind: false,
             editable: true,
@@ -114,7 +116,9 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
             $scope.material.shippedAmount = data.m.shippedAmount;
             $scope.material.actualAmount = 0;
             $scope.material.rawMaterialCode = data.m.rawMaterialCode;
+            $scope.material.rawMaterialId = data.m.rawMaterialId;
             $scope.material.progress = data.m.progress;
+            $scope.params.rawMaterialId = data.m.rawMaterialId;
         }
     }, 100);
 
@@ -189,4 +193,16 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         $scope.currentCargoList.kendoGrid.dataSource.remove(dataItem)
     }
 
+    $scope.sendCode = function ($event) {
+        if ($event.charCode === 13) {
+            $scope.search()
+            // Common.getCargoByBarCode($scope.params.scanCode).then(function (cargo) {
+            //     if (cargo) {
+            //         initScanCargo(cargo)
+            //     } else {
+            //         swal('', '该货物不属于本次拣货范围', 'error');
+            //     }
+            // });
+        }
+    };
 });

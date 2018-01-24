@@ -441,7 +441,9 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     }
                 },
                 data: {
-                    cl: $scope.onlyCargoGrid.kendoGrid.dataSource.data()
+                    cl: $scope.onlyCargoGrid.kendoGrid.dataSource.data(),
+                    cargoUnit: data.cargoUnit,
+                    materialUnit: data.materialUnit
                 }
             }
         });
