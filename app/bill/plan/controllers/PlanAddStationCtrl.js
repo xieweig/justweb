@@ -8,22 +8,22 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         case 'DELIVERY':
             // 配送
             outStationType = 'LOGISTICS';
-            inStationType = 'BOOKSTORE,CAFE,WHOLESALE,STAPLE';
+            inStationType = 'BOOKSTORE,CAFE,Comprehensive';
             break;
         case 'RESTOCK':
             // 退库
-            outStationType = 'BOOKSTORE,CAFE,WHOLESALE,STAPLE';
+            outStationType = 'BOOKSTORE,CAFE,Comprehensive';
             inStationType = 'LOGISTICS';
             break;
         case 'RETURNED':
             // 退货
-            outStationType = 'LOGISTICS,BOOKSTORE,CAFE,WHOLESALE,STAPLE';
+            outStationType = 'LOGISTICS,BOOKSTORE,CAFE,Comprehensive';
             $scope.inStationIsSupplier = true;
             break;
         case 'ADJUST':
             // 调剂
-            outStationType = 'LOGISTICS,BOOKSTORE,CAFE,WHOLESALE,STAPLE';
-            inStationType = 'LOGISTICS,BOOKSTORE,CAFE,WHOLESALE,STAPLE';
+            outStationType = 'LOGISTICS,BOOKSTORE,CAFE,Comprehensive';
+            inStationType = 'LOGISTICS,BOOKSTORE,CAFE,Comprehensive';
             break;
     }
 
