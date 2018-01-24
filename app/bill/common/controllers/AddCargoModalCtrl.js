@@ -57,6 +57,7 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data
         }
     };
 
+    window.x = data;
     // 已选中货物列表
     $scope.currentCargoList = {
         primaryId: 'cargoCode',
@@ -100,13 +101,14 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data
         }).then(function (res) {
             if (res.value) {
                 var dataSource = $scope.currentCargoList.kendoGrid.dataSource;
-                _.find(dataSource.data(), function (item, index) {
+                _.find(data, function (item, index) {
                     if (item.cargoCode === dataItem.cargoCode) {
-                        dataSource.remove(dataSource.at(index));
+                        data.splice(index, 1);
                         return true;
                     }
                     return false;
                 });
+                dataSource.data(data);
             }
         });
     }
@@ -121,14 +123,15 @@ angular.module('app').controller('AddCargoModalCtrl', function ($scope, cb, data
         } else {
             selectIds = [dataSource[0].cargoCode];
         }
-        var existArray = _.map(currentDataSource.data(), function (item, index) {
+        var existArray = _.map(data, function (item, index) {
             return item.cargoCode;
         });
         _.each(dataSource, function (item, index) {
             if (_.indexOf(selectIds, '' + item.cargoCode) > -1 && _.indexOf(existArray, '' + item.cargoCode) < 0) {
-                currentDataSource.add(item);
+                data.push(item);
             }
         });
+        currentDataSource.data(data);
     };
 
     /**
