@@ -324,7 +324,13 @@ function inputDecimal(element, options) {
 
     function inputFunction() {
         var val = element.val();
-        var valNumber = parseFloat(val);
+        var valNumber = /\d{1,7}\.?\d{0,2}/.exec(val);
+        if (valNumber) {
+            valNumber = valNumber[0];
+        }
+        if (!valNumber || valNumber !== valNumber) {
+            valNumber = 0;
+        }
         var maxNumber = parseFloat(options.maxNumber);
         var minNumber = parseFloat(options.minNumber);
         if (maxNumber && maxNumber < valNumber) {
@@ -346,9 +352,6 @@ function inputDecimal(element, options) {
             valArray[1] = valArray[1].substring(0, 2);
         }
         valNumber = valArray.join('.');
-        if (val.indexOf('.') === val.length - 1) {
-            valNumber += '.';
-        }
         element.val(valNumber);
     }
 }
@@ -376,10 +379,10 @@ function checkNumber(val, options) {
         max: 9999999
     };
 
-    if(isNaN(val) && parseInt(val) != val){
+    if (isNaN(val) && parseInt(val) != val) {
         return false
     }
-    if(parseInt(val) < options.min || parseInt(val) > options.max){
+    if (parseInt(val) < options.min || parseInt(val) > options.max) {
         return false
     }
     return true
