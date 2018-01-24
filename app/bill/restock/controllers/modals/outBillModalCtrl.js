@@ -104,12 +104,12 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         $scope.CargoGrid = {
             primaryId: 'cargoCode',
             kendoSetting: {
-                editable: 'inline',
+                editable: true,
                 columns: [
                     {
                         title: '操作',
-                        command: [{name: 'del', text: "删除", click: delWithMaterial}, {name: 'edit', text: "编辑"}],
-                        width: 140
+                        command: [{name: 'del', text: "删除", click: delWithMaterial}],
+                        width: 80
                     },
                     {field: "cargoName", title: "货物名称"},
                     {field: "cargoCode", title: "货物编码"},
@@ -133,20 +133,22 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                 ],
                 save: function (e) {
                     // 每次保存都重新计算总的和原料的拣货数量
-                    $scope.params.totalAmount = 0;
-                    _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (item) {
-                        $scope.params.totalAmount += parseInt(item.actualAmount);
-                    });
-                    _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (material) {
-                        material.actualAmount = 0;
-                        _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (cargo) {
-                            if (cargo.rawMaterialCode === material.materialCode) {
-                                material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
-                            }
+                    $timeout(function () {
+                        $scope.params.totalAmount = 0;
+                        _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (item) {
+                            $scope.params.totalAmount += parseInt(item.actualAmount);
                         });
-                        material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
-                    });
-                    $scope.MaterialGrid.kendoGrid.refresh();
+                        _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (material) {
+                            material.actualAmount = 0;
+                            _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (cargo) {
+                                if (cargo.rawMaterialCode === material.materialCode) {
+                                    material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
+                                }
+                            });
+                            material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
+                        });
+                        $scope.MaterialGrid.kendoGrid.refresh();
+                    })
                     return e;
                 }
             }

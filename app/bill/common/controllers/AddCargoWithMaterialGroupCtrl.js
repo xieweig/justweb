@@ -3,6 +3,7 @@
 angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($scope, $timeout, cb, data) {
     $scope.params = {};
     $scope.show = data.hasOwnProperty('m');
+    $scope.materialCodeList = [];
 
     $scope.search = function () {
         $scope.cargoList.kendoGrid.dataSource.page(1);
@@ -48,7 +49,27 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
                 {field: "standardUnitCode", title: "标准单位", width: 120},
                 {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
                 {field: "actualAmount", title: "货物数量", width: 120, editable: true}
-            ]
+            ],
+            save:function (e) {
+                // 每次保存都重新计算总的和原料的拣货数量
+                $timeout(function () {
+                    $scope.params.totalAmount = 0;
+                    _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
+                        $scope.params.totalAmount += parseInt(item.actualAmount);
+                    });
+                    _.each($scope.currentMaterialGrid.kendoGrid.dataSource.data(), function (material) {
+                        material.actualAmount = 0;
+                        _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (cargo) {
+                            if (cargo.rawMaterialCode === material.materialCode) {
+                                material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
+                            }
+                        });
+                        material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
+                    });
+                    $scope.currentMaterialGrid.kendoGrid.refresh();
+                })
+                return e;
+            }
         }
     };
 
@@ -70,11 +91,65 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
     $timeout(function () {
         _.each(data.cl, function (item) {
             $scope.currentCargoList.kendoGrid.dataSource.add(item)
-        })
+        });
         _.each(data.m, function (item) {
+            $scope.materialCodeList.push(item.materialCode);
             $scope.currentMaterialGrid.kendoGrid.dataSource.add(item)
         })
     }, 100);
+
+    // 增加货物
+    $scope.addCargo = function (selectIds) {
+        if (!selectIds) {
+            var selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
+        } else {
+            selectIds = [selectIds]
+        }
+        var dataSource = $scope.cargoList.kendoGrid.dataSource;
+        var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
+        var cargoCodeList = _.map(currentDataSource.data(), function (item) {
+            return item.cargoCode
+        });
+        _.each(dataSource.data(), function (item, index) {
+            if (_.indexOf(selectIds, '' + item.cargoCode) > -1 && _.indexOf(cargoCodeList, '' + item.cargoCode) === -1) {
+                // 判断是否需要区分原料
+                if ($scope.show) {
+                    if ($scope.materialCodeList.indexOf(item.rawMaterialCode) > -1) {
+                        // 添加货物预置数量
+                        // if ($scope.material.shippedAmount > $scope.material.actualAmount) {
+                        //     item.actualAmount = parseInt((parseInt($scope.material.shippedAmount) - parseInt($scope.material.actualAmount)) / parseInt(item.number));
+                        // } else {
+                        //     item.actualAmount = 0;
+                        // }
+                        item.actualAmount = 0;
+                        currentDataSource.add(item);
+
+                        $timeout(function () {
+                            $scope.params.totalAmount = 0;
+                            _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
+                                $scope.params.totalAmount += parseInt(item.actualAmount);
+                            });
+                            _.each($scope.currentMaterialGrid.kendoGrid.dataSource.data(), function (material) {
+                                material.actualAmount = 0;
+                                _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (cargo) {
+                                    if (cargo.rawMaterialCode === material.materialCode) {
+                                        material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
+                                    }
+                                });
+                                material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
+                            });
+                            $scope.currentMaterialGrid.kendoGrid.refresh();
+                        })
+
+
+                    }
+                }
+                else {
+                    currentDataSource.add(item);
+                }
+            }
+        });
+    };
 
     /**
      * 提交选中货物
