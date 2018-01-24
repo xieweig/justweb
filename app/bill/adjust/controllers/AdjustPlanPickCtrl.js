@@ -152,7 +152,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
 
     // 保存拣货
     $scope.savePick = function () {
-        var bill = getParams();
+        var bill = getParams('save');
         ApiService.post('/api/bill/adjust/save', bill).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
@@ -166,11 +166,21 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
 
     // 提交拣货
     $scope.submitPick = function () {
-
+        var bill = getParams('submit');
+        ApiService.post('/api/bill/adjust/submit', bill).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                swal('操作成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
+            }
+        }, apiServiceError);
     };
 
     function getParams() {
         var result = {
+            sourceCode: params.bill.billCode,
             basicEnum: 'BY_MATERIAL',
             billPurpose: 'OUT_STORAGE',
             self: false,
@@ -210,8 +220,17 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             ]
         };
         result.billDetails = [];
-        _.each($scope.materialList, function (material) {
-            _.each(material.kendoGrid.kendoGrid.dataSource.data(), function (dataItem) {
+        var emptyItem = _.find($scope.materialList, function (material) {
+            var dataSource = material.kendoGrid.kendoGrid.dataSource.data();
+            if (dataSource.length === 0) {
+                swal('请选择' + material.materialName + '的货物', '', 'error');
+                return true;
+            }
+            var emptyCargo = _.find(dataSource, function (dataItem) {
+                if (!dataItem.actualAmount && dataItem.actualAmount !== 0) {
+                    swal('请选择' + material.materialName + '中' + dataItem.cargoName + '的实拣数量', '', 'error');
+                    return true;
+                }
                 result.billDetails.push({
                     actualAmount: dataItem.actualAmount,
                     shippedAmount: material.amount,
@@ -225,8 +244,16 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                         rawMaterialName: dataItem.rawMaterialName
                     }
                 });
+                return false;
             });
+            if (!emptyCargo) {
+                return false;
+            }
+            return true;
         });
-        return result;
+        if (!emptyItem) {
+            return result;
+        }
+        return false;
     }
 });
