@@ -227,7 +227,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
         var emptyItem = _.find($scope.materialList, function (material) {
             var dataSource = material.kendoGrid.kendoGrid.dataSource.data();
             if (dataSource.length === 0) {
-                swal('请选择' + material.materialName + '的货物', '', 'error');
+                swal('请选择' + material.material.materialName + '的货物', '', 'error');
                 return true;
             }
             var emptyCargo = _.find(dataSource, function (dataItem) {
