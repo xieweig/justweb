@@ -21,19 +21,6 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     $timeout(function () {
         $('#select-out').val($scope.storageType[0].value).trigger('change');
     });
-    // Common.getStore().then(function (storage) {
-    //     _.each(storage, function (item) {
-    //         $scope.outType.push({
-    //             key: item.tempStorageCode,
-    //             value: item.tempStorageCode,
-    //             text: item.tempStorageName
-    //         })
-    //     });
-    //     // 设置默认值
-    //     $timeout(function () {
-    //         $('#select-out').val($scope.outType[0].value).trigger('change')
-    //     })
-    // });
 
     // 屏蔽按原料拣货时触发的操作
     $scope.change = function () {
@@ -179,7 +166,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                 },
                 {field: "shippedAmount", title: "应拣数量"},
                 {field: "actualAmount", title: "实拣数量"},
-                {field: "memo", title: "备注", editable: true}
+                {field: "memo", title: "备注(点击修改)", editable: true}
             ]
         }
     };
