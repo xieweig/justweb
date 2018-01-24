@@ -143,13 +143,13 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
                 {
                     title: "提交状态", width: 120,
                     template: function (data) {
-                        return getTextByVal($scope.auditStatus, data.auditState);
+                        return getTextByVal($scope.submitStatus, data.submitState);
                     }
                 },
                 {
                     title: "审核状态", width: 120,
                     template: function (data) {
-                        return getTextByVal($scope.submitStatus, data.submitState);
+                        return getTextByVal($scope.auditStatus, data.auditState);
                     }
                 },
                 {field: "memo", title: "备注", width: 120}
