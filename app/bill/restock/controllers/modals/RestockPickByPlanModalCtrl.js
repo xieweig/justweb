@@ -30,7 +30,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
         if (response.code === '000') {
             var res = response.result.bill;
             // 赋值到scope上
-            _.each(['basicEnum', 'billCode', 'memo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo'], function (name) {
+            _.each(['basicEnum', 'billCode', 'planMemo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.params.outStationCode = res.outStationCode;
@@ -45,6 +45,10 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                     var cargoCodeList = _.map(billDetails, function (item) {
                         return item.rawMaterial.cargo.cargoCode
                     });
+                    if(cargoCodeList.length === 0){
+                        $('#tabs').children('li:eq(1)').children('a').click();
+                        return
+                    }
                     // 获取货物信息
                     Common.getCargoByCodes(cargoCodeList).then(function (cargoList) {
                         var cargoObject = _.zipObject(_.map(cargoList, function (item) {
@@ -75,53 +79,83 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                                     standardUnitCode: item.cargo.standardUnitCode,
                                     actualAmount: 0,
                                     shippedAmount: item.amount
-                                })
+                                });
+
+                                // 计算原来各种原料的需求，再addItem
+                                var materialResult = {};
+                                _.each(res.childPlanBillDetails, function (item) {
+                                    if (!materialResult[item.material.materialCode]) {
+                                        materialResult[item.material.materialCode] = {
+                                            shippedAmount: 0
+                                        }
+                                    }
+                                    materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
+                                    materialResult[item.material.materialCode].materialName = item.material.materialName;
+                                    materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
+                                });
+                                _.each(materialResult, function (item) {
+                                    $scope.addItem({
+                                        materialName: item.materialName,
+                                        rawMaterialCode: item.rawMaterialCode,
+                                        shippedAmount: item.shippedAmount
+                                    })
+                                });
+                                $timeout(function () {
+                                    $('#tabs').children('li:eq(1)').children('a').click();
+                                    var tabBtn = $('#tabs').children('li:first-child').children('a');
+                                    // 置为不可点击
+                                    tabBtn.attr('data-toggle', null);
+                                    tabBtn.click(function (e) {
+                                        e.preventDefault()
+                                    });
+                                });
                             })
                         })
                     })
                 });
 
-                $scope.change = function (e) {
-                    swal({
-                        title: '提示',
-                        text: '你将要从货物操作切换到原料操作，切换后之前的数据将被清空，请问是否确定切换？',
-                        type: 'warning',
-                        showCancelButton: true
-                    }).then(function (result) {
-                        if (result.value) {
-                            var tabBtn = $('#tabs').children('li:first-child').children('a');
-                            // 置为不可点击
-                            tabBtn.attr('data-toggle', null);
-                            tabBtn.click(function (e) {
-                                e.preventDefault()
-                            });
-                            // 屏蔽掉原change函数,只能改变一次
-                            $scope.change = function () {
-                            };
-                            // 计算原来各种原料的需求，再addItem
-                            var materialResult = {};
-                            _.each(res.childPlanBillDetails, function (item) {
-                                if (!materialResult[item.material.materialCode]) {
-                                    materialResult[item.material.materialCode] = {
-                                        shippedAmount: 0
-                                    }
-                                }
-                                materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
-                                materialResult[item.material.materialCode].materialName = item.material.materialName;
-                                materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
-                            });
-                            _.each(materialResult, function (item) {
-                                $scope.addItem({
-                                    materialName: item.materialName,
-                                    rawMaterialCode: item.rawMaterialCode,
-                                    shippedAmount: item.shippedAmount
-                                })
-                            })
-                        } else {
-                            $('#tabs').children('li:first-child').children('a').click()
-                        }
-                    })
-                }
+                // $scope.change = function (e) {
+                //     // swal({
+                //     //     title: '提示',
+                //     //     text: '你将要从货物操作切换到原料操作，切换后之前的数据将被清空，请问是否确定切换？',
+                //     //     type: 'warning',
+                //     //     showCancelButton: true
+                //     // }).then(function (result) {
+                //     //     if (result.value) {
+                //     var tabBtn = $('#tabs').children('li:first-child').children('a');
+                //     // 置为不可点击
+                //     tabBtn.attr('data-toggle', null);
+                //     tabBtn.click(function (e) {
+                //         e.preventDefault()
+                //     });
+                //     // 屏蔽掉原change函数,只能改变一次
+                //     $scope.change = function () {
+                //     };
+                //     // 计算原来各种原料的需求，再addItem
+                //     var materialResult = {};
+                //     _.each(res.childPlanBillDetails, function (item) {
+                //         if (!materialResult[item.material.materialCode]) {
+                //             materialResult[item.material.materialCode] = {
+                //                 shippedAmount: 0
+                //             }
+                //         }
+                //         materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
+                //         materialResult[item.material.materialCode].materialName = item.material.materialName;
+                //         materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
+                //     });
+                //     _.each(materialResult, function (item) {
+                //         $scope.addItem({
+                //             materialName: item.materialName,
+                //             rawMaterialCode: item.rawMaterialCode,
+                //             shippedAmount: item.shippedAmount
+                //         })
+                //     })
+                //     //     } else {
+                //     //         $('#tabs').children('li:first-child').children('a').click()
+                //     //     }
+                //     // })
+                // };
+
             } else {
                 // 按原料拣货
                 $timeout(function () {
@@ -135,6 +169,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                         }), materialList);
                         _.each(res.childPlanBillDetails, function (item) {
                             $scope.addItem({
+                                // rawMaterialId: item.rawMaterial.rawMaterialId,
                                 materialName: materialObject[item.rawMaterial.rawMaterialCode].materialName,
                                 rawMaterialCode: item.rawMaterial.rawMaterialCode,
                                 shippedAmount: item.amount
@@ -209,11 +244,16 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                 shippedAmount: data.shippedAmount,
                 actualAmount: 0,
                 rawMaterialCode: data.rawMaterialCode,
+                rawMaterialId: data.rawMaterialId,
                 progress: '0%'
             },
             cargoGrid: {
                 primaryId: 'cargoCode',
                 kendoSetting: {
+                    // autoBind: false,
+                    // pageable: true,
+                    // persistSelection: true,
+                    // height: 300,
                     columns: [
                         {field: "cargoName", title: "货物名称"},
                         {field: "cargoCode", title: "货物编码"},
@@ -225,7 +265,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                         },
                         {field: "actualAmount", title: "实拣数量"},
                         {field: "memo", title: "备注"},
-                        {command: [{name: 'delete', text: "删除", click: delCargo}], title: "操作"}
+                        {command: [{name: 'del', text: "删除", click: delCargo}], title: "操作"}
                     ]
                 }
             }
@@ -234,38 +274,43 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
     };
 
     $scope.addCargo = function (index) {
-        // $scope.index = index
+        $scope.index = index;
         initCargoModal(index)
     };
 
     function initCargoModal(index) {
-        $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/common/modals/addCargoWithMaterial.html',
-            size: 'lg',
-            controller: 'AddCargoWithMaterialCtrl',
-            resolve: {
-                cb: function () {
-                    return function (data) {
-                        $scope.cargoList = data;
-                        var dataSource = $scope.itemMap[index].cargoGrid.kendoGrid.dataSource;
-                        dataSource.data([]);
-                        $scope.itemMap[index].material.actualAmount = 0
-                        _.each(data, function (item) {
-                            // 添加隐藏数据index 方便删除数据
-                            item['index'] = $scope.index;
-                            dataSource.add(item);
-                            $scope.itemMap[index].material.actualAmount += parseInt(item.actualAmount) * parseInt(item.number)
-                            $scope.itemMap[index].material.progress = parseFloat(parseInt($scope.itemMap[index].material.actualAmount) / parseInt($scope.itemMap[index].material.shippedAmount) * 100).toFixed(2) + '%'
-                        });
-                        $scope.addModal.close()
+        Common.getMaterialByCodes([$scope.itemMap[index].material.rawMaterialCode]).then(function (response) {
+            $scope.itemMap[index].material.rawMaterialId = response[0].materialId;
+            $scope.addModal = $uibModal.open({
+                templateUrl: 'app/bill/common/modals/addCargoWithMaterial.html',
+                size: 'lg',
+                controller: 'AddCargoWithMaterialCtrl',
+                resolve: {
+                    cb: function () {
+                        return function (data) {
+                            $scope.cargoList = data;
+                            var dataSource = $scope.itemMap[index].cargoGrid.kendoGrid.dataSource;
+                            dataSource.data([]);
+                            $scope.itemMap[index].material.actualAmount = 0;
+                            _.each(data, function (item) {
+                                // 添加隐藏数据index 方便删除数据
+                                item['index'] = $scope.index;
+                                dataSource.add(item);
+                                $scope.itemMap[index].material.actualAmount += parseInt(item.actualAmount) * parseInt(item.number);
+                                $scope.itemMap[index].material.progress = parseFloat(parseInt($scope.itemMap[index].material.actualAmount) / parseInt($scope.itemMap[index].material.shippedAmount) * 100).toFixed(2) + '%'
+                            });
+                            $scope.addModal.close()
+                        }
+                    },
+                    data: {
+                        cl: $scope.itemMap[index].cargoGrid.kendoGrid.dataSource.data(),
+                        m: $scope.itemMap[index].material,
+                        // materialId: response
+                        cargoUnit: $scope.cargoConfigure,
+                        materialUnit: $scope.materialConfigure
                     }
-                },
-                data: {
-                    cl: $scope.itemMap[index].cargoGrid.kendoGrid.dataSource.data(),
-                    m: $scope.itemMap[index].material,
-                    cargoUnit: $scope.cargoConfigure
                 }
-            }
+            })
         })
     }
 
@@ -306,6 +351,10 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
 
         bill.sourceCode = $scope.params.billCode;
         bill.rootCode = $scope.params.rootCode;
+        // 计划备注
+        bill.planMemo = $scope.params.planMemo;
+        bill.outStorageMemo = $scope.params.outStorageMemo;
+
         bill.outLocation = {
             stationCode: $scope.params.outStationCode,
             stationName: $scope.params.outStationName,
@@ -329,7 +378,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             bill.basicEnum = 'BY_CARGO';
             // 按货物拣货
             bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
-                if(!checkNumber(item.actualAmount)){
+                if (!checkNumber(item.actualAmount)) {
                     swal('参数错误', '货物数量错误', 'error');
                     flag = false;
                     return
@@ -352,7 +401,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             bill.billDetails = [];
             _.each($scope.itemMap, function (item) {
                 _.each(item.cargoGrid.kendoGrid.dataSource.data(), function (data) {
-                    if(!checkNumber(data.actualAmount)){
+                    if (!checkNumber(data.actualAmount)) {
                         swal('参数错误', '货物实拣数量错误', 'error');
                         flag = false;
                         return
@@ -372,7 +421,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
                 })
             })
         }
-        if(!flag){
+        if (!flag) {
             return
         }
         ApiService.post(url, bill).then(function (response) {

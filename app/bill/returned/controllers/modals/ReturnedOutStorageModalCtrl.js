@@ -446,7 +446,9 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
                     }
                 },
                 data: {
-                    cl: $scope.onlyCargoGrid.kendoGrid.dataSource.data()
+                    cl: $scope.onlyCargoGrid.kendoGrid.dataSource.data(),
+                    cargoUnit: data.cargoUnit,
+                    materialUnit: data.materialUnit
                 }
             }
         });

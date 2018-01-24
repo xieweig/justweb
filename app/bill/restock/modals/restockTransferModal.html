@@ -19,16 +19,36 @@
     </h1>
     <div class="uib-content">
         <div class="row info-block">
-            <div class="col-sm-6">
+            <div class="col-sm-6" id="left_panel">
                 <div class="well margin-top-10  padding-top-0">
                     <h5>
                         <small>库位信息</small>
                     </h5>
                     <div class="row">
+                        <span data-ng-if="!show">
+                            <style>
+                                #left_panel .well .row > div, #left_panel .well .row span > div {
+                                    margin-bottom: 5px !important;
+                                }
+                                .info-block > div:nth-child(1) > div:nth-child(1) {
+                                    height: 200px;
+                                }
+                                #right_panel .well{
+                                    padding-bottom: 29px!important;
+                                }
+                            </style>
+                            <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon">单号</span>
+                                    <input type="text" class="form-control" data-ng-model="params.billCode" disabled>
+                                </div>
+                            </div>
+                        </span>
+
                         <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
                             <div class="input-group">
-                                <span class="input-group-addon">单号</span>
-                                <input type="text" class="form-control" data-ng-model="params.billCode" disabled>
+                                <span class="input-group-addon">单据属性</span>
+                                <input type="text" class="form-control" data-ng-model="params.billType" disabled>
                             </div>
                         </div>
 
@@ -60,10 +80,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" id="right_panel">
                 <div class="well margin-top-10 padding-top-0">
                     <h5>
-                        <small>调剂入库单信息</small>
+                        <small>退库入库单信息</small>
                     </h5>
                     <div class="row">
                         <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
