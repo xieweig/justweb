@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibModal, $timeout, ApiService) {
-    $scope.params = {};
+angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibModal, Common, params, ApiService, $timeout) {
     // 出库站点选择
     $scope.outStationParams = {
         callback: function (data) {
@@ -11,70 +10,57 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
         }
     };
 
+    $scope.bill = params.bill;
+    $scope.materialList = [];
+    (function () {
+        var materialCodes = _.map($scope.bill.childPlanBillDetails, function (item) {
+            return item.rawMaterial.rawMaterialCode;
+        });
+        Common.getMaterialByCodes(materialCodes).then(function (materialList) {
+            var materialObject = _.zipObject(_.map(materialList, function (item) {
+                return item.materialCode
+            }), materialList);
+
+            _.each($scope.bill.childPlanBillDetails, function (item) {
+                var material = materialObject[item.rawMaterial.rawMaterialCode] || {};
+                $scope.materialList.push({
+                    material: {
+                        materialName: material.materialName,
+                        materialCode: item.rawMaterial.rawMaterialCode
+                    },
+                    kendoGrid: {
+                        kendoSetting: {
+                            dataSource: [{xxxxx: 123, a: 123, b: 44}, {xxxxx: 123, a: 123, b: 44}],
+                            columns: [
+                                {title: "操作", width: 85, command: [{name: 'del', text: "删除", click: delCargo}]},
+                                {field: "xxxxx", title: "货物名称", width: 120},
+                                {field: "xxxxx", title: "货物编码", width: 120},
+                                {field: "xxxxx", title: "所属原料", width: 120},
+                                {field: "xxxxx", title: "规格", width: 120},
+                                {field: "xxxxx", title: "应拣数量", width: 120},
+                                {field: "b", title: "实拣数量", width: 120}
+                            ]
+                        }
+                    }
+                });
+            });
+        });
+    }());
+
     // 货物grid
     $scope.cargoGrid = {
         kendoSetting: {
             dataSource: [{xxxxx: 123, a: 123, b: 44}, {xxxxx: 123, a: 123, b: 44}],
-            editable: true,
             columns: [
                 {field: "xxxxx", title: "货物名称", width: 120},
                 {field: "xxxxx", title: "货物编码", width: 120},
                 {field: "xxxxx", title: "所属原料", width: 120},
                 {field: "xxxxx", title: "规格", width: 120},
                 {field: "xxxxx", title: "应拣数量", width: 120},
-                {field: "b", title: "实拣数量", width: 120},
-                {field: "a", title: "备注(点击编辑)", width: 120, editable: true}
+                {field: "b", title: "实拣数量", width: 120}
             ]
         }
     };
-
-    // 原料grid
-    $scope.materialList = [
-        {
-            material: {
-                materialName: '原料名称',
-                materialCode: '原料编码'
-            },
-            kendoGrid: {
-                kendoSetting: {
-                    dataSource: [{xxxxx: 123, a: 123, b: 44}, {xxxxx: 123, a: 123, b: 44}],
-                    editable: true,
-                    columns: [
-                        {title: "操作", width: 85, command: [{name: 'del', text: "删除", click: delCargo}]},
-                        {field: "xxxxx", title: "货物名称", width: 120},
-                        {field: "xxxxx", title: "货物编码", width: 120},
-                        {field: "xxxxx", title: "所属原料", width: 120},
-                        {field: "xxxxx", title: "规格", width: 120},
-                        {field: "xxxxx", title: "应拣数量", width: 120},
-                        {field: "b", title: "实拣数量", width: 120},
-                        {field: "a", title: "备注(点击编辑)", width: 120, editable: true}
-                    ]
-                }
-            }
-        },
-        {
-            material: {
-                materialName: '原料名称',
-                materialCode: '原料编码'
-            },
-            kendoGrid: {
-                kendoSetting: {
-                    dataSource: [{xxxxx: 123, a: 123, b: 44}, {xxxxx: 123, a: 123, b: 44}],
-                    editable: true,
-                    columns: [
-                        {title: "操作", width: 85, command: [{name: 'del', text: "删除", click: delCargo}]},
-                        {field: "xxxxx", title: "货物名称", width: 120},
-                        {field: "xxxxx", title: "货物编码", width: 120},
-                        {field: "xxxxx", title: "所属原料", width: 120},
-                        {field: "xxxxx", title: "规格", width: 120},
-                        {field: "xxxxx", title: "应拣数量", width: 120},
-                        {field: "b", title: "实拣数量", width: 120},
-                        {field: "a", title: "备注(点击编辑)", width: 120, editable: true}
-                    ]
-                }
-            }
-        }
-    ];
 
     // 删除原料表格中的货物
     function delCargo(e) {

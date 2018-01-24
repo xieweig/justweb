@@ -6,13 +6,13 @@ angular.module('app.bill.adjust', ['ui.router']).config(function ($stateProvider
         .state('app.bill.adjust', {
             abstract: true,
             data: {
-                title: '配送'
+                title: '调剂'
             }
         })
         .state('app.bill.adjust.planList', {
             url: '/bill/adjust/planList',
             data: {
-                title: '添加运单'
+                title: '查询调剂站点计划'
             },
             views: {
                 "content@app": {
