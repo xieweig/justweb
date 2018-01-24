@@ -277,7 +277,8 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
 
     $scope.bill = {
         billType: 'RESTOCK',
-        specificBillType: 'RESTOCK',
+        // specificBillType: 'RESTOCK',
+        specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 

@@ -458,7 +458,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
 
     $scope.bill = {
         billType: 'RESTOCK',
-        specificBillType: 'RESTOCK',
+        // specificBillType: 'RESTOCK',
+        specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 

@@ -278,7 +278,8 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
 
     $scope.bill = {
         billType: 'DELIVERY',
-        specificBillType: 'DELIVERY',
+        // specificBillType: 'DELIVERY',
+        specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 

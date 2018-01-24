@@ -455,8 +455,8 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
     }
 
     $scope.bill = {
-        billType: 'RESTOCK',
-        specificBillType: 'RESTOCK',
+        billType: 'DELIVERY',
+        specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 

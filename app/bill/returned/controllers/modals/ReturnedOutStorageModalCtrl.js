@@ -463,7 +463,8 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
 
     $scope.bill = {
         billType: 'RETURNED',
-        specificBillType: 'RETURNED',
+        // specificBillType: 'RETURNED',
+        specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 
