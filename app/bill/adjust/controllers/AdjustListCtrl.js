@@ -64,55 +64,20 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
     // 点击计划单号
     $('#planGrid').on('click', 'a.billCode', function (e) {
         var dataItem = $scope.planGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-
-        ApiService.get('/api/bill/adjust/findPlanByBillCode?billCode=' + dataItem.billCode).then(function (response) {
-            if (response.code !== '000') {
-                swal('', response.message, 'error')
-            } else {
-                $scope.planDetails = response.result.bill;
-                $scope.planDetails.type = 'look';
-                $scope.planDetails.inStationName = getTextByVal($scope.station, $scope.planDetails.inStationCode);
-                $scope.planDetails.outStationName = getTextByVal($scope.station, $scope.planDetails.outStationCode);
-                var cargoCodes = _.map($scope.planDetails.childPlanBillDetails, function (item) {
-                    return item.rawMaterial.cargo.cargoCode;
-                });
-                Common.getCargoByCodes(cargoCodes).then(function (cargoList) {
-                    var cargoObject = _.zipObject(_.map(cargoList, function (item) {
-                        return item.cargoCode
-                    }), cargoList);
-                    $scope.cargoGrid = {
-                        kendoSetting: {
-                            dataSource: _.map($scope.planDetails.childPlanBillDetails, function (item) {
-                                var cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
-                                return {
-                                    cargoName: cargo.cargoName,
-                                    cargoCode: cargo.cargoCode,
-                                    rawMaterialName: cargo.rawMaterialName,
-                                    number: cargo.number,
-                                    measurementName: getTextByVal(cargoUnit, cargo.measurementCode),
-                                    actualAmount: item.amount
-                                };
-                            }),
-                            columns: [
-                                {field: "cargoName", title: "货物名称", width: 120},
-                                {field: "cargoCode", title: "货物编码", width: 120},
-                                {field: "rawMaterialName", title: "所属原料", width: 120},
-                                {title: "规格", width: 120, template: '#: data.number + data.measurementName #'},
-                                {field: "actualAmount", title: "应拣数量", width: 120}
-                            ]
-                        }
-                    };
-                    $uibModal.open({
-                        templateUrl: 'app/bill/adjust/modals/billDetails.html',
-                        size: 'lg',
-                        scope: $scope
-                    }).closed.then(function () {
-                        $scope.planDetails = null;
-                        $scope.cargoGrid = null;
-                    });
-                });
+        $uibModal.open({
+            templateUrl: 'app/bill/adjust/modals/billDetails.html',
+            size: 'lg',
+            scope: $scope,
+            controller: 'AdjustPlanDetailsCtrl',
+            resolve: {
+                params: {
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit
+                }
             }
-        }, apiServiceError);
+        }).closed.then(function () {
+
+        });
     });
 
     // 拣货

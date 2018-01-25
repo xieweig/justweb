@@ -46,6 +46,8 @@
         </div>
         <hr class="gray-line">
         <p class="text-center">站点调剂计划明细</p>
-        <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
+        <div data-ng-if="detailsGrid">
+            <div class="margin-top-10" data-kendo-grids data-options="detailsGrid"></div>
+        </div>
     </div>
 </div>
