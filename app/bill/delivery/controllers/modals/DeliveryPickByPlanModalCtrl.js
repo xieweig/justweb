@@ -35,6 +35,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
             });
             $scope.params.outStationCode = res.outStationCode;
             $scope.params.inStationCode = res.inStationCode;
+            $scope.specificBillType = res.specificBillType;
             $scope.params.outStationName = getTextByVal($scope.station, res.outStationCode);
             $scope.params.inStationName = getTextByVal($scope.station, res.inStationCode);
 
@@ -349,7 +350,6 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
     $scope.bill = {
         billType: 'DELIVERY',
         // specificBillType: 'DELIVERY',
-        specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 
@@ -374,7 +374,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
             bill[name] = $scope.params[name]
         });
         // bill.billProperty = 'RESTOCK';
-
+        bill.specificBillType =  $scope.specificBillType;
         bill.sourceCode = $scope.params.billCode;
         bill.rootCode = $scope.params.rootCode;
         // 计划备注
