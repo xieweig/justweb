@@ -19,7 +19,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
     ];
     $scope.outType = $scope.storageType;
     $timeout(function () {
-        $('#select-out').val($scope.storageType[0].value).trigger('change');
+        $('#select-out').val($scope.storageType[3].value).trigger('change');
     });
 
     // 屏蔽按原料拣货时触发的操作
@@ -54,10 +54,10 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
                     var cargoCodeList = _.map(billDetails, function (item) {
                         return item.rawMaterial.cargo.cargoCode
                     });
-                    if (cargoCodeList.length === 0) {
-                        $('#tabs').children('li:eq(1)').children('a').click();
-                        return
-                    }
+                    // if (cargoCodeList.length === 0) {
+                    //     $('#tabs').children('li:eq(1)').children('a').click();
+                    //     return
+                    // }
                     // 获取货物信息
                     Common.getCargoByCodes(cargoCodeList).then(function (cargoList) {
                         var cargoObject = _.zipObject(_.map(cargoList, function (item) {
@@ -90,81 +90,81 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
                                     shippedAmount: item.amount
                                 });
 
-                                // 计算原来各种原料的需求，再addItem
-                                var materialResult = {};
-                                _.each(res.childPlanBillDetails, function (item) {
-                                    if (!materialResult[item.material.materialCode]) {
-                                        materialResult[item.material.materialCode] = {
-                                            shippedAmount: 0
-                                        }
-                                    }
-                                    materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
-                                    materialResult[item.material.materialCode].materialName = item.material.materialName;
-                                    materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
-                                });
-                                _.each(materialResult, function (item) {
-                                    $scope.addItem({
-                                        materialName: item.materialName,
-                                        rawMaterialCode: item.rawMaterialCode,
-                                        shippedAmount: item.shippedAmount
-                                    })
-                                });
-                                $timeout(function () {
-                                    $('#tabs').children('li:eq(1)').children('a').click();
-                                    var tabBtn = $('#tabs').children('li:first-child').children('a');
-                                    // 置为不可点击
-                                    tabBtn.attr('data-toggle', null);
-                                    tabBtn.click(function (e) {
-                                        e.preventDefault()
-                                    });
-                                });
+                                // // 计算原来各种原料的需求，再addItem
+                                // var materialResult = {};
+                                // _.each(res.childPlanBillDetails, function (item) {
+                                //     if (!materialResult[item.material.materialCode]) {
+                                //         materialResult[item.material.materialCode] = {
+                                //             shippedAmount: 0
+                                //         }
+                                //     }
+                                //     materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
+                                //     materialResult[item.material.materialCode].materialName = item.material.materialName;
+                                //     materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
+                                // });
+                                // _.each(materialResult, function (item) {
+                                //     $scope.addItem({
+                                //         materialName: item.materialName,
+                                //         rawMaterialCode: item.rawMaterialCode,
+                                //         shippedAmount: item.shippedAmount
+                                //     })
+                                // });
+                                // $timeout(function () {
+                                //     $('#tabs').children('li:eq(1)').children('a').click();
+                                //     var tabBtn = $('#tabs').children('li:first-child').children('a');
+                                //     // 置为不可点击
+                                //     tabBtn.attr('data-toggle', null);
+                                //     tabBtn.click(function (e) {
+                                //         e.preventDefault()
+                                //     });
+                                // });
 
                             })
                         })
                     })
                 });
 
-                // $scope.change = function (e) {
-                //     swal({
-                //         title: '提示',
-                //         text: '你将要从货物操作切换到原料操作，切换后之前的数据将被清空，请问是否确定切换？',
-                //         type: 'warning',
-                //         showCancelButton: true
-                //     }).then(function (result) {
-                //         if (result.value) {
-                //             var tabBtn = $('#tabs').children('li:first-child').children('a');
-                //             // 置为不可点击
-                //             tabBtn.attr('data-toggle', null);
-                //             tabBtn.click(function (e) {
-                //                 e.preventDefault()
-                //             });
-                //             // 屏蔽掉原change函数,只能改变一次
-                //             $scope.change = function () {
-                //             };
-                //             // 计算原来各种原料的需求，再addItem
-                //             var materialResult = {};
-                //             _.each(res.childPlanBillDetails, function (item) {
-                //                 if (!materialResult[item.material.materialCode]) {
-                //                     materialResult[item.material.materialCode] = {
-                //                         shippedAmount: 0
-                //                     }
-                //                 }
-                //                 materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
-                //                 materialResult[item.material.materialCode].materialName = item.material.materialName;
-                //                 materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
-                //             });
-                //             _.each(materialResult, function (item) {
-                //                 $scope.addItem({
-                //                     materialName: item.materialName,
-                //                     rawMaterialCode: item.rawMaterialCode,
-                //                     shippedAmount: item.shippedAmount
-                //                 })
-                //             })
-                //         } else {
-                //             $('#tabs').children('li:first-child').children('a').click()
-                //         }
-                //     })
-                // }
+                $scope.change = function (e) {
+                    swal({
+                        title: '提示',
+                        text: '你将要从货物操作切换到原料操作，切换后之前的数据将被清空，请问是否确定切换？',
+                        type: 'warning',
+                        showCancelButton: true
+                    }).then(function (result) {
+                        if (result.value) {
+                            var tabBtn = $('#tabs').children('li:first-child').children('a');
+                            // 置为不可点击
+                            tabBtn.attr('data-toggle', null);
+                            tabBtn.click(function (e) {
+                                e.preventDefault()
+                            });
+                            // 屏蔽掉原change函数,只能改变一次
+                            $scope.change = function () {
+                            };
+                            // 计算原来各种原料的需求，再addItem
+                            var materialResult = {};
+                            _.each(res.childPlanBillDetails, function (item) {
+                                if (!materialResult[item.material.materialCode]) {
+                                    materialResult[item.material.materialCode] = {
+                                        shippedAmount: 0
+                                    }
+                                }
+                                materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
+                                materialResult[item.material.materialCode].materialName = item.material.materialName;
+                                materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
+                            });
+                            _.each(materialResult, function (item) {
+                                $scope.addItem({
+                                    materialName: item.materialName,
+                                    rawMaterialCode: item.rawMaterialCode,
+                                    shippedAmount: item.shippedAmount
+                                })
+                            })
+                        } else {
+                            $('#tabs').children('li:first-child').children('a').click()
+                        }
+                    })
+                }
             } else {
                 // 按原料拣货
                 $timeout(function () {

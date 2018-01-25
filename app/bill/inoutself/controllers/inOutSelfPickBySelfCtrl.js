@@ -128,7 +128,7 @@ angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $s
                     }
                 },
                 actualAmount: item.actualAmount,
-                shippedAmount: item.actualAmount // 站点自己拣货,实拣和应拣一致
+                shippedAmount: 0
             }
         });
         ApiService.post(url, bill).then(function (response) {

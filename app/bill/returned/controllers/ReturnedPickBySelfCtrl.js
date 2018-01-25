@@ -144,7 +144,7 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                     }
                 },
                 actualAmount: item.actualAmount,
-                shippedAmount: item.actualAmount // 站点自己拣货,实拣和应拣一致
+                shippedAmount: 0
             }
         });
         if(!flag){
