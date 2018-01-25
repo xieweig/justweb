@@ -466,7 +466,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
     $scope.bill = {
         billType: 'RETURNED',
         // specificBillType: 'RETURNED',
-        specificBillType: $scope.specificBillType,
+        // specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 
@@ -488,6 +488,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
         }
         bill.billCode = $scope.params.billCode;
         // bill.sourceCode = $scope.params.billCode;
+        bill.specificBillType = $scope.specificBillType;
         if($scope.specificBillType !== 'NO_PLAN'){
             bill.sourceCode = $scope.params.sourceCode
         }
