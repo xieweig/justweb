@@ -43,6 +43,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
             autoBind: false,
             pageable: true,
             persistSelection: true,
+            height:300,
             columns: [
                 {
                     command: [
@@ -66,7 +67,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                 // },
                 {
                     field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
-                        return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
+                        return '<a href="#" class="plan-btn-group">' + data.sourceCode || '' + '</a>'
                     }
                 },
                 {field: "billCode", title: "入库单号", locked: true, width: 210},

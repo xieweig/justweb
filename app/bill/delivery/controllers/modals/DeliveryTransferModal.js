@@ -124,7 +124,7 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
         // bill.billType = '';
         bill.self = $scope.params.specificBillType === 'NO_PLAN';
         bill.billPurpose = 'MOVE_STORAGE';
-        bill.specificBillType = 'RESTOCK';
+        bill.specificBillType = 'DELIVERY';
         bill.allowMemo = '';
         bill.basicEnum = $scope.params.basicEnum;
         bill.sourceCode = $scope.params.billCode;
