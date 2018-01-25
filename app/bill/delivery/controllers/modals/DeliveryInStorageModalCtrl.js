@@ -2,7 +2,7 @@
 
 angular.module('app').controller('DeliveryInStorageModalCtrl', function ($scope, $timeout, $uibModal, ApiService, Common, data) {
     /**
-     查看退库入库单弹窗
+     查看入库单弹窗
      */
     $scope.params = {};
     $scope.cargoConfigure = data.cargoUnit;

@@ -175,5 +175,4 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
         $scope.cargoGrid.kendoGrid.refresh();
         $scope.$close();
     }
-
 });
