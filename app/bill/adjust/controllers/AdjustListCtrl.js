@@ -44,7 +44,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                         {
                             name: 'look', text: "查看", click: lookDetails,
                             visible: function (data) {
-                                return data.operationState  && data.operationState !== 'NOOPERATION';
+                                return data.operationState && data.operationState !== 'NOOPERATION';
                             }
                         }
                     ]
