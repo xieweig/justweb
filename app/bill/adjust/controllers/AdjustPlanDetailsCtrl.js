@@ -81,5 +81,6 @@ angular.module('app').controller('AdjustPlanDetailsCtrl', function ($scope, ApiS
                 };
             });
         }
+        $scope.planDetails = planDetails;
     }
 });
