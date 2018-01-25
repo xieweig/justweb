@@ -16,13 +16,13 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">录单人</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.operatorName">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">出库单号</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.billCode">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
@@ -58,13 +58,13 @@
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon">出库时间</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createStartTime">
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.outStorageStartTime">
                                     </div>
                                 </div>
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-left: 0;">至</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createEndTime">
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.outStorageEndTime">
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                                 <span class="input-group-addon">单据属性</span>
                                 <select smart-select2 class="select2 width-full" data-ng-model="params.billPurpose">
                                     <option value="">请选择</option>
-                                    <option data-ng-repeat="item in billPurpose" data-ng-value="item.value">
+                                    <option data-ng-repeat="item in adjustBillType" data-ng-value="item.value">
                                         {{item.text}}
                                     </option>
                                 </select>
@@ -110,7 +110,7 @@
                                 <div class="smart-form">
                                     <div class="inline-group">
                                         <label class="checkbox" data-ng-repeat="status in outboundStatus">
-                                            <input data-ng-model="curAuditStatus[status.value]" type="checkbox" name="auditStatus"><i></i>{{status.text}}
+                                            <input data-ng-model="curOutStatus[status.value]" type="checkbox" name="auditStatus"><i></i>{{status.text}}
                                         </label>
                                     </div>
                                 </div>
@@ -121,33 +121,33 @@
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon">配送品种</span>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="params.varietyStart">
                                     </div>
                                 </div>
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-left: 0;">至</span>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="params.varietyEnd">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
-                            <div class="display-flex">
-                                <div class="flex-1">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">配送总价</span>
-                                        <input type="text" class="form-control" data-confine-money>
-                                    </div>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" style="border-left: 0;">至</span>
-                                        <input type="text" class="form-control" data-confine-money>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--<div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">-->
+                        <!--<div class="display-flex">-->
+                        <!--<div class="flex-1">-->
+                        <!--<div class="input-group">-->
+                        <!--<span class="input-group-addon">配送总价</span>-->
+                        <!--<input type="text" class="form-control" data-confine-money>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="flex-1">-->
+                        <!--<div class="input-group">-->
+                        <!--<span class="input-group-addon" style="border-left: 0;">至</span>-->
+                        <!--<input type="text" class="form-control" data-confine-money>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
                     </div>
                 </div>
                 <div class="padding-10">
