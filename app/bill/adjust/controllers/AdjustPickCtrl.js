@@ -143,6 +143,19 @@ angular.module('app').controller('AdjustPickCtrl', function ($scope, $uibModal, 
     };
 
     function getParams(type) {
+        var dataSource = $scope.planGrid.kendoGrid.dataSource.data();
+        if (type === 'submit') {
+            if (!$scope.params.outStorageType) {
+                swal('请选择出库库位', '', 'warning');
+                return false;
+            } else if (!$scope.params.inStationCode) {
+                swal('请选择入库站点', '', 'warning');
+                return false;
+            } else if (dataSource.length === 0) {
+                swal('请添加货物明细', '', 'warning');
+                return false;
+            }
+        }
         var result = {
             basicEnum: 'BY_CARGO',
             billPurpose: 'OUT_STORAGE',
@@ -162,7 +175,7 @@ angular.module('app').controller('AdjustPickCtrl', function ($scope, $uibModal, 
             },
             billDetails: []
         };
-        var emptyItem = _.find($scope.planGrid.kendoGrid.dataSource.data(), function (dataItem) {
+        var emptyItem = _.find(dataSource, function (dataItem) {
             result.billDetails.push({
                 actualAmount: dataItem.actualAmount,
                 shippedAmount: 0,
