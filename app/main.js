@@ -395,5 +395,9 @@ function checkNumber(val, options) {
 
 // 百分比
 Number.prototype.toPercent = function () {
-    return (Math.round(this * 10000) / 100).toFixed(2) + '%';
+    var result = (Math.round(this * 10000) / 100);
+    if (result === Infinity || result !== result) {
+        result = 0;
+    }
+    return result.toFixed(2) + '%';
 };

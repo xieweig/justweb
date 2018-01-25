@@ -2,6 +2,10 @@
 
 angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $timeout, $uibModal) {
     $scope.params = {};
+    $scope.curSubmitStatus = {};
+    $scope.curAuditStatus = {};
+    $scope.curOutStatus = {};
+
     $scope.adjustBillType = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划转'},
         {key: 'ADJUST', value: 'ADJUST', text: '调剂计划转'},
@@ -9,14 +13,14 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
         {key: 'RETURNED', value: 'RETURNED', text: '无计划'}
     ];
     $scope.outboundStatus = [
-        {key: 'DELIVERY', value: 'DELIVERY', text: '未出库'},
-        {key: 'ADJUST', value: 'ADJUST', text: '出库成功'},
-        {key: 'RETURNED', value: 'RETURNED', text: '出库失败'}
+        {key: 'NOT_OUT', value: 'NOT_OUT', text: '未出库'},
+        {key: 'OUT_SUCCESS', value: 'OUT_SUCCESS', text: '出库成功'},
+        {key: 'IN_FAILURE', value: 'IN_FAILURE', text: '出库失败'}
     ];
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
         callback: function (data) {
-            $scope.params.inStationCode = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -25,21 +29,37 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
     // 搜索条件中的入库站点选择
     $scope.inStationParams = {
         callback: function (data) {
-            $scope.params.outStationCode = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
     };
-
     $scope.search = function () {
         $scope.billGrid.kendoGrid.dataSource.page(1);
     };
     $scope.billGrid = {
-        url: '/api/bill/waybill/findWayBillByConditions',
+        url: '/api/bill/adjust/findOutStorageByConditions',
         params: $scope.params,
         dataSource: {
-            data: function () {
-                return [{a: 123213}, {a: 12321}];
+            parameterMap: function (data) {
+                data.submitStates = [];
+                _.each($scope.curSubmitStatus, function (item, key) {
+                    if (item) {
+                        data.submitStates.push(key);
+                    }
+                });
+                data.auditStates = [];
+                _.each($scope.curAuditStatus, function (item, key) {
+                    if (item) {
+                        data.auditStates.push(key);
+                    }
+                });
+                data.inOrOutStates = [];
+                _.each($scope.curOutStatus, function (item, key) {
+                    if (item) {
+                        data.inOrOutStates.push(key);
+                    }
+                });
             }
         },
         kendoSetting: {
@@ -48,26 +68,26 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
             columns: [
                 {title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}, {name: 'u', text: "修改", click: updateDetails}, {name: 'a', text: "审核", click: audit}], width: 220},
                 {field: "xxxxx", title: "单据属性", width: 120},
-                {field: "xxxxx", title: "出库状态", width: 120},
-                {field: "xxxxx", title: "提交状态", width: 120},
-                {field: "xxxxx", title: "审核状态", width: 120},
-                {title: "来源单号", width: 120, template: '<span class="kendo-link showSourceBill" sourceCode="#: data.a #">#: data.a #</span>'},
-                {field: "xxxxx", title: "出库单号", width: 120},
-                {field: "xxxxx", title: "录单时间", width: 120},
+                {field: "outStateEnum", title: "出库状态", width: 120},
+                {field: "submitState", title: "提交状态", width: 120},
+                {field: "auditState", title: "审核状态", width: 120},
+                {title: "来源单号", width: 120, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
+                {field: "billCode", title: "出库单号", width: 120},
+                {field: "createTime", title: "录单时间", width: 120},
                 {field: "xxxxx", title: "出库时间", width: 120},
-                {field: "xxxxx", title: "录单人", width: 120},
+                {field: "operatorName", title: "录单人", width: 120},
                 {field: "xxxxx", title: "审核人", width: 120},
-                {field: "xxxxx", title: "出库站点", width: 120},
-                {field: "xxxxx", title: "入库站点", width: 120},
-                {field: "xxxxx", title: "配送数量", width: 120},
-                {field: "xxxxx", title: "配送品种数", width: 120}
+                {title: "出库站点", width: 120, template: '#: data.outLocation ? data.outLocation.stationCode : "" #'},
+                {title: "入库站点", width: 120, template: '#: data.inLocation ? data.inLocation.stationCode : "" #'},
+                {field: "totalAmount", title: "配送数量", width: 120},
+                {field: "totalVarietyAmount", title: "配送品种数", width: 120}
             ]
         }
     };
 
     $timeout(function () {
         // 点击来源单号的事件
-        $('#billGrid').on('click', '.showSourceBill', function () {
+        $('#billGrid').on('click', '.sourceCode', function () {
             var sourceCode = $(this).attr('sourceCode');
             $scope.planDetails = {billCode: sourceCode};
             $scope.cargoGrid = {
