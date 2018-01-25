@@ -148,7 +148,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                             material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
                         });
                         $scope.MaterialGrid.kendoGrid.refresh();
-                    })
+                    });
                     return e;
                 }
             }
@@ -181,7 +181,18 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                             return parseInt(data.number) * parseInt(data.actualAmount)
                         }
                     }
-                ]
+                ],
+                save: function (e) {
+                    $timeout(function () {
+                        $scope.params.totalAmount = 0;
+                        $scope.params.totalVarietyAmount = 0;
+                        _.each($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
+                            $scope.params.totalVarietyAmount++;
+                            $scope.params.totalAmount += item.actualAmount;
+                        })
+                    });
+                    return e
+                }
             }
         };
     }
@@ -367,6 +378,14 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                                     }
                                 })
                             });
+                            $timeout(function () {
+                                $scope.params.totalAmount = 0;
+                                $scope.params.totalVarietyAmount = 0;
+                                _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (item) {
+                                    $scope.params.totalVarietyAmount ++;
+                                    $scope.params.totalAmount += item.actualAmount;
+                                })
+                            });
                             $scope.MaterialGrid.kendoGrid.refresh();
                             $scope.addModal.close()
                         }
@@ -405,6 +424,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         $scope.CargoGrid.kendoGrid.dataSource.remove(dataItem);
+        $scope.params.totalVarietyAmount --;
         // 修改退库数量和品种
         $scope.params.totalAmount = parseInt($scope.params.totalAmount) - parseInt(dataItem.actualAmount);
         // 修改原料
@@ -437,7 +457,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                         _.each(data, function (item) {
                             $scope.params.totalVarietyAmount++;
                             $scope.params.totalAmount += parseInt(item.actualAmount);
-                            if(!item.shippedAmount){
+                            if (!item.shippedAmount) {
                                 item.shippedAmount = 0
                             }
                             dataSource.add(item)
@@ -492,6 +512,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         $scope.onlyCargoGrid.kendoGrid.dataSource.remove(dataItem);
+        $scope.params.totalVarietyAmount --;
         // 修改数量
         $scope.params.totalAmount = $scope.params.totalAmount - parseInt(dataItem.actualAmount);
     }

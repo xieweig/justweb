@@ -69,7 +69,8 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
             $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
             $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
-            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
+            $scope.params.outStorageName = '在途库';
+            // $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
             if (!$scope.show) {
                 $scope.params.inStorageName = getTextByVal($scope.storageType, res.inLocation.storage.storageCode)
             }else{
@@ -137,23 +138,23 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
         bill.sourceCode = $scope.params.billCode;
         bill.inStorageBillCode = $scope.params.billCode;
         bill.inStorageBillType = $scope.params.billProperty;
-
+        // 调拨单调出调入站点都是入库单入库站点
         bill.outLocation = {
-            stationCode: $scope.params.outLocation.stationCode,
+            stationCode: $scope.params.inLocation.stationCode,
             storage: {
-                storageCode: $scope.params.outLocation.storage.storageCode
+                storageCode: 'ON_STORAGE'
             }
         };
         bill.inLocation = {
             stationCode: $scope.params.inLocation.stationCode,
             storage: {
-                storageCode: $scope.params.inLocation.storage.storageCode
+                storageCode: $scope.params.inStationType
             }
         };
 
         // 默认出库是在途库
-        bill.inStorageBillInStationCode = $scope.params.inStationType;
-        bill.inStorageBillOutStationCode = 'ON_STORAGE';
+        bill.inStorageBillInStationCode = $scope.params.inLocation.stationCode;
+        bill.inStorageBillOutStationCode = $scope.params.outLocation.stationCode;
 
         bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
             return {
