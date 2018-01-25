@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $rootScope, $state, $timeout, ApiService, Common, data) {
-    $scope.params = {
-        outStorageName: '在途库'
-    };
+    $scope.params = {};
     $scope.show = data.type === 'transfer'; // transfer 入库单调拨 view 查看调拨单
     $scope.cargoConfigure = data.cargoUnit;
     $scope.materialConfigure = data.materialUnit;
@@ -67,6 +65,7 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
             $scope.params.outLocation = res.outLocation;
             $scope.params.billProperty = res.billProperty;
             $scope.params.specificBillType = res.specificBillType;
+            $scope.specificBillType = res.specificBillType;
             $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
             $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
@@ -132,7 +131,7 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
 
         bill.self = $scope.params.specificBillType === 'NO_PLAN';
         bill.billPurpose = 'MOVE_STORAGE';
-        bill.specificBillType = 'RESTOCK';
+        bill.specificBillType = $scope.specificBillType;
         bill.allowMemo = '';
         bill.basicEnum = $scope.params.basicEnum;
         bill.sourceCode = $scope.params.billCode;
