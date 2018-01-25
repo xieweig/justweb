@@ -21,7 +21,7 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
     $scope.cargoGrid = {
         primaryId: 'cargoCode',
         kendoSetting: {
-            editable: true,
+            editable: $scope.show,
             columns: [
                 {field: "cargoName", title: "货物名称"},
                 {field: "cargoCode", title: "货物编码"},
@@ -64,11 +64,13 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             $scope.params.inLocation = res.inLocation;
             $scope.params.outLocation = res.outLocation;
             $scope.params.billProperty = res.billProperty;
+            $scope.specificBillType = res.specificBillType;
+            $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
             $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
-            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);;
+            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
+
             if (!$scope.show) {
-                console.log(res.inStorageBillInStationCode)
                 $scope.params.inStorageName = getTextByVal($scope.storageType, res.inLocation.storage.storageCode)
             }else{
                 $timeout(function () {
@@ -122,9 +124,9 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
         var bill = _.cloneDeep($scope.bill);
 
         // bill.billType = '';
-        bill.self = $scope.params.specificBillType === 'NO_PLAN';
+        bill.self = $scope.specificBillType === 'NO_PLAN';
         bill.billPurpose = 'MOVE_STORAGE';
-        bill.specificBillType = 'DELIVERY';
+        bill.specificBillType = $scope.specificBillType;
         bill.allowMemo = '';
         bill.basicEnum = $scope.params.basicEnum;
         bill.sourceCode = $scope.params.billCode;
