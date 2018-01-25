@@ -13,7 +13,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
         case 'RESTOCK':
             // 退库
             outStationType = 'BOOKSTORE,CAFE,Comprehensive';
-            inStationType = 'BOOKSTORE, LOGISTICS';
+            inStationType = 'LOGISTICS';
             break;
         case 'RETURNED':
             // 退货
