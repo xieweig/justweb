@@ -12,6 +12,12 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
         inOrOutStates: []
     };
 
+    $scope.specificType = [
+        {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
+        {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
+        {key: 'NO_PLAN', value: 'NO_PLAN', text: '无计划'}
+    ];
+
     $scope.auditStates = [
         {value: 'UN_REVIEWED', text: '未审核'},
         {value: 'AUDIT_SUCCESS', text: '审核通过'},

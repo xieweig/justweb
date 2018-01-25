@@ -431,10 +431,12 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                         dataSource.data([]);
                         _.each(data, function (item) {
                             $scope.params.totalVarietyAmount++;
-                            $scope.params.totalAmount += parseInt(item.actualAmount)
+                            $scope.params.totalAmount += parseInt(item.actualAmount);
+                            if(!item.shippedAmount){
+                                item.shippedAmount = 0
+                            }
                             dataSource.add(item)
                         });
-                        console.log($scope.params.totalVarietyAmount, $scope.params.totalAmount)
                         $scope.addModal.close()
                     }
                 },
