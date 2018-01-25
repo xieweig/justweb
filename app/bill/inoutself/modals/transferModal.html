@@ -1,0 +1,103 @@
+<div class="uib-modal">
+    <h1 class="uib-modal-title">
+        <span data-ng-if="show">
+            <span>退库到货调拨</span>
+        </span>
+        <span data-ng-if="!show">
+            <span>查看退库调拨单</span>
+        </span>
+        <span class="option">
+            <span data-ng-if="show">
+                <input type="button" class="btn btn-primary" value="调拨" data-ng-click="transfer()">
+                <input type="button" class="btn btn-default" value="返回" data-ng-click="$close()">
+            </span>
+            <span data-ng-if="!show">
+                <input type="button" class="btn btn-primary" value="导出" data-ng-click="export()">
+                <input type="button" class="btn btn-default" value="返回" data-ng-click="$close()">
+            </span>
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row info-block">
+            <div class="col-sm-6">
+                <div class="well margin-top-10  padding-top-0">
+                    <h5>
+                        <small>库位信息</small>
+                    </h5>
+                    <div class="row">
+                        <div class="col-lg-10 col-sm-10 col-xs-10 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">单号</span>
+                                <input type="text" class="form-control" data-ng-model="params.billCode" disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">调出库位</span>
+                                <input type="text" class="form-control" data-ng-model="params.outStorageName" disabled>
+                            </div>
+                        </div>
+
+                        <!--调入库位-->
+                        <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">入库库位</span>
+                                <span data-ng-if="!show">
+                                    <input type="text" class="form-control" data-ng-model="params.inStorageName"
+                                           disabled>
+                                </span>
+                                <span data-ng-if="show">
+                                    <select smart-select2 id="select-in" class="width-full"
+                                            data-ng-model="params.inStationType">
+                                        <option data-ng-repeat="item in storageType" data-ng-value="item.value">
+                                            {{item.text}}
+                                        </option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="well margin-top-10 padding-top-0">
+                    <h5>
+                        <small>调剂入库单信息</small>
+                    </h5>
+                    <div class="row">
+                        <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                            <div class="display-flex">
+                                <div class="flex-1">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">录单时间</span>
+                                        <input type="text" class="form-control" data-datepicker
+                                               data-ng-model="params.createTime" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">入库站点</span>
+                                <input type="text" class="form-control" data-ng-model="params.inStationName" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-10 col-sm-10 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">出库站点</span>
+                                <input type="text" class="form-control" data-ng-model="params.outStationName" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="widget-body no-padding">
+            <div class="padding-10">
+                <div class="text-center"><h3 class="margin-top-0">货物明细</h3></div>
+                <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
+            </div>
+        </div>
+    </div>
+</div>
