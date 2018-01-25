@@ -18,7 +18,7 @@
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">出库库位</span>
-                        <select id="outStorageCode" smart-select2 class="width-full" data-ng-model="params.outStorageCode">
+                        <select id="outStorageCode" smart-select2 class="width-full" data-ng-model="bill.outStorage">
                             <option value="">请选择</option>
                             <option data-ng-repeat="item in outType" data-ng-value="item.value">
                                 {{item.text}}
@@ -63,7 +63,7 @@
                 <div class="tab-pane" id="tabs-1">
                     <p class="text-center">配送计划拣货货物明细</p>
                     <div>
-                        <input type="text" class="form-control" style="max-width: 315px;" placeholder="扫描货物编码" data-ng-keyup="enterCargo()">
+                        <input type="text" class="form-control" style="max-width: 315px;" data-ng-model="cargoBarcode" placeholder="扫描货物编码" data-ng-keyup="enterCargo()">
                     </div>
                     <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
                 </div>

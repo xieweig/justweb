@@ -9,19 +9,19 @@
         <div class="row">
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>货物名称</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="cargoByBarcode.cargoName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>货物条码</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="cargoByBarcode.cargoCode"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>所属原料</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="cargoByBarcode.rawMaterialId"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>规格</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="cargoByBarcode.standardUnitCode"></dd>
             </dl>
         </div>
         <hr class="gray-line">
@@ -30,23 +30,23 @@
                 <div class="input-group margin-bottom-10">
                     <span class="input-group-addon">
                         <span class="radio no-margin">
-                            <label><input type="radio" class="radiobox" name="typeOpt"><span> 增加数量</span></label>
+                            <label><input data-ng-model="cargoByBarcode.range" type="radio" class="radiobox" name="typeOpt" value="add"><span> 增加数量</span></label>
                         </span>
                     </span>
-                    <input class="form-control" placeholder="" type="text" data-only-number>
+                    <input class="form-control" data-ng-model="cargoByBarcode.addNumber" type="text" data-only-number data-ng-disabled="cargoByBarcode.range!=='add'">
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">
                         <span class="radio no-margin">
-                            <label><input type="radio" class="radiobox" name="typeOpt"><span> 减少数量</span></label>
+                            <label><input data-ng-model="cargoByBarcode.range" type="radio" class="radiobox" name="typeOpt" value="less"><span> 减少数量</span></label>
                         </span>
                     </span>
-                    <input class="form-control" placeholder="" type="text" data-only-number>
+                    <input class="form-control" data-ng-model="cargoByBarcode.lessNumber" type="text" data-only-number data-ng-disabled="cargoByBarcode.range!=='less'">
                 </div>
             </div>
         </div>
         <div class="margin-top-10 text-center">
-            <input type="button" class="btn btn-primary width-80" value="确定">
+            <input type="button" class="btn btn-primary width-80" value="确定" data-ng-click="getCargoRange();$close();">
         </div>
     </div>
 </div>
