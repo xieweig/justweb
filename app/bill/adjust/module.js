@@ -32,12 +32,20 @@ angular.module('app.bill.adjust', ['ui.router']).config(function ($stateProvider
         .state('app.bill.adjust.pick', {
             url: '/bill/adjust/pick',
             data: {
-                title: '站点配送拣货'
+                title: '站点调剂拣货'
             },
             views: {
                 "content@app": {
                     templateUrl: 'app/bill/adjust/views/pick.html',
                     controller: 'AdjustPickCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
                 }
             }
         })

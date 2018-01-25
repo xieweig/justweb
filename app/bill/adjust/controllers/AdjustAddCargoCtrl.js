@@ -4,6 +4,9 @@ angular.module('app').controller('AdjustAddCargoCtrl', function ($scope, params)
     if (!params.data) {
         params.data = [];
     }
+    if (!params.material) {
+        params.material = {amount: 0};
+    }
     $scope.material = params.material;
     $scope.material.actualAmount = 0;
     _.each(params.data, function (item) {
@@ -143,6 +146,7 @@ angular.module('app').controller('AdjustAddCargoCtrl', function ($scope, params)
         });
         _.each(dataSource, function (item, index) {
             if (_.indexOf(selectIds, '' + item.cargoCode) > -1 && _.indexOf(existArray, '' + item.cargoCode) < 0) {
+                item.actualAmount = 0;
                 params.data.push(item);
             }
         });
