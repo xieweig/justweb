@@ -111,6 +111,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         _.each(data.cl, function (item) {
             $scope.currentCargoList.kendoGrid.dataSource.add(item)
         });
+        $scope.currentCargoList.kendoGrid.refresh();
         if ($scope.show) {
             $scope.material.materialName = data.m.materialName;
             $scope.material.shippedAmount = data.m.shippedAmount;

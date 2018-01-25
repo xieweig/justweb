@@ -30,7 +30,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
         if (response.code === '000') {
             var res = response.result.bill;
             // 赋值到scope上
-            _.each(['basicEnum', 'billCode', 'planMemo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo'], function (name) {
+            _.each(['basicEnum', 'billCode', 'planMemo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo', 'specificBillType'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.params.outStationCode = res.outStationCode;

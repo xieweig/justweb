@@ -22,7 +22,7 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
         primaryId: 'cargoCode',
         kendoSetting: {
             autoBind: false,
-            // persistSelection: true,
+            persistSelection: true,
             editable: true,
             // pageable: true,
             columns: [
