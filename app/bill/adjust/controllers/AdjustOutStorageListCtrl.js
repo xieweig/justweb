@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $timeout, $uibModal) {
+angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $timeout, $uibModal, cargoUnit, materialUnit) {
     $scope.params = {};
     $scope.curSubmitStatus = {};
     $scope.curAuditStatus = {};
@@ -115,26 +115,25 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
     function lookDetails(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        loadBillDetails('look');
+        loadBillDetails('look', dataItem.billCode);
     }
 
     // 查看详情
     function updateDetails(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        loadBillDetails('update');
+        loadBillDetails('update', dataItem.billCode);
     }
 
     // 查看详情
     function audit(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        loadBillDetails('audit');
+        loadBillDetails('audit', dataItem.billCode);
     }
 
     // 加载出库单详情
-    function loadBillDetails(type) {
-
+    function loadBillDetails(type, billCode) {
         $uibModal.open({
             templateUrl: 'app/bill/adjust/modals/details.html',
             size: 'lg',
@@ -143,7 +142,9 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
             resolve: {
                 params: {
                     type: type,
-                    billCode: '123123'
+                    billCode: billCode,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         });
