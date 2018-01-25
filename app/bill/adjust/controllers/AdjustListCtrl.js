@@ -37,14 +37,14 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                     command: [
                         {
                             name: 'picking', text: "拣货", click: picking,
-                            visible: function (item) {
-                                return item.submitState === 'UNCOMMITTED';
+                            visible: function (data) {
+                                return !data.operationState || data.operationState === 'NOOPERATION';
                             }
                         },
                         {
                             name: 'look', text: "查看", click: lookDetails,
-                            visible: function (item) {
-                                return item.submitState !== 'UNCOMMITTED';
+                            visible: function (data) {
+                                return data.operationState  && data.operationState !== 'NOOPERATION';
                             }
                         }
                     ]
