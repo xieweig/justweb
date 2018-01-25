@@ -6,9 +6,14 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
         specificBillType: []
     };
 
+    $scope.specificType = [
+        {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
+        {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
+        {key: 'NO_PLAN', value: 'NO_PLAN', text: '无计划'}
+    ];
+
     $scope.billStatus = [
         {value: 'ALLOT', text: '已调拨'},
-        // {value: 'ALLOT', text: '调拨中'},
         {value: 'NOT_ALLOT', text: '未调拨'}
     ];
 
@@ -21,7 +26,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
         {value: 'OUT_STORAGING', text: '出库中'},
         {value: 'IN_STORAGING', text: '入库中'},
         {value: 'DONE', text: '完成'}
-    ]
+    ];
 
     $scope.billAttr = [
         {value: 'DELIVERY', text: '配送计划转'},
@@ -96,7 +101,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                 },
                 {field: "totalAmount", title: "入库数量", width: 60},
                 {field: "totalVarietyAmount", title: "入库品种", width: 100},
-                {field: "totalPrice", title: "总进价", width: 100}
+                // {field: "totalPrice", title: "总进价", width: 100}
             ]
         }
     };
@@ -177,9 +182,14 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
         })
     });
 
-
     // 重置表格
     $scope.reset = function () {
         $state.reload($state.current.name)
     };
+
+    $scope.$watch('params.billAllotState', function (newVal) {
+        if (newVal === '' || newVal === undefined) {
+            $scope.params.billAllotState = null;
+        }
+    });
 });

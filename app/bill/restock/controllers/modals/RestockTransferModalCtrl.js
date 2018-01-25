@@ -67,8 +67,14 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
             $scope.params.specificBillType = res.specificBillType;
             $scope.specificBillType = res.specificBillType;
             $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
-            $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
-            $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
+            if($scope.show){
+                $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
+                $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
+            }else{
+                $scope.params.outStationName = getTextByVal($scope.station, res.inStorageBillOutStationCode);
+                $scope.params.inStationName = getTextByVal($scope.station, res.inStorageBillInStationCode);
+            }
+
             $scope.params.outStorageName = '在途库';
             // $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
             if (!$scope.show) {

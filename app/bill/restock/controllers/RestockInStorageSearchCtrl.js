@@ -177,9 +177,14 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
         })
     });
 
-
     // 重置表格
     $scope.reset = function () {
         $state.reload($state.current.name)
     };
+
+    $scope.$watch('params.billAllotState', function (newVal) {
+        if (newVal === '' || newVal === undefined) {
+            $scope.params.billAllotState = null;
+        }
+    });
 });
