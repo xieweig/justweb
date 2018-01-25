@@ -140,7 +140,7 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
             }
         };
         bill.billDetails = _.map($scope.cargoListGrid.kendoGrid.dataSource.data(), function (item) {
-            if(!checkNumber(item.actualAmount)){
+            if (!checkNumber(item.actualAmount)) {
                 swal('参数错误', '货物数量错误', 'error');
                 flag = false;
                 return
@@ -158,7 +158,7 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
                 shippedAmount: item.actualAmount // 站点自己拣货,实拣和应拣一致
             }
         });
-        if(!flag){
+        if (!flag) {
             return
         }
         ApiService.post(url, bill).then(function (response) {
@@ -207,9 +207,42 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
                     cl: $scope.cargoListGrid.kendoGrid.dataSource.data(),
                     cargoUnit: $scope.cargoConfigure,
                     materialUnit: $scope.materialConfigure
+                },
+                form: function () {
+                    return _.map($scope.cargoListGrid.kendoGrid.dataSource.data(), function (item) {
+                        return combinationItem(item);
+                    })
                 }
             }
         });
+    }
+
+    function combinationItem(item) {
+        return {
+            "createTime": item.createTime,
+            "updateTime": item.updateTime,
+            "cargoId": item.cargoId,
+            "cargoCode": item.cargoCode,
+            "barCode": item.barCode,
+            "selfBarCode": item.selfBarCode,
+            "originalName": item.originalName,
+            "cargoName": item.cargoName,
+            "effectiveTime": item.effectiveTime,
+            "measurementCode": item.measurementCode,
+            "standardUnitCode": item.standardUnitCode,
+            "memo": item.memo,
+            "number": item.number,
+            "rawMaterialId": item.rawMaterialId,
+            "operatorCode": item.operatorCode,
+            "cargoType": item.cargoType,
+            "rawMaterialName": item.rawMaterialName,
+            "rawMaterialCode": item.rawMaterialCode,
+            "configureName": item.configureName,
+            "dateInProduced": item.dateInProduced,
+            "unitPrice": item.unitPrice,
+            "actualAmount": item.actualAmount,
+            "shippedAmount": item.shippedAmount
+        };
     }
 
     $scope.delCargo = function () {

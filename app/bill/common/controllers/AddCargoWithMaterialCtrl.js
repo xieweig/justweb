@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $timeout, cb, data) {
+angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $timeout, cb, data, form) {
     $scope.params = {};
     $scope.cargoConfigure = data.cargoUnit;
     $scope.materialConfigure = data.materialUnit;
@@ -67,14 +67,16 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
         }
     };
 
+    window.x = form;
     // 已选中货物列表
     $scope.currentCargoList = {
         primaryId: 'cargoCode',
         kendoSetting: {
-            autoBind: false,
+            // autoBind: false,
             editable: true,
             height: 200,
-            persistSelection: true,
+            // persistSelection: true,
+            dataSource: form,
             columns: [
                 {title: "操作", locked: true, command: [{name: 'select', text: "删除", click: delCurCargo}], width: 80},
                 {field: "cargoName", title: "货物名称", width: 120},
@@ -86,7 +88,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                 }
                 },
                 {
-                    title: "规格", width: 120, template: function (data) {
+                    title: "规格", width: 110, template: function (data) {
                     return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                 }
                 },
@@ -108,10 +110,10 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
 
     // 同步已选中数据
     $timeout(function () {
-        _.each(data.cl, function (item) {
-            $scope.currentCargoList.kendoGrid.dataSource.add(item)
-        });
-        $scope.currentCargoList.kendoGrid.refresh();
+        // _.each(data.cl, function (item) {
+        //     $scope.currentCargoList.kendoGrid.dataSource.add(item)
+        // });
+        // $scope.currentCargoList.kendoGrid.refresh();
         if ($scope.show) {
             $scope.material.materialName = data.m.materialName;
             $scope.material.shippedAmount = data.m.shippedAmount;

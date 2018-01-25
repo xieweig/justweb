@@ -1,10 +1,13 @@
 <div class="uib-modal">
     <h1 class="uib-modal-title">
-        <span ng-if="modalType !== 'inview'">
+        <span ng-if="modalType === 'view'">
             <span>查看退库出库单</span>
         </span>
-        <span ng-if="modalType === 'inview'">
-            <span>查看退库入库单</span>
+        <span ng-if="modalType === 'edit'">
+            <span>修改退库出库单</span>
+        </span>
+        <span ng-if="modalType === 'audit'">
+            <span>审核退库出库单</span>
         </span>
         <span class="option">
             <span ng-if="modalType === 'view'">

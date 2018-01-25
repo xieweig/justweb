@@ -378,6 +378,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                 }
             });
         } else {
+            // 暂时移除按原料拣货
             $scope.addModal = $uibModal.open({
                 templateUrl: 'app/bill/common/modals/addCargoWithMaterial.html',
                 size: 'lg',
@@ -446,9 +447,42 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                     cl: $scope.onlyCargoGrid.kendoGrid.dataSource.data(),
                     cargoUnit: data.cargoUnit,
                     materialUnit: data.materialUnit
+                },
+                form: function () {
+                    return _.map($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
+                        return combinationItem(item);
+                    })
                 }
             }
         });
+    }
+
+    function combinationItem(item) {
+        return {
+            "createTime": item.createTime,
+            "updateTime": item.updateTime,
+            "cargoId": item.cargoId,
+            "cargoCode": item.cargoCode,
+            "barCode": item.barCode,
+            "selfBarCode": item.selfBarCode,
+            "originalName": item.originalName,
+            "cargoName": item.cargoName,
+            "effectiveTime": item.effectiveTime,
+            "measurementCode": item.measurementCode,
+            "standardUnitCode": item.standardUnitCode,
+            "memo": item.memo,
+            "number": item.number,
+            "rawMaterialId": item.rawMaterialId,
+            "operatorCode": item.operatorCode,
+            "cargoType": item.cargoType,
+            "rawMaterialName": item.rawMaterialName,
+            "rawMaterialCode": item.rawMaterialCode,
+            "configureName": item.configureName,
+            "dateInProduced": item.dateInProduced,
+            "unitPrice": item.unitPrice,
+            "actualAmount": item.actualAmount,
+            "shippedAmount": item.shippedAmount,
+        };
     }
 
     // 删除
@@ -463,7 +497,6 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
     $scope.bill = {
         billType: 'RESTOCK',
         // specificBillType: 'RESTOCK',
-        specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 
@@ -484,6 +517,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             url = '/api/bill/restock/submit'
         }
         bill.billCode = $scope.params.billCode;
+        bill.specificBillType = $scope.specificBillType;
         if ($scope.specificBillType !== 'NO_PLAN') {
             bill.sourceCode = $scope.params.sourceCode
         }
