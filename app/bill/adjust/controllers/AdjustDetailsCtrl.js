@@ -1,9 +1,20 @@
 'use strict';
 
-angular.module('app').controller('AdjustDetailsCtrl', function ($scope, params) {
-    $scope.planDetails = {type: params.type};
-    if (params.billCode) {
-        $scope.billCode = params.billCode;
+angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiService, params) {
+
+
+    if (!params.billCode) {
+        swal('没有单据号', '', 'warning');
+        $scope.$close();
+    } else {
+        ApiService.get('/api/bill/adjust/findPlanByBillCode?billCode=' + params.billCode).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error')
+            } else {
+                $scope.billDetails = response.result.bill;
+                $scope.billDetails.type = params.type;
+            }
+        }, apiServiceError);
     }
 
     $scope.materialDetails = {

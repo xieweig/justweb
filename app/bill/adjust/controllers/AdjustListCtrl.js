@@ -49,7 +49,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                         }
                     ]
                 },
-                {field: "billCode", title: "站点计划号", width: 120},
+                {field: "billCode", title: "站点计划号", width: 120, template: '<a href="javascript:void(0);" class="billCode">#: data.billCode #</a>'},
                 {field: "createTime", title: "录单时间", width: 120},
                 {field: "operatorName", title: "录单人", width: 120},
                 {field: "outStationCode", title: "出库站点", width: 120},
@@ -60,6 +60,25 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
             ]
         }
     };
+
+    // 点击计划单号
+    $('#planGrid').on('click', 'a.billCode', function (e) {
+        var dataItem = $scope.planGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
+        $uibModal.open({
+            templateUrl: 'app/bill/adjust/modals/billDetails.html',
+            size: 'lg',
+            scope: $scope,
+            controller: 'AdjustPlanDetailsCtrl',
+            resolve: {
+                params: {
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit
+                }
+            }
+        }).closed.then(function () {
+
+        });
+    });
 
     // 拣货
     function picking(e) {
