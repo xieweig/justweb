@@ -40,19 +40,19 @@
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库站点</dt>
-                <dd data-ng-bind="billDetails.outStationCode"></dd>
+                <dd data-ng-bind="billDetails.outLocation.stationCode"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库库位</dt>
-                <dd data-ng-bind="billDetails.xxxx"></dd>
+                <dd data-ng-bind="billDetails.outLocation.storage.storageCode"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>入库站点</dt>
-                <dd data-ng-bind="billDetails.xxxx"></dd>
+                <dd data-ng-bind="billDetails.inLocation.stationCode"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>入库库位</dt>
-                <dd data-ng-bind="billDetails.xxxx"></dd>
+                <dd data-ng-bind="billDetails.inLocation.storage.storageCode"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>单据属性</dt>
@@ -60,23 +60,23 @@
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库状态</dt>
-                <dd data-ng-bind="billDetails.xxxx"></dd>
+                <dd data-ng-bind="billDetails.outStateEnum"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>提交状态</dt>
-                <dd data-ng-bind="billDetails.xxxx"></dd>
+                <dd data-ng-bind="billDetails.submitState"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>审核状态</dt>
-                <dd data-ng-bind="billDetails.xxxx"></dd>
+                <dd data-ng-bind="billDetails.auditState"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>调剂数量</dt>
-                <dd data-ng-bind="billDetails.xxxx"></dd>
+                <dd data-ng-bind="billDetails.totalAmount"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>调剂品种数</dt>
-                <dd data-ng-bind="billDetails.xxxx"></dd>
+                <dd data-ng-bind="billDetails.totalVarietyAmount"></dd>
             </dl>
         </div>
         <div class="row">
@@ -100,16 +100,16 @@
             </div>
         </div>
         <hr class="gray-line">
-        <div>
+        <div data-ng-if="planDetails.basicEnum==='BY_MATERIAL'">
             <p class="text-center">原料拣货情况</p>
-            <div class="margin-top-10" data-kendo-grids data-options="materialDetails"></div>
+            <div data-ng-if="materialDetails" class="margin-top-10" data-kendo-grids data-options="materialDetails"></div>
         </div>
         <div class="margin-top-10">
             <p class="text-center">货物拣货情况</p>
             <div class="text-right" data-ng-if="planDetails.type==='update'">
                 <input type="button" class="btn btn-default" value="添加货物">
             </div>
-            <div class="margin-top-10" data-kendo-grids data-options="cargoDetails"></div>
+            <div data-ng-if="cargoDetails" class="margin-top-10" data-kendo-grids data-options="cargoDetails"></div>
         </div>
     </div>
 </div>

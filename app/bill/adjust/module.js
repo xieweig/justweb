@@ -59,6 +59,14 @@ angular.module('app.bill.adjust', ['ui.router']).config(function ($stateProvider
                     templateUrl: 'app/bill/adjust/views/outStorageList.html',
                     controller: 'AdjustOutStorageListCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         })
         .state('app.bill.adjust.inStorageList', {
