@@ -82,7 +82,9 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
 
     $scope.bill = {
         billType: 'DELIVERY',
-        specificBillType: 'NO_PLAN',
+        // specificBillType: 'NO_PLAN',
+        specificBillType:'DELIVERY',
+        sourceBillType:'NO_PLAN',
         basicEnum: 'BY_CARGO',
         billPurpose: 'OUT_STORAGE'
     };
@@ -146,7 +148,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                 flag = false;
                 return
             }
-            if(!checkNumber(item.actualAmount)){
+            if (!checkNumber(item.actualAmount)) {
                 swal('参数错误', '货物数量错误', 'error');
                 flag = false;
                 return
@@ -164,7 +166,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                 shippedAmount: 0 // 站点自己拣货,应拣为0 2018/01/25
             }
         });
-        if(!flag){
+        if (!flag) {
             return
         }
         ApiService.post(url, bill).then(function (response) {

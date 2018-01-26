@@ -94,7 +94,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
                 {field: "billCode", locked: true, title: "出库单号", width: 150},
                 {
                     title: "单据属性", width: 150, template: function (data) {
-                        return getTextByVal($scope.specificType, data.specificBillType) + '转'
+                        return getTextByVal($scope.specificType, data.sourceBillType) + '转'
                     }
                 },
                 {

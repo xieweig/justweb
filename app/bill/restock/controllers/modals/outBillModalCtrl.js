@@ -212,7 +212,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         if (response.code === '000') {
             var res = response.result.bill;
             _.each(['billCode', 'createTime', 'outWareHouseTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
-                'auditMemo', 'auditPersonName', 'outStorageMemo', 'rootCode', 'sourceCode'], function (name) {
+                'auditMemo', 'auditPersonName', 'outStorageMemo', 'rootCode', 'sourceCode', 'sourceBillType'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
@@ -562,7 +562,8 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
         }
         bill.billCode = $scope.params.billCode;
         bill.specificBillType = $scope.specificBillType;
-        if ($scope.specificBillType !== 'NO_PLAN') {
+        bill.sourceBillType = $scope.params.sourceBillType;
+        if ($scope.sourceBillType !== 'NO_PLAN') {
             bill.sourceCode = $scope.params.sourceCode
         }
         bill.rootCode = $scope.params.rootCode;

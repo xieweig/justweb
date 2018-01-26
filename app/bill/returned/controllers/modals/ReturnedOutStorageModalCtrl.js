@@ -196,11 +196,11 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
         if (response.code === '000') {
             var res = response.result.bill;
             _.each(['billCode', 'createTime', 'outWareHouseTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
-                'auditMemo', 'outStorageMemo', 'rootCode', 'sourceCode'], function (name) {
+                'auditMemo', 'outStorageMemo', 'rootCode', 'sourceCode', 'sourceBillType'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
-            $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
+            $scope.params.billType = getTextByVal($scope.specificType, res.sourceBillType) + '转';
             $scope.params.inOrOutState = getTextByVal($scope.outState, res.inOrOutState);
             $scope.params.auditState = getTextByVal($scope.auditStatus, res.auditState);
             $scope.params.submitState = getTextByVal($scope.submitStatus, res.submitState);
@@ -526,7 +526,8 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
         bill.billCode = $scope.params.billCode;
         // bill.sourceCode = $scope.params.billCode;
         bill.specificBillType = $scope.specificBillType;
-        if($scope.specificBillType !== 'NO_PLAN'){
+        bill.sourceBillType = $scope.params.sourceBillType;
+        if($scope.sourceBillType !== 'NO_PLAN'){
             bill.sourceCode = $scope.params.sourceCode
         }
         bill.rootCode = $scope.params.rootCode;

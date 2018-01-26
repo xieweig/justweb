@@ -65,7 +65,8 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             $scope.params.outLocation = res.outLocation;
             $scope.params.billProperty = res.billProperty;
             $scope.specificBillType = res.specificBillType;
-            $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
+            $scope.params.sourceBillType = res.sourceBillType;
+            $scope.params.billType = getTextByVal($scope.specificType, res.sourceBillType) + '转';
             if($scope.show){
                 $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
                 $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
@@ -129,9 +130,10 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
         var bill = _.cloneDeep($scope.bill);
 
         // bill.billType = '';
-        bill.self = $scope.specificBillType === 'NO_PLAN';
+        bill.self = $scope.sourceBillType === 'NO_PLAN';
         bill.billPurpose = 'MOVE_STORAGE';
         bill.specificBillType = $scope.specificBillType;
+        bill.sourceBillType = $scope.params.sourceBillType;
         bill.allowMemo = '';
         bill.basicEnum = $scope.params.basicEnum;
         bill.sourceCode = $scope.params.billCode;

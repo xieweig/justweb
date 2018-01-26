@@ -81,7 +81,9 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
 
     $scope.bill = {
         billType: 'RETURNED',
-        specificBillType: 'NO_PLAN',
+        // specificBillType: 'NO_PLAN',
+        specificBillType:'RETURNED',
+        sourceBillType:'NO_PLAN',
         basicEnum: 'BY_CARGO',
         billPurpose: 'OUT_STORAGE'
     };

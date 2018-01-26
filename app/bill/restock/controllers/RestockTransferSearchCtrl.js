@@ -41,7 +41,7 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
                     }},
                 {field: "billCode", title: "调拨单号", locked: true, width: 210},
                 {title: "单据属性", width: 100, template: function (item) {
-                        return getTextByVal($scope.billType, item.specificBillType) + '转'
+                        return getTextByVal($scope.billType, item.sourceBillType) + '转'
                     }},
                 {field: "createTime", title: "调拨时间", width: 150},
                 {field: "operatorName", title: "操作人", width: 60},

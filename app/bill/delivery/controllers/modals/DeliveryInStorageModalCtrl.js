@@ -92,7 +92,7 @@ angular.module('app').controller('DeliveryInStorageModalCtrl', function ($scope,
                 $scope.params[name] = res[name]
             });
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
-            $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
+            $scope.params.billType = getTextByVal($scope.specificType, res.sourceBillType) + '转';
             $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
             $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
             $scope.params.inStorageName = getTextByVal($scope.storageType, res.inLocation.storage.storageCode);
