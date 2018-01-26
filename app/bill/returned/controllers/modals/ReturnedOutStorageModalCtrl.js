@@ -196,7 +196,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
         if (response.code === '000') {
             var res = response.result.bill;
             _.each(['billCode', 'createTime', 'outWareHouseTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
-                'auditMemo', 'outStorageMemo', 'rootCode', 'sourceCode', 'sourceBillType'], function (name) {
+                'auditMemo', 'outStorageMemo', 'rootCode', 'sourceCode', 'sourceBillType', 'auditPersonName'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
