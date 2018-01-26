@@ -405,6 +405,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
             bill.basicEnum = 'BY_CARGO';
             // 按货物拣货
             bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
+                console.log('type', type)
                 if(type==='save'){
                     if (!checkNumber(item.actualAmount, {min:0, max:99999999})) {
                         swal('参数错误', '货物数量错误', 'error');

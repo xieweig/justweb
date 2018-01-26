@@ -169,7 +169,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
     $scope.inStationParams = {
         type: 'supplier',
         callback: function (data) {
-            $scope.kendoQueryCondition.inStationCodes = _.map(data, function (item) {
+            $scope.kendoQueryCondition.supplierCodeList = _.map(data, function (item) {
                 return item.supplierCode;
             });
         }

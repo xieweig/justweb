@@ -103,19 +103,18 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
         $scope.CargoGrid = {
             primaryId: 'cargoCode',
             kendoSetting: {
-                editable: 'inline',
+                editable: true,
                 columns: [
                     {
                         title: '操作',
-                        command: [{name: 'del', text: "删除", click: delWithMaterial}, {name: 'edit', text: "编辑"}],
-                        width: 140
+                        command: [{name: 'del', text: "删除", click: delWithMaterial}],
+                        width: 80
                     },
                     {field: "cargoName", title: "货物名称"},
                     {field: "cargoCode", title: "货物编码"},
                     {field: "rawMaterialName", title: "所属原料"},
                     {
                         field: "standardUnitCode", title: "标准单位", template: function (data) {
-                            console.log('==', $scope.materialConfigure)
                             return getTextByVal($scope.materialConfigure, data.standardUnitCode)
                         }
                     },
