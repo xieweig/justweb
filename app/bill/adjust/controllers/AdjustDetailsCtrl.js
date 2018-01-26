@@ -164,4 +164,74 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
             };
         });
     }
+
+
+    // 保存拣货
+    $scope.savePick = function () {
+        var bill = getParams('save');
+        var url = '';
+        if ($scope.billDetails.self) {
+            url = '/api/bill/adjust/saveBySelf';
+        } else {
+            url = '/api/bill/adjust/save'
+        }
+        ApiService.post(url, bill).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                swal('操作成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
+            }
+        }, apiServiceError);
+    };
+
+    // 提交拣货
+    $scope.submitPick = function () {
+        var bill = getParams('submit');
+        var url = '';
+        if ($scope.billDetails.self) {
+            url = '/api/bill/adjust/submitBySelf';
+        } else {
+            url = '/api/bill/adjust/submit'
+        }
+        ApiService.post(url, bill).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                swal('操作成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
+            }
+        }, apiServiceError);
+    };
+
+    function getParams(type) {
+        var result = {
+            sourceCode: $scope.billDetails.billCode,
+            basicEnum: $scope.billDetails.basicEnum,
+            billPurpose: $scope.billDetails.billPurpose,
+            self: $scope.billDetails.self,
+            billType: $scope.billDetails.billType,
+            inLocation: $scope.billDetails.inLocation,
+            outLocation: $scope.billDetails.outLocation,
+            billDetails: []
+        };
+        _.each($scope.cargoDetails.kendoGrid.dataSource.data(), function (dataItem) {
+            result.billDetails.push({
+                actualAmount: dataItem.actualAmount,
+                shippedAmount: dataItem.shippedAmount,
+                belongMaterialCode: dataItem.rawMaterialCode,
+                rawMaterial: {
+                    cargo: {
+                        cargoCode: dataItem.cargoCode,
+                        cargoName: dataItem.cargoName
+                    },
+                    rawMaterialCode: dataItem.rawMaterialCode,
+                    rawMaterialName: dataItem.rawMaterialName
+                }
+            });
+        });
+        return result;
+    }
 });
