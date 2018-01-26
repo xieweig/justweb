@@ -1,0 +1,64 @@
+<div class="uib-modal">
+    <h1 class="uib-modal-title">
+        <span>添加货物明细</span>
+        <span class="option">
+            <input type="button" class="btn btn-primary" value="提交选中货物" data-ng-click="submit()">
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row">
+            <div class="col-sm-4 col-xs-12 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">原料名称</span>
+                    <input type="text" class="form-control" data-ng-model="params.materialName">
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-12 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">原料编码</span>
+                    <input type="text" class="form-control" data-ng-model="params.materialCode">
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">所属原料分类</span>
+                    <span data-select-tree data-select-modal="materialParamOpt"></span>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">建档人</span>
+                    <input type="text" class="form-control" data-ng-model="params.operatorName">
+                </div>
+            </div>
+            <div class="col-lg-8 col-sm-12 col-xs-12 margin-bottom-10">
+                <div class="display-flex">
+                    <div class="flex-1">
+                        <div class="input-group">
+                            <span class="input-group-addon">建档时间</span>
+                            <input type="text" class="form-control" data-datepicker data-ng-model="params.startTime">
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="border-left: 0;">至</span>
+                            <input type="text" class="form-control" data-datepicker data-ng-model="params.endTime">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <input type="button" class="btn btn-default width-80" value="查询" data-ng-click="search()">
+        </div>
+        <hr class="gray-line">
+        <div class="margin-top-10" data-kendo-grids data-options="materialList"></div>
+        <div class="text-center margin-top-10">
+            <input type="button" class="btn btn-default" value="添加选中货物" data-ng-click="addCargo()">
+        </div>
+        <hr class="gray-line">
+        <h2 class="text-center margin-top-10">已选中货物</h2>
+        <div class="margin-top-10" data-kendo-grids data-options="currentMateriaList"></div>
+    </div>
+</div>

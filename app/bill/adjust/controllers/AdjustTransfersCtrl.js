@@ -99,7 +99,7 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
             specificBillType: 'ADJUST',
             sourceBillType: $scope.billDetails.sourceBillType,
             basicEnum: $scope.billDetails.basicEnum,
-            sourceCode: $scope.billDetails.sourceCode,
+            sourceCode: $scope.billDetails.billCode,
             inStorageBillCode: $scope.billDetails.inStorageBillCode,
             outLocation: $scope.billDetails.outLocation,
             inLocation: $scope.billDetails.inLocation,

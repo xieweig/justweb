@@ -69,19 +69,56 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
                 params: {
                     cargoUnit: cargoUnit,
                     materialUnit: materialUnit,
-                    data: combinationItem($scope.cargoGrid.kendoGrid.dataSource.data()),
+                    data: combinationCargoItem($scope.cargoGrid.kendoGrid.dataSource.data()),
                     cb: function (data) {
                         var dataSource = $scope.cargoGrid.kendoGrid.dataSource;
                         console.log(data);
-                        dataSource.data(combinationItem(data));
+                        dataSource.data(combinationCargoItem(data));
                     }
                 }
             }
         });
     };
 
+    function combinationCargoItem(dataSource) {
+        return _.map(dataSource, function (item) {
+            return {
+                cargoName: item.cargoName,
+                cargoCode: item.cargoCode,
+                rawMaterialName: item.rawMaterialName,
+                rawMaterialCode: item.rawMaterialCode,
+                measurementCode: item.measurementCode,
+                measurementName: getTextByVal(cargoUnit, item.measurementCode),
+                standardUnitCode: item.standardUnitCode,
+                standardUnitName: getTextByVal(materialUnit, item.standardUnitCode),
+                number: item.number,
+                amount: item.amount || 0
+            };
+        });
+    }
 
-    function combinationItem(dataSource) {
+    // 原料选择货物
+    $scope.chooseMaterial = function () {
+        $uibModal.open({
+            templateUrl: 'app/bill/mistake/modals/addMaterialModal.html',
+            size: 'lg',
+            controller: 'MistakeAddMaterialCtrl',
+            resolve: {
+                params: {
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit,
+                    data: combinationMaterialItem($scope.materialGrid.kendoGrid.dataSource.data()),
+                    cb: function (data) {
+                        var dataSource = $scope.materialGrid.kendoGrid.dataSource;
+                        console.log(data);
+                        dataSource.data(combinationMaterialItem(data));
+                    }
+                }
+            }
+        });
+    };
+
+    function combinationMaterialItem(dataSource) {
         return _.map(dataSource, function (item) {
             return {
                 cargoName: item.cargoName,
