@@ -277,7 +277,8 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             sourceCode: params.bill.billCode,
             basicEnum: 'BY_MATERIAL',
             billPurpose: 'OUT_STORAGE',
-            specificBillType: params.bill.sourceBillType,
+            specificBillType: 'ADJUST',
+            sourceBillType: params.bill.sourceBillType,
             billType: params.bill.billType,
             inLocation: {
                 stationCode: params.bill.inStationCode,

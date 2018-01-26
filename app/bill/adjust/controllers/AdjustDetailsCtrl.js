@@ -238,6 +238,8 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
 
     function getParams(type) {
         var result = {
+            specificBillType: 'ADJUST',
+            sourceBillType: $scope.billDetails.sourceBillType,
             sourceCode: $scope.billDetails.billCode,
             basicEnum: $scope.billDetails.basicEnum,
             billPurpose: $scope.billDetails.billPurpose,

@@ -97,6 +97,7 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
         var sendParams = {
             billPurpose: 'MOVE_STORAGE',
             specificBillType: 'ADJUST',
+            sourceBillType: $scope.billDetails.sourceBillType,
             basicEnum: $scope.billDetails.basicEnum,
             sourceCode: $scope.billDetails.sourceCode,
             inStorageBillCode: $scope.billDetails.inStorageBillCode,
