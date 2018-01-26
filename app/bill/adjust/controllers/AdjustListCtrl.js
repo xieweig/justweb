@@ -44,7 +44,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                         {
                             name: 'look', text: "查看", click: lookDetails,
                             visible: function (data) {
-                                return data.operationState  && data.operationState !== 'NOOPERATION';
+                                return data.operationState && data.operationState !== 'NOOPERATION';
                             }
                         }
                     ]
@@ -75,8 +75,6 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                     cargoUnit: cargoUnit
                 }
             }
-        }).closed.then(function () {
-
         });
     });
 
@@ -114,7 +112,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
             resolve: {
                 params: {
                     type: 'look',
-                    billCode: '123123'
+                    billCode: dataItem.billCode
                 }
             }
         });
