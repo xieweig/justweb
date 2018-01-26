@@ -111,7 +111,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
             controller: 'AdjustDetailsCtrl',
             resolve: {
                 params: {
-                    type: 'look',
+                    type: 'outLook',
                     billCode: dataItem.billCode
                 }
             }

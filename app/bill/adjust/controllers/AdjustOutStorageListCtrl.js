@@ -78,7 +78,12 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                         }
                     ]
                 },
-                {field: "xxxxx", title: "单据属性", width: 120},
+                {
+                    title: "单据属性", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.sourceBillType, data.sourceBillType)
+                    }
+                },
                 {
                     title: "出库状态", width: 120,
                     template: function (data) {
@@ -149,7 +154,7 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
     function lookDetails(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        loadBillDetails('look', dataItem.billCode);
+        loadBillDetails('outLook', dataItem.billCode);
     }
 
     // 查看详情

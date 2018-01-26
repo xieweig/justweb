@@ -2,11 +2,7 @@
 
 angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $timeout, $uibModal) {
     $scope.params = {};
-    $scope.outboundStatus = [
-        {key: 'DELIVERY', value: 'DELIVERY', text: '未出库'},
-        {key: 'ADJUST', value: 'ADJUST', text: '出库成功'},
-        {key: 'RETURNED', value: 'RETURNED', text: '出库失败'}
-    ];
+
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
         callback: function (data) {
@@ -29,15 +25,9 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
         $scope.billGrid.kendoGrid.dataSource.page(1);
     };
     $scope.billGrid = {
-        url: '/api/bill/waybill/findWayBillByConditions',
         params: $scope.params,
-        dataSource: {
-            data: function () {
-                return [{a: 123213}, {a: 12321}];
-            }
-        },
+        url: '/api/bill/adjust/findAllotByConditions',
         kendoSetting: {
-            autoBind: false,
             pageable: true,
             columns: [
                 {title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}], width: 80},
@@ -68,7 +58,7 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
                 controller: 'AdjustDetailsCtrl',
                 resolve: {
                     params: {
-                        type: 'look',
+                        type: 'inLook',
                         billCode: '123123'
                     }
                 }

@@ -10,26 +10,26 @@
         <div class="row">
             <div class="col-sm-6 col-xs-12 margin-bottom-10">
                 <p>库位信息</p>
-                <div style="border: 1px dashed #ddd;padding: 10px;" data-ng-if="!billCode">
+                <div style="border: 1px dashed #ddd;padding: 10px;" data-ng-if="billDetails.sourceType==='new'">
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">单据属性</span>
-                        <input type="text" class="form-control" disabled>
+                        <input type="text" class="form-control" disabled  data-ng-model="billDetails.sourceBillTypeName">
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">调出库位</span>
-                        <input type="text" class="form-control" disabled>
+                        <input type="text" class="form-control" disabled data-ng-model="billDetails.outLocation.storage.storageName">
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">调入库位</span>
-                        <select smart-select2 class="select2 width-full" data-ng-model="params.billPurpose">
+                        <select smart-select2 class="select2 width-full" data-ng-model="billDetails.inLocation.storage.storageCode">
                             <option value="">请选择</option>
-                            <option data-ng-repeat="item in sourceBillType" data-ng-value="item.value">
+                            <option data-ng-repeat="item in outType" data-ng-value="item.value">
                                 {{item.text}}
                             </option>
                         </select>
                     </div>
                 </div>
-                <div style="border: 1px dashed #ddd;padding: 10px;" data-ng-if="billCode">
+                <div style="border: 1px dashed #ddd;padding: 10px;" data-ng-if="billDetails.sourceType==='look'">
                     <dl class="margin-bottom-10 dl-horizontal">
                         <dt>调拨单号</dt>
                         <dd>123213</dd>
@@ -53,20 +53,20 @@
                 <div style="border: 1px dashed #ddd;padding: 10px;">
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">入库时间</span>
-                        <input type="text" class="form-control" disabled>
+                        <input type="text" class="form-control" disabled data-ng-model="billDetails.xxx">
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">出库站点</span>
-                        <input type="text" class="form-control" disabled>
+                        <input type="text" class="form-control" disabled data-ng-model="billDetails.outLocation.stationName">
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">入库站点</span>
-                        <input type="text" class="form-control" disabled>
+                        <input type="text" class="form-control" disabled data-ng-model="billDetails.inLocation.stationName">
                     </div>
                 </div>
             </div>
         </div>
         <hr class="gray-line">
-        <div class="margin-top-10" data-kendo-grids data-options="detailsGrid"></div>
+        <div data-ng-if="detailsGrid" class="margin-top-10" data-kendo-grids data-options="detailsGrid"></div>
     </div>
 </div>
