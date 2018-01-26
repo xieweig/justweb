@@ -625,6 +625,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
                 swal('', response.message, 'error');
             } else {
                 // alert('success')
+                swal('审核成功', '', 'success');
                 $scope.$close()
             }
         });

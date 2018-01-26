@@ -615,6 +615,7 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
                 swal('', response.message, 'error');
             } else {
                 // alert('success')
+                swal('审核成功', '', 'success');
                 $scope.$close()
             }
         });
