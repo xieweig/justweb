@@ -137,7 +137,7 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
             controller: 'AdjustPlanDetailsCtrl',
             resolve: {
                 params: {
-                    billCode: dataItem.billCode,
+                    billCode: dataItem.sourceCode,
                     cargoUnit: cargoUnit
                 }
             }

@@ -35,7 +35,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, $st
         {key: 'IN_FAILURE', value: 'IN_FAILURE', text: '出库失败'}
     ];
 
-    $rootScope.adjustBillType = [
+    $rootScope.sourceBillType = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划转'},
         {key: 'ADJUST', value: 'ADJUST', text: '调剂计划转'},
         {key: 'RETURNED', value: 'RETURNED', text: '退货计划转'},

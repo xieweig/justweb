@@ -25,6 +25,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                 $scope.billDetails.outStateName = getTextByVal($scope.outStateEnum, $scope.billDetails.outStateEnum);
                 $scope.billDetails.submitStatusName = getTextByVal($scope.submitStatus, $scope.billDetails.submitState);
                 $scope.billDetails.auditStateName = getTextByVal($scope.auditStatus, $scope.billDetails.auditState);
+                $scope.billDetails.sourceBillTypeName = getTextByVal($scope.sourceBillType, $scope.billDetails.sourceBillType);
                 if ($scope.billDetails.outLocation.storage) {
                     $scope.billDetails.outLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.outLocation.storage.storageCode);
                 }
