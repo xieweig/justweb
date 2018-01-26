@@ -127,28 +127,20 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
         }
     };
 
-    $timeout(function () {
-        // 点击来源单号的事件
-        $('#billGrid').on('click', '.sourceCode', function () {
-            var sourceCode = $(this).attr('sourceCode');
-            $scope.planDetails = {billCode: sourceCode};
-            $scope.cargoGrid = {
-                kendoSetting: {
-                    dataSource: [{}, {}],
-                    columns: [
-                        {field: "xxxxx", title: "货物名称", width: 120},
-                        {field: "xxxxx", title: "货物编码", width: 120},
-                        {field: "xxxxx", title: "所属原料", width: 120},
-                        {field: "xxxxx", title: "规格", width: 120},
-                        {field: "xxxxx", title: "应拣数量", width: 120}
-                    ]
+    // 点击来源单号的事件
+    $('#billGrid').on('click', '.sourceCode', function (e) {
+        var dataItem = $scope.billGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
+        $uibModal.open({
+            templateUrl: 'app/bill/adjust/modals/billDetails.html',
+            size: 'lg',
+            scope: $scope,
+            controller: 'AdjustPlanDetailsCtrl',
+            resolve: {
+                params: {
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit
                 }
-            };
-            $uibModal.open({
-                templateUrl: 'app/bill/adjust/modals/billDetails.html',
-                size: 'lg',
-                scope: $scope
-            });
+            }
         });
     });
 
@@ -189,6 +181,8 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                     materialUnit: materialUnit
                 }
             }
+        }).closed.then(function () {
+            $scope.billGrid.kendoGrid.dataSource.read();
         });
     }
 });

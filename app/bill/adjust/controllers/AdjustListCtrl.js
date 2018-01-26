@@ -75,8 +75,6 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                     cargoUnit: cargoUnit
                 }
             }
-        }).closed.then(function () {
-
         });
     });
 

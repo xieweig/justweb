@@ -10,6 +10,12 @@ angular.module('app').controller('AdjustPlanDetailsCtrl', function ($scope, ApiS
             if (response.code !== '000') {
                 swal('', response.message, 'error')
             } else {
+                if (!response.result.bill) {
+                    swal('未找到单据', '', 'warning').then(function () {
+                        $scope.$close();
+                    });
+                    return;
+                }
                 var planDetails = response.result.bill;
                 planDetails.type = 'look';
                 planDetails.inStationName = getTextByVal($scope.station, planDetails.inStationCode);
