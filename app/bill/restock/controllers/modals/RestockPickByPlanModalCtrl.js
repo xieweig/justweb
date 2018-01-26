@@ -30,7 +30,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
         if (response.code === '000') {
             var res = response.result.bill;
             // 赋值到scope上
-            _.each(['basicEnum', 'billCode', 'planMemo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo', 'specificBillType'], function (name) {
+            _.each(['basicEnum', 'billCode', 'planMemo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo', 'specificBillType', 'sourceBillType'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.params.outStationCode = res.outStationCode;
@@ -383,6 +383,7 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
         });
         // bill.billProperty = 'RESTOCK';
         bill.specificBillType = $scope.specificBillType;
+        bill.sourceBillType = $scope.params.sourceBillType;
         bill.sourceCode = $scope.params.billCode;
         bill.rootCode = $scope.params.rootCode;
         // 计划备注

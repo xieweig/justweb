@@ -30,7 +30,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
         if (response.code === '000') {
             var res = response.result.bill;
             // 赋值到scope上
-            _.each(['basicEnum', 'billCode', 'planMemo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo', 'specificBillType'], function (name) {
+            _.each(['basicEnum', 'billCode', 'planMemo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo', 'specificBillType', 'sourceBillType'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.specificBillType = res.specificBillType;
@@ -231,7 +231,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
             templateUrl: 'app/bill/returned/modals/scan.html',
             scope: $scope,
             size: 'xs',
-            controller: 'ReturnedModalScanCtrl',
+            controller: 'ReturnedScanModalCtrl',
             resolve: {
                 data: {
                     cargo: cargo
@@ -381,6 +381,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
             bill[name] = $scope.params[name]
         });
         bill.specificBillType = $scope.specificBillType;
+        bill.sourceBillType = $scope.params.sourceBillType;
         bill.sourceCode = $scope.params.billCode;
         bill.rootCode = $scope.params.rootCode;
         // 计划备注

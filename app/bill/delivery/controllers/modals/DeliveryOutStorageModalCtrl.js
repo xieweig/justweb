@@ -115,6 +115,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                     {field: "rawMaterialName", title: "所属原料"},
                     {
                         field: "standardUnitCode", title: "标准单位", template: function (data) {
+                            console.log('==', $scope.materialConfigure)
                             return getTextByVal($scope.materialConfigure, data.standardUnitCode)
                         }
                     },
@@ -282,7 +283,29 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                             // 往MaterialGrid中添加数据
                             _.each($scope.materialResult, function (item) {
                                 $scope.MaterialGrid.kendoGrid.dataSource.add(item)
+                            });
+
+                            // 添加未拣的数据 noOperationDetails
+                            var noOperationMaterialList = _.map(res.noOperationDetails, function (item) {
+                                return item.rawMaterial.rawMaterialCode
+                            });
+                            Common.getMaterialByCodes(noOperationMaterialList).then(function (materialList) {
+                                var materialObject = _.zipObject(_.map(materialList, function (item) {
+                                    return item.materialCode
+                                }), materialList);
+                                _.each(res.noOperationDetails, function (item) {
+                                    console.log('-',item)
+                                    $scope.MaterialGrid.kendoGrid.dataSource.add({
+                                        materialName: materialObject[item.rawMaterial.rawMaterialCode].materialName,
+                                        materialCode: materialObject[item.rawMaterial.rawMaterialCode].materialCode,
+                                        materialId: materialObject[item.rawMaterial.rawMaterialCode].materialId,
+                                        shippedAmount: item.amount,
+                                        actualAmount: 0,
+                                        progress: '0%'
+                                    })
+                                })
                             })
+                            
                         })
                     });
                 })

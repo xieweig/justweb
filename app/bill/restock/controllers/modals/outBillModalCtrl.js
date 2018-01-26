@@ -295,6 +295,26 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                             _.each($scope.materialResult, function (item) {
                                 $scope.MaterialGrid.kendoGrid.dataSource.add(item)
                             })
+
+                            // 添加未拣的数据 noOperationDetails
+                            var noOperationMaterialList = _.map(res.noOperationDetails, function (item) {
+                                return item.rawMaterial.rawMaterialCode
+                            });
+                            Common.getMaterialByCodes(noOperationMaterialList).then(function (materialList) {
+                                var materialObject = _.zipObject(_.map(materialList, function (item) {
+                                    return item.materialCode
+                                }), materialList);
+                                _.each(res.noOperationDetails, function (item) {
+                                    $scope.MaterialGrid.kendoGrid.dataSource.add({
+                                        materialName: materialObject[item.rawMaterial.rawMaterialCode].materialName,
+                                        materialCode: materialObject[item.rawMaterial.rawMaterialCode].materialCode,
+                                        materialId: materialObject[item.rawMaterial.rawMaterialCode].materialId,
+                                        shippedAmount: item.amount,
+                                        actualAmount: 0,
+                                        progress: '0%'
+                                    })
+                                })
+                            })
                         })
                     });
                 })
