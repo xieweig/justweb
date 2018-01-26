@@ -78,20 +78,18 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
     $scope.inStationParams = {
         type: 'BOOKSTORE,CAFE,WHOLESALE,STAPLE',
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.inStationCodeArray = array.join(',')
         }
     };
 
     $scope.outStationParams = {
         type: 'LOGISTICS',
         callback: function (data) {
-            var array = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
-            $scope.params.outStationCodeArray = array.join(',')
         }
     };
 

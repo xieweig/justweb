@@ -495,6 +495,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         $scope.onlyCargoGrid.kendoGrid.dataSource.remove(dataItem);
+        $scope.params.totalVarietyAmount --;
         // 修改数量
         $scope.params.totalAmount = $scope.params.totalAmount - parseInt(dataItem.actualAmount);
     }
