@@ -276,6 +276,7 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
                                     $scope.materialResult.push({
                                         materialName: item.material.materialName,
                                         materialCode: item.rawMaterial.rawMaterialCode,
+                                        materialId: item.material.materialId,
                                         shippedAmount: sa,
                                         actualAmount: aa,
                                         progress: pg

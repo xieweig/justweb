@@ -284,6 +284,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                                     $scope.materialResult.push({
                                         materialName: item.material.materialName,
                                         materialCode: item.rawMaterial.rawMaterialCode,
+                                        materialId: item.material.materialId,
                                         shippedAmount: sa,
                                         actualAmount: aa,
                                         progress: pg

@@ -242,11 +242,13 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                                 // 将相应原料信息添加进billDetails
                                 item.material = materialObject[item.rawMaterial.rawMaterialCode];
                                 // 往CargoGrid中添加数据
+                                console.log(item.material);
                                 $scope.CargoGrid.kendoGrid.dataSource.add({
                                     cargoName: item.cargo.cargoName,
                                     cargoCode: item.cargo.cargoCode,
                                     rawMaterialName: item.material.materialName,
                                     rawMaterialCode: item.material.materialCode,
+                                    rawMaterialId: item.material.materialId,
                                     number: item.cargo.number,
                                     standardUnitCode: item.cargo.standardUnitCode,
                                     shippedAmount: item.shippedAmount,
@@ -270,6 +272,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                                     $scope.materialResult.push({
                                         materialName: item.material.materialName,
                                         materialCode: item.rawMaterial.rawMaterialCode,
+                                        materialId: item.material.materialId,
                                         shippedAmount: sa,
                                         actualAmount: aa,
                                         progress: pg
