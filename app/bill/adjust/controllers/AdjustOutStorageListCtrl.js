@@ -5,18 +5,6 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
     $scope.curSubmitStatus = {};
     $scope.curAuditStatus = {};
     $scope.curOutStatus = {};
-
-    $scope.adjustBillType = [
-        {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划转'},
-        {key: 'ADJUST', value: 'ADJUST', text: '调剂计划转'},
-        {key: 'RETURNED', value: 'RETURNED', text: '退货计划转'},
-        {key: 'RETURNED', value: 'RETURNED', text: '无计划'}
-    ];
-    $scope.outboundStatus = [
-        {key: 'NOT_OUT', value: 'NOT_OUT', text: '未出库'},
-        {key: 'OUT_SUCCESS', value: 'OUT_SUCCESS', text: '出库成功'},
-        {key: 'IN_FAILURE', value: 'IN_FAILURE', text: '出库失败'}
-    ];
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
         callback: function (data) {

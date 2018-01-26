@@ -40,19 +40,19 @@
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库站点</dt>
-                <dd data-ng-bind="billDetails.outLocation.stationCode"></dd>
+                <dd data-ng-bind="billDetails.outLocation.stationName"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库库位</dt>
-                <dd data-ng-bind="billDetails.outLocation.storage.storageCode"></dd>
+                <dd data-ng-bind="billDetails.outLocation.storage.storageName"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>入库站点</dt>
-                <dd data-ng-bind="billDetails.inLocation.stationCode"></dd>
+                <dd data-ng-bind="billDetails.inLocation.stationName"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>入库库位</dt>
-                <dd data-ng-bind="billDetails.inLocation.storage.storageCode"></dd>
+                <dd data-ng-bind="billDetails.inLocation.storage.storageName"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>单据属性</dt>
@@ -60,15 +60,15 @@
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库状态</dt>
-                <dd data-ng-bind="billDetails.outStateEnum"></dd>
+                <dd data-ng-bind="billDetails.outStateName"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>提交状态</dt>
-                <dd data-ng-bind="billDetails.submitState"></dd>
+                <dd data-ng-bind="billDetails.submitStatusName"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>审核状态</dt>
-                <dd data-ng-bind="billDetails.auditState"></dd>
+                <dd data-ng-bind="billDetails.auditStateName"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>调剂数量</dt>
@@ -89,25 +89,25 @@
             <div class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <div class="input-group">
                     <span class="input-group-addon">出库备注</span>
-                    <input type="text" class="form-control" data-ng-disabled="!(planDetails.type==='update')">
+                    <input type="text" class="form-control" data-ng-disabled="!(billDetails.type==='update')">
                 </div>
             </div>
             <div class="col-xs-12 margin-bottom-10 dl-horizontal">
                 <div class="input-group">
                     <span class="input-group-addon">审核意见</span>
-                    <input type="text" class="form-control" data-ng-disabled="!(planDetails.type==='audit')">
+                    <input type="text" class="form-control" data-ng-disabled="!(billDetails.type==='audit')">
                 </div>
             </div>
         </div>
         <hr class="gray-line">
-        <div data-ng-if="planDetails.basicEnum==='BY_MATERIAL'">
+        <div data-ng-if="billDetails.basicEnum==='BY_MATERIAL'">
             <p class="text-center">原料拣货情况</p>
             <div data-ng-if="materialDetails" class="margin-top-10" data-kendo-grids data-options="materialDetails"></div>
         </div>
         <div class="margin-top-10">
             <p class="text-center">货物拣货情况</p>
-            <div class="text-right" data-ng-if="planDetails.type==='update'">
-                <input type="button" class="btn btn-default" value="添加货物">
+            <div class="text-right" data-ng-if="billDetails.type==='update'">
+                <input type="button" class="btn btn-default" value="添加货物" data-ng-click="chooseCargo()">
             </div>
             <div data-ng-if="cargoDetails" class="margin-top-10" data-kendo-grids data-options="cargoDetails"></div>
         </div>

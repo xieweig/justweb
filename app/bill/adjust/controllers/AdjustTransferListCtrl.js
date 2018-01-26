@@ -2,12 +2,6 @@
 
 angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $timeout, $uibModal) {
     $scope.params = {};
-    $scope.adjustBillType = [
-        {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划转'},
-        {key: 'ADJUST', value: 'ADJUST', text: '调剂计划转'},
-        {key: 'RETURNED', value: 'RETURNED', text: '退货计划转'},
-        {key: 'RETURNED', value: 'RETURNED', text: '无计划'}
-    ];
     $scope.outboundStatus = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '未出库'},
         {key: 'ADJUST', value: 'ADJUST', text: '出库成功'},

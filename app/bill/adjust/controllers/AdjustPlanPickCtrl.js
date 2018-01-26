@@ -333,6 +333,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                 return false;
             });
         } else {
+            // 如果要提示 未选择拣货计划   取消下面的注释即可
             emptyItem = _.find($scope.materialList, function (material) {
                 var dataSource = material.kendoGrid.kendoGrid.dataSource.data();
                 // if (type === 'submit' && dataSource.length === 0) {

@@ -114,7 +114,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
             resolve: {
                 params: {
                     type: 'look',
-                    billCode: '123123'
+                    billCode: dataItem.billCode
                 }
             }
         });
