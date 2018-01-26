@@ -401,3 +401,15 @@ Number.prototype.toPercent = function () {
     }
     return result.toFixed(2) + '%';
 };
+
+
+function getStationType(type) {
+    if (type) {
+        type = (type + '').toUpperCase();
+        if (type === 'BOOKSTORE' || type === 'CAFE' || type === 'WHOLESALE' || type === 'STAPLE') {
+            return 'STORE';
+        }
+        return type;
+    }
+    return 'SUPPLIER';
+}
