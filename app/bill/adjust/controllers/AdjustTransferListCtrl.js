@@ -36,7 +36,7 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
                 {
                     title: "单据属性", width: 120,
                     template: function (data) {
-                        return getTextByVal($scope.specificBillType, data.specificBillType);
+                        return getTextByVal($scope.sourceBillType, data.sourceBillType);
                     }
                 },
                 {field: "createTime", title: "调拨时间", width: 160},

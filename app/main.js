@@ -18,7 +18,7 @@ var COMMON_URL = {
 var is8999 = (location.port === '8999');
 if (is8999) {
     COMMON_URL = {
-        bill: 'http://192.168.21.141:15009',
+        bill: 'http://192.168.21.56:15009',
         baseInfo: 'http://192.168.21.141:15006',
         oauth: 'http://192.168.21.141:16001'
     };
@@ -401,3 +401,15 @@ Number.prototype.toPercent = function () {
     }
     return result.toFixed(2) + '%';
 };
+
+
+function getStationType(type) {
+    if (type) {
+        type = (type + '').toUpperCase();
+        if (type === 'BOOKSTORE' || type === 'CAFE' || type === 'WHOLESALE' || type === 'STAPLE') {
+            return 'STORE';
+        }
+        return type;
+    }
+    return 'SUPPLIER';
+}

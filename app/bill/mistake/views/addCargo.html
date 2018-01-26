@@ -9,7 +9,7 @@
         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
             <div class="input-group">
                 <span class="input-group-addon">报溢库位</span>
-                <select smart-select2 class="width-full" data-ng-model="bill.cargo.billType">
+                <select smart-select2 class="width-full" data-ng-model="bill.cargo.storageCode">
                     <option value="">请选择</option>
                     <option data-ng-repeat="item in outType" data-ng-value="item.key">{{item.text}}</option>
                 </select>
@@ -24,7 +24,7 @@
     </div>
     <hr class="gray-line">
     <div class="text-right">
-        <input type="button" class="btn btn-default" value="添加原料">
+        <input type="button" class="btn btn-default" value="编辑货物" data-ng-click="chooseCargo()">
     </div>
     <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
 </div>

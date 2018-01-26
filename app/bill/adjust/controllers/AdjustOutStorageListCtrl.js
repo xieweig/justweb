@@ -81,7 +81,7 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                 {
                     title: "单据属性", width: 120,
                     template: function (data) {
-                        return getTextByVal($scope.specificBillType, data.specificBillType)
+                        return getTextByVal($scope.sourceBillType, data.sourceBillType)
                     }
                 },
                 {
