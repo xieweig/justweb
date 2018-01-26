@@ -69,7 +69,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
                     }},
                 {field: "totalAmount", title: "调拨数量", width: 60},
                 {field: "totalVarietyAmount", title: "调拨品种", width: 60},
-                {field: "totalPrice", title: "总进价", width: 60}
+                // {field: "totalPrice", title: "总进价", width: 60}
             ]
         }
     };

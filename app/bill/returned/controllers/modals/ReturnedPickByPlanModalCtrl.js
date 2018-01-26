@@ -33,6 +33,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
             _.each(['basicEnum', 'billCode', 'planMemo', 'createTime', 'updateTime', 'rootCode', 'outStorageMemo', 'specificBillType'], function (name) {
                 $scope.params[name] = res[name]
             });
+            $scope.specificBillType = res.specificBillType;
             $scope.params.outStationCode = res.outStationCode;
             $scope.params.inStationCode = res.inStationCode;
             $scope.params.outStationName = getTextByVal($scope.station, res.outStationCode);
@@ -358,7 +359,6 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
     $scope.bill = {
         billType: 'RETURNED',
         // specificBillType: 'RETURNED',
-        specificBillType: $scope.specificBillType,
         billPurpose: 'OUT_STORAGE'
     };
 
@@ -382,7 +382,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
         _.each(['planMemo', 'outStorageMemo', 'sourceCode'], function (name) {
             bill[name] = $scope.params[name]
         });
-
+        bill.specificBillType = $scope.specificBillType;
         bill.sourceCode = $scope.params.billCode;
         bill.rootCode = $scope.params.rootCode;
         // 计划备注

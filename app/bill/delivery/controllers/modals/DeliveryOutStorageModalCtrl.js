@@ -55,6 +55,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                     {field: "rawMaterialName", title: "所属原料"},
                     {
                         field: "standardUnitCode", title: "标准单位", template: function (data) {
+                            console.log($scope.materialConfigure, data.standardUnitCode)
                             return getTextByVal($scope.materialConfigure, data.standardUnitCode)
                         }
                     },
@@ -606,6 +607,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                 swal('', response.message, 'error');
             } else {
                 // alert('success')
+                swal('审核成功', '', 'success');
                 $scope.$close()
             }
         });

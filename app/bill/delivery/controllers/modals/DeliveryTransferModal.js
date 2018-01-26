@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, $rootScope, $timeout, ApiService, Common, data) {
+angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, $rootScope, $state, $timeout, ApiService, Common, data) {
     $scope.params = {};
     $scope.show = data.type === 'transfer'; // transfer 入库单调拨 view 查看调拨单
     $scope.cargoConfigure = data.cargoUnit;
@@ -66,10 +66,15 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             $scope.params.billProperty = res.billProperty;
             $scope.specificBillType = res.specificBillType;
             $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
-            $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
-            $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
-            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
-
+            if($scope.show){
+                $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
+                $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
+            }else{
+                $scope.params.outStationName = getTextByVal($scope.station, res.inStorageBillOutStationCode);
+                $scope.params.inStationName = getTextByVal($scope.station, res.inStorageBillInStationCode);
+            }
+            // $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
+            $scope.params.outStorageName = '在途库';
             if (!$scope.show) {
                 $scope.params.inStorageName = getTextByVal($scope.storageType, res.inLocation.storage.storageCode)
             }else{
@@ -134,21 +139,21 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
         bill.inStorageBillType = $scope.params.billProperty;
 
         bill.outLocation = {
-            stationCode: $scope.params.outLocation.stationCode,
+            stationCode: $scope.params.inLocation.stationCode,
             storage: {
-                storageCode: $scope.params.outLocation.storage.storageCode
+                storageCode: 'ON_STORAGE'
             }
         };
         bill.inLocation = {
             stationCode: $scope.params.inLocation.stationCode,
             storage: {
-                storageCode: $scope.params.inLocation.storage.storageCode
+                storageCode: $scope.params.inStationType
             }
         };
 
         // 默认出库是在途库
-        bill.inStorageBillInStationCode = $scope.params.inStationType;
-        bill.inStorageBillOutStationCode = 'ON_STORAGE';
+        bill.inStorageBillInStationCode = $scope.params.inLocation.stationCode;
+        bill.inStorageBillOutStationCode = $scope.params.outLocation.stationCode;
 
         bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
             return {
@@ -169,10 +174,11 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
                 swal('', response.message, 'error');
             } else {
                 // alert('success')
+                $scope.cargoGrid.kendoGrid.refresh();
+                $scope.$close();
                 $state.go('app.bill.delivery.transferList');
             }
         }, apiServiceError);
-        $scope.cargoGrid.kendoGrid.refresh();
-        $scope.$close();
+
     }
 });
