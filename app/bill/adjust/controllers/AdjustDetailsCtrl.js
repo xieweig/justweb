@@ -235,4 +235,30 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
         });
         return result;
     }
+
+
+    // 审核通过or不通过
+    $scope.audit = function (pass) {
+        var params = {
+            billCode: $scope.billDetails.billCode,
+            auditMemo: $scope.billDetails.auditMemo
+        };
+        var url = '';
+        if (!pass) {
+            url = '/api/bill/adjust/auditFailure';
+        } else {
+            url = '/api/bill/adjust/auditSuccess';
+        }
+        ApiService.post(url, params).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
+                swal('操作成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
+            }
+        }, apiServiceError);
+    }
+
+    // 审核不通过
 });

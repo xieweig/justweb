@@ -54,7 +54,30 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
             autoBind: false,
             pageable: true,
             columns: [
-                {title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}, {name: 'u', text: "修改", click: updateDetails}, {name: 'a', text: "审核", click: audit}], width: 220},
+                {
+                    title: '操作',
+                    width: 220,
+                    command: [
+                        {name: 'l', text: "查看", click: lookDetails},
+                        {
+                            name: 'u', text: "修改", click: updateDetails,
+                            visible: function (dataItem) {
+                                return dataItem.billState === 'AUDIT_FAILURE'
+                                    || dataItem.billState === "SUBMITTED"
+                                    || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE")
+                                    || dataItem.submitState === 'UNCOMMITTED';
+                            }
+                        },
+                        {
+                            name: 'a', text: "审核", click: audit,
+                            visible: function (dataItem) {
+                                return dataItem.submitState === 'SUBMITTED'
+                                    && (dataItem.auditState === 'UN_REVIEWED'
+                                    || dataItem.auditState === 'AUDIT_ING');
+                            }
+                        }
+                    ]
+                },
                 {field: "xxxxx", title: "单据属性", width: 120},
                 {
                     title: "出库状态", width: 120,
