@@ -159,7 +159,8 @@ angular.module('app').controller('AdjustPickCtrl', function ($scope, $uibModal, 
         var result = {
             basicEnum: 'BY_CARGO',
             billPurpose: 'OUT_STORAGE',
-            self: true,
+            specificBillType: 'NO_PLAN',
+            sourceBillType: 'NO_PLAN',
             billType: 'ADJUST',
             inLocation: {
                 stationCode: $scope.params.inStationCode,

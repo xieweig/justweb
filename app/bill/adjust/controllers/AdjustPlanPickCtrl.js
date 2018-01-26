@@ -277,7 +277,8 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             sourceCode: params.bill.billCode,
             basicEnum: 'BY_MATERIAL',
             billPurpose: 'OUT_STORAGE',
-            self: false,
+            specificBillType: 'ADJUST',
+            sourceBillType: params.bill.sourceBillType,
             billType: params.bill.billType,
             inLocation: {
                 stationCode: params.bill.inStationCode,
@@ -289,31 +290,16 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                 // }
             },
             outLocation: {
-                stationCode: params.bill.inStationCode,
-                stationName: params.bill.inStationCode
+                stationCode: params.bill.outStationCode,
+                stationName: params.bill.outStationCode
                 // stationType: params.bill.inStationCode,
                 // storage: {
                 //     storageCode: params.bill.inStationCode,
                 //     storageName: params.bill.inStationCode
                 // }
             },
-            billDetails: [
-                {
-                    "actualAmount": 0,
-                    "rawMaterial": {
-                        "cargo": {
-                            "cargoCode": "cargoCode2",
-                            "cargoName": "string"
-                        },
-                        "rawMaterialCode": "string",
-                        "rawMaterialName": "string"
-                    },
-                    "shippedAmount": 100,
-                    "belongMaterialCode": "NN"
-                }
-            ]
+            billDetails: []
         };
-        result.billDetails = [];
         var emptyItem = null;
         if ($scope.pickType === 'cargo') {
             emptyItem = _.find($scope.cargoArray, function (dataItem) {
