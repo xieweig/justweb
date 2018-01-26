@@ -122,7 +122,7 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
         params.billDetails = _.map(dataSource.data(), function (item) {
             var result = {
                 actualAmount: item.amount,
-                actualTotalAmount: item.actualTotalAmount,
+                actualTotalAmount: parseInt(item.number) * parseInt(item.amount),
                 belongMaterialCode: item.rawMaterialCode,
                 rawMaterial: {
                     rawMaterialCode: item.rawMaterialCode,
@@ -137,8 +137,12 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
             }
             return result;
         });
-        ApiService.post('/api/bill/mistake/submitOverFlow', params).then(function () {
+        ApiService.post('/api/bill/mistake/submitOverFlow', params).then(function (response) {
+            if (response.code !== '000') {
+                swal('', response.message, 'error');
+            } else {
 
+            }
         });
     };
 });

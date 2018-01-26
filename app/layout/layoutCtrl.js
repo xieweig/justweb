@@ -35,13 +35,6 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, $st
         {key: 'IN_FAILURE', value: 'IN_FAILURE', text: '出库失败'}
     ];
 
-    $rootScope.sourceBillType = [
-        {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划转'},
-        {key: 'ADJUST', value: 'ADJUST', text: '调剂计划转'},
-        {key: 'RETURNED', value: 'RETURNED', text: '退货计划转'},
-        {key: 'RETURNED', value: 'RETURNED', text: '无计划'}
-    ];
-
     $rootScope.billType = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
         {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
@@ -49,7 +42,7 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, $st
         {key: 'RETURNED', value: 'RETURNED', text: '退货计划'}
     ];
 
-    $rootScope.specificType = [
+    $rootScope.sourceBillType = $rootScope.specificType = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
         {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
         {key: 'RESTOCK', value: 'RESTOCK', text: '退库计划'},

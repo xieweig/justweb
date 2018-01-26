@@ -41,7 +41,7 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
     function initBillDetails(bill) {
         $scope.billDetails = bill;
         $scope.billDetails.sourceType = params.sourceType;
-        $scope.billDetails.sourceBillTypeName = getTextByVal($scope.specificBillType, $scope.billDetails.specificBillType);
+        $scope.billDetails.sourceBillTypeName = getTextByVal($scope.sourceBillType, $scope.billDetails.sourceBillType);
         if ($scope.billDetails.inLocation) {
             $scope.billDetails.inLocation.stationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);
             if ($scope.billDetails.inLocation.storage) {
