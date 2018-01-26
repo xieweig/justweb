@@ -215,6 +215,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
             billType: $scope.billDetails.billType,
             inLocation: $scope.billDetails.inLocation,
             outLocation: $scope.billDetails.outLocation,
+            auditMemo: $scope.billDetails.auditMemo,
             billDetails: []
         };
         _.each($scope.cargoDetails.kendoGrid.dataSource.data(), function (dataItem) {

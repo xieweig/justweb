@@ -83,19 +83,19 @@
             <div class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <div class="input-group">
                     <span class="input-group-addon">计划备注</span>
-                    <input type="text" class="form-control" disabled>
+                    <input type="text" class="form-control" disabled data-ng-model="billDetails.planMemo">
                 </div>
             </div>
             <div class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <div class="input-group">
                     <span class="input-group-addon">出库备注</span>
-                    <input type="text" class="form-control" data-ng-disabled="!(billDetails.type==='update')">
+                    <input type="text" class="form-control" data-ng-model="billDetails.outStorageMemo" data-ng-disabled="!(billDetails.type==='update')">
                 </div>
             </div>
             <div class="col-xs-12 margin-bottom-10 dl-horizontal">
                 <div class="input-group">
                     <span class="input-group-addon">审核意见</span>
-                    <input type="text" class="form-control" data-ng-disabled="!(billDetails.type==='audit')">
+                    <input type="text" class="form-control" data-ng-model="billDetails.auditMemo" data-ng-disabled="!(billDetails.type==='audit')">
                 </div>
             </div>
         </div>
