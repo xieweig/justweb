@@ -81,7 +81,9 @@ angular.module('app').controller('RestockPickBySelfCtrl', function ($scope, $sta
 
     $scope.bill = {
         billType: 'RESTOCK',
-        specificBillType: 'NO_PLAN',
+        // specificBillType: 'NO_PLAN',
+        specificBillType:'RESTOCK',
+        sourceBillType:'NO_PLAN',
         basicEnum: 'BY_CARGO',
         billPurpose: 'OUT_STORAGE'
     };

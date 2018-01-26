@@ -38,9 +38,11 @@ angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $s
                         return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
                     }
                 },
-                {title: "标准单位数量", template: function (data) {
+                {
+                    title: "标准单位数量", template: function (data) {
                         return data.number * data.actualAmount
-                    }},
+                    }
+                },
                 {
                     field: "standardUnitCode", title: "标准单位", template: function (data) {
                         return getTextByVal($scope.materialConfigure, data.standardUnitCode);
@@ -61,7 +63,9 @@ angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $s
 
     $scope.bill = {
         billType: 'IN_OUT_SELF',
-        specificBillType: 'NO_PLAN',
+        // specificBillType: 'NO_PLAN',
+        specificBillType: 'IN_OUT_SELF',
+        sourceBillType: 'NO_PLAN',
         basicEnum: 'BY_CARGO',
         billPurpose: 'OUT_STORAGE'
     };
@@ -78,7 +82,7 @@ angular.module('app').controller('inOutSelfPickBySelfCtrl', function ($scope, $s
 
     // 保存和提交合并
     function saveOrSubmit(type, bill) {
-        if (!$scope.params.inStationCode){
+        if (!$scope.params.inStationCode) {
             swal('参数错误', '调入站点不能为空', 'error');
             return
         }

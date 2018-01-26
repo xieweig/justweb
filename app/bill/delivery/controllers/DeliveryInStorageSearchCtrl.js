@@ -83,7 +83,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                 },
                 {
                     title: "单据属性", width: 100, template: function (data) {
-                        return getTextByVal($scope.specificType, data.specificBillType) + '转'
+                        return getTextByVal($scope.specificType, data.sourceBillType) + '转'
                     }
                 },
                 {field: "createTime", title: "录单时间", width: 150},
