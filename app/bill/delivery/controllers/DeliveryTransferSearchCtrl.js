@@ -53,12 +53,12 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
                 {field: "operatorName", title: "操作人", width: 60},
                 {
                     title: "入库单出库站点", width: 150, template: function (data) {
-                        return getTextByVal($scope.station, data.outLocation.stationCode)
+                        return getTextByVal($scope.station, data.inStorageBillOutStationCode)
                     }
                 },
                 {
                     title: "入库单入库站点", width: 150, template: function (item) {
-                        return getTextByVal($scope.station, item.inLocation.stationCode)
+                        return getTextByVal($scope.station, item.inStorageBillInStationCode)
                     }
                 },
                 {field: "outStorageName", title: "调拨单调出库位", width: 100, template: function (data) {

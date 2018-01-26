@@ -97,7 +97,7 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
             materialIdList.push(item.materialId);
             $scope.materialCodeList.push(item.materialCode);
             $scope.currentMaterialGrid.kendoGrid.dataSource.add(item)
-        })
+        });
         $scope.params.rawMaterialId = materialIdList.join(',')
     }, 100);
 
