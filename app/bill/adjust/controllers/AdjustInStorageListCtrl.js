@@ -68,8 +68,6 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
                     }
                 },
                 {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
-
-
                 {field: "billCode", title: "出库单号", width: 200},
                 {field: "createTime", title: "录单时间", width: 160},
                 {field: "xxxxx", title: "出库时间", width: 120},

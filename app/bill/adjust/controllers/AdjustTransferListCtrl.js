@@ -31,7 +31,7 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
             pageable: true,
             columns: [
                 {title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}], width: 80},
-                {title: "来源单号", width: 120, template: '<span class="kendo-link showSourceBill" sourceCode="#: data.a #">#: data.a #</span>'},
+                {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
                 {field: "xxxxx", title: "调拨单号", width: 120},
                 {field: "xxxxx", title: "单据属性", width: 120},
                 {field: "xxxxx", title: "调拨时间", width: 120},
@@ -47,22 +47,20 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
         }
     };
 
-    $timeout(function () {
-        // 点击来源单号的事件
-        $('#billGrid').on('click', '.showSourceBill', function () {
-            var sourceCode = $(this).attr('sourceCode');
-            $uibModal.open({
-                templateUrl: 'app/bill/adjust/modals/details.html',
-                size: 'lg',
-                scope: $scope,
-                controller: 'AdjustDetailsCtrl',
-                resolve: {
-                    params: {
-                        type: 'inLook',
-                        billCode: '123123'
-                    }
+    // 点击来源单号的事件
+    $('#billGrid').on('click', '.sourceCode', function () {
+        var dataItem = $scope.billGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
+        $uibModal.open({
+            templateUrl: 'app/bill/adjust/modals/details.html',
+            size: 'lg',
+            scope: $scope,
+            controller: 'AdjustDetailsCtrl',
+            resolve: {
+                params: {
+                    type: 'inLook',
+                    billCode: dataItem.sourceCode
                 }
-            });
+            }
         });
     });
 
@@ -77,11 +75,11 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
             controller: 'AdjustTransfersCtrl',
             scope: $scope,
             resolve: {
-                billCode: function () {
-                    return '123123'
+                params: {
+                    billCode: dataItem.billCode,
+                    sourceType: 'old'
                 }
             }
-        })
-        ;
+        });
     }
 });
