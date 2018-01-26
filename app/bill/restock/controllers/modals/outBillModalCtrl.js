@@ -639,6 +639,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
                 swal('', response.message, 'error');
             } else {
                 // alert('success')
+                swal('审核成功', '', 'success');
                 $scope.$close()
             }
         });
