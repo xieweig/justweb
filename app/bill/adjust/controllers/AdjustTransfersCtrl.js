@@ -15,48 +15,7 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
                         });
                         return;
                     }
-                    $scope.billDetails = response.result.bill;
-                    $scope.billDetails.sourceType = params.sourceType;
-                    $scope.billDetails.inLocation.stationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);
-                    $scope.billDetails.outLocation.stationName = getTextByVal($scope.station, $scope.billDetails.outLocation.stationCode);
-                    $scope.billDetails.sourceBillTypeName = getTextByVal($scope.sourceBillType, $scope.billDetails.sourceBillType);
-                    if ($scope.billDetails.outLocation.storage) {
-                        $scope.billDetails.outLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.outLocation.storage.storageCode);
-                    }
-                    if ($scope.billDetails.inLocation.storage) {
-                        $scope.billDetails.inLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.inLocation.storage.storageCode);
-                    }
-                    var cargoCodes = _.map($scope.billDetails.billDetails, function (item) {
-                        return item.rawMaterial.cargo.cargoCode;
-                    });
-                    Common.getCargoByCodes(cargoCodes).then(function (cargoList) {
-                        var cargoObject = _.zipObject(_.map(cargoList, function (item) {
-                            return item.cargoCode
-                        }), cargoList);
-                        $scope.detailsGrid = {
-                            kendoSetting: {
-                                editable: true,
-                                dataSource: _.map($scope.billDetails.billDetails, function (item) {
-                                    var cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
-                                    cargo.shippedAmount = item.shippedAmount;
-                                    cargo.actualAmount = item.actualAmount;
-                                    cargo.amount = item.actualAmount;
-                                    cargo.measurementName = getTextByVal(params.cargoUnit, item.measurementCode);
-                                    return cargo;
-                                }),
-                                columns: [
-                                    {field: "cargoName", title: "货物名称", width: 120},
-                                    {field: "cargoCode", title: "货物编码", width: 120},
-                                    {field: "rawMaterialName", title: "所属原料", width: 120},
-                                    {field: "standardUnitCode", title: "标准单位", width: 120},
-                                    {title: "规格", width: 120, template: '#: data.number + data.measurementName #'},
-                                    {field: "actualAmount", title: "入库数量", width: 120},
-                                    {field: "shippedAmount", title: "入库标准单位数量", width: 120},
-                                    {field: "amount", title: "实调数量", width: 120, editable: true, kType: 'number'}
-                                ]
-                            }
-                        }
-                    });
+                    initBillDetails(response.result.bill);
                 }
             });
         } else if (params.sourceType === 'old') {
@@ -72,9 +31,56 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
                         });
                         return;
                     }
+                    initBillDetails(response.result.bill);
                 }
             });
         }
+    }
+
+    // 初始化详情
+    function initBillDetails(bill) {
+        $scope.billDetails = bill;
+        $scope.billDetails.sourceType = params.sourceType;
+        $scope.billDetails.inLocation.stationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);
+        $scope.billDetails.outLocation.stationName = getTextByVal($scope.station, $scope.billDetails.outLocation.stationCode);
+        $scope.billDetails.sourceBillTypeName = getTextByVal($scope.sourceBillType, $scope.billDetails.sourceBillType);
+        if ($scope.billDetails.outLocation.storage) {
+            $scope.billDetails.outLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.outLocation.storage.storageCode);
+        }
+        if ($scope.billDetails.inLocation.storage) {
+            $scope.billDetails.inLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.inLocation.storage.storageCode);
+        }
+        var cargoCodes = _.map($scope.billDetails.billDetails, function (item) {
+            return item.rawMaterial.cargo.cargoCode;
+        });
+        Common.getCargoByCodes(cargoCodes).then(function (cargoList) {
+            var cargoObject = _.zipObject(_.map(cargoList, function (item) {
+                return item.cargoCode
+            }), cargoList);
+            $scope.detailsGrid = {
+                kendoSetting: {
+                    editable: true,
+                    dataSource: _.map($scope.billDetails.billDetails, function (item) {
+                        var cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
+                        cargo.shippedAmount = item.shippedAmount;
+                        cargo.actualAmount = item.actualAmount;
+                        cargo.amount = item.actualAmount;
+                        cargo.measurementName = getTextByVal(params.cargoUnit, item.measurementCode);
+                        return cargo;
+                    }),
+                    columns: [
+                        {field: "cargoName", title: "货物名称", width: 120},
+                        {field: "cargoCode", title: "货物编码", width: 120},
+                        {field: "rawMaterialName", title: "所属原料", width: 120},
+                        {field: "standardUnitCode", title: "标准单位", width: 120},
+                        {title: "规格", width: 120, template: '#: data.number + data.measurementName #'},
+                        {field: "actualAmount", title: "入库数量", width: 120},
+                        {field: "shippedAmount", title: "入库标准单位数量", width: 120},
+                        {field: "amount", title: "实调数量", width: 120, editable: true, kType: 'number'}
+                    ]
+                }
+            }
+        });
     }
 
     // 调拨
