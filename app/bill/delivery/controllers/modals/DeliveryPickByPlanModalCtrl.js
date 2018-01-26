@@ -82,36 +82,36 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                                     actualAmount: 0,
                                     shippedAmount: item.amount
                                 });
-
-                                // 计算原来各种原料的需求，再addItem
-                                var materialResult = {};
-                                _.each(res.childPlanBillDetails, function (item) {
-                                    if (!materialResult[item.material.materialCode]) {
-                                        materialResult[item.material.materialCode] = {
-                                            shippedAmount: 0
-                                        }
-                                    }
-                                    materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
-                                    materialResult[item.material.materialCode].materialName = item.material.materialName;
-                                    materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
-                                });
-                                _.each(materialResult, function (item) {
-                                    $scope.addItem({
-                                        materialName: item.materialName,
-                                        rawMaterialCode: item.rawMaterialCode,
-                                        shippedAmount: item.shippedAmount
-                                    })
-                                })
-                                $timeout(function () {
-                                    $('#tabs').children('li:eq(1)').children('a').click();
-                                    var tabBtn = $('#tabs').children('li:first-child').children('a');
-                                    // 置为不可点击
-                                    tabBtn.attr('data-toggle', null);
-                                    tabBtn.click(function (e) {
-                                        e.preventDefault()
-                                    });
-                                });
                             })
+
+                            // 计算原来各种原料的需求，再addItem
+                            var materialResult = {};
+                            _.each(billDetails, function (item) {
+                                if (!materialResult[item.material.materialCode]) {
+                                    materialResult[item.material.materialCode] = {
+                                        shippedAmount: 0
+                                    }
+                                }
+                                materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
+                                materialResult[item.material.materialCode].materialName = item.material.materialName;
+                                materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
+                            });
+                            _.each(materialResult, function (item) {
+                                $scope.addItem({
+                                    materialName: item.materialName,
+                                    rawMaterialCode: item.rawMaterialCode,
+                                    shippedAmount: item.shippedAmount
+                                })
+                            })
+                            $timeout(function () {
+                                $('#tabs').children('li:eq(1)').children('a').click();
+                                var tabBtn = $('#tabs').children('li:first-child').children('a');
+                                // 置为不可点击
+                                tabBtn.attr('data-toggle', null);
+                                tabBtn.click(function (e) {
+                                    e.preventDefault()
+                                });
+                            });
                         })
                     })
                 });
@@ -374,7 +374,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
             bill[name] = $scope.params[name]
         });
         // bill.billProperty = 'RESTOCK';
-        bill.specificBillType =  $scope.specificBillType;
+        bill.specificBillType = $scope.specificBillType;
         bill.sourceCode = $scope.params.billCode;
         bill.rootCode = $scope.params.rootCode;
         // 计划备注

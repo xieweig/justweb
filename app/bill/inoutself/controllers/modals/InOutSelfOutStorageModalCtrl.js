@@ -270,6 +270,7 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
                                     $scope.materialResult.push({
                                         materialName: item.material.materialName,
                                         materialCode: item.rawMaterial.rawMaterialCode,
+                                        materialId: item.material.materialId,
                                         shippedAmount: sa,
                                         actualAmount: aa,
                                         progress: pg
