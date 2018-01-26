@@ -16,7 +16,7 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">调拨单号</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.billCode">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
@@ -38,7 +38,7 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">操作人</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.operatorName">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
@@ -55,10 +55,10 @@
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
-                                <span class="input-group-addon">调拨单调出站点</span>
-                                <select smart-select2 class="select2 width-full" data-ng-model="params.billPurpose">
+                                <span class="input-group-addon">调拨单调出库位</span>
+                                <select smart-select2 class="select2 width-full" data-ng-model="params.outStorageCode">
                                     <option value="">请选择</option>
-                                    <option data-ng-repeat="item in billPurpose" data-ng-value="item.value">
+                                    <option data-ng-repeat="item in outType" data-ng-value="item.value">
                                         {{item.text}}
                                     </option>
                                 </select>
@@ -66,10 +66,10 @@
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
-                                <span class="input-group-addon">调拨单调入站点</span>
-                                <select smart-select2 class="select2 width-full" data-ng-model="params.billPurpose">
+                                <span class="input-group-addon">调拨单调入库位</span>
+                                <select smart-select2 class="select2 width-full" data-ng-model="params.inStorageCode">
                                     <option value="">请选择</option>
-                                    <option data-ng-repeat="item in billPurpose" data-ng-value="item.value">
+                                    <option data-ng-repeat="item in outType" data-ng-value="item.value">
                                         {{item.text}}
                                     </option>
                                 </select>

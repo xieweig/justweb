@@ -5,7 +5,14 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
         swal('没有单据号', '', 'warning');
         $scope.$close();
     } else {
-        ApiService.get('/api/bill/adjust/findOutStorageByBillCode?billCode=' + params.billCode).then(function (response) {
+        var url = '';
+        if (params.type === 'inLook') {
+            url = '/api/bill/adjust/findInStorageByBillCode?billCode=' + params.billCode;
+        } else {
+            // 审核 修改等都属于入库操作
+            url = '/api/bill/adjust/findOutStorageByBillCode?billCode=' + params.billCode;
+        }
+        ApiService.get(url).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error').then(function () {
                     $scope.$close();
@@ -23,7 +30,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                 $scope.billDetails.outStateName = getTextByVal($scope.outStateEnum, $scope.billDetails.outStateEnum);
                 $scope.billDetails.submitStatusName = getTextByVal($scope.submitStatus, $scope.billDetails.submitState);
                 $scope.billDetails.auditStateName = getTextByVal($scope.auditStatus, $scope.billDetails.auditState);
-                $scope.billDetails.sourceBillTypeName = getTextByVal($scope.sourceBillType, $scope.billDetails.sourceBillType);
+                $scope.billDetails.sourceBillTypeName = getTextByVal($scope.specificBillType, $scope.billDetails.specificBillType);
                 if ($scope.billDetails.inLocation) {
                     $scope.billDetails.inLocation.stationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);
                     if ($scope.billDetails.inLocation.storage) {

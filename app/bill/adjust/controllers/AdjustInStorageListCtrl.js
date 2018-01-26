@@ -27,6 +27,13 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
     $scope.billGrid = {
         url: '/api/bill/adjust/findInStorageByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data.billAllotState) {
+                    data.billAllotState = null;
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -46,7 +53,7 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
                 {
                     title: "单据属性", width: 120,
                     template: function (data) {
-                        return getTextByVal($scope.sourceBillType, data.sourceBillType)
+                        return getTextByVal($scope.specificBillType, data.specificBillType)
                     }
                 },
                 {
