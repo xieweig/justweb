@@ -1,13 +1,21 @@
 'use strict';
 
-angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParams, $uibModal) {
+angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParams, ApiService, $uibModal) {
     $scope.typeName = $stateParams.typeName;
-    $scope.bill = {};
+    $scope.bill = {cargo: {}, material: {}};
+    $scope.bySomething = 'cargo';
 
-    $scope.stationOpt = {
+    $scope.materialStationOpt = {
         single: true,
         callback: function (data) {
-            $scope.bill.inStationCode = data.stationCode;
+            $scope.bill.material.inStationCode = data.stationCode;
+        }
+    };
+
+    $scope.cargoStationOpt = {
+        single: true,
+        callback: function (data) {
+            $scope.bill.cargo.inStationCode = data.stationCode;
         }
     };
 
@@ -47,5 +55,21 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
                 {field: "xxxxx", title: "货物数量", width: 120}
             ]
         }
+    };
+
+    // 提交
+    $scope.submit = function () {
+        var params = {};
+        var dataItem = {};
+        if ($scope.bySomething === 'cargo') {
+            dataItem = $scope.bill.cargo;
+        } else {
+            dataItem = $scope.bill.material;
+        }
+        params.memo = dataItem.memo;
+        return
+        ApiService.post('/api/bill/mistake/submitOverFlow', params).then(function () {
+
+        });
     };
 });
