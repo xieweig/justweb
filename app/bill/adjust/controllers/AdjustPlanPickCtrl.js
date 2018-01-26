@@ -289,8 +289,8 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                 // }
             },
             outLocation: {
-                stationCode: params.bill.inStationCode,
-                stationName: params.bill.inStationCode
+                stationCode: params.bill.outStationCode,
+                stationName: params.bill.outStationCode
                 // stationType: params.bill.inStationCode,
                 // storage: {
                 //     storageCode: params.bill.inStationCode,

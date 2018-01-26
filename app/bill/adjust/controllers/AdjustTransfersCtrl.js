@@ -41,15 +41,20 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
     function initBillDetails(bill) {
         $scope.billDetails = bill;
         $scope.billDetails.sourceType = params.sourceType;
-        $scope.billDetails.inLocation.stationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);
-        $scope.billDetails.outLocation.stationName = getTextByVal($scope.station, $scope.billDetails.outLocation.stationCode);
         $scope.billDetails.sourceBillTypeName = getTextByVal($scope.sourceBillType, $scope.billDetails.sourceBillType);
-        if ($scope.billDetails.outLocation.storage) {
-            $scope.billDetails.outLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.outLocation.storage.storageCode);
+        if ($scope.billDetails.inLocation) {
+            $scope.billDetails.inLocation.stationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);
+            if ($scope.billDetails.inLocation.storage) {
+                $scope.billDetails.inLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.inLocation.storage.storageCode);
+            }
         }
-        if ($scope.billDetails.inLocation.storage) {
-            $scope.billDetails.inLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.inLocation.storage.storageCode);
+        if ($scope.billDetails.outLocation) {
+            $scope.billDetails.outLocation.stationName = getTextByVal($scope.station, $scope.billDetails.outLocation.stationCode);
+            if ($scope.billDetails.outLocation.storage) {
+                $scope.billDetails.outLocation.storage.storageName = getTextByVal($scope.outType, $scope.billDetails.outLocation.storage.storageCode);
+            }
         }
+
         var cargoCodes = _.map($scope.billDetails.billDetails, function (item) {
             return item.rawMaterial.cargo.cargoCode;
         });
@@ -90,8 +95,8 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
             return;
         }
         var sendParams = {
-            billPurpose: $scope.billDetails.billPurpose,
-            specificBillType: $scope.billDetails.specificBillType,
+            billPurpose: 'MOVE_STORAGE',
+            specificBillType: 'ADJUST',
             basicEnum: $scope.billDetails.basicEnum,
             sourceCode: $scope.billDetails.sourceCode,
             inStorageBillCode: $scope.billDetails.inStorageBillCode,
