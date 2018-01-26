@@ -59,6 +59,21 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
                     });
                 }
             });
+        } else if (params.sourceType === 'old') {
+            ApiService.get('/api/bill/adjust/findAllotByBillCode?billCode=' + params.billCode).then(function (response) {
+                if (response.code !== '000') {
+                    swal('', response.message, 'error').then(function () {
+                        $scope.$close();
+                    });
+                } else {
+                    if (!response.result.bill) {
+                        swal('未找到单据', '', 'warning').then(function () {
+                            $scope.$close();
+                        });
+                        return;
+                    }
+                }
+            });
         }
     }
 
