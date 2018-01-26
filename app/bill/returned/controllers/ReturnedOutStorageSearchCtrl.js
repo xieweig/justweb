@@ -169,7 +169,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
     $scope.inStationParams = {
         type: 'supplier',
         callback: function (data) {
-            $scope.params.inStationCodes = _.map(data, function (item) {
+            $scope.kendoQueryCondition.inStationCodes = _.map(data, function (item) {
                 return item.supplierCode;
             });
         }
@@ -177,7 +177,7 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
 
     $scope.outStationParams = {
         callback: function (data) {
-            $scope.params.outStationCodes = _.map(data, function (item) {
+            $scope.kendoQueryCondition.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }

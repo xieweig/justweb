@@ -7,7 +7,7 @@ angular.module('app').controller('PlanAddStationCtrl', function ($scope, $timeou
     switch (billType) {
         case 'DELIVERY':
             // 配送
-            outStationType = 'LOGISTICS,BOOKSTORE';
+            outStationType = 'LOGISTICS';
             inStationType = 'BOOKSTORE,CAFE,Comprehensive';
             break;
         case 'RESTOCK':

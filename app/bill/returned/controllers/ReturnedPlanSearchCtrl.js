@@ -85,7 +85,7 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
         type: 'supplier',
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
-                return item.stationCode;
+                return item.supplierCode;
             });
         }
     };
