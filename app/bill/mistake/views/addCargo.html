@@ -3,13 +3,13 @@
         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
             <div class="input-group">
                 <span class="input-group-addon">{{typeName}}站点</span>
-                <span data-station-tree data-select-modal="stationOpt"></span>
+                <span data-station-tree data-select-modal="cargoStationOpt"></span>
             </div>
         </div>
         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
             <div class="input-group">
                 <span class="input-group-addon">报溢库位</span>
-                <select smart-select2 class="width-full" data-ng-model="plan.billType">
+                <select smart-select2 class="width-full" data-ng-model="bill.cargo.billType">
                     <option value="">请选择</option>
                     <option data-ng-repeat="item in outType" data-ng-value="item.key">{{item.text}}</option>
                 </select>
@@ -18,7 +18,7 @@
         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
             <div class="input-group width-full">
                 <span class="input-group-addon" style="width: 100px;">备注</span>
-                <textarea class="form-control" rows="1" data-ng-model="plan.memo"></textarea>
+                <textarea class="form-control" rows="1" data-ng-model="bill.cargo.memo"></textarea>
             </div>
         </div>
     </div>

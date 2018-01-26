@@ -8,8 +8,10 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
         var url = '';
         if (params.type === 'inLook') {
             url = '/api/bill/adjust/findInStorageByBillCode?billCode=' + params.billCode;
+        } else if (params.type === 'planLook') {
+            url = '/api/bill/adjust/findBySourceCode?sourceCode=' + params.billCode;
         } else {
-            // 审核 修改等都属于入库操作
+            // 审核 修改等都属于出库操作
             url = '/api/bill/adjust/findOutStorageByBillCode?billCode=' + params.billCode;
         }
         ApiService.get(url).then(function (response) {

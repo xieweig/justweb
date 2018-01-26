@@ -1,8 +1,8 @@
 <div class="uib-modal" data-ng-init="initPage()">
     <h1 class="uib-modal-title">
-        <span data-ng-if="billDetails.type==='outLook'">查看调剂出库单</span>
+        <span data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook'">查看调剂出库单</span>
         <span data-ng-if="billDetails.type==='inLook'">查看调剂入库单</span>
-        <span class="option" data-ng-if="billDetails.type==='inLook' || billDetails.type==='outLook'">
+        <span class="option" data-ng-if="billDetails.type==='inLook' || billDetails.type==='outLook' || billDetails.type==='planLook'">
             <input type="button" class="btn btn-primary" value="导出">
             <input type="button" class="btn btn-default" value="返回" data-ng-click="$close();">
         </span>
@@ -27,7 +27,7 @@
                 <dt>录单时间</dt>
                 <dd data-ng-bind="billDetails.createTime"></dd>
             </dl>
-            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook'">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook'">
                 <dt>出库时间</dt>
                 <dd data-ng-bind="billDetails.xxxx"></dd>
             </dl>
@@ -39,7 +39,7 @@
                 <dt>录单人</dt>
                 <dd data-ng-bind="billDetails.operatorName"></dd>
             </dl>
-            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook'">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook'">
                 <dt>审核人</dt>
                 <dd data-ng-bind="billDetails.xxxx"></dd>
             </dl>
@@ -63,15 +63,15 @@
                 <dt>单据属性</dt>
                 <dd data-ng-bind="billDetails.sourceBillTypeName"></dd>
             </dl>
-            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook'">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook'">
                 <dt>出库状态</dt>
                 <dd data-ng-bind="billDetails.outStateName"></dd>
             </dl>
-            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook'">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook'">
                 <dt>提交状态</dt>
                 <dd data-ng-bind="billDetails.submitStatusName"></dd>
             </dl>
-            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook'">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook'">
                 <dt>审核状态</dt>
                 <dd data-ng-bind="billDetails.auditStateName"></dd>
             </dl>
