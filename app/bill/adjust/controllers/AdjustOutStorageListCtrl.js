@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $timeout, $uibModal, cargoUnit, materialUnit) {
+angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $state, $timeout, $uibModal, cargoUnit, materialUnit) {
     $scope.params = {};
     $scope.curSubmitStatus = {};
     $scope.curAuditStatus = {};

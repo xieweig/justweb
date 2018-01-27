@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $timeout, $uibModal, cargoUnit, materialUnit) {
+angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $state, $timeout, $uibModal, cargoUnit, materialUnit) {
     $scope.params = {};
 
     // 搜索条件中的出库站点选择
