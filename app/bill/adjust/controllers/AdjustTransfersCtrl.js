@@ -70,14 +70,15 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
                         cargo.shippedAmount = item.shippedAmount;
                         cargo.actualAmount = item.actualAmount;
                         cargo.amount = item.actualAmount;
-                        cargo.measurementName = getTextByVal(params.cargoUnit, item.measurementCode);
+                        cargo.measurementName = getTextByVal(params.cargoUnit, cargo.measurementCode);
+                        cargo.standardUnitName = getTextByVal(params.materialUnit, cargo.standardUnitCode);
                         return cargo;
                     }),
                     columns: [
                         {field: "cargoName", title: "货物名称", width: 120},
                         {field: "cargoCode", title: "货物编码", width: 120},
                         {field: "rawMaterialName", title: "所属原料", width: 120},
-                        {field: "standardUnitCode", title: "标准单位", width: 120},
+                        {field: "standardUnitName", title: "标准单位", width: 120},
                         {title: "规格", width: 120, template: '#: data.number + data.measurementName #'},
                         {field: "actualAmount", title: "入库数量", width: 120},
                         {field: "shippedAmount", title: "入库标准单位数量", width: 120},

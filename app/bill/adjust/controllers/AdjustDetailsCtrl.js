@@ -175,7 +175,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                                 if (!materialObject[item.rawMaterialCode]) {
                                     materialObject[item.rawMaterialCode] = {actualAmount: 0};
                                 }
-                                materialObject[item.rawMaterialCode].actualAmount += parseInt(item.actualAmount);
+                                materialObject[item.rawMaterialCode].actualAmount += parseInt(item.actualAmount) * parseInt(item.number);
                             });
                             _.each($scope.materialList, function (item) {
                                 if (materialObject[item.materialCode]) {
@@ -262,6 +262,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
             inLocation: $scope.billDetails.inLocation,
             outLocation: $scope.billDetails.outLocation,
             auditMemo: $scope.billDetails.auditMemo,
+            outStorageMemo: $scope.billDetails.outStorageMemo,
             billDetails: []
         };
         _.each($scope.cargoDetails.kendoGrid.dataSource.data(), function (dataItem) {

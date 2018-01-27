@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $timeout, $uibModal) {
+angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $timeout, $uibModal, cargoUnit, materialUnit) {
     $scope.params = {};
 
     // 搜索条件中的出库站点选择
@@ -119,7 +119,9 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
             resolve: {
                 params: {
                     billCode: dataItem.billCode,
-                    sourceType: 'old'
+                    sourceType: 'old',
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         });

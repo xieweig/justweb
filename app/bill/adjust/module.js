@@ -99,6 +99,14 @@ angular.module('app.bill.adjust', ['ui.router']).config(function ($stateProvider
                     templateUrl: 'app/bill/adjust/views/transferList.html',
                     controller: 'AdjustTransferListCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         });
 });

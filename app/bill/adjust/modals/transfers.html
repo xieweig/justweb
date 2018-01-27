@@ -13,7 +13,7 @@
                 <div style="border: 1px dashed #ddd;padding: 10px;" data-ng-if="billDetails.sourceType==='new'">
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">单据属性</span>
-                        <input type="text" class="form-control" disabled  data-ng-model="billDetails.sourceBillTypeName">
+                        <input type="text" class="form-control" disabled data-ng-model="billDetails.sourceBillTypeName">
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">调出库位</span>
@@ -32,19 +32,19 @@
                 <div style="border: 1px dashed #ddd;padding: 10px;" data-ng-if="billDetails.sourceType==='old'">
                     <dl class="margin-bottom-10 dl-horizontal">
                         <dt>调拨单号</dt>
-                        <dd>123213</dd>
+                        <dd data-ng-bind="billDetails.billCode"></dd>
                     </dl>
                     <dl class="margin-bottom-10 dl-horizontal">
                         <dt>单据属性</dt>
-                        <dd>123213</dd>
+                        <dd data-ng-bind="billDetails.billCode"></dd>
                     </dl>
                     <dl class="margin-bottom-10 dl-horizontal">
                         <dt>调出库位</dt>
-                        <dd>123213</dd>
+                        <dd data-ng-bind="billDetails.outLocation.storage.storageName"></dd>
                     </dl>
                     <dl class="margin-bottom-10 dl-horizontal">
                         <dt>调入库位</dt>
-                        <dd>123213</dd>
+                        <dd data-ng-bind="billDetails.inLocation.storage.storageName"></dd>
                     </dl>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                 <div style="border: 1px dashed #ddd;padding: 10px;">
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">入库时间</span>
-                        <input type="text" class="form-control" disabled data-ng-model="billDetails.xxx">
+                        <input type="text" class="form-control" disabled data-ng-model="billDetails.createTime">
                     </div>
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">出库站点</span>
