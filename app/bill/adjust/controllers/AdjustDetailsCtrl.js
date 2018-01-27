@@ -76,7 +76,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                                 {template: "#: data.number + data.measurementName #", title: "规格", width: 120},
                                 {
                                     title: "应拣数量", width: 120,
-                                    template: function () {
+                                    template: function (data) {
                                         if ($scope.billDetails.basicEnum === 'BY_CARGO') {
                                             return data.shippedAmount;
                                         }
