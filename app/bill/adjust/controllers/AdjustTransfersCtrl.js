@@ -81,7 +81,12 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
                         {field: "standardUnitName", title: "标准单位", width: 120},
                         {title: "规格", width: 120, template: '#: data.number + data.measurementName #'},
                         {field: "actualAmount", title: "入库数量", width: 120},
-                        {field: "shippedAmount", title: "入库标准单位数量", width: 120},
+                        {
+                            title: "入库标准单位数量", width: 120,
+                            template: function (data) {
+                                return data.number * data.actualAmount;
+                            }
+                        },
                         {field: "amount", title: "实调数量", width: 120, editable: true, kType: 'number'}
                     ]
                 }
