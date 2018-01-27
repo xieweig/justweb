@@ -122,7 +122,9 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
             resolve: {
                 params: {
                     type: 'inLook',
-                    billCode: dataItem.billCode
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         });
@@ -140,7 +142,9 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
             resolve: {
                 params: {
                     billCode: dataItem.billCode,
-                    sourceType: 'new'
+                    sourceType: 'new',
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         });
