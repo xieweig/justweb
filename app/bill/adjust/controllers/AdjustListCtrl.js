@@ -7,7 +7,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $state, $ui
     $scope.outStationParams = {
         initTip: decodeURIComponent($.cookie('currentStationName')),
         callback: function (data) {
-            $scope.params.inStationCodes = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -16,7 +16,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $state, $ui
     // 搜索条件中的入库站点选择
     $scope.inStationParams = {
         callback: function (data) {
-            $scope.params.outStationCodes = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
