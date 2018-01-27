@@ -4,6 +4,23 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
     $scope.typeName = $stateParams.typeName;
     $scope.bill = {cargo: {}, material: {}};
 
+    var submitUrl = '';
+    $scope.locationPrefix = '';
+    switch ($stateParams.type) {
+        case 'overflow':
+            submitUrl = '/api/bill/mistake/submitOverFlow';
+            $scope.locationPrefix = 'in';
+            break;
+        case 'loss':
+            submitUrl = '/api/bill/mistake/submitLoss';
+            $scope.locationPrefix = 'out';
+            break;
+        case 'dayMistake':
+            submitUrl = '/api/bill/mistake/submitDayMistake';
+            $scope.locationPrefix = 'out';
+            break;
+    }
+
     $scope.bySomething = 'material';
     $('#tabHead').on('click', 'a', function () {
         $scope.bySomething = $(this).attr('data-type');
@@ -12,18 +29,18 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
     $scope.materialStationOpt = {
         single: true,
         callback: function (data) {
-            $scope.bill.material.inStationCode = data.stationCode;
-            $scope.bill.material.inStationName = data.stationName;
-            $scope.bill.material.inStationType = data.siteType;
+            $scope.bill.material[$scope.locationPrefix + 'StationCode'] = data.stationCode;
+            $scope.bill.material[$scope.locationPrefix + 'StationName'] = data.stationName;
+            $scope.bill.material[$scope.locationPrefix + 'StationType'] = data.siteType;
         }
     };
 
     $scope.cargoStationOpt = {
         single: true,
         callback: function (data) {
-            $scope.bill.cargo.inStationCode = data.stationCode;
-            $scope.bill.cargo.inStationName = data.stationName;
-            $scope.bill.cargo.inStationType = data.siteType;
+            $scope.bill.cargo[$scope.locationPrefix + 'StationCode'] = data.stationCode;
+            $scope.bill.cargo[$scope.locationPrefix + 'StationName'] = data.stationName;
+            $scope.bill.cargo[$scope.locationPrefix + 'StationType'] = data.siteType;
         }
     };
 
@@ -149,10 +166,10 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
             dataItem = $scope.bill.material;
             dataSource = $scope.materialGrid.kendoGrid.dataSource.data();
         }
-        if (!dataItem.inStationCode) {
+        if (!dataItem[$scope.locationPrefix + 'StationCode']) {
             swal('请选择' + $scope.typeName + '站点', '', 'warning');
             return
-        } else if (!dataItem.inStationCode) {
+        } else if (!dataItem.storageCode) {
             swal('请选择库位', '', 'warning');
             return
         } else if (!dataItem.memo) {
@@ -163,15 +180,27 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
             return
         }
         params.memo = dataItem.memo;
-        params.inLocation = {
-            stationCode: dataItem.inStationCode,
-            stationName: dataItem.inStationName,
-            stationType: getStationType(dataItem.inStationType),
-            storage: {
-                storageCode: dataItem.storageCode,
-                storageName: getTextByVal($scope.outType, dataItem.storageCode)
-            }
-        };
+        if ($scope.locationPrefix === 'in') {
+            params.inLocation = {
+                stationCode: dataItem[$scope.locationPrefix + 'StationCode'],
+                stationName: dataItem[$scope.locationPrefix + 'StationName'],
+                stationType: getStationType(dataItem[$scope.locationPrefix + 'StationType']),
+                storage: {
+                    storageCode: dataItem.storageCode,
+                    storageName: getTextByVal($scope.outType, dataItem.storageCode)
+                }
+            };
+        } else {
+            params.outLocation = {
+                stationCode: dataItem[$scope.locationPrefix + 'StationCode'],
+                stationName: dataItem[$scope.locationPrefix + 'StationName'],
+                stationType: getStationType(dataItem[$scope.locationPrefix + 'StationType']),
+                storage: {
+                    storageCode: dataItem.storageCode,
+                    storageName: getTextByVal($scope.outType, dataItem.storageCode)
+                }
+            };
+        }
         params.billDetails = _.map(dataSource, function (item) {
             var result = {
                 actualAmount: item.amount,
@@ -190,7 +219,7 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
             }
             return result;
         });
-        ApiService.post('/api/bill/mistake/submitOverFlow', params).then(function (response) {
+        ApiService.post(submitUrl, params).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {

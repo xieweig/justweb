@@ -2,12 +2,29 @@
 
 angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal, $stateParams) {
     $scope.typeName = $stateParams.typeName;
-    $scope.params = {inStorageCode: ''};
+    $scope.params = {};
+    var kendoGridUrl = '';
+    $scope.locationPrefix = '';
+    switch ($stateParams.type) {
+        case 'overflow':
+            kendoGridUrl = '/api/bill/mistake/findOverFlowByConditions';
+            $scope.locationPrefix = 'in';
+            break;
+        case 'loss':
+            kendoGridUrl = '/api/bill/mistake/findLossByConditions';
+            $scope.locationPrefix = 'out';
+            break;
+        case 'dayMistake':
+            kendoGridUrl = '/api/bill/mistake/findDayMistakeByConditions';
+            $scope.locationPrefix = 'out';
+            break;
+    }
+    $scope.params[$scope.locationPrefix + 'StorageCode'] = '';
 
     // 出库站点选择
     $scope.overflowStation = {
         callback: function (data) {
-            $scope.params.inStationCodes = _.map(data, function (item) {
+            $scope.params[$scope.locationPrefix + 'StationCodes'] = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -17,13 +34,15 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
     $scope.search = function () {
         $scope.billGrid.kendoGrid.dataSource.page(1);
     };
+
+
     $scope.billGrid = {
-        url: '/api/bill/mistake/findOverFlowByConditions',
+        url: kendoGridUrl,
         params: $scope.params,
         dataSource: {
             parameterMap: function (data) {
-                if (!data.inStationCodes) {
-                    data.inStationCodes = ['USER_ALL'];
+                if (!data[$scope.locationPrefix + 'StationCodes']) {
+                    data[$scope.locationPrefix + 'StationCodes'] = ['USER_ALL'];
                 }
                 data.targetEnumSet = [];
                 _.each($scope.targetEnumSet, function (item, key) {
