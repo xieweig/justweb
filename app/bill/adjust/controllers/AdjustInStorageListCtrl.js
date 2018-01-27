@@ -103,8 +103,8 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
                         return '-';
                     }
                 },
-                {field: "totalAmount", title: "配送数量", width: 120},
-                {field: "totalVarietyAmount", title: "配送品种数", width: 120}
+                {field: "totalAmount", title: "入库数量", width: 120},
+                {field: "totalVarietyAmount", title: "入库品种数", width: 120}
             ]
         }
     };

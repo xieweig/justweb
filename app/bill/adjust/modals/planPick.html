@@ -10,7 +10,7 @@
     <div class="uib-content">
         <div class="row">
             <div class="col-sm-6 col-xs-12 margin-bottom-10">
-                <p>配送信息</p>
+                <p>调剂信息</p>
                 <div style="border: 1px dashed #ddd;padding: 10px;">
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">单号</span>
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="col-sm-6 col-xs-12 margin-bottom-10">
-                <p>配送计划单信息</p>
+                <p>调剂计划单信息</p>
                 <div style="border: 1px dashed #ddd;padding: 10px;">
                     <div class="input-group margin-bottom-10">
                         <span class="input-group-addon">录单时间</span>
@@ -61,14 +61,14 @@
             </ul>
             <div class="tab-content padding-10">
                 <div class="tab-pane" id="tabs-1">
-                    <p class="text-center">配送计划拣货货物明细</p>
+                    <p class="text-center">调剂计划拣货货物明细</p>
                     <div>
                         <input type="text" class="form-control" style="max-width: 315px;" data-ng-model="cargoBarcode" placeholder="扫描货物编码" data-ng-keyup="enterCargo()">
                     </div>
                     <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
                 </div>
                 <div class="tab-pane active" id="tabs-2">
-                    <p class="text-center">配送计划拣货货物明细</p>
+                    <p class="text-center">调剂计划拣货货物明细</p>
                     <div data-ng-repeat="item in materialList" class="padding-10 margin-bottom-10" style="border: 1px dashed #ccc;">
                         <div class="row">
                             <div class="col-xs-12 col-sm-6 col-lg-3">
