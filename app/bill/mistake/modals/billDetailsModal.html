@@ -9,30 +9,30 @@
         <div class="row">
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>报溢时间</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.createTime"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>报溢目标</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.basicEnumName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>报溢站点</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.inLocation.stationName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>报溢库位</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.inLocation.storage.storageName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>操作人</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.operatorName"></dd>
             </dl>
         </div>
         <div class="input-group margin-bottom-10 width-full">
             <span class="input-group-addon" style="width: 100px;">备注</span>
-            <textarea class="form-control" rows="2" data-ng-model="plan.memo" disabled></textarea>
+            <textarea class="form-control" rows="2" data-ng-model="billDetails.memo" disabled></textarea>
         </div>
     </div>
     <p class="text-center" data-ng-if="">已选择货物</p>
-    <div class="margin-top-10" data-kendo-grids data-options="detailsGrid"></div>
+    <div class="margin-top-10" data-ng-if="detailsGrid" data-kendo-grids data-options="detailsGrid"></div>
 </div>

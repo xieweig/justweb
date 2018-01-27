@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal, $stateParams) {
+angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal, cargoUnit, $stateParams) {
     $scope.typeName = $stateParams.typeName;
     $scope.params = {};
     var kendoGridUrl = '';
@@ -101,7 +101,9 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
             controller: 'BillDetailsCtrl',
             resolve: {
                 params: {
-                    type: dataItem.type
+                    type: $stateParams.type,
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit
                 }
             }
         });

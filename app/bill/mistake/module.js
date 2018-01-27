@@ -23,6 +23,11 @@ angular.module('app.bill.mistake', ['ui.router']).config(function ($stateProvide
                     templateUrl: 'app/bill/mistake/views/list.html',
                     controller: 'MistakeListCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                }
             }
         })
         .state('app.bill.mistake.overflowAdd', {
@@ -63,6 +68,11 @@ angular.module('app.bill.mistake', ['ui.router']).config(function ($stateProvide
                     templateUrl: 'app/bill/mistake/views/list.html',
                     controller: 'MistakeListCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                }
             }
         })
         .state('app.bill.mistake.lossAdd', {
@@ -102,6 +112,11 @@ angular.module('app.bill.mistake', ['ui.router']).config(function ($stateProvide
                 "content@app": {
                     templateUrl: 'app/bill/mistake/views/list.html',
                     controller: 'MistakeListCtrl'
+                }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
                 }
             }
         })

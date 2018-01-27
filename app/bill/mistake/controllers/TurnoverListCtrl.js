@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal) {
-    $scope.params = {inStorageCode:[],outStorageCode:[]};
+    $scope.params = {inStorageCode: [], outStorageCode: []};
 
     // 出库站点选择
     $scope.outStationOpt = {
