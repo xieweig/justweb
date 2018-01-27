@@ -16,41 +16,41 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">流转误差单号</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.mistakeBillCode">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">调拨单调出库位</span>
-                                <select data-multiple-select>
-                                    <option data-ng-repeat="item in outType" value="item.value">{{item.text}}</option>
+                                <select data-multiple-select data-multiple-model="params.outStorageCode">
+                                    <option data-ng-repeat="item in outType" data-ng-value="item.value">{{item.text}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">调拨单调入库位</span>
-                                <select data-multiple-select>
-                                    <option data-ng-repeat="item in outType" value="item.value">{{item.text}}</option>
+                                <select data-multiple-select data-multiple-model="params.inStorageCode">
+                                    <option data-ng-repeat="item in outType" data-ng-value="item.value">{{item.text}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">入库单调出站点</span>
-                                <span data-station-tree data-select-modal="overflowStation"></span>
+                                <span data-station-tree data-select-modal="outStationOpt"></span>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">入库单调入站点</span>
-                                <span data-station-tree data-select-modal="overflowStation"></span>
+                                <span data-station-tree data-select-modal="inStationOpt"></span>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">调拨人</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.operatorName">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
@@ -58,13 +58,13 @@
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon">调拨时间</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createStartTime">
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.allotStartTime">
                                     </div>
                                 </div>
                                 <div class="flex-1">
                                     <div class="input-group">
                                         <span class="input-group-addon" style="border-left: 0;">至</span>
-                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.createEndTime">
+                                        <input type="text" class="form-control" data-datepicker data-ng-model="params.allotEndTime">
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">调拨单号</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.billCode">
                             </div>
                         </div>
                     </div>

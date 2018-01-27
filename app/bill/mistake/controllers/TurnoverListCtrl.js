@@ -1,12 +1,19 @@
 'use strict';
 
 angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal) {
-    $scope.params = {};
+    $scope.params = {inStorageCode:[],outStorageCode:[]};
 
     // 出库站点选择
-    $scope.overflowStation = {
+    $scope.outStationOpt = {
         callback: function (data) {
-            $scope.params.inStationCode = _.map(data, function (item) {
+            $scope.params.outStationCodes = _.map(data, function (item) {
+                return item.stationCode;
+            });
+        }
+    };
+    $scope.inStationOpt = {
+        callback: function (data) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -17,7 +24,7 @@ angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal
         $scope.billGrid.kendoGrid.dataSource.page(1);
     };
     $scope.billGrid = {
-        url: '/api/bill/waybill/findWayBillByConditions',
+        url: '/api/bill/mistake/findAllotByConditions',
         params: $scope.params,
         dataSource: {
             data: function () {
