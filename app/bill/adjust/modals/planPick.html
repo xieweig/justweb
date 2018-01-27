@@ -55,15 +55,15 @@
         </div>
         <hr class="gray-line">
         <div class="tab-pane">
-            <ul class="nav nav-tabs">
-                <li><a href="#tabs-1" tabType="cargo" data-toggle="tab">按货物拣货</a></li>
-                <li class="active"><a href="#tabs-2" tabType="material" data-toggle="tab">按原料拣货</a></li>
+            <ul class="nav nav-tabs" id="tabHead">
+                <li><a href="#tabs-1" data-type="cargo" data-toggle="tab" data-ng-show="basicEnum==='BY_CARGO'">按货物拣货</a></li>
+                <li class="active"><a href="#tabs-2" data-type="material" data-toggle="tab">按原料拣货</a></li>
             </ul>
             <div class="tab-content padding-10">
                 <div class="tab-pane" id="tabs-1">
                     <p class="text-center">调剂计划拣货货物明细</p>
                     <div>
-                        <input type="text" class="form-control" style="max-width: 315px;" data-ng-model="cargoBarcode" placeholder="扫描货物编码" data-ng-keyup="enterCargo()">
+                        <input type="text" class="form-control" style="max-width: 315px;" data-ng-model="cargoBarcode" placeholder="扫描货物条码" data-ng-keyup="enterCargo()">
                     </div>
                     <div class="margin-top-10" data-kendo-grids data-options="cargoGrid"></div>
                 </div>

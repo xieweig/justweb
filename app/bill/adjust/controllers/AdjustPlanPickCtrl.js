@@ -12,6 +12,9 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             $scope.bill.outStorageCode = 'NORMAL';
             $('#outStorageCode').val('NORMAL').trigger('change');
         }
+        $('#tabHead').on('click', 'a', function () {
+            $scope.pickType = $(this).attr('data-type');
+        });
     });
     // 库位切换提示
     $scope.$watch('bill.outStorage', function (newVal, oldVal) {
@@ -54,11 +57,13 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
     };
     $scope.cargoArray = [];
     (function () {
+        // 根据货物拣货也可以有调剂  所以只需要判断货物
+        $scope.basicEnum = params.bill.basicEnum;
         if (params.bill.basicEnum === 'BY_CARGO') {
-            var cargoCodes = _.map(params.bill.childPlanBillDetails, function (item) {
+            $scope.cargoCodes = _.map(params.bill.childPlanBillDetails, function (item) {
                 return item.rawMaterial.cargo.cargoCode;
             });
-            Common.getCargoByCodes(cargoCodes).then(function (cargoList) {
+            Common.getCargoByCodes($scope.cargoCodes).then(function (cargoList) {
                 var cargoObject = _.zipObject(_.map(cargoList, function (item) {
                     return item.cargoCode
                 }), cargoList);
@@ -202,6 +207,10 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                 swal('请输入货物条码', '', 'warning');
                 return;
             }
+            if (_.indexOf($scope.cargoCodes, $scope.cargoBarcode) < 0) {
+                swal('货物条码必须存在于明细列表', '', 'warning');
+                return;
+            }
             Common.getCargoByBarCode($scope.cargoBarcode).then(function (cargo) {
                 if (!cargo) {
                     swal('货物不存在', '', 'warning');
@@ -275,7 +284,6 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
     function getParams(type) {
         var result = {
             sourceCode: params.bill.billCode,
-            basicEnum: 'BY_MATERIAL',
             billPurpose: 'OUT_STORAGE',
             specificBillType: 'ADJUST',
             sourceBillType: params.bill.sourceBillType,
@@ -302,6 +310,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
         };
         var emptyItem = null;
         if ($scope.pickType === 'cargo') {
+            result.basicEnum = 'BY_CARGO';
             emptyItem = _.find($scope.cargoArray, function (dataItem) {
                 result.billDetails.push({
                     actualAmount: dataItem.actualAmount,
@@ -320,6 +329,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             });
         } else {
             // 如果要提示 未选择拣货计划   取消下面的注释即可
+            result.basicEnum = 'BY_MATERIAL';
             emptyItem = _.find($scope.materialList, function (material) {
                 var dataSource = material.kendoGrid.kendoGrid.dataSource.data();
                 // if (type === 'submit' && dataSource.length === 0) {
