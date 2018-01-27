@@ -34,8 +34,8 @@
                                 <div class="smart-checkbox-title">审核状态</div>
                                 <div class="smart-form">
                                     <div class="inline-group">
-                                        <label class="checkbox"><input value="1" type="checkbox" name="target"><i></i>货物</label>
-                                        <label class="checkbox"><input value="0" type="checkbox" name="target"><i></i>原料</label>
+                                        <label class="checkbox"><input data-ng-model="targetEnumSet['BY_CARGO']" type="checkbox" name="target"><i></i>货物</label>
+                                        <label class="checkbox"><input data-ng-model="targetEnumSet['BY_MATERIAL']" type="checkbox" name="target"><i></i>原料</label>
                                     </div>
                                 </div>
                             </div>
@@ -49,27 +49,27 @@
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">{{typeName}}库位</span>
-                                <select data-multiple-select>
-                                    <option data-ng-repeat="item in outType" value="item.value">{{item.text}}</option>
+                                <select data-multiple-select data-multiple-model="params.inStorageCodexx">
+                                    <option data-ng-repeat="item in outType" data-ng-value="item.value">{{item.text}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">{{typeName}}目标编码</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.targetCode">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">{{typeName}}目标名称</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.targetName">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">操作人</span>
-                                <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                                <input type="text" class="form-control" data-ng-model="params.operatorName">
                             </div>
                         </div>
                     </div>

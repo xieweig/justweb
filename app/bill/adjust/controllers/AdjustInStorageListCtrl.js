@@ -86,7 +86,7 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
                         if (data.outLocation) {
                             return getTextByVal($scope.station, data.outLocation.stationCode);
                         }
-                        return '';
+                        return '-';
                     }
                 },
                 {
@@ -95,7 +95,7 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
                         if (data.inLocation) {
                             return getTextByVal($scope.station, data.inLocation.stationCode);
                         }
-                        return '';
+                        return '-';
                     }
                 },
                 {field: "totalAmount", title: "配送数量", width: 120},

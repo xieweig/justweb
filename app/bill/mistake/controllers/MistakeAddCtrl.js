@@ -1,14 +1,20 @@
 'use strict';
 
-angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParams, ApiService, $uibModal, cargoUnit, materialUnit) {
+angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParams, ApiService, $state, $uibModal, cargoUnit, materialUnit) {
     $scope.typeName = $stateParams.typeName;
     $scope.bill = {cargo: {}, material: {}};
-    $scope.bySomething = 'cargo';
+
+    $scope.bySomething = 'material';
+    $('#tabHead').on('click', 'a', function () {
+        $scope.bySomething = $(this).attr('data-type');
+    });
 
     $scope.materialStationOpt = {
         single: true,
         callback: function (data) {
             $scope.bill.material.inStationCode = data.stationCode;
+            $scope.bill.material.inStationName = data.stationName;
+            $scope.bill.material.inStationType = data.siteType;
         }
     };
 
@@ -30,12 +36,11 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
         },
         kendoSetting: {
             columns: [
-                // {title: "操作", width: 80, command: [{name: 'look', text: "查看", click: lookDetails}]},
-                {field: "xxxxx", title: "原料编码"},
-                {field: "xxxxx", title: "原料名称", width: 120},
-                {field: "xxxxx", title: "原料所属分类", width: 120},
-                {field: "xxxxx", title: "报溢数量", width: 120},
-                {field: "xxxxx", title: "标准单位", width: 120}
+                {field: "materialName", title: "原料名称"},
+                {field: "materialCode", title: "原料编码", width: 120},
+                {field: "materialTypeName", title: "所属原料", width: 120},
+                {field: "standardUnit", title: "最小标准单位", width: 120},
+                {field: "amount", title: "货物数量", width: 120}
             ]
         }
     };
@@ -121,15 +126,11 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
     function combinationMaterialItem(dataSource) {
         return _.map(dataSource, function (item) {
             return {
-                cargoName: item.cargoName,
-                cargoCode: item.cargoCode,
-                rawMaterialName: item.rawMaterialName,
-                rawMaterialCode: item.rawMaterialCode,
-                measurementCode: item.measurementCode,
-                measurementName: getTextByVal(cargoUnit, item.measurementCode),
-                standardUnitCode: item.standardUnitCode,
-                standardUnitName: getTextByVal(materialUnit, item.standardUnitCode),
-                number: item.number,
+                materialCode: item.materialCode,
+                materialName: item.materialName,
+                materialTypeName: item.materialTypeName,
+                materialTypeCode: item.materialTypeCode,
+                standardUnit: item.standardUnit,
                 amount: item.amount || 0
             };
         });
@@ -140,11 +141,26 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
         var params = {};
         var dataItem = {}, dataSource = null;
         if ($scope.bySomething === 'cargo') {
+            params.basicEnum = 'BY_CARGO';
             dataItem = $scope.bill.cargo;
-            dataSource = $scope.cargoGrid.kendoGrid.dataSource;
+            dataSource = $scope.cargoGrid.kendoGrid.dataSource.data();
         } else {
+            params.basicEnum = 'BY_MATERIAL';
             dataItem = $scope.bill.material;
-            dataSource = $scope.materialGrid.kendoGrid.dataSource;
+            dataSource = $scope.materialGrid.kendoGrid.dataSource.data();
+        }
+        if (!dataItem.inStationCode) {
+            swal('请选择' + $scope.typeName + '站点', '', 'warning');
+            return
+        } else if (!dataItem.inStationCode) {
+            swal('请选择库位', '', 'warning');
+            return
+        } else if (!dataItem.memo) {
+            swal('请填写备注', '', 'warning');
+            return
+        } else if (dataSource.length === 0) {
+            swal('请添加' + $scope.typeName + '目标', '', 'warning');
+            return
         }
         params.memo = dataItem.memo;
         params.inLocation = {
@@ -156,14 +172,14 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
                 storageName: getTextByVal($scope.outType, dataItem.storageCode)
             }
         };
-        params.billDetails = _.map(dataSource.data(), function (item) {
+        params.billDetails = _.map(dataSource, function (item) {
             var result = {
                 actualAmount: item.amount,
-                actualTotalAmount: parseInt(item.number) * parseInt(item.amount),
+                actualTotalAmount: item.number ? parseInt(item.number) * parseInt(item.amount) : item.amount,
                 belongMaterialCode: item.rawMaterialCode,
                 rawMaterial: {
-                    rawMaterialCode: item.rawMaterialCode,
-                    rawMaterialName: item.rawMaterialName
+                    rawMaterialCode: item.rawMaterialCode || item.materialCode,
+                    rawMaterialName: item.rawMaterialName || item.materialName
                 }
             };
             if ($scope.bySomething === 'cargo') {
@@ -178,7 +194,9 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-
+                swal('操作成功', '', 'success').then(function () {
+                    $state.go('app.bill.mistake.overflowList');
+                });
             }
         });
     };

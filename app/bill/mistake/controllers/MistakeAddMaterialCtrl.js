@@ -22,7 +22,7 @@ angular.module('app').controller('MistakeAddMaterialCtrl', function ($scope, par
     $scope.materialList = {
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/rawMaterial/findByConditionForApi',
         params: $scope.params,
-        primaryId: 'material',
+        primaryId: 'materialCode',
         dataSource: {
             data: function (response) {
                 var result = getKendoData(response);
@@ -53,24 +53,27 @@ angular.module('app').controller('MistakeAddMaterialCtrl', function ($scope, par
 
     // 已选中货物列表
     $scope.currentMateriaList = {
-        primaryId: 'cargoCode',
-        persistSelection: true,
+        primaryId: 'materialCode',
         kendoSetting: {
             editable: true,
             dataSource: params.data,
             columns: [
                 {title: "操作", command: [{name: 'del', text: "删除", click: deleteCurrentCargo}], width: 80},
-                {field: "cargoName", title: "原料名称", width: 120},
-                {field: "cargoCode", title: "原料编码", width: 120},
-                {field: "rawMaterialName", title: "所属原料分类", width: 120},
-                {
-                    title: "最小标准单位", width: 120,
-                    template: function (data) {
-                        return getTextByVal(params.materialUnit, data.standardUnitCode);
-                    }
-                },
+                {field: "materialName", title: "原料名称", width: 120},
+                {field: "materialCode", title: "原料编码", width: 120},
+                {field: "materialTypeName", title: "所属原料分类", width: 120},
+                {field: "standardUnit", title: "最小标准单位", width: 120},
                 {field: "amount", title: "报溢数量(点击编辑)", width: 200, kType: 'number', editable: true}
-            ]
+            ],
+            save: function (e) {
+                var dataItem = e.model;
+                _.find(params.data, function (item) {
+                    if (item.materialCode === dataItem.materialCode) {
+                        item.amount = e.values.amount;
+                        return true;
+                    }
+                });
+            }
         }
     };
 
@@ -79,15 +82,15 @@ angular.module('app').controller('MistakeAddMaterialCtrl', function ($scope, par
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         swal({
-            title: '确定要删除' + dataItem.cargoName,
+            title: '确定要删除' + dataItem.materialName,
             type: 'warning',
             confirmButtonText: '是的',
             showCancelButton: true
         }).then(function (res) {
             if (res.value) {
-                var dataSource = $scope.currentCargoList.kendoGrid.dataSource;
+                var dataSource = $scope.currentMateriaList.kendoGrid.dataSource;
                 _.find(params.data, function (item, index) {
-                    if (item.cargoCode === dataItem.cargoCode) {
+                    if (item.materialCode === dataItem.materialCode) {
                         params.data.splice(index, 1);
                         return true;
                     }
@@ -99,21 +102,21 @@ angular.module('app').controller('MistakeAddMaterialCtrl', function ($scope, par
     }
 
     // 增加货物
-    $scope.addCargo = function (dataSource) {
+    $scope.addMaterial = function (dataSource) {
         var selectIds = [];
-        var currentDataSource = $scope.currentCargoList.kendoGrid.dataSource;
+        var currentDataSource = $scope.currentMateriaList.kendoGrid.dataSource;
         if (!dataSource) {
-            selectIds = $scope.cargoList.kendoGrid.selectedKeyNames();
-            dataSource = $scope.cargoList.kendoGrid.dataSource.data();
+            selectIds = $scope.materialList.kendoGrid.selectedKeyNames();
+            dataSource = $scope.materialList.kendoGrid.dataSource.data();
         } else {
-            selectIds = [dataSource[0].cargoCode];
+            selectIds = [dataSource[0].materialCode];
         }
         var existArray = _.map(params.data, function (item, index) {
-            return item.cargoCode;
+            return item.materialCode;
         });
         _.each(dataSource, function (item, index) {
-            if (_.indexOf(selectIds, '' + item.cargoCode) > -1 && _.indexOf(existArray, '' + item.cargoCode) < 0) {
-                item.actualAmount = 0;
+            if (_.indexOf(selectIds, '' + item.materialCode) > -1 && _.indexOf(existArray, '' + item.materialCode) < 0) {
+                item.amount = 0;
                 params.data.push(item);
             }
         });
@@ -125,7 +128,7 @@ angular.module('app').controller('MistakeAddMaterialCtrl', function ($scope, par
      */
     $scope.submit = function (dataSource) {
         if (!dataSource) {
-            dataSource = $scope.currentCargoList.kendoGrid.dataSource.data();
+            dataSource = $scope.currentMateriaList.kendoGrid.dataSource.data();
         }
         params.cb(dataSource);
         $scope.$close();

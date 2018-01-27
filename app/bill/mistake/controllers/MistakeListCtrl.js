@@ -2,12 +2,12 @@
 
 angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal, $stateParams) {
     $scope.typeName = $stateParams.typeName;
-    $scope.params = {};
+    $scope.params = {inStorageCode: ''};
 
     // 出库站点选择
     $scope.overflowStation = {
         callback: function (data) {
-            $scope.params.inStationCode = _.map(data, function (item) {
+            $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -18,11 +18,19 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
         $scope.billGrid.kendoGrid.dataSource.page(1);
     };
     $scope.billGrid = {
-        url: '/api/bill/waybill/findWayBillByConditions',
+        url: '/api/bill/mistake/findOverFlowByConditions',
         params: $scope.params,
         dataSource: {
-            data: function () {
-                return [{type: 'cargo'}, {type: 'material'}];
+            parameterMap: function (data) {
+                if (!data.inStationCodes) {
+                    data.inStationCodes = ['USER_ALL'];
+                }
+                data.targetEnumSet = [];
+                _.each($scope.targetEnumSet, function (item, key) {
+                    if (item) {
+                        data.targetEnumSet.push(key);
+                    }
+                });
             }
         },
         kendoSetting: {
@@ -30,11 +38,35 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
             pageable: true,
             columns: [
                 {title: "操作", width: 80, command: [{name: 'look', text: "查看", click: lookDetails}]},
-                {field: "xxxxx", title: $stateParams.typeName + "时间"},
-                {field: "xxxxx", title: $stateParams.typeName + "目标", width: 120},
-                {field: "xxxxx", title: $stateParams.typeName + "站点", width: 120},
-                {field: "xxxxx", title: $stateParams.typeName + "库位", width: 120},
-                {field: "xxxxx", title: $stateParams.typeName + "操作人", width: 120}
+                {field: "createTime", title: $stateParams.typeName + "时间", width: 160},
+                {
+                    title: $stateParams.typeName + "目标", width: 120,
+                    template: function (data) {
+                        if (data.basicEnum === 'BY_CARGO') {
+                            return '货物';
+                        }
+                        return '原料';
+                    }
+                },
+                {
+                    title: $stateParams.typeName + "站点", width: 180,
+                    template: function (data) {
+                        if (data.inLocation) {
+                            return getTextByVal($scope.station, data.inLocation.stationCode);
+                        }
+                        return '-';
+                    }
+                },
+                {
+                    title: $stateParams.typeName + "库位", width: 120,
+                    template: function (data) {
+                        if (data.inLocation && data.inLocation.storage) {
+                            return getTextByVal($scope.outType, data.inLocation.storage.storageCode);
+                        }
+                        return '-';
+                    }
+                },
+                {field: "operatorName", title: $stateParams.typeName + "操作人", width: 180}
             ]
         }
     };

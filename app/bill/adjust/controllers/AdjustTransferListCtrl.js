@@ -47,7 +47,7 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
                         if (data.outLocation) {
                             return getTextByVal($scope.station, data.outLocation.stationCode);
                         }
-                        return '';
+                        return '-';
                     }
                 },
                 {
@@ -56,7 +56,7 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
                         if (data.outLocation) {
                             return getTextByVal($scope.station, data.inLocation.stationCode);
                         }
-                        return '';
+                        return '-';
                     }
                 },
                 {
@@ -65,7 +65,7 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
                         if (data.outLocation && data.outLocation.storage) {
                             return getTextByVal($scope.outType, data.outLocation.storage.storageCode);
                         }
-                        return '';
+                        return '-';
                     }
                 },
                 {
@@ -74,7 +74,7 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
                         if (data.inLocation && data.inLocation.storage) {
                             return getTextByVal($scope.outType, data.inLocation.storage.storageCode);
                         }
-                        return '';
+                        return '-';
                     }
                 },
                 {field: "totalAmount", title: "调拨数量", width: 120},
