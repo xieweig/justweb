@@ -20,6 +20,11 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
             });
         }
     };
+    // 重置页面
+    $scope.resetPage = function () {
+        $state.reload($state.current.name);
+    };
+
 
     $scope.search = function () {
         $scope.billGrid.kendoGrid.dataSource.page(1);

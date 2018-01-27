@@ -72,6 +72,8 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
                     template: function (data) {
                         if (data.inLocation) {
                             return getTextByVal($scope.station, data.inLocation.stationCode);
+                        } else if (data.outLocation) {
+                            return getTextByVal($scope.station, data.outLocation.stationCode);
                         }
                         return '-';
                     }

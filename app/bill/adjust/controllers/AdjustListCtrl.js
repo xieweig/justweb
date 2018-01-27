@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
+angular.module('app').controller('AdjustListCtrl', function ($scope, $state, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
     // 搜索条件中的出库站点选择
     $scope.params.inStationCodes = [$.cookie('currentStationCode')];
@@ -20,6 +20,11 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $uibModal, 
                 return item.stationCode;
             });
         }
+    };
+
+    // 重置页面
+    $scope.resetPage = function () {
+        $state.reload($state.current.name);
     };
 
     // 搜索

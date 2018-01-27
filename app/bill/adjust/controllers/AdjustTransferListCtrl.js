@@ -21,6 +21,12 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $ti
         }
     };
 
+    // 重置页面
+    $scope.resetPage = function () {
+        $state.reload($state.current.name);
+    };
+
+
     $scope.search = function () {
         $scope.billGrid.kendoGrid.dataSource.page(1);
     };
