@@ -17,7 +17,7 @@
                     <div style="max-width: 420px;">
                         <div class="input-group margin-bottom-10">
                             <span class="input-group-addon">出库库位</span>
-                            <select smart-select2 id="select-out" class="width-full" data-ng-model="params.outStorageType">
+                            <select smart-select2 id="outStorageCode" class="width-full" data-ng-model="params.outStorageType">
                                 <option value="">请选择</option>
                                 <option data-ng-repeat="item in outType" data-ng-value="item.value">
                                     {{item.text}}
@@ -30,7 +30,7 @@
                         </div>
                         <div class="input-group margin-bottom-10">
                             <span class="input-group-addon">出库备注</span>
-                            <input type="text" class="form-control" data-ng-model="params.wayBillCode">
+                            <input type="text" class="form-control" data-ng-model="params.outMemo">
                         </div>
                     </div>
                 </div>

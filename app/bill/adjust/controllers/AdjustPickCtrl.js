@@ -1,7 +1,16 @@
 'use strict';
 
-angular.module('app').controller('AdjustPickCtrl', function ($scope, $uibModal, Common, ApiService, cargoUnit, materialUnit) {
+angular.module('app').controller('AdjustPickCtrl', function ($scope, $uibModal, Common, $timeout, ApiService, cargoUnit, materialUnit) {
     $scope.params = {};
+    $timeout(function () {
+        if ($.cookie('currentStationType') === 'LOGISTICS') {
+            $scope.params.outStorageCode = 'STORAGE';
+            $('#outStorageCode').val('STORAGE').trigger('change');
+        } else {
+            $scope.params.outStorageCode = 'NORMAL';
+            $('#outStorageCode').val('NORMAL').trigger('change');
+        }
+    });
 
     // 搜索条件中的入库站点选择
     $scope.inStationParams = {
