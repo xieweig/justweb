@@ -60,10 +60,13 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
         // 根据货物拣货也可以有调剂  所以只需要判断货物
         $scope.basicEnum = params.bill.basicEnum;
         if (params.bill.basicEnum === 'BY_CARGO') {
-            $scope.cargoCodes = _.map(params.bill.childPlanBillDetails, function (item) {
-                return item.rawMaterial.cargo.cargoCode;
+            var cargoCodes = [];
+            $scope.cargoBarCodes = [];
+            _.each(params.bill.childPlanBillDetails, function (item) {
+                cargoCodes.push(item.rawMaterial.cargo.cargoCode);
+                $scope.cargoBarCodes.push(item.rawMaterial.cargo.barCode);
             });
-            Common.getCargoByCodes($scope.cargoCodes).then(function (cargoList) {
+            Common.getCargoByCodes(cargoCodes).then(function (cargoList) {
                 var cargoObject = _.zipObject(_.map(cargoList, function (item) {
                     return item.cargoCode
                 }), cargoList);
@@ -208,7 +211,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                 swal('请输入货物条码', '', 'warning');
                 return;
             }
-            if (_.indexOf($scope.cargoCodes, $scope.cargoBarcode) < 0) {
+            if (_.indexOf($scope.cargoBarCodes, $scope.cargoBarcode) < 0) {
                 swal('货物条码必须存在于明细列表', '', 'warning');
                 return;
             }
