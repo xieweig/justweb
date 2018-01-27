@@ -3,7 +3,7 @@
 angular.module('app').controller('AdjustListCtrl', function ($scope, $state, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
     $scope.params = {};
     // 搜索条件中的出库站点选择
-    $scope.params.inStationCodes = [$.cookie('currentStationCode')];
+    $scope.params.outStationCodes = [$.cookie('currentStationCode')];
     $scope.outStationParams = {
         initTip: decodeURIComponent($.cookie('currentStationName')),
         callback: function (data) {
