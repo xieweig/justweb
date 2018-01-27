@@ -61,13 +61,13 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
         $scope.basicEnum = params.bill.basicEnum;
         if (params.bill.basicEnum === 'BY_CARGO') {
             var cargoCodes = [];
-            $scope.cargoBarCodes = [];
             _.each(params.bill.childPlanBillDetails, function (item) {
                 cargoCodes.push(item.rawMaterial.cargo.cargoCode);
-                $scope.cargoBarCodes.push(item.rawMaterial.cargo.barCode);
             });
             Common.getCargoByCodes(cargoCodes).then(function (cargoList) {
+                $scope.cargoBarCodes = [];
                 var cargoObject = _.zipObject(_.map(cargoList, function (item) {
+                    $scope.cargoBarCodes.push(item.barCode);
                     return item.cargoCode
                 }), cargoList);
                 _.each(params.bill.childPlanBillDetails, function (item) {
