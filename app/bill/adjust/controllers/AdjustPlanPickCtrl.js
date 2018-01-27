@@ -159,8 +159,9 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                         material: material,
                         data: combinationItem(item.kendoGrid.kendoGrid.dataSource.data()),
                         cb: function (data) {
-                            var dataSource = item.kendoGrid.kendoGrid.dataSource;
-                            dataSource.data(combinationItem(data));
+                            var dataSource = combinationItem(data);
+                            item.kendoGrid.kendoGrid.dataSource.data(dataSource);
+                            calculateActual();
                         }
                     }
                 }
@@ -343,7 +344,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                     // }
                     result.billDetails.push({
                         actualAmount: dataItem.actualAmount,
-                        shippedAmount: material.amount,
+                        shippedAmount: material.material.amount,
                         belongMaterialCode: dataItem.rawMaterialCode,
                         rawMaterial: {
                             cargo: {
