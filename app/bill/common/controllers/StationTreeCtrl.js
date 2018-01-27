@@ -78,23 +78,25 @@ angular.module('app').controller('StationTreeCtrl', function ($scope, $rootScope
             if (isMultiple) {
                 options.modal = [];
                 checkedNodeIds($scope.treeViewOptions.treeView.dataSource.view(), options.modal);
-                if (options.modal.length === 0) {
-                    swal('请选择站点', '', 'warning');
-                    return;
-                }
+                // if (options.modal.length === 0) {
+                //     swal('请选择站点', '', 'warning');
+                //     return;
+                // }
             } else {
                 var selectNode = $scope.treeViewOptions.treeView.select();
-                options.modal = {
-                    stationId: selectNode.find('.stationId').val(),
-                    stationCode: selectNode.find('.stationCode').val(),
-                    stationName: selectNode.find('.stationName').val(),
-                    siteType: selectNode.find('.siteType').val(),
-                    type: selectNode.find('.stationType').val()
-                };
-                // 判断是否选择了站点
-                if (options.modal.type !== 'station') {
-                    swal('请选择站点', '', 'warning');
-                    return;
+                if (selectNode.length > 0) {
+                    options.modal = {
+                        stationId: selectNode.find('.stationId').val(),
+                        stationCode: selectNode.find('.stationCode').val(),
+                        stationName: selectNode.find('.stationName').val(),
+                        siteType: selectNode.find('.siteType').val(),
+                        type: selectNode.find('.stationType').val()
+                    };
+                    // 判断是否选择了站点
+                    if (options.modal.type !== 'station') {
+                        swal('请选择站点', '', 'warning');
+                        return;
+                    }
                 }
             }
             // 判断有没有回调函数  有则执行
