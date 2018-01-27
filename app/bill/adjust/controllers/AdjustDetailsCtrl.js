@@ -113,7 +113,14 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                             $scope.materialList = _.map(materialList, function (item) {
                                 var material = materialObject[item.rawMaterial.rawMaterialCode];
                                 material.shippedAmount = item.shippedAmount;
-                                material.actualAmount = item.actualAmount;
+                                // 计算实拣数量
+                                material.actualAmount = 0;
+                                // 循环货物列表  获取每个货物的规格和实践数量
+                                _.map(cargoList, function (cargoItem) {
+                                    if (cargoItem.rawMaterialCode === material.materialCode) {
+                                        material.actualAmount += parseInt(cargoItem.actualAmount) * parseInt(cargoItem.number);
+                                    }
+                                });
                                 return material;
                             });
                             $scope.materialDetails = {
@@ -123,7 +130,12 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                                         {field: "materialName", title: "原料名称", width: 120},
                                         {field: "materialCode", title: "原料编码", width: 120},
                                         {field: "shippedAmount", title: "应拣数量", width: 120},
-                                        {field: "actualAmount", title: "实拣数量", width: 120},
+                                        {
+                                            title: "实拣数量", width: 120,
+                                            template: function (data) {
+                                                return data.actualAmount;
+                                            }
+                                        },
                                         {
                                             title: "完成度", width: 120,
                                             template: function (data) {
