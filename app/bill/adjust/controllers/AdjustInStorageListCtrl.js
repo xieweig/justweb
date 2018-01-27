@@ -122,9 +122,7 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
             resolve: {
                 params: {
                     type: 'inLook',
-                    billCode: dataItem.billCode,
-                    cargoUnit: cargoUnit,
-                    materialUnit: materialUnit
+                    billCode: dataItem.billCode
                 }
             }
         });
