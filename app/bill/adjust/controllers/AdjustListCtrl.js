@@ -5,7 +5,7 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $state, $ui
     // 搜索条件中的出库站点选择
     $scope.params.inStationCodes = [$.cookie('currentStationCode')];
     $scope.outStationParams = {
-        initTip: $.cookie('currentStationName'),
+        initTip: decodeURIComponent($.cookie('currentStationName')),
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
@@ -59,8 +59,18 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $state, $ui
                 {field: "billCode", title: "站点计划号", width: 120, template: '<a href="javascript:void(0);" class="billCode">#: data.billCode #</a>'},
                 {field: "createTime", title: "录单时间", width: 120},
                 {field: "operatorName", title: "录单人", width: 120},
-                {field: "outStationCode", title: "出库站点", width: 120},
-                {field: "inStationCode", title: "调入站点", width: 120},
+                {
+                    title: "出库站点", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.station, data.outStationCode);
+                    }
+                },
+                {
+                    title: "调入站点", width: 120,
+                    template: function (data) {
+                        return getTextByVal($scope.station, data.inStationCode);
+                    }
+                },
                 {field: "totalAmount", title: "数量", width: 120},
                 {field: "typeAmount", title: "规格品种", width: 120},
                 {field: "planMemo", title: "备注", width: 120}
