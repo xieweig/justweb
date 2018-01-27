@@ -254,7 +254,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
         var result = {
             specificBillType: 'ADJUST',
             sourceBillType: $scope.billDetails.sourceBillType,
-            sourceCode: $scope.billDetails.billCode,
+            sourceCode: $scope.billDetails.sourceCode,
             basicEnum: $scope.billDetails.basicEnum,
             billPurpose: $scope.billDetails.billPurpose,
             self: $scope.billDetails.self,

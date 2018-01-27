@@ -128,7 +128,7 @@ angular.module('app').controller('AdjustPickCtrl', function ($scope, $state, $ui
                     swal('', response.message, 'error');
                 } else {
                     swal('操作成功!', '', 'success').then(function () {
-                        $scope.$close();
+                        $state.go('app.bill.adjust.outStorageList');
                     });
                 }
             }, apiServiceError);
@@ -144,7 +144,7 @@ angular.module('app').controller('AdjustPickCtrl', function ($scope, $state, $ui
                     swal('', response.message, 'error');
                 } else {
                     swal('操作成功!', '', 'success').then(function () {
-                        $state.go('app.bill.adjust.planList');
+                        $state.go('app.bill.adjust.outStorageList');
                     });
                 }
             }, apiServiceError);
