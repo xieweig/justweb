@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AdjustPickCtrl', function ($scope, $uibModal, Common, $timeout, ApiService, cargoUnit, materialUnit) {
+angular.module('app').controller('AdjustPickCtrl', function ($scope, $state, $uibModal, Common, $timeout, ApiService, cargoUnit, materialUnit) {
     $scope.params = {};
     $timeout(function () {
         if ($.cookie('currentStationType') === 'LOGISTICS') {
@@ -144,7 +144,7 @@ angular.module('app').controller('AdjustPickCtrl', function ($scope, $uibModal, 
                     swal('', response.message, 'error');
                 } else {
                     swal('操作成功!', '', 'success').then(function () {
-                        $scope.$close();
+                        $state.go('app.bill.adjust.planList');
                     });
                 }
             }, apiServiceError);
