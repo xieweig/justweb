@@ -55,35 +55,18 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $t
                         }
                     ], width: 160
                 },
+                {field: "xxx", title: "单据状态", width: 160},
                 {
                     title: "单据属性", width: 120,
                     template: function (data) {
                         return getTextByVal($scope.sourceBillType, data.sourceBillType)
                     }
                 },
-                {
-                    title: "出库状态", width: 120,
-                    template: function (data) {
-                        return getTextByVal($scope.outStateEnum, data.outStateEnum);
-                    }
-                },
-                {
-                    title: "提交状态", width: 120,
-                    template: function (data) {
-                        return getTextByVal($scope.submitStatus, data.submitState);
-                    }
-                },
-                {
-                    title: "审核状态", width: 120,
-                    template: function (data) {
-                        return getTextByVal($scope.auditStatus, data.auditState);
-                    }
-                },
                 {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
-                {field: "billCode", title: "出库单号", width: 200},
+                {field: "billCode", title: "入库单号", width: 200},
                 {field: "createTime", title: "录单时间", width: 160},
                 {field: "xxxxx", title: "出库时间", width: 120},
-                {field: "operatorName", title: "录单人", width: 120},
+                {field: "operatorName", title: "入库人", width: 120},
                 {field: "xxxxx", title: "审核人", width: 120},
                 {
                     title: "出库站点", width: 200,
