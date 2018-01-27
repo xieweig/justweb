@@ -221,6 +221,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                     return;
                 }
                 $scope.cargoByBarcode = cargo;
+                $scope.cargoByBarcode.standardUnitName = getTextByVal(params.materialUnit, cargo.standardUnitCode);
                 $scope.cargoByBarcode.range = 'add';
                 $uibModal.open({
                     templateUrl: 'app/bill/adjust/modals/planPickCargo.html',
