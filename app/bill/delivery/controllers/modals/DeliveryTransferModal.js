@@ -183,8 +183,9 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             } else {
                 // alert('success')
                 $scope.cargoGrid.kendoGrid.refresh();
-                $scope.$close();
-                $state.go('app.bill.delivery.transferList');
+                swal('调拨成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
             }
         }, apiServiceError);
 

@@ -188,8 +188,9 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                // alert('success')
-                $state.go('app.bill.restock.transferList');
+                swal('调拨成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
             }
         }, apiServiceError);
         $scope.cargoGrid.kendoGrid.refresh();

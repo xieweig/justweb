@@ -465,7 +465,9 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.returned.outStorageList');
+                swal('操作成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
             }
         }, apiServiceError);
         $scope.$close();

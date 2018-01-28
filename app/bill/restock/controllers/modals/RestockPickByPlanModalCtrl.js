@@ -472,7 +472,9 @@ angular.module('app').controller('RestockPickByPlanModalCtrl', function ($scope,
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $state.go('app.bill.restock.outStorageList');
+                swal('操作成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
             }
         }, apiServiceError);
         $scope.$close();
