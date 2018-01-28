@@ -85,6 +85,7 @@ angular.module('app').controller('ReturnedPickByPlanModalCtrl', function ($scope
                                     cargoCode: item.cargo.cargoCode,
                                     rawMaterialName: item.material.materialName,
                                     rawMaterialCode: item.material.materialCode,
+                                    measurementCode: item.cargo.measurementCode,
                                     number: item.cargo.number,
                                     standardUnitCode: item.cargo.standardUnitCode,
                                     actualAmount: 0,

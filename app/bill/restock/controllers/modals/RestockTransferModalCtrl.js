@@ -110,6 +110,12 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
                     }), materialList);
                     _.each(billDetails, function (item) {
                         item.material = materialObject[item.rawMaterial.rawMaterialCode];
+                        var actualAmount = 0;
+                        if($scope.show){
+                            actualAmount = item.actualAmount
+                        }else{
+                            actualAmount = item.shippedAmount
+                        }
                         $scope.cargoGrid.kendoGrid.dataSource.add({
                             cargoName: item.cargo.cargoName,
                             cargoCode: item.cargo.cargoCode,
@@ -118,7 +124,7 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
                             number: item.cargo.number,
                             standardUnitCode: item.cargo.standardUnitCode,
                             measurementCode: item.cargo.measurementCode,
-                            actualAmount: item.actualAmount,
+                            actualAmount: actualAmount,
                             realAmount: item.actualAmount
                         })
                     });

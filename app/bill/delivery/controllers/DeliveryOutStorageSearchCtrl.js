@@ -107,7 +107,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
                 {field: "billCode", locked: true, title: "出库单号", width: 150},
                 {
                     title: "单据属性", width: 150, template: function (data) {
-                        return getTextByVal($scope.specificType, data.sourceBillType) + '转'
+                        return getTextByVal($scope.sourceBillType, data.sourceBillType) + '转'
                     }
                 },
                 {
@@ -126,7 +126,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
                     }
                 },//
                 {field: "createTime", title: "录单时间", width: 150},
-                {field: "inWareHouseTime", title: "出库时间", width: 150},
+                {field: "outWareHouseTime", title: "出库时间", width: 150},
                 {field: "operatorName", title: "录单人", width: 150},
                 {field: "auditPersonName", title: "审核人", width: 150},
                 {

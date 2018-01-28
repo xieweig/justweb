@@ -46,8 +46,8 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
                     }},
                 {field: "billCode", title: "调拨单号", locked: true, width: 210},
-                {title: "单据属性", width: 100, template: function (item) {
-                        return getTextByVal($scope.billType, item.sourceBillType) + '转'
+                {title: "单据属性", width: 100, template: function (data) {
+                        return getTextByVal($scope.sourceBillType, data.sourceBillType) + '转'
                     }},
                 {field: "createTime", title: "调拨时间", width: 100},
                 {field: "operatorName", title: "操作人", width: 60},

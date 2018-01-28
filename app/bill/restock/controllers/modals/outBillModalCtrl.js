@@ -230,117 +230,137 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             var billDetails = [], cargoList = [];
             if ($scope.showMaterial) {
                 billDetails = res.billDetails;
-                cargoList = _.map(billDetails, function (item) {
-                    return item.rawMaterial.cargo.cargoCode
+                $scope.materialCodes = [];
+                $scope.materialCodes = _.map(res.planBill.childPlanBillDetails, function (item) {
+                    return item.rawMaterial.rawMaterialCode
                 });
-                // 异步加载货物信息
-                $timeout(function () {
+                Common.getMaterialByCodes($scope.materialCodes).then(function (materialList) {
+
+                    cargoList = _.map(billDetails, function (item) {
+                        return item.rawMaterial.cargo.cargoCode
+                    });
+
+                    if(res.planBill.basicEnum === 'BY_CARGO'){
+                        _.each(res.planBill.childPlanBillDetails, function (plan) {
+                            cargoList.push(plan.rawMaterial.cargo.cargoCode)
+                        })
+                    }
+
+                    var materialObject = _.zipObject(_.map(materialList, function (item) {
+                        return item.materialCode
+                    }), materialList);
+
                     Common.getCargoByCodes(cargoList).then(function (cargoList) {
-                        // cargoList: 货物详细信息
                         var cargoObject = _.zipObject(_.map(cargoList, function (item) {
                             return item.cargoCode
                         }), cargoList);
-                        // 原料Code列表
-                        var materialList = [];
+
+                        _.each(materialList, function (item) {
+                            var sp = 0;
+                            if(res.planBill.basicEnum === 'BY_CARGO'){
+                                _.each(res.planBill.childPlanBillDetails, function (plan) {
+                                    if (plan.rawMaterial.rawMaterialCode === item.materialCode) {
+                                        console.log(cargoObject[plan.rawMaterial.cargo.cargoCode])
+                                        sp += plan.amount * cargoObject[plan.rawMaterial.cargo.cargoCode].number;
+                                        console.log(sp)
+                                    }
+                                })
+                            }else{
+                                _.each(res.planBill.childPlanBillDetails, function (plan) {
+                                    if (plan.rawMaterial.rawMaterialCode === item.materialCode) {
+                                        sp = plan.amount;
+                                    }
+                                })
+                            }
+
+                            $scope.MaterialGrid.kendoGrid.dataSource.add({
+                                materialName: item.materialName,
+                                materialCode: item.materialCode,
+                                materialId: item.materialId,
+                                shippedAmount: sp,
+                                actualAmount: 0,
+                                progress: 0
+                            })
+                        });
+
                         _.each(billDetails, function (item) {
                             // 将相应货物信息添加进billDetails
                             item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
-                            materialList.push(item.rawMaterial.rawMaterialCode)
-                        });
-                        Common.getMaterialByCodes(materialList).then(function (materialList) {
-                            // materialList: 原料详细信息
-                            var materialObject = _.zipObject(_.map(materialList, function (item) {
-                                return item.materialCode
-                            }), materialList);
-                            _.each(billDetails, function (item) {
-                                // 将相应原料信息添加进billDetails
-                                item.material = materialObject[item.rawMaterial.rawMaterialCode];
-                                // 往CargoGrid中添加数据
-                                $scope.CargoGrid.kendoGrid.dataSource.add({
-                                    cargoName: item.cargo.cargoName,
-                                    cargoCode: item.cargo.cargoCode,
-                                    rawMaterialName: item.material.materialName,
-                                    rawMaterialCode: item.material.materialCode,
-                                    number: item.cargo.number,
-                                    standardUnitCode: item.cargo.standardUnitCode,
-                                    shippedAmount: item.shippedAmount,
-                                    actualAmount: item.actualAmount,
-                                    measurementCode: item.cargo.measurementCode
-                                });
-                                // 原料列表的去重，可能需要重构
-                                var isExist = false;
-                                $scope.materialResult = _.map($scope.materialResult, function (result) {
-                                    if (result.materialCode === item.rawMaterial.rawMaterialCode) {
-                                        isExist = true;
-                                        // 累加已拣数量
-                                        result.actualAmount += (parseInt(item.actualAmount) * parseInt(item.cargo.number))
-                                    }
-                                    return result
-                                });
-                                if (!isExist) {
-                                    var sa = item.shippedAmount,
-                                        aa = parseInt(item.actualAmount) * parseInt(item.cargo.number),
-                                        pg = parseFloat(aa / parseInt(sa) * 100).toFixed(2) + '%';
-                                    $scope.materialResult.push({
-                                        materialName: item.material.materialName,
-                                        materialCode: item.rawMaterial.rawMaterialCode,
-                                        materialId: item.material.materialId,
-                                        shippedAmount: sa,
-                                        actualAmount: aa,
-                                        progress: pg
-                                    })
+                            item.material = materialObject[item.rawMaterial.rawMaterialCode];
+                            $scope.CargoGrid.kendoGrid.dataSource.add({
+                                cargoName: item.cargo.cargoName,
+                                cargoCode: item.cargo.cargoCode,
+                                rawMaterialName: item.material.materialName,
+                                rawMaterialCode: item.material.materialCode,
+                                rawMaterialId: item.material.materialId,
+                                number: item.cargo.number,
+                                standardUnitCode: item.cargo.standardUnitCode,
+                                shippedAmount: item.shippedAmount,
+                                actualAmount: item.actualAmount,
+                                measurementCode: item.cargo.measurementCode
+                            });
+
+                            _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (material) {
+                                if (material.materialCode === item.material.materialCode) {
+                                    material.actualAmount += item.actualAmount * item.cargo.number;
+                                    material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2);
                                 }
                             });
-                            // 往MaterialGrid中添加数据
-                            _.each($scope.materialResult, function (item) {
-                                $scope.MaterialGrid.kendoGrid.dataSource.add(item)
-                            })
-
-                            // 添加未拣的数据 noOperationDetails
-                            var noOperationMaterialList = _.map(res.noOperationDetails, function (item) {
-                                return item.rawMaterial.rawMaterialCode
-                            });
-                            Common.getMaterialByCodes(noOperationMaterialList).then(function (materialList) {
-                                var materialObject = _.zipObject(_.map(materialList, function (item) {
-                                    return item.materialCode
-                                }), materialList);
-                                _.each(res.noOperationDetails, function (item) {
-                                    $scope.MaterialGrid.kendoGrid.dataSource.add({
-                                        materialName: materialObject[item.rawMaterial.rawMaterialCode].materialName,
-                                        materialCode: materialObject[item.rawMaterial.rawMaterialCode].materialCode,
-                                        materialId: materialObject[item.rawMaterial.rawMaterialCode].materialId,
-                                        shippedAmount: item.amount,
-                                        actualAmount: 0,
-                                        progress: '0%'
-                                    })
-                                })
-                            })
-                        })
-                    });
-                })
+                        });
+                        $scope.MaterialGrid.kendoGrid.refresh();
+                    })
+                });
             } else {
                 // 按货物
                 billDetails = res.billDetails;
                 cargoList = _.map(billDetails, function (item) {
                     return item.rawMaterial.cargo.cargoCode
                 });
+                if (!res.planBill) {
+                    res.planBill = {
+                        childPlanBillDetails: []
+                    }
+                }
+                _.each(res.planBill.childPlanBillDetails, function (plan) {
+                    cargoList.push(plan.rawMaterial.cargo.cargoCode)
+                });
+
                 Common.getCargoByCodes(cargoList).then(function (cargoList) {
                     // cargoList: 货物详细信息
                     var cargoObject = _.zipObject(_.map(cargoList, function (item) {
                         return item.cargoCode
                     }), cargoList);
+
+                    var cargoDetails = _.cloneDeep(billDetails);
+                    _.each(res.planBill.childPlanBillDetails, function (plan) {
+                        var isExist = false;
+                        _.each(cargoDetails, function (cargo) {
+                            if(cargo.rawMaterial.cargo.cargoCode === plan.rawMaterial.cargo.cargoCode){
+                                isExist = true
+                            }
+                        });
+                        if(!isExist){
+                            cargoDetails.push({
+                                actualAmount: 0,
+                                shippedAmount: plan.amount,
+                                rawMaterial: plan.rawMaterial
+                            })
+                        }
+                    });
+
                     // 原料Code列表
                     var materialList = [];
-                    _.each(billDetails, function (item) {
+                    _.each(cargoDetails, function (item) {
                         // 将相应货物信息添加进billDetails
                         item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
                         materialList.push(item.rawMaterial.rawMaterialCode)
                     });
+
                     Common.getMaterialByCodes(materialList).then(function (materialList) {
                         var materialObject = _.zipObject(_.map(materialList, function (item) {
                             return item.materialCode
                         }), materialList);
-                        _.each(billDetails, function (item) {
+                        _.each(cargoDetails, function (item) {
                             // materialList: 原料详细信息
                             item.material = materialObject[item.rawMaterial.rawMaterialCode];
                             $scope.onlyCargoGrid.kendoGrid.dataSource.add({

@@ -296,23 +296,51 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
                 cargoList = _.map(billDetails, function (item) {
                     return item.rawMaterial.cargo.cargoCode
                 });
+                if (!res.planBill) {
+                    res.planBill = {
+                        childPlanBillDetails: []
+                    }
+                }
+                _.each(res.planBill.childPlanBillDetails, function (plan) {
+                    cargoList.push(plan.rawMaterial.cargo.cargoCode)
+                });
+
                 Common.getCargoByCodes(cargoList).then(function (cargoList) {
                     // cargoList: 货物详细信息
                     var cargoObject = _.zipObject(_.map(cargoList, function (item) {
                         return item.cargoCode
                     }), cargoList);
+
+                    var cargoDetails = _.cloneDeep(billDetails);
+                    _.each(res.planBill.childPlanBillDetails, function (plan) {
+                        var isExist = false;
+                        _.each(cargoDetails, function (cargo) {
+                            if(cargo.rawMaterial.cargo.cargoCode === plan.rawMaterial.cargo.cargoCode){
+                                isExist = true
+                            }
+                        });
+                        if(!isExist){
+                            cargoDetails.push({
+                                actualAmount: 0,
+                                shippedAmount: plan.amount,
+                                rawMaterial: plan.rawMaterial
+                            })
+                        }
+                    });
+
                     // 原料Code列表
                     var materialList = [];
-                    _.each(billDetails, function (item) {
+                    _.each(cargoDetails, function (item) {
                         // 将相应货物信息添加进billDetails
                         item.cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
                         materialList.push(item.rawMaterial.rawMaterialCode)
                     });
+
                     Common.getMaterialByCodes(materialList).then(function (materialList) {
                         var materialObject = _.zipObject(_.map(materialList, function (item) {
                             return item.materialCode
                         }), materialList);
-                        _.each(billDetails, function (item) {
+                        _.each(cargoDetails, function (item) {
                             // materialList: 原料详细信息
                             item.material = materialObject[item.rawMaterial.rawMaterialCode];
                             $scope.onlyCargoGrid.kendoGrid.dataSource.add({

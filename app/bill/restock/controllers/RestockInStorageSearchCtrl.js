@@ -79,7 +79,7 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
                 },
                 {
                     title: "单据属性", width: 100, template: function (data) {
-                        return getTextByVal($scope.specificType, data.sourceBillType) + '转'
+                        return getTextByVal($scope.sourceBillType, data.sourceBillType) + '转'
                     }
                 },
                 {field: "createTime", title: "录单时间", width: 150},
@@ -97,7 +97,7 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
                 },
                 {field: "totalAmount", title: "入库数量", width: 60},
                 {field: "totalVarietyAmount", title: "入库品种", width: 100},
-                {field: "totalPrice", title: "总进价", width: 100}
+                // {field: "totalPrice", title: "总进价", width: 100}
             ]
         }
     };

@@ -83,8 +83,8 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
     $scope.bill = {
         billType: 'DELIVERY',
         // specificBillType: 'NO_PLAN',
-        specificBillType:'DELIVERY',
-        sourceBillType:'NO_PLAN',
+        specificBillType: 'DELIVERY',
+        sourceBillType: 'NO_PLAN',
         basicEnum: 'BY_CARGO',
         billPurpose: 'OUT_STORAGE'
     };
@@ -173,12 +173,9 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                if (type === 'save') {
-                    swal('操作成功', '', 'success');
-                } else {
-                    swal('提交成功', '', 'success');
-                }
-                $state.go('app.bill.delivery.outStorageList');
+                swal('操作成功!', '', 'success').then(function () {
+                    $state.go('app.bill.delivery.outStorageList')
+                })
             }
         }, apiServiceError)
     }
