@@ -72,7 +72,6 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
                 {field: "createTime", title: "录单时间", width: 160},
                 {field: "xxxxx", title: "入库时间", width: 120},
                 {field: "operatorName", title: "入库人", width: 120},
-                {field: "xxxxx", title: "审核人", width: 120},
                 {
                     title: "出库站点", width: 200,
                     template: function (data) {
