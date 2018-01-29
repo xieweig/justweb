@@ -55,7 +55,7 @@
                 <dt>入库站点</dt>
                 <dd data-ng-bind="billDetails.inLocation.stationName"></dd>
             </dl>
-            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='inLook'">
                 <dt>入库库位</dt>
                 <dd data-ng-bind="billDetails.inLocation.storage.storageName"></dd>
             </dl>

@@ -48,8 +48,15 @@ $(function () {
 });
 
 function loadMenu(callback) {
+    var userCode = $.cookie("userCode");
+    if (!userCode) {
+        swal('提示', '请登录后重试', 'warning').then(function () {
+            window.location = '/login';
+        });
+        return;
+    }
     $.ajax({
-        url: "/oauth/api/oauth/jurisdiction/findUserJurisdictionByUserCode?userCode=" + $.cookie("userCode"),
+        url: "/oauth/api/oauth/jurisdiction/findUserJurisdictionByUserCode?userCode=" + userCode,
         dataType: 'json',
         success: function (result) {
             if (result.code !== "000") {

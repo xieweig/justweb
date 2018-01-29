@@ -19,7 +19,7 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
             $scope.locationPrefix = 'out';
             break;
     }
-    $scope.params[$scope.locationPrefix + 'StorageCode'] = '';
+    $scope.params[$scope.locationPrefix + 'StorageCodeSet'] = [];
 
     // 出库站点选择
     $scope.overflowStation = {
