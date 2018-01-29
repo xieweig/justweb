@@ -63,7 +63,10 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
                 {
                     title: "单据状态", width: 160,
                     template: function (data) {
-                        return getTextByVal($scope.allotState, data.allotStatus);
+                        if (data.allotStatus === 'ALLOT') {
+                            return '已调拨';
+                        }
+                        return '未调拨';
                     }
                 },
                 {
