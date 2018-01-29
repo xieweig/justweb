@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiService, Common, params) {
+angular.module('app').controller('AdjustTransfersCtrl', function ($scope, $timeout, ApiService, Common, params) {
     if (params.billCode) {
         if (params.sourceType === 'new') {
             ApiService.get('/api/bill/adjust/findInStorageByBillCode?billCode=' + params.billCode).then(function (response) {
@@ -41,6 +41,22 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
     function initBillDetails(bill) {
         $scope.billDetails = bill;
         $scope.billDetails.sourceType = params.sourceType;
+
+        if (bill.inLocation) {
+            var stationType = _.find($scope.station, function (item) {
+                return item.value === bill.inLocation.stationCode;
+            }).siteType;
+
+            $timeout(function () {
+                if (stationType === 'LOGISTICS') {
+                    $('#inStorage').val('STORAGE').trigger('change');
+                } else {
+                    $('#inStorage').val('NORMAL').trigger('change');
+                }
+            });
+        }
+
+
         $scope.billDetails.sourceBillTypeName = getTextByVal($scope.sourceBillType, $scope.billDetails.sourceBillType);
         if ($scope.billDetails.inLocation) {
             $scope.billDetails.inLocation.stationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);

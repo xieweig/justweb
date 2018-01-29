@@ -21,6 +21,10 @@ angular.module('app').controller('AdjustPickCtrl', function ($scope, $state, $ui
         }
     };
 
+    $scope.resetPage = function () {
+        $state.reload($state.current.name);
+    };
+
     // 搜索
     $scope.search = function () {
         $scope.planGrid.kendoGrid.dataSource.page(1);
