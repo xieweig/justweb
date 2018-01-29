@@ -88,25 +88,25 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                                 });
                             })
 
-                            // 计算原来各种原料的需求，再addItem
-                            var materialResult = {};
-                            _.each(billDetails, function (item) {
-                                if (!materialResult[item.material.materialCode]) {
-                                    materialResult[item.material.materialCode] = {
-                                        shippedAmount: 0
-                                    }
-                                }
-                                materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
-                                materialResult[item.material.materialCode].materialName = item.material.materialName;
-                                materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
-                            });
-                            _.each(materialResult, function (item) {
-                                $scope.addItem({
-                                    materialName: item.materialName,
-                                    rawMaterialCode: item.rawMaterialCode,
-                                    shippedAmount: item.shippedAmount
-                                })
-                            })
+                            // // 计算原来各种原料的需求，再addItem
+                            // var materialResult = {};
+                            // _.each(billDetails, function (item) {
+                            //     if (!materialResult[item.material.materialCode]) {
+                            //         materialResult[item.material.materialCode] = {
+                            //             shippedAmount: 0
+                            //         }
+                            //     }
+                            //     materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
+                            //     materialResult[item.material.materialCode].materialName = item.material.materialName;
+                            //     materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
+                            // });
+                            // _.each(materialResult, function (item) {
+                            //     $scope.addItem({
+                            //         materialName: item.materialName,
+                            //         rawMaterialCode: item.rawMaterialCode,
+                            //         shippedAmount: item.shippedAmount
+                            //     })
+                            // })
                             // $timeout(function () {
                             //     $('#tabs').children('li:eq(1)').children('a').click();
                             //     var tabBtn = $('#tabs').children('li:first-child').children('a');
