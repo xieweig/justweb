@@ -124,6 +124,8 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
             resolve: {
                 params: {
                     type: 'inLook',
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit,
                     billCode: dataItem.billCode
                 }
             }
