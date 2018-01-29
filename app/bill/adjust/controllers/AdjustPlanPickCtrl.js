@@ -316,7 +316,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             sourceBillType: params.bill.sourceBillType,
             billType: params.bill.billType,
             outStorageMemo: $scope.bill.outStorageMemo,
-            planMemo: $scope.bill.planMemo,
+            planMemo: $scope.bill.outStorageMemo,
             auditMemo: $scope.bill.auditMemo,
             inLocation: {
                 stationCode: params.bill.inStationCode,
@@ -329,12 +329,11 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             },
             outLocation: {
                 stationCode: params.bill.outStationCode,
-                stationName: params.bill.outStationCode
+                stationName: params.bill.outStationCode,
                 // stationType: params.bill.inStationCode,
-                // storage: {
-                //     storageCode: params.bill.inStationCode,
-                //     storageName: params.bill.inStationCode
-                // }
+                storage: {
+                    storageCode: $scope.bill.outStorageCode
+                }
             },
             billDetails: []
         };
