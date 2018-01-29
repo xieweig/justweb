@@ -55,7 +55,12 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
                         }
                     ], width: 160
                 },
-                {field: "xxx", title: "单据状态", width: 160},
+                {
+                    title: "单据状态", width: 160,
+                    template: function (data) {
+                        return getTextByVal($scope.allotState, data.allotStatus);
+                    }
+                },
                 {
                     title: "单据属性", width: 120,
                     template: function (data) {
@@ -96,14 +101,16 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
     $('#billGrid').on('click', '.sourceCode', function (e) {
         var dataItem = $scope.billGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
         $uibModal.open({
-            templateUrl: 'app/bill/adjust/modals/billDetails.html',
+            templateUrl: 'app/bill/adjust/modals/details.html',
             size: 'lg',
             scope: $scope,
-            controller: 'AdjustPlanDetailsCtrl',
+            controller: 'AdjustDetailsCtrl',
             resolve: {
                 params: {
                     billCode: dataItem.sourceCode,
-                    cargoUnit: cargoUnit
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit,
+                    type: 'outLook'
                 }
             }
         });
@@ -122,6 +129,8 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
             resolve: {
                 params: {
                     type: 'inLook',
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit,
                     billCode: dataItem.billCode
                 }
             }

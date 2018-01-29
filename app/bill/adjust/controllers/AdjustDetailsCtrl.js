@@ -155,6 +155,10 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
 
     // 原料选择货物
     $scope.chooseCargo = function () {
+        var materialIds = '';
+        if (!$scope.billDetails.self) {
+            materialIds = $scope.materialIds.join();
+        }
         $uibModal.open({
             templateUrl: 'app/bill/adjust/modals/addCargoModal.html',
             size: 'lg',
@@ -163,7 +167,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                 params: {
                     cargoUnit: params.cargoUnit,
                     materialUnit: params.materialUnit,
-                    material: {materialId: $scope.materialIds.join()},
+                    material: {materialId: materialIds},
                     data: combinationItem($scope.cargoDetails.kendoGrid.dataSource.data()),
                     cb: function (data) {
                         var dataSource = combinationItem(data);
@@ -204,6 +208,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                 standardUnitCode: item.standardUnitCode,
                 standardUnitName: getTextByVal(params.materialUnit, item.standardUnitCode),
                 number: item.number,
+                shippedAmount: item.shippedAmount,
                 actualAmount: item.actualAmount || 0
             };
         });

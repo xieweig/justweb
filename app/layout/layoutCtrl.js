@@ -35,6 +35,11 @@ angular.module('app').controller('LayoutCtrl', function ($scope, $rootScope, $st
         {key: 'IN_FAILURE', value: 'IN_FAILURE', text: '出库失败'}
     ];
 
+    $rootScope.allotState = [
+        {key: 'ALLOT', value: 'ALLOT', text: '已调拨'},
+        {key: 'NOT_ALLOT', value: 'NOT_ALLOT', text: '未调拨'}
+    ];
+
     $rootScope.billType = [
         {key: 'DELIVERY', value: 'DELIVERY', text: '配送计划'},
         {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},

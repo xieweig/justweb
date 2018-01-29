@@ -93,15 +93,29 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                 $timeout(function () {
                     $scope.cargoGrid.kendoGrid.dataSource.data($scope.cargoArray);
                 });
+
+                initMaterialData(cargoObject);
             });
         }
+        if (params.bill.basicEnum === 'BY_MATERIAL') {
+            initMaterialData();
+        }
 
+    }());
+
+    function initMaterialData(cargoObject) {
         // 初始化原料
         $scope.materialList = [];
         _.each($scope.bill.childPlanBillDetails, function (item) {
+            var amount = 0;
+            if (params.bill.basicEnum === 'BY_CARGO') {
+                amount = cargoObject[item.rawMaterial.cargo.cargoCode].number * item.amount;
+            } else {
+                amount = item.amount
+            }
             $scope.materialList.push({
                 material: {
-                    amount: item.amount,
+                    amount: amount,
                     actualAmount: 0,
                     materialName: item.rawMaterial.rawMaterialName,
                     materialCode: item.rawMaterial.rawMaterialCode
@@ -131,7 +145,9 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                 }
             });
         });
-    }());
+    }
+
+
     function calculateActual() {
         _.each($scope.materialList, function (material) {
             material.material.actualAmount = 0;
@@ -299,6 +315,8 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             specificBillType: 'ADJUST',
             sourceBillType: params.bill.sourceBillType,
             billType: params.bill.billType,
+            outStorageMemo: $scope.bill.outStorageMemo,
+            auditMemo: $scope.bill.auditMemo,
             inLocation: {
                 stationCode: params.bill.inStationCode,
                 stationName: params.bill.inStationName
