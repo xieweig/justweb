@@ -24,11 +24,12 @@ angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal
         $scope.billGrid.kendoGrid.dataSource.page(1);
     };
     $scope.billGrid = {
-        url: '/api/bill/mistake/findAllotByConditions',
+        url: '/api/bill/mistake/findMistakeByConditions',
         params: $scope.params,
         dataSource: {
-            data: function () {
-                return [{type: 'cargo'}, {type: 'material'}];
+            parameterMap: function (data) {
+                data.inStorageCode = '';
+                data.outStorageCode = '';
             }
         },
         kendoSetting: {
