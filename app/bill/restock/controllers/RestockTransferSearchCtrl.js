@@ -79,6 +79,7 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
     };
 
     $scope.outStationParams = {
+        type: 'BOOKSTORE,CAFE,WHOLESALE,STAPLE',
         callback: function (data) {
             $scope.params.outStationCodes = _.map(data, function (item) {
                 return item.stationCode;
