@@ -161,7 +161,7 @@ function getTextByVal(array, value) {
     var result = _.find(array, function (item) {
         return item.value === value;
     });
-    return !result ? value : result.text;
+    return !result ? '' : result.text;
 }
 
 // 生成字母+数字的指定位数的随机数
