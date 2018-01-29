@@ -53,6 +53,13 @@ angular.module('app').controller('InOutSelfOutStorageSearchCtrl', function ($sco
         primaryId: 'billCode',
         url: '/api/bill/inOutSelf/findOutStorageByConditions',
         params: $scope.kendoQueryCondition,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['outStationCodes'] || (data['outStationCodes']).length === 0) {
+                    data['outStationCodes'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
@@ -68,11 +75,10 @@ angular.module('app').controller('InOutSelfOutStorageSearchCtrl', function ($sco
                         },
                         {
                             name: 'e', text: "修改", click: edit, visible: function (dataItem) {
-                                var state = dataItem.billState === 'AUDIT_FAILURE'; // 已提交，审核不通过
-                                state = state || dataItem.billState === "SUBMITTED";
-                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE");
-                                state = state || dataItem.submitState === 'UNCOMMITTED';
-                                return state
+                                return dataItem.billState === 'AUDIT_FAILURE'
+                                    || dataItem.billState === "SUBMITTED"
+                                    || (dataItem.submitState === 'SUBMITTED' && dataItem.inOrOutState === "OUT_FAILURE")
+                                    || dataItem.submitState === 'UNCOMMITTED';
                             }
                         }, {
                             name: 't', text: "审核", click: audit, visible: function (dataItem) {
@@ -117,12 +123,12 @@ angular.module('app').controller('InOutSelfOutStorageSearchCtrl', function ($sco
                 {field: "operatorName", title: "录单人", width: 150},
                 {field: "auditPersonName", title: "审核人", width: 150},
                 {
-                    field: "outStationCode", title: "出库站点", width: 150, template: function (data) {
+                    title: "出库站点", width: 150, template: function (data) {
                         return getTextByVal($scope.station, data.outLocation.stationCode)
                     }
                 },
                 {
-                    field: "inStationCode", title: "入库站点", width: 150, template: function (data) {
+                    title: "入库站点", width: 150, template: function (data) {
                         return getTextByVal($scope.station, data.inLocation.stationCode)
                     }
                 },
@@ -231,7 +237,7 @@ angular.module('app').controller('InOutSelfOutStorageSearchCtrl', function ($sco
         } else if (type === 'out') {
             arr = query.inOrOutStates
         }
-        var index = arr.indexOf(status)
+        var index = arr.indexOf(status);
         if (index > -1) {
             arr.splice(index, 1)
         } else {

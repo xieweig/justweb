@@ -70,7 +70,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
                             name: 'e', text: "修改", click: edit, visible: function (dataItem) {
                                 var state = dataItem.billState === 'AUDIT_FAILURE'; // 已提交，审核不通过
                                 state = state || dataItem.billState === "SUBMITTED";
-                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE");
+                                state = state || (dataItem.submitState === 'SUBMITTED' && dataItem.inOrOutState === "OUT_FAILURE");
                                 state = state || dataItem.submitState === 'UNCOMMITTED';
                                 return state
                             }
