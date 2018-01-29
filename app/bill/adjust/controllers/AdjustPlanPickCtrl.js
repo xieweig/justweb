@@ -7,7 +7,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
     $timeout(function () {
         if (params.bill.outLocation) {
             var stationType = _.find($scope.station, function (item) {
-                return item.value === params.bill.outLocation.stationCode;
+                return item.value === params.bill.outStationCode;
             }).siteType;
 
             if (stationType === 'LOGISTICS') {
