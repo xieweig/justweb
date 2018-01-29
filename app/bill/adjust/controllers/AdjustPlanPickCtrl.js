@@ -5,7 +5,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
     $scope.pickType = 'material';
 
     $timeout(function () {
-        if (params.bill.outLocation) {
+        if (params.bill.outStationCode) {
             var stationType = _.find($scope.station, function (item) {
                 return item.value === params.bill.outStationCode;
             }).siteType;
