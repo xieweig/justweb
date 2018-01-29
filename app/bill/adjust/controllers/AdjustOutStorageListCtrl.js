@@ -75,7 +75,7 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                             visible: function (dataItem) {
                                 return dataItem.billState === 'AUDIT_FAILURE'
                                     || dataItem.billState === "SUBMITTED"
-                                    || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE")
+                                    || (dataItem.submitState === 'SUBMITTED' && dataItem.inOrOutState === "OUT_FAILURE")
                                     || dataItem.submitState === 'UNCOMMITTED';
                             }
                         },
