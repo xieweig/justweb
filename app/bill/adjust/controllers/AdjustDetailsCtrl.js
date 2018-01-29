@@ -204,7 +204,6 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                 standardUnitCode: item.standardUnitCode,
                 standardUnitName: getTextByVal(params.materialUnit, item.standardUnitCode),
                 number: item.number,
-                shippedAmount: item.shippedAmount,
                 actualAmount: item.actualAmount || 0
             };
         });
