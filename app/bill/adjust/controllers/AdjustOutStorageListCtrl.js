@@ -98,7 +98,7 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                 {
                     title: "出库状态", width: 120,
                     template: function (data) {
-                        return getTextByVal($scope.outStateEnum, data.inOrOutState);
+                        return getTextByVal($scope.outboundStatus, data.inOrOutState);
                     }
                 },
                 {
