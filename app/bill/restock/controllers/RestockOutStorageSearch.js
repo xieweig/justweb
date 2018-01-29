@@ -53,6 +53,13 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
         primaryId: 'billCode',
         url: '/api/bill/restock/findOutStorageByConditions',
         params: $scope.kendoQueryCondition,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['outStationCodes'] || (data['outStationCodes']).length === 0) {
+                    data['outStationCodes'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
@@ -241,10 +248,4 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
             arr.push(status)
         }
     };
-
-    $scope.$watch('kendoQueryCondition.outStationCodes', function (newVal) {
-        if (newVal === [] || newVal === undefined) {
-            $scope.kendoQueryCondition.outStationCodes = ['USER_ALL'];
-        }
-    });
 });

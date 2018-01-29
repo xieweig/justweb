@@ -39,6 +39,11 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
                     });
                 });
                 return data
+            },
+            parameterMap: function (data) {
+                if (!data['outStationCodes'] || (data['outStationCodes']).length === 0) {
+                    data['outStationCodes'] = ['USER_ALL'];
+                }
             }
         },
         kendoSetting: {
@@ -176,10 +181,4 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
             $scope.stationGrid.kendoGrid.dataSource.read();
         });
     }
-
-    $scope.$watch('params.outStationCodes', function (newVal) {
-        if (newVal === [] || newVal === undefined) {
-            $scope.params.outStationCodes = ['USER_ALL'];
-        }
-    });
 });

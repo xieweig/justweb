@@ -83,6 +83,11 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
                     });
                 });
                 return data
+            },
+            parameterMap: function (data) {
+                if (!data['outStationCodes'] || (data['outStationCodes']).length === 0) {
+                    data['outStationCodes'] = ['USER_ALL'];
+                }
             }
         },
         kendoSetting: {
@@ -271,10 +276,4 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
             arr.push(status)
         }
     };
-
-    $scope.$watch('kendoQueryCondition.outStationCodes', function (newVal) {
-        if (newVal === [] || newVal === undefined) {
-            $scope.kendoQueryCondition.outStationCodes = ['USER_ALL'];
-        }
-    });
 });

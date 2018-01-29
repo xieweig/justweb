@@ -24,6 +24,13 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
         primaryId: 'billCode',
         url: '/api/bill/restock/findAllotByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['inStationCodes'] || (data['inStationCodes']).length === 0) {
+                    data['inStationCodes'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -154,10 +161,4 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
             }
         })
     }
-
-    $scope.$watch('params.inStationCodes', function (newVal) {
-        if (newVal === [] || newVal === undefined) {
-            $scope.params.inStationCodes = ['USER_ALL'];
-        }
-    });
 });

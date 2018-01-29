@@ -14,6 +14,13 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
         primaryId: 'billCode',
         url: '/api/bill/restock/findPlanByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['outStationCodes'] || (data['outStationCodes']).length === 0) {
+                    data['outStationCodes'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -148,10 +155,4 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
             $scope.stationGrid.kendoGrid.dataSource.read();
         });
     }
-
-    $scope.$watch('params.outStationCodes', function (newVal) {
-        if (newVal === [] || newVal === undefined) {
-            $scope.params.outStationCodes = ['USER_ALL'];
-        }
-    });
 });
