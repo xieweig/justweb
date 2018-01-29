@@ -37,12 +37,33 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
             $scope.params.inStationName = getTextByVal($scope.station, res.inStationCode);
 
             $timeout(function () {
+                var watchType = 'IN_STORAGE';
                 if(res.sourceBillType === 'ADJUST'){
-                    $('#select-out').val($scope.storageType[1].value).trigger('change');
+                    watchType = 'STORAGE';
+                    $('#select-out').val(watchType).trigger('change');
                 }else{
-                    $('#select-out').val($scope.storageType[2].value).trigger('change');
+                    $('#select-out').val(watchType).trigger('change');
                 }
+                // 警告库位修改
+                $scope.$watch('params.inStationType', function (newVal, oldVal) {
+                    if (newVal === watchType || oldVal === undefined) {
+                    } else {
+                        swal({
+                            title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
+                            type: 'warning',
+                            confirmButtonText: '是的',
+                            showCancelButton: true
+                        }).then(function (res) {
+                            if (res.value) {
+                            } else if (res.dismiss === 'cancel') {
+                                // 重置选项为初始
+                                $('#select-out').val(watchType).trigger('change')
+                            }
+                        })
+                    }
+                });
             });
+
             if (res.basicEnum === 'BY_CARGO') {
                 // 按货物拣货
                 $timeout(function () {

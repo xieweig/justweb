@@ -66,6 +66,35 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
             $scope.params.billProperty = res.billProperty;
             $scope.params.specificBillType = res.specificBillType;
             $scope.params.sourceBillType = res.sourceBillType;
+
+            $timeout(function () {
+                var watchType = 'STORAGE';
+                if (res.sourceBillType === 'RESTOCK') {
+                    watchType = 'OUT_STORAGE';
+                    $('#select-out').val(watchType).trigger('change')
+                } else {
+                    $('#select-out').val(watchType).trigger('change')
+                }
+                // 警告库位修改
+                $scope.$watch('params.inStationType', function (newVal, oldVal) {
+                    if (newVal === watchType || oldVal === undefined) {
+                    } else {
+                        swal({
+                            title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
+                            type: 'warning',
+                            confirmButtonText: '是的',
+                            showCancelButton: true
+                        }).then(function (res) {
+                            if (res.value) {
+                            } else if (res.dismiss === 'cancel') {
+                                // 重置选项为初始
+                                $('#select-out').val(watchType).trigger('change')
+                            }
+                        })
+                    }
+                });
+            });
+
             $scope.specificBillType = res.specificBillType;
             $scope.params.billType = getTextByVal($scope.specificType, res.sourceBillType) + '转';
             if($scope.show){
@@ -196,5 +225,4 @@ angular.module('app').controller('RestockTransferModalCtrl', function ($scope, $
         $scope.cargoGrid.kendoGrid.refresh();
         $scope.$close();
     }
-
 });
