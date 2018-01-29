@@ -24,13 +24,13 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
         primaryId: 'billCode',
         url: '/api/bill/restock/findAllotByConditions',
         params: $scope.params,
-        dataSource: {
-            parameterMap: function (data) {
-                if (!data['inStationCodes'] || (data['inStationCodes']).length === 0) {
-                    data['inStationCodes'] = ['USER_ALL'];
-                }
-            }
-        },
+        // dataSource: {
+        //     parameterMap: function (data) {
+        //         if (!data['inStationCodes'] || (data['inStationCodes']).length === 0) {
+        //             data['inStationCodes'] = ['USER_ALL'];
+        //         }
+        //     }
+        // },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -79,7 +79,7 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
     $scope.inStationParams = {
         type: 'LOGISTICS',
         callback: function (data) {
-            $scope.params.inStationCodes = _.map(data, function (item) {
+            $scope.params.inStorageBillInStationCode = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -88,7 +88,7 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
     $scope.outStationParams = {
         type: 'BOOKSTORE,CAFE,WHOLESALE,STAPLE',
         callback: function (data) {
-            $scope.params.outStationCodes = _.map(data, function (item) {
+            $scope.params.inStorageBillOutStationCode = _.map(data, function (item) {
                 return item.stationCode;
             });
         }

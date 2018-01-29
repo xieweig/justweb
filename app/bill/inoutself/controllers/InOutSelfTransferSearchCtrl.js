@@ -72,7 +72,7 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
     $scope.inStationParams = {
         type: 'LOGISTICS',
         callback: function (data) {
-            $scope.params.inStationCodes = _.map(data, function (item) {
+            $scope.params.inStorageBillInStationCode = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -80,7 +80,7 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
 
     $scope.outStationParams = {
         callback: function (data) {
-            $scope.params.outStationCodes = _.map(data, function (item) {
+            $scope.params.inStorageBillOutStationCode = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
