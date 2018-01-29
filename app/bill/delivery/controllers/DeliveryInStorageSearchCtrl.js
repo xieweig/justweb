@@ -44,6 +44,13 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
         primaryId: 'billCode',
         url: '/api/bill/delivery/findInStorageByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['inStationCodes'] || (data['inStationCodes']).length === 0) {
+                    data['inStationCodes'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -190,12 +197,6 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
     $scope.$watch('params.billAllotState', function (newVal) {
         if (newVal === '' || newVal === undefined) {
             $scope.params.billAllotState = null;
-        }
-    });
-
-    $scope.$watch('params.inStationCodes', function (newVal) {
-        if (newVal === [] || newVal === undefined) {
-            $scope.params.inStationCodes = ['USER_ALL'];
         }
     });
 });

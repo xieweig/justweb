@@ -13,11 +13,13 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
         primaryId: 'billCode',
         url: '/api/bill/delivery/findPlanByConditions',
         params: $scope.params,
-        // dataSource: {
-        //     data: function () {
-        //         return [{}, {}];
-        //     }
-        // },
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['outStationCodes'] || (data['outStationCodes']).length === 0) {
+                    data['outStationCodes'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -59,6 +61,7 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
 
     // 搜索条件中的入库站点选择
     $scope.inStationParams = {
+        type: 'BOOKSTORE,CAFE,WHOLESALE,STAPLE',
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
@@ -155,10 +158,4 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
             $scope.planGrid.kendoGrid.dataSource.read();
         });
     }
-
-    $scope.$watch('params.outStationCodes', function (newVal) {
-        if (newVal === [] || newVal === undefined) {
-            $scope.params.outStationCodes = ['USER_ALL'];
-        }
-    });
 });

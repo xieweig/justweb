@@ -66,6 +66,13 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
         primaryId: 'billCode',
         url: '/api/bill/delivery/findOutStorageByConditions',
         params: $scope.kendoQueryCondition,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['outStationCodes'] || (data['outStationCodes']).length === 0) {
+                    data['outStationCodes'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             persistSelection: true,
@@ -83,7 +90,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
                             name: 'e', text: "修改", click: edit, visible: function (dataItem) {
                                 var state = dataItem.billState === 'AUDIT_FAILURE'; // 已提交，审核不通过
                                 state = state || dataItem.billState === "SUBMITTED";
-                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE");
+                                state = state || (dataItem.submitState === 'SUBMITTED' && dataItem.inOrOutState === "OUT_FAILURE");
                                 state = state || dataItem.submitState === 'UNCOMMITTED';
                                 return state
                             }
@@ -124,7 +131,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
                     title: "审核状态", width: 150, template: function (data) {
                         return getTextByVal($scope.auditState, data.auditState)
                     }
-                },//
+                },
                 {field: "createTime", title: "录单时间", width: 150},
                 {field: "outWareHouseTime", title: "出库时间", width: 150},
                 {field: "operatorName", title: "录单人", width: 150},
@@ -255,10 +262,4 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
             arr.push(status)
         }
     };
-
-    $scope.$watch('kendoQueryCondition.outStationCodes', function (newVal) {
-        if (newVal === [] || newVal === undefined) {
-            $scope.kendoQueryCondition.outStationCodes = ['USER_ALL'];
-        }
-    });
 });

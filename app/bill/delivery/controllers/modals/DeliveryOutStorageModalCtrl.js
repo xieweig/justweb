@@ -403,7 +403,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                             $scope.params.totalVarietyAmount = 0;
                             $scope.params.totalAmount = 0;
                             _.each(data, function (item) {
-                                $scope.params.totalVarietyAmount ++;
+                                $scope.params.totalVarietyAmount++;
                                 $scope.params.totalAmount += item.actualAmount * item.number;
                             });
                             // $scope.cargoList = data;
@@ -629,7 +629,9 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $scope.$close()
+                swal('操作成功!', '', 'success').then(function () {
+                    $scope.$close()
+                })
             }
         }, apiServiceError);
         $scope.$close();
@@ -647,7 +649,15 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
         }
         var bill = {
             billCode: $scope.params.billCode,
-            auditMemo: $scope.params.auditMemo
+            auditMemo: $scope.params.auditMemo,
+            outLocation: {
+                stationCode: $scope.params.outLocation.stationCode,
+                stationName: $scope.params.outLocation.stationName,
+                storage: {
+                    storageCode: $scope.params.outLocation.storage.storageCode,
+                    storageName: $scope.params.outLocation.storage.storageName
+                }
+            }
         };
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {

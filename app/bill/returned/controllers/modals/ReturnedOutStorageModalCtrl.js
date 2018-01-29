@@ -648,7 +648,15 @@ angular.module('app').controller('ReturnedOutStorageModalCtrl', function ($scope
         }
         var bill = {
             billCode: $scope.params.billCode,
-            auditMemo: $scope.params.auditMemo
+            auditMemo: $scope.params.auditMemo,
+            outLocation: {
+                stationCode: $scope.params.outLocation.stationCode,
+                stationName: $scope.params.outLocation.stationName,
+                storage: {
+                    storageCode: $scope.params.outLocation.storage.storageCode,
+                    storageName: $scope.params.outLocation.storage.storageName
+                }
+            }
         };
         ApiService.post(url, bill).then(function (response) {
             if (response.code !== '000') {

@@ -99,12 +99,12 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
         $scope.CargoGrid = {
             primaryId: 'cargoCode',
             kendoSetting: {
-                editable: 'inline',
+                editable: true,
                 columns: [
                     {
                         title: '操作',
-                        command: [{name: 'del', text: "删除", click: delWithMaterial}, {name: 'edit', text: "编辑"}],
-                        width: 140
+                        command: [{name: 'del', text: "删除", click: delWithMaterial}],
+                        width: 80
                     },
                     {field: "cargoName", title: "货物名称"},
                     {field: "cargoCode", title: "货物编码"},
@@ -128,20 +128,22 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
                 ],
                 save: function (e) {
                     // 每次保存都重新计算总的和原料的拣货数量
-                    $scope.params.totalAmount = 0;
-                    _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (item) {
-                        $scope.params.totalAmount += parseInt(item.actualAmount);
-                    });
-                    _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (material) {
-                        material.actualAmount = 0;
-                        _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (cargo) {
-                            if (cargo.rawMaterialCode === material.materialCode) {
-                                material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
-                            }
+                    $timeout(function () {
+                        $scope.params.totalAmount = 0;
+                        _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (item) {
+                            $scope.params.totalAmount += parseInt(item.actualAmount);
                         });
-                        material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
+                        _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (material) {
+                            material.actualAmount = 0;
+                            _.each($scope.CargoGrid.kendoGrid.dataSource.data(), function (cargo) {
+                                if (cargo.rawMaterialCode === material.materialCode) {
+                                    material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
+                                }
+                            });
+                            material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
+                        });
+                        $scope.MaterialGrid.kendoGrid.refresh();
                     });
-                    $scope.MaterialGrid.kendoGrid.refresh();
                     return e;
                 }
             }
@@ -193,8 +195,8 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
     ApiService.get(getURL + '?billCode=' + data.billCode).then(function (response) {
         if (response.code === '000') {
             var res = response.result.bill;
-            _.each(['billCode', 'createTime', 'outWareHouseTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
-                'auditMemo', 'auditPersonName', 'outStorageMemo', 'rootCode', 'sourceCode'], function (name) {
+            _.each(['billCode', 'createTime', 'outWareHouseTime', 'inLocation', 'outLocation', 'operatorName', 'totalVarietyAmount', 'totalAmount',
+                'auditMemo', 'auditPersonName', 'outStorageMemo', 'rootCode', 'sourceCode', 'sourceBillType'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.showMaterial = (res.basicEnum !== 'BY_CARGO');
@@ -400,6 +402,7 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
         $scope.CargoGrid.kendoGrid.dataSource.remove(dataItem);
         // 修改退库数量和品种
         $scope.params.totalAmount = parseInt($scope.params.totalAmount) - parseInt(dataItem.actualAmount);
+        $scope.params.totalVarietyAmount--;
         // 修改原料
         _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (item) {
             if (item.materialCode === dataItem.rawMaterialCode) {
@@ -490,8 +493,8 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
     }
 
     $scope.bill = {
-        billType: 'RESTOCK',
-        specificBillType: 'RESTOCK',
+        billType: 'IN_OUT_SELF',
+        // specificBillType: 'RESTOCK',
         billPurpose: 'OUT_STORAGE'
     };
 
@@ -513,10 +516,9 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
         }
         bill.billCode = $scope.params.billCode;
         // bill.sourceCode = $scope.params.billCode;
+        bill.specificBillType = $scope.specificBillType;
         if($scope.specificBillType !== 'NO_PLAN'){
             bill.sourceCode = $scope.params.sourceCode
-        }else{
-            bill.sourceCode = ''
         }
         bill.rootCode = $scope.params.rootCode;
 
@@ -562,12 +564,6 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
             // 按货物
             bill.basicEnum = 'BY_CARGO';
             bill.billDetails = _.map($scope.onlyCargoGrid.kendoGrid.dataSource.data(), function (item) {
-                var sp = '';
-                if ($scope.specificBillType === 'NO_PLAN') {
-                    sp = item.actualAmount
-                } else {
-                    sp = item.shippedAmount
-                }
                 return {
                     rawMaterial: {
                         rawMaterialCode: item.rawMaterialCode,
@@ -578,7 +574,7 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
                         }
                     },
                     actualAmount: item.actualAmount,
-                    shippedAmount: sp
+                    shippedAmount: item.shippedAmount
                 }
             });
         }
@@ -586,7 +582,9 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $scope.$close()
+                swal('操作成功!', '', 'success').then(function () {
+                    $scope.$close()
+                })
             }
         }, apiServiceError);
         $scope.$close();
@@ -610,9 +608,9 @@ angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scop
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                // alert('success')
-                swal('审核成功', '', 'success');
-                $scope.$close()
+                swal('审核成功!', '', 'success').then(function () {
+                    $scope.$close()
+                })
             }
         });
         $scope.$close();
