@@ -30,7 +30,7 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
                     }], title: "操作", width: 80
                 },
                 {
-                    field: "billCode", title: "站点计划号", width: 200, template: function (data) {
+                    field: "billCode", title: "站点计划号", width: 250, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.billCode + '</a>';
                     }
                 },

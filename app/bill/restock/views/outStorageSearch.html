@@ -1,5 +1,6 @@
 <div id="content">
-    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false" data-widget-attstyle="jarviswidget-color-white">
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false"
+         data-widget-attstyle="jarviswidget-color-white">
         <header class="widget-header-wrap">
             <span class="widget-icon">
                 <i class="fa fa-table"></i>
@@ -12,80 +13,73 @@
         </header>
         <div>
             <div class="widget-body no-padding">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="margin-top-10 padding-top-0">
-                            <h5 class="padding-rl-10">
-                                <small>
-                                    查询条件
-                                </small>
-                            </h5>
-                            <div class="row padding-rl-10">
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                <div class="widget-body-toolbar">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">录单人</span>
+                                <input type="text" class="form-control"
+                                       data-ng-model="kendoQueryCondition.operatorName">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">出库单号</span>
+                                <input type="text" class="form-control"
+                                       data-ng-model="kendoQueryCondition.billCode">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">出库站点</span>
+                                <span data-station-tree data-select-modal="outStationParams"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            <div class="input-group">
+                                <span class="input-group-addon">入库站点</span>
+                                <span data-station-tree data-select-modal="inStationParams"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                            <div class="display-flex">
+                                <div class="flex-1">
                                     <div class="input-group">
-                                        <span class="input-group-addon">录单人</span>
-                                        <input type="text" class="form-control"
-                                               data-ng-model="kendoQueryCondition.operatorName">
+                                        <span class="input-group-addon">录单日期</span>
+                                        <input type="text" class="form-control" data-datepicker
+                                               data-ng-model="kendoQueryCondition.createStartTime">
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                <div class="flex-1">
                                     <div class="input-group">
-                                        <span class="input-group-addon">出库单号</span>
-                                        <input type="text" class="form-control"
-                                               data-ng-model="kendoQueryCondition.billCode">
+                                        <span class="input-group-addon" style="border-left: 0;">至</span>
+                                        <input type="text" class="form-control" data-datepicker
+                                               data-ng-model="kendoQueryCondition.createEndTime">
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                            <div class="display-flex">
+                                <div class="flex-1">
                                     <div class="input-group">
-                                        <span class="input-group-addon">出库站点</span>
-                                        <span data-station-tree data-select-modal="outStationParams"></span>
+                                        <span class="input-group-addon">出库日期</span>
+                                        <input type="text" class="form-control" data-datepicker
+                                               data-ng-model="kendoQueryCondition.outStorageStartTime">
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
+                                <div class="flex-1">
                                     <div class="input-group">
-                                        <span class="input-group-addon">入库站点</span>
-                                        <span data-station-tree data-select-modal="inStationParams"></span>
+                                        <span class="input-group-addon" style="border-left: 0;">至</span>
+                                        <input type="text" class="form-control" data-datepicker
+                                               data-ng-model="kendoQueryCondition.outStorageEndTime">
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
-                                    <div class="display-flex">
-                                        <div class="flex-1">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">录单日期</span>
-                                                <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="kendoQueryCondition.createStartTime">
-                                            </div>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" style="border-left: 0;">至</span>
-                                                <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="kendoQueryCondition.createEndTime">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
-                                    <div class="display-flex">
-                                        <div class="flex-1">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">出库日期</span>
-                                                <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="kendoQueryCondition.outStorageStartTime">
-                                            </div>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" style="border-left: 0;">至</span>
-                                                <input type="text" class="form-control" data-datepicker
-                                                       data-ng-model="kendoQueryCondition.outStorageEndTime">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
-                                    <span class="checkbox-label-fix">提交状态</span>
-                                    <span data-ng-repeat="sb in submitStates">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
+                            <span class="checkbox-label-fix">提交状态</span>
+                            <span data-ng-repeat="sb in submitStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
@@ -95,10 +89,10 @@
                                             <span>{{ sb.text }}</span>
                                         </label>
                                     </span>
-                                </div>
-                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
-                                    <span class="checkbox-label-fix">审核状态</span>
-                                    <span data-ng-repeat="ad in auditStates">
+                        </div>
+                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10 margin-top-7">
+                            <span class="checkbox-label-fix">审核状态</span>
+                            <span data-ng-repeat="ad in auditStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
@@ -109,21 +103,21 @@
                                             <span>{{ ad.text }}</span>
                                         </label>
                                     </span>
-                                </div>
-                                <div class="col-sm-6 col-xs-12 margin-bottom-10 margin-top-5">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">单据属性</span>
-                                        <select data-multiple-select data-multiple-model="kendoQueryCondition.sourceBillType">
-                                            <option ng-repeat="attr in specificType" value="{{attr.value}}">
-                                                {{attr.text}}转
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-16" style="margin-top: 12px">
-                                    <span class="checkbox-label-fix">出库状态</span>
+                        </div>
+                        <div class="col-sm-6 col-xs-12 margin-bottom-10 margin-top-5">
+                            <div class="input-group">
+                                <span class="input-group-addon">单据属性</span>
+                                <select data-multiple-select data-multiple-model="kendoQueryCondition.sourceBillType">
+                                    <option ng-repeat="attr in specificType" value="{{attr.value}}">
+                                        {{attr.text}}转
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-16" style="margin-top: 12px">
+                            <span class="checkbox-label-fix">出库状态</span>
 
-                                    <span data-ng-repeat="os in inOrOutStates">
+                            <span data-ng-repeat="os in inOrOutStates">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="checkbox-inline"
                                                    class="checkbox style-2"
@@ -134,60 +128,28 @@
                                             <span>{{ os.text }}</span>
                                         </label>
                                     </span>
-                                </div>
-                                <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
-                                    <div class="display-flex">
-                                        <div class="flex-1">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">配送品种</span>
-                                                <input type="text" class="form-control"
-                                                       data-ng-model="kendoQueryCondition.varietyStart">
-                                            </div>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" style="border-left: 0;">至</span>
-                                                <input type="text" class="form-control"
-                                                       data-ng-model="kendoQueryCondition.varietyEnd">
-                                            </div>
-                                        </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
+                            <div class="display-flex">
+                                <div class="flex-1">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">配送品种</span>
+                                        <input type="text" class="form-control"
+                                               data-ng-model="kendoQueryCondition.varietyStart">
                                     </div>
                                 </div>
-                                <!--<div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">-->
-                                    <!--<div class="display-flex">-->
-                                        <!--<div class="flex-1">-->
-                                            <!--<div class="input-group">-->
-                                                <!--<span class="input-group-addon">配送总价</span>-->
-                                                <!--<input type="text" class="form-control"-->
-                                                       <!--data-ng-model="kendoQueryConditions.startTotalPrice">-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="flex-1">-->
-                                            <!--<div class="input-group">-->
-                                                <!--<span class="input-group-addon" style="border-left: 0;">至</span>-->
-                                                <!--<input type="text" class="form-control"-->
-                                                       <!--data-ng-model="kendoQueryCondition.endTotalPrice">-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
+                                <div class="flex-1">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="border-left: 0;">至</span>
+                                        <input type="text" class="form-control"
+                                               data-ng-model="kendoQueryCondition.varietyEnd">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <hr class="gray-line">
                 <div class="padding-10">
-
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-12">
-                            <h5 style="padding-left: 5px;">
-                                <small>
-                                    退库出库单列表
-                                </small>
-
-                            </h5>
-                        </div>
-                    </div>
                     <section id="grid">
                         <div class="margin-top-10 min-btn-grid" data-kendo-grids data-options="outBillGrid"></div>
                     </section>

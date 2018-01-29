@@ -1,11 +1,16 @@
 <div id="content">
-    <div jarvis-widget data-widget-editbutton="false">
-        <header class="custom-header">
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false"
+         data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
+            <span class="widget-icon">
+                <i class="fa fa-table"></i>
+            </span>
             <h2>{{ $state.current.data.title }}</h2>
-            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="reset()">
-            <input type="button" class="btn btn-default btn-header" value="查询" data-ng-click="search()">
+            <div class="fr">
+                <input type="button" class="btn btn-default fl margin-right-5" value="重置" data-ng-click="reset()">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="查询" data-ng-click="search()">
+            </div>
         </header>
-
         <div>
             <div class="widget-body no-padding">
                 <div class="widget-body-toolbar">
@@ -16,7 +21,6 @@
                                 <input type="text" class="form-control" data-ng-model="params.billCode">
                             </div>
                         </div>
-
                         <div class="col-lg-6 col-sm-8 col-xs-12 margin-bottom-10">
                             <div class="display-flex">
                                 <div class="flex-1">
@@ -35,7 +39,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-3 col-sm-4 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">单据属性</span>
@@ -46,44 +49,32 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">入库站点</span>
                                 <span data-station-tree data-select-modal="inStationParams"></span>
                             </div>
                         </div>
-
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">出库站点</span>
                                 <span data-station-tree data-select-modal="outStationParams"></span>
                             </div>
                         </div>
-
                         <div class="col-lg-4 col-sm-5 col-xs-12 margin-bottom-10">
                             <div class="input-group">
                                 <span class="input-group-addon">单据状态</span>
                                 <select smart-select2 class="select2 width-full" data-ng-model="params.billAllotState">
                                     <option value="">请选择</option>
-                                    <option data-ng-repeat="item in billStatus" data-ng-value="item.value">{{item.text}}</option>
+                                    <option data-ng-repeat="item in billStatus" data-ng-value="item.value">
+                                        {{item.text}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="padding-10">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-12">
-                            <h5 style="padding-left: 5px;">
-                                <small>
-                                    退库入库单列表
-                                </small>
-                            </h5>
-                        </div>
-                    </div>
-                    <hr class="gray-line">
                     <section id="grid">
                         <div class="margin-top-10" data-kendo-grids data-options="stationGrid"></div>
                     </section>
