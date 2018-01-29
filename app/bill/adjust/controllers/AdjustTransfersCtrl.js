@@ -41,6 +41,22 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
     function initBillDetails(bill) {
         $scope.billDetails = bill;
         $scope.billDetails.sourceType = params.sourceType;
+
+        if (bill.inLocation) {
+            var stationType = _.find($scope.station, function (item) {
+                return item.value === bill.inLocation.stationCode;
+            }).siteType;
+
+            if (stationType === 'LOGISTICS') {
+                $scope.bill.outStorageCode = 'STORAGE';
+                $('#inStorage').val('STORAGE').trigger('change');
+            } else {
+                $scope.bill.outStorageCode = 'NORMAL';
+                $('#inStorage').val('NORMAL').trigger('change');
+            }
+        }
+
+
         $scope.billDetails.sourceBillTypeName = getTextByVal($scope.sourceBillType, $scope.billDetails.sourceBillType);
         if ($scope.billDetails.inLocation) {
             $scope.billDetails.inLocation.stationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);
