@@ -316,6 +316,7 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             sourceBillType: params.bill.sourceBillType,
             billType: params.bill.billType,
             outStorageMemo: $scope.bill.outStorageMemo,
+            planMemo: $scope.bill.planMemo,
             auditMemo: $scope.bill.auditMemo,
             inLocation: {
                 stationCode: params.bill.inStationCode,
