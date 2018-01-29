@@ -55,7 +55,12 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
                         }
                     ], width: 160
                 },
-                {field: "xxx", title: "单据状态", width: 160},
+                {
+                    title: "单据状态", width: 160,
+                    template: function (data) {
+                        return getTextByVal($scope.allotState, data.allotStatus)
+                    }
+                },
                 {
                     title: "单据属性", width: 120,
                     template: function (data) {
