@@ -5,6 +5,12 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
     $scope.curSubmitStatus = {};
     $scope.curAuditStatus = {};
     $scope.curOutStatus = {};
+
+    $scope.sourceBillType = [
+        {key: 'ADJUST', value: 'ADJUST', text: '调剂计划'},
+        {key: 'NO_PLAN', value: 'NO_PLAN', text: '无计划'}
+    ];
+
     // 搜索条件中的出库站点选择
     $scope.outStationParams = {
         callback: function (data) {

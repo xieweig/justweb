@@ -5,12 +5,18 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
     $scope.pickType = 'material';
 
     $timeout(function () {
-        if ($.cookie('currentStationType') === 'LOGISTICS') {
-            $scope.bill.outStorageCode = 'STORAGE';
-            $('#outStorageCode').val('STORAGE').trigger('change');
-        } else {
-            $scope.bill.outStorageCode = 'NORMAL';
-            $('#outStorageCode').val('NORMAL').trigger('change');
+        if (params.bill.outLocation) {
+            var stationType = _.find($scope.station, function (item) {
+                return item.value === params.bill.outLocation.stationCode;
+            }).siteType;
+
+            if (stationType === 'LOGISTICS') {
+                $scope.bill.outStorageCode = 'STORAGE';
+                $('#outStorageCode').val('STORAGE').trigger('change');
+            } else {
+                $scope.bill.outStorageCode = 'NORMAL';
+                $('#outStorageCode').val('NORMAL').trigger('change');
+            }
         }
         $('#tabHead').on('click', 'a', function () {
             $scope.pickType = $(this).attr('data-type');
