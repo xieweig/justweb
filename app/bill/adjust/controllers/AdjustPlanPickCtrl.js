@@ -337,15 +337,15 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             result.basicEnum = 'BY_MATERIAL';
             emptyItem = _.find($scope.materialList, function (material) {
                 var dataSource = material.kendoGrid.kendoGrid.dataSource.data();
-                // if (type === 'submit' && dataSource.length === 0) {
-                //     swal('请选择' + material.material.materialName + '的货物', '', 'error');
-                //     return true;
-                // }
+                if (type === 'submit' && dataSource.length === 0) {
+                    swal('请选择' + material.material.materialName + '的货物', '', 'error');
+                    return true;
+                }
                 var emptyCargo = _.find(dataSource, function (dataItem) {
-                    // if (type === 'submit' && !dataItem.actualAmount && dataItem.actualAmount !== 0) {
-                    //     swal('请选择' + material.material.materialName + '中' + dataItem.cargoName + '的实拣数量', '', 'error');
-                    //     return true;
-                    // }
+                    if (type === 'submit' && !dataItem.actualAmount && dataItem.actualAmount !== 0) {
+                        swal('请选择' + material.material.materialName + '中' + dataItem.cargoName + '的实拣数量', '', 'error');
+                        return true;
+                    }
                     result.billDetails.push({
                         actualAmount: dataItem.actualAmount,
                         shippedAmount: material.material.amount,
