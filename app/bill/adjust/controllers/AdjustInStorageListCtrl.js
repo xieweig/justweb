@@ -153,6 +153,8 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
                     materialUnit: materialUnit
                 }
             }
+        }).closed.then(function () {
+            $scope.billGrid.kendoGrid.dataSource.read();
         });
     }
 });
