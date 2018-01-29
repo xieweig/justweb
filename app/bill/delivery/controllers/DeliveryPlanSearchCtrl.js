@@ -34,7 +34,7 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
                     }], title: "操作", width: 80
                 },
                 {
-                    field: "billCode", title: "站点计划号", template: function (data) {
+                    field: "billCode", title: "站点计划号", width:250, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.billCode + '</a>';
                     }
                 },

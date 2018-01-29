@@ -42,10 +42,10 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
                         }
                     }],  locked: true, title: "操作", width: 80
                 },
-                {field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
+                {field: "createTime", title: "来源单号", width: 250, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
                     }},
-                {field: "billCode", title: "调拨单号", locked: true, width: 210},
+                {field: "billCode", title: "调拨单号", width: 250},
                 {title: "单据属性", width: 100, template: function (data) {
                         return getTextByVal($scope.sourceBillType, data.sourceBillType) + '转'
                     }},
