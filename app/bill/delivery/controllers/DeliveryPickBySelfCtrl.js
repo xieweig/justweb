@@ -14,7 +14,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
         {value: 'RESERVE_STORAGE', text: '预留库'}
     ];
     $timeout(function () {
-        $('#select-out').val($scope.storageType[1].value).trigger('change');
+        $('#select-out').val($scope.storageType[2].value).trigger('change');
     });
 
     $scope.cargoList = {};
@@ -63,7 +63,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
 
     // 警告库位修改
     $scope.$watch('params.outStorageType', function (newVal, oldVal) {
-        if (newVal === 'STORAGE' || oldVal === undefined) {
+        if (newVal === 'IN_STORAGE' || oldVal === undefined) {
         } else {
             swal({
                 title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
@@ -74,7 +74,7 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                 if (res.value) {
                 } else if (res.dismiss === 'cancel') {
                     // 重置选项为初始
-                    $('#select-out').val($scope.storageType[1].value).trigger('change')
+                    $('#select-out').val($scope.storageType[2].value).trigger('change')
                 }
             })
         }
@@ -82,7 +82,6 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
 
     $scope.bill = {
         billType: 'DELIVERY',
-        // specificBillType: 'NO_PLAN',
         specificBillType: 'DELIVERY',
         sourceBillType: 'NO_PLAN',
         basicEnum: 'BY_CARGO',
