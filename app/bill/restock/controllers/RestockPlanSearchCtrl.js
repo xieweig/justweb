@@ -118,7 +118,10 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
                     materialUnit: materialUnit
                 }
             }
-        })
+        });
+        $scope.addModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read();
+        });
     });
 
     // 重置表格
@@ -140,6 +143,9 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
                     materialUnit: materialUnit
                 }
             }
-        })
+        });
+        $scope.outModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read();
+        });
     }
 });

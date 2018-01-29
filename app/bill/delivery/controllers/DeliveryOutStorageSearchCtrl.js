@@ -223,7 +223,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
             }
         });
         $scope.addModal.closed.then(function () {
-            $scope.search();
+            $scope.outBillGrid.kendoGrid.dataSource.read();
         });
     });
 

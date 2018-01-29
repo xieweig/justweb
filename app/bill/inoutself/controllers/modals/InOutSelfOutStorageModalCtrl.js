@@ -1,14 +1,10 @@
 'use strict';
 
 angular.module('app').controller('InOutSelfOutStorageModalCtrl', function ($scope, $timeout, $uibModal, ApiService, Common, data) {
-    /**
-     查看站点配送计划弹窗
-     */
     $scope.params = {};
     $scope.cargoConfigure = data.cargoUnit;
     $scope.materialConfigure = data.materialUnit;
     $scope.modalType = data.type;
-    console.log(data.type)
     $scope.materialResult = [];
 
     $scope.storageType = [

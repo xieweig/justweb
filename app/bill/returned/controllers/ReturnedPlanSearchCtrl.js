@@ -147,7 +147,10 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
                     materialUnit: materialUnit
                 }
             }
-        })
+        });
+        $scope.addModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read();
+        });
     });
 
     // 重置表格
@@ -168,6 +171,9 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
                     cargoUnit: cargoUnit
                 }
             }
-        })
+        });
+        $scope.outModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read();
+        });
     }
 });

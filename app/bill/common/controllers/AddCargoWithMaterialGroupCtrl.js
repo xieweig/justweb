@@ -27,8 +27,16 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
                 {field: "barCode", title: "货物条码", width: 120},
                 {field: "selfBarCode", title: "自定义条码", width: 120},
                 {field: "effectiveTime", title: "保质期(天)", width: 120},
-                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
-                {field: "standardUnitCode", title: "最小标准单位", width: 120},
+                {
+                    title: "规格", width: 120, template: function (data) {
+                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                    }
+                },
+                {
+                    title: "最小标准单位", width: 120, template: function (data) {
+                        return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                    }
+                },
                 {field: "createTime", title: "建档时间", width: 120},
                 {field: "memo", title: "备注", width: 200}
             ]
@@ -41,33 +49,26 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
         persistSelection: true,
         kendoSetting: {
             editable: true,
+            height: 250,
             columns: [
                 {title: "操作", locked: true, command: [{name: 'select', text: "删除", click: delCurCargo}], width: 80},
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},
-                {field: "standardUnitCode", title: "标准单位", width: 120},
-                {title: "规格", width: 120, template: '#: number #/#: measurementCode #'},
+                {
+                    field: "standardUnitCode", title: "标准单位", width: 120, template: function (data) {
+                        return getTextByVal($scope.materialConfigure, data.standardUnitCode)
+                    }
+                },
+                {
+                    title: "规格", width: 120, template: function (data) {
+                        return data.number + getTextByVal($scope.cargoConfigure, data.measurementCode)
+                    }
+                },
                 {field: "actualAmount", title: "货物数量", width: 120, editable: true}
             ],
-            save:function (e) {
-                // 每次保存都重新计算总的和原料的拣货数量
-                $timeout(function () {
-                    $scope.params.totalAmount = 0;
-                    _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
-                        $scope.params.totalAmount += parseInt(item.actualAmount);
-                    });
-                    _.each($scope.currentMaterialGrid.kendoGrid.dataSource.data(), function (material) {
-                        material.actualAmount = 0;
-                        _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (cargo) {
-                            if (cargo.rawMaterialCode === material.materialCode) {
-                                material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
-                            }
-                        });
-                        material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
-                    });
-                    $scope.currentMaterialGrid.kendoGrid.refresh();
-                })
+            save: function (e) {
+                syncData();
                 return e;
             }
         }
@@ -82,7 +83,9 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
                 {field: "materialCode", title: "原料编码"},
                 {field: "shippedAmount", title: "应拣数量"},
                 {field: "actualAmount", title: "实拣数量"},
-                {field: "progress", title: "完成度"}
+                {title: "完成度", template: function (data) {
+                        return data.progress + '%'
+                    }}
             ]
         }
     };
@@ -139,7 +142,7 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
                                         material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
                                     }
                                 });
-                                material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
+                                material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2);
                             });
                             $scope.currentMaterialGrid.kendoGrid.refresh();
                         })
@@ -160,11 +163,10 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
     $scope.submit = function () {
         var result = _.map($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
             _.each(data.m, function (material) {
-                if(material.materialCode === item.rawMaterialCode){
+                if (material.materialCode === item.rawMaterialCode) {
                     item.shippedAmount = material.shippedAmount
-                    console.log('con!', item)
                 }
-            })
+            });
             return {
                 barCode: item.barCode,
                 cargoCode: item.cargoCode,
@@ -195,6 +197,30 @@ angular.module('app').controller('AddCargoWithMaterialGroupCtrl', function ($sco
     function delCurCargo(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $scope.currentCargoList.kendoGrid.dataSource.remove(dataItem)
+        $scope.currentCargoList.kendoGrid.dataSource.remove(dataItem);
+        syncData()
+    }
+
+    function syncData() {
+        $timeout(function () {
+            $scope.params.totalAmount = 0;
+            $scope.params.totalVarietyAmount = 0;
+            _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (item) {
+                $scope.params.totalAmount += parseInt(item.actualAmount);
+                $scope.params.totalVarietyAmount ++;
+            });
+            _.each($scope.currentMaterialGrid.kendoGrid.dataSource.data(), function (material) {
+                material.actualAmount = 0;
+                material.progress = 0.00;
+                _.each($scope.currentCargoList.kendoGrid.dataSource.data(), function (cargo) {
+                    if (cargo.rawMaterialCode === material.materialCode) {
+                        material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount);
+                        material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2);
+                    }
+                });
+                console.log(material)
+            });
+            $scope.currentMaterialGrid.kendoGrid.refresh();
+        });
     }
 });

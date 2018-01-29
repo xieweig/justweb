@@ -126,7 +126,10 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
                     materialUnit: materialUnit
                 }
             }
-        })
+        });
+        $scope.addModal.closed.then(function () {
+            $scope.planGrid.kendoGrid.dataSource.read();
+        });
     });
 
     // 重置表格
@@ -147,6 +150,9 @@ angular.module('app').controller('DeliveryPlanSearchCtrl', function ($scope, $ro
                     materialUnit: materialUnit
                 }
             }
+        });
+        $scope.outModal.closed.then(function () {
+            $scope.planGrid.kendoGrid.dataSource.read();
         });
     }
 });

@@ -40,7 +40,8 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                 {field: "shippedAmount", title: "应拣数量"},
                 {field: "actualAmount", title: "实拣数量"},
                 {
-                    field: "progress", title: "完成度", template: function (data) {
+                    title: "完成度", template: function (data) {
+                        console.log(data)
                         return data.progress + '%'
                     }
                 }
@@ -59,7 +60,6 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                     {field: "rawMaterialName", title: "所属原料"},
                     {
                         field: "standardUnitCode", title: "标准单位", template: function (data) {
-                            console.log($scope.materialConfigure, data.standardUnitCode)
                             return getTextByVal($scope.materialConfigure, data.standardUnitCode)
                         }
                     },
@@ -150,7 +150,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                                     material.actualAmount += parseInt(cargo.number) * parseInt(cargo.actualAmount)
                                 }
                             });
-                            material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2) + '%';
+                            material.progress = parseFloat(material.actualAmount / material.shippedAmount * 100).toFixed(2);
                         });
                         $scope.MaterialGrid.kendoGrid.refresh();
                     });
@@ -254,9 +254,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                             if (res.planBill.basicEnum === 'BY_CARGO') {
                                 _.each(res.planBill.childPlanBillDetails, function (plan) {
                                     if (plan.rawMaterial.rawMaterialCode === item.materialCode) {
-                                        console.log(cargoObject[plan.rawMaterial.cargo.cargoCode])
                                         sp += plan.amount * cargoObject[plan.rawMaterial.cargo.cargoCode].number;
-                                        console.log(sp)
                                     }
                                 })
                             } else {
@@ -273,7 +271,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                                 materialId: item.materialId,
                                 shippedAmount: sp,
                                 actualAmount: 0,
-                                progress: 0
+                                progress: parseFloat(0).toFixed(2)
                             })
                         });
 
@@ -402,17 +400,14 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
                     cb: function () {
                         return function (data) {
                             // 回调表格数据到外部表格
-                            $scope.cargoList = data;
-                            $scope.CargoGrid.kendoGrid.dataSource.data(data);
-                            // 修改原料数量
-                            _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (item) {
-                                item.pick = 0;
-                                _.each(data, function (dataItem) {
-                                    if (item.materialCode.toString() === dataItem.rawMaterialCode.toString()) {
-                                        item.pick += parseInt(dataItem.number) * parseInt(dataItem.pick);
-                                    }
-                                })
+                            $scope.params.totalVarietyAmount = 0;
+                            $scope.params.totalAmount = 0;
+                            _.each(data, function (item) {
+                                $scope.params.totalVarietyAmount ++;
+                                $scope.params.totalAmount += item.actualAmount * item.number;
                             });
+                            // $scope.cargoList = data;
+                            $scope.CargoGrid.kendoGrid.dataSource.data(data);
                             $scope.MaterialGrid.kendoGrid.refresh();
                             $scope.addModal.close()
                         }
@@ -457,6 +452,7 @@ angular.module('app').controller('DeliveryOutStorageModalCtrl', function ($scope
         _.each($scope.MaterialGrid.kendoGrid.dataSource.data(), function (item) {
             if (item.materialCode === dataItem.rawMaterialCode) {
                 item.actualAmount = parseInt(item.actualAmount) - (parseInt(dataItem.number) * parseInt(dataItem.actualAmount));
+                item.progress = parseFloat(item.actualAmount / item.shippedAmount * 100).toFixed(2)
             }
         });
         $scope.MaterialGrid.kendoGrid.refresh();
