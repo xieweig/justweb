@@ -58,7 +58,7 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
                 {
                     title: "单据状态", width: 160,
                     template: function (data) {
-                        return getTextByVal($scope.allotState, data.allotStatus)
+                        return getTextByVal($scope.allotState, data.allotStatus);
                     }
                 },
                 {
