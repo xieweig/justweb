@@ -29,7 +29,9 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
                 $scope.billDetails = response.result.bill;
                 $scope.billDetails.type = params.type;
                 // 初始化站点名称
-                // $scope.billDetails.planMemo = $scope.billDetails.planBill.planMemo;
+                if ($scope.billDetails.planBill) {
+                    $scope.billDetails.planMemo = $scope.billDetails.planBill.planMemo;
+                }
                 $scope.billDetails.outStateName = getTextByVal($scope.outboundStatus, $scope.billDetails.inOrOutState);
                 $scope.billDetails.submitStatusName = getTextByVal($scope.submitStatus, $scope.billDetails.submitState);
                 $scope.billDetails.auditStateName = getTextByVal($scope.auditStatus, $scope.billDetails.auditState);
