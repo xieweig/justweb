@@ -116,14 +116,14 @@ angular.module('app').controller('ReturnedOutStorageSearchCtrl', function ($scop
                     width: 153
                 },
                 {
-                    locked: true, title: "来源单号", width: 150, template: function (data) {
+                    title: "来源单号", width: 150, template: function (data) {
                         if (!data.sourceCode) {
                             data.sourceCode = ''
                         }
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
                     }
                 },
-                {field: "billCode", locked: true, title: "出库单号", width: 150},
+                {field: "billCode", title: "出库单号", width: 150},
                 {
                     title: "单据属性", width: 150, template: function (data) {
                         return getTextByVal($scope.sourceBillType, data.sourceBillType) + '转'

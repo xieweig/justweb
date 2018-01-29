@@ -1,74 +1,51 @@
 <div id="content">
-    <div jarvis-widget data-widget-editbutton="false">
-        <header class="custom-header">
+    <div jarvis-widget data-widget-colorbutton="true" data-widget-editbutton="false"
+         data-widget-attstyle="jarviswidget-color-white">
+        <header class="widget-header-wrap">
+            <span class="widget-icon">
+                <i class="fa fa-table"></i>
+            </span>
             <h2>{{ $state.current.data.title }}</h2>
-            <input type="button" class="btn btn-default btn-header" value="重置" data-ng-click="reset()">
-            <input type="button" class="btn btn-default btn-header" value="提交出库单" data-ng-click="submit()">
-            <input type="button" class="btn btn-default btn-header" value="保存" data-ng-click="save()">
+            <div class="fr">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="重置" data-ng-click="reset()">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="提交出库单" data-ng-click="submit()">
+                <input type="button" class="btn btn-primary fl margin-right-5" value="保存" data-ng-click="save()">
+            </div>
         </header>
 
         <div>
             <div class="widget-body no-padding">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="margin-top-10 padding-top-0">
-                            <h5 style="padding-left: 15px;">
-                                <small>退库信息</small>
-                            </h5>
-                            <div class="row">
-                                <div class="col-lg-12 col-sm-12 col-xs-12 margin-bottom-10">
-                                    <div class="col-lg-3 col-sm-4 col-xs-12">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">出库库位</span>
-                                            <select smart-select2 id="select-out" class="width-full"
-                                                    data-ng-model="params.outStorageType">
-                                                <option data-ng-repeat="item in storageType" data-ng-value="item.value">
-                                                    {{item.text}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 col-sm-12 col-xs-12 margin-bottom-10">
-                                    <div class="col-lg-3 col-sm-4 col-xs-12">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">调入站点</span>
-                                            <span data-station-tree data-select-modal="inStationParams"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 col-sm-12 col-xs-10 margin-bottom-10">
-                                    <div class="col-lg-6 col-sm-6 col-xs-12">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">出库备注</span>
-                                            <textarea type="text" rows="3" class="form-control custom-scroll"
-                                                      data-ng-model="params.outStorageMemo"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="widget-body-toolbar">
+                    <div style="max-width: 420px;">
+                        <div class="input-group margin-bottom-10">
+                            <span class="input-group-addon">出库库位</span>
+                            <select smart-select2 id="select-out" class="width-full"
+                                    data-ng-model="params.outStorageType">
+                                <option data-ng-repeat="item in storageType" data-ng-value="item.value">
+                                    {{item.text}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="input-group margin-bottom-10">
+                            <span class="input-group-addon">调入站点</span>
+                            <span data-station-tree data-select-modal="inStationParams"></span>
+                        </div>
+                        <div class="input-group margin-bottom-10">
+                            <span class="input-group-addon">出库备注</span>
+                            <input type="text" class="form-control" data-ng-model="params.outStorageMemo">
                         </div>
                     </div>
                 </div>
-                <hr class="gray-line">
                 <div class="padding-10">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-12">
-                            <h5 style="padding-left: 5px;">
-                                <small>退库货物明细</small>
-                            </h5>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-xs-12 text-align-right">
-                            <input type="button" class="btn btn-default width-80" value="批量删除"
-                                   data-ng-click="delCargo()">
-                            <input type="button" class="btn btn-default width-80" value="添加"
-                                   data-ng-click="addCargo()">
-                        </div>
+                    <div class="text-right">
+                        <input type="button" class="btn btn-danger width-80" value="批量删除"
+                               data-ng-click="delCargo()">
+                        <input type="button" class="btn btn-primary width-80" value="添加"
+                               data-ng-click="addCargo()">
                     </div>
                     <div class="margin-top-10" data-kendo-grids data-options="cargoListGrid"></div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

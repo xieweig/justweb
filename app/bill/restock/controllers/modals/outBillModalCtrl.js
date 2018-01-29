@@ -587,7 +587,7 @@ angular.module('app').controller('outBillModalCtrl', function ($scope, $timeout,
             bill.sourceCode = $scope.params.sourceCode
         }
         bill.rootCode = $scope.params.rootCode;
-
+        bill.planMemo = $scope.params.planMemo;
         bill.outStorageMemo = $scope.params.outStorageMemo;
 
         bill.outLocation = {

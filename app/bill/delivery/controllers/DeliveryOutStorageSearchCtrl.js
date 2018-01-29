@@ -83,7 +83,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
                             name: 'e', text: "修改", click: edit, visible: function (dataItem) {
                                 var state = dataItem.billState === 'AUDIT_FAILURE'; // 已提交，审核不通过
                                 state = state || dataItem.billState === "SUBMITTED";
-                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE")
+                                state = state || (dataItem.submitState === 'SUBMITTED' && inOrOutState === "OUT_FAILURE");
                                 state = state || dataItem.submitState === 'UNCOMMITTED';
                                 return state
                             }
@@ -97,14 +97,14 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
                     width: 153
                 },
                 {
-                    locked: true, title: "来源单号", width: 150, template: function (data) {
+                    title: "来源单号", width: 250, template: function (data) {
                         if (!data.sourceCode) {
                             data.sourceCode = ''
                         }
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
                     }
                 },
-                {field: "billCode", locked: true, title: "出库单号", width: 150},
+                {field: "billCode", title: "出库单号", width: 250},
                 {
                     title: "单据属性", width: 150, template: function (data) {
                         return getTextByVal($scope.sourceBillType, data.sourceBillType) + '转'
@@ -202,7 +202,7 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
             }
         });
         $scope.outModal.closed.then(function () {
-            $scope.search();
+            $scope.outBillGrid.kendoGrid.dataSource.read();
         });
     }
 
