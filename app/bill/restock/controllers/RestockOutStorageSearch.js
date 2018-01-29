@@ -242,9 +242,9 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
         }
     };
 
-    $scope.$watch('params.outStationCodes', function (newVal) {
+    $scope.$watch('kendoQueryCondition.outStationCodes', function (newVal) {
         if (newVal === [] || newVal === undefined) {
-            $scope.params.outStationCodes = ['USER_ALL'];
+            $scope.kendoQueryCondition.outStationCodes = ['USER_ALL'];
         }
     });
 });
