@@ -96,14 +96,15 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
     $('#billGrid').on('click', '.sourceCode', function (e) {
         var dataItem = $scope.billGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
         $uibModal.open({
-            templateUrl: 'app/bill/adjust/modals/billDetails.html',
+            templateUrl: 'app/bill/adjust/modals/details.html',
             size: 'lg',
             scope: $scope,
-            controller: 'AdjustPlanDetailsCtrl',
+            controller: 'AdjustDetailsCtrl',
             resolve: {
                 params: {
                     billCode: dataItem.sourceCode,
                     cargoUnit: cargoUnit,
+                    materialUnit: materialUnit,
                     type: 'outLook'
                 }
             }
