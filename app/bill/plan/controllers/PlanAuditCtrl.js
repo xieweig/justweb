@@ -136,9 +136,16 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
         } else {
             url = '/api/bill/plan/auditFailure';
         }
+        var outStationCodes = [];
+        _.each($scope.plan.planBillDetails, function (materialItem) {
+            _.each(materialItem.resultPlanBillDetailDTOSet, function (stationItem) {
+                outStationCodes.push(stationItem.outLocation.stationCode);
+            });
+        });
         var auditParams = {
             billCode: params.billCode,
-            auditMemo: $scope.plan.auditMemo
+            auditMemo: $scope.plan.auditMemo,
+            outStationCodes: outStationCodes
         };
         ApiService.post(url, auditParams).then(function (response) {
             if (response.code !== '000') {
