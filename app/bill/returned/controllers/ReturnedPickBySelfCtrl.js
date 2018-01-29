@@ -59,10 +59,9 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
         }
     };
 
-// 数据监控，警告库位修改
+    // 数据监控，警告库位修改
     $scope.$watch('params.outStorageType', function (newVal, oldVal) {
-
-        if (newVal === 'NORMAL' || oldVal === undefined) {
+        if (newVal === 'STORAGE' || oldVal === undefined) {
         } else {
             swal({
                 title: '是否将出库库位修改为' + getTextByVal($scope.storageType, newVal),
@@ -73,7 +72,7 @@ angular.module('app').controller('ReturnedPickBySelfCtrl', function ($scope, $st
                 if (res.value) {
                 } else if (res.dismiss === 'cancel') {
                     // 重置选项为初始
-                    $('#select-out').val($scope.storageType[0].value).trigger('change')
+                    $('#select-out').val($scope.storageType[1].value).trigger('change')
                 }
             })
         }
