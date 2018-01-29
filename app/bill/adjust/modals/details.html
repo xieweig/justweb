@@ -41,7 +41,7 @@
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook' || billDetails.type==='update'">
                 <dt>审核人</dt>
-                <dd data-ng-bind="billDetails.auditPersonName"></dd>
+                <dd data-ng-bind="billDetails.xxxx"></dd>
             </dl>
             <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>出库站点</dt>
@@ -67,11 +67,11 @@
                 <dt>出库状态</dt>
                 <dd data-ng-bind="billDetails.outStateName"></dd>
             </dl>
-            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook' || billDetails.type==='update'">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook'">
                 <dt>提交状态</dt>
                 <dd data-ng-bind="billDetails.submitStatusName"></dd>
             </dl>
-            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook' || billDetails.type==='update'">
+            <dl class="col-lg-4 col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal" data-ng-if="billDetails.type==='outLook' || billDetails.type==='planLook'">
                 <dt>审核状态</dt>
                 <dd data-ng-bind="billDetails.auditStateName"></dd>
             </dl>

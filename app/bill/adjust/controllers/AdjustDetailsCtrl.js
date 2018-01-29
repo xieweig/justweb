@@ -157,7 +157,7 @@ angular.module('app').controller('AdjustDetailsCtrl', function ($scope, ApiServi
     $scope.chooseCargo = function () {
         var materialIds = '';
         if (!$scope.billDetails.self) {
-            materialIds = $scope.materialIds.join()
+            materialIds = $scope.materialIds.join();
         }
         $uibModal.open({
             templateUrl: 'app/bill/adjust/modals/addCargoModal.html',
