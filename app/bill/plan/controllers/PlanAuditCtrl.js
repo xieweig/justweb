@@ -145,7 +145,7 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
         var auditParams = {
             billCode: params.billCode,
             auditMemo: $scope.plan.auditMemo,
-            outStationCodes: outStationCodes
+            outStationCodes: _.union(outStationCodes)
         };
         ApiService.post(url, auditParams).then(function (response) {
             if (response.code !== '000') {
