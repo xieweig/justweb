@@ -124,6 +124,8 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $st
                     materialUnit: materialUnit
                 }
             }
+        }).closed.then(function () {
+            $scope.billGrid.kendoGrid.dataSource.read();
         });
     }
 });

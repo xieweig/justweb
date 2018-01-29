@@ -70,7 +70,7 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
                 {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
                 {field: "billCode", title: "入库单号", width: 200},
                 {field: "createTime", title: "录单时间", width: 160},
-                {field: "xxxxx", title: "入库时间", width: 120},
+                {field: "inWareHouseTime", title: "入库时间", width: 120},
                 {field: "operatorName", title: "入库人", width: 120},
                 {
                     title: "出库站点", width: 200,

@@ -41,7 +41,7 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
         params: $scope.params,
         dataSource: {
             parameterMap: function (data) {
-                if (!data[$scope.locationPrefix + 'StationCodes']) {
+                if (!data[$scope.locationPrefix + 'StationCodes'] || data[$scope.locationPrefix + 'StationCodes'].length === 0) {
                     data[$scope.locationPrefix + 'StationCodes'] = ['USER_ALL'];
                 }
                 data.targetEnumSet = [];
