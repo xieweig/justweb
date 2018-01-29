@@ -116,9 +116,9 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                 {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
                 {field: "billCode", title: "出库单号", width: 200},
                 {field: "createTime", title: "录单时间", width: 160},
-                {field: "xxxxx", title: "出库时间", width: 120},
+                {field: "outWareHouseTime", title: "出库时间", width: 120},
                 {field: "operatorName", title: "录单人", width: 120},
-                {field: "xxxxx", title: "审核人", width: 120},
+                {field: "auditPersonName", title: "审核人", width: 120},
                 {
                     title: "出库站点", width: 200,
                     template: function (data) {
