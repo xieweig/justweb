@@ -35,6 +35,7 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $st
         url: '/api/bill/adjust/findAllotByConditions',
         kendoSetting: {
             pageable: true,
+            autoBind: false,
             columns: [
                 {title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}], width: 80},
                 {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},

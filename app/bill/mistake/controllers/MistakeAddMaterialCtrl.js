@@ -63,7 +63,7 @@ angular.module('app').controller('MistakeAddMaterialCtrl', function ($scope, par
                 {field: "materialCode", title: "原料编码", width: 120},
                 {field: "materialTypeName", title: "所属原料分类", width: 120},
                 {field: "standardUnit", title: "最小标准单位", width: 120},
-                {field: "amount", title: "报溢数量(点击编辑)", width: 200, kType: 'number', editable: true}
+                {field: "amount", title: params.typeName + "数量(点击编辑)", width: 200, kType: 'number', editable: true}
             ],
             save: function (e) {
                 var dataItem = e.model;

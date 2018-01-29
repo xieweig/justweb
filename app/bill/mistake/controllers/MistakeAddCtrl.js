@@ -89,6 +89,7 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
             controller: 'MistakeAddCargoCtrl',
             resolve: {
                 params: {
+                    typeName: $stateParams.typeName,
                     cargoUnit: cargoUnit,
                     materialUnit: materialUnit,
                     data: combinationCargoItem($scope.cargoGrid.kendoGrid.dataSource.data()),
@@ -127,6 +128,7 @@ angular.module('app').controller('MistakeAddCtrl', function ($scope, $stateParam
             controller: 'MistakeAddMaterialCtrl',
             resolve: {
                 params: {
+                    typeName: $stateParams.typeName,
                     cargoUnit: cargoUnit,
                     materialUnit: materialUnit,
                     data: combinationMaterialItem($scope.materialGrid.kendoGrid.dataSource.data()),

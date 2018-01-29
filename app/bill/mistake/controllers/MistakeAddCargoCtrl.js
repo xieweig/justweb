@@ -77,7 +77,7 @@ angular.module('app').controller('MistakeAddCargoCtrl', function ($scope, params
                         return data.number + getTextByVal(params.cargoUnit, data.measurementCode);
                     }
                 },
-                {field: "amount", title: "报溢数量(点击编辑)", width: 200, kType: 'number', editable: true}
+                {field: "amount", title: params.typeName + "数量(点击编辑)", width: 200, kType: 'number', editable: true}
             ]
         }
     };

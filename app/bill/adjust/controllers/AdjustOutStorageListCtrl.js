@@ -75,7 +75,8 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                             visible: function (dataItem) {
                                 return dataItem.billState === 'AUDIT_FAILURE'
                                     || dataItem.billState === "SUBMITTED"
-                                    || (dataItem.submitState === 'SUBMITTED' && dataItem.inOrOutState === "OUT_FAILURE")
+                                    || (dataItem.submitState === 'SUBMITTED'
+                                    && dataItem.inOrOutState === "OUT_FAILURE")
                                     || dataItem.submitState === 'UNCOMMITTED';
                             }
                         },
@@ -116,9 +117,9 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                 {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
                 {field: "billCode", title: "出库单号", width: 200},
                 {field: "createTime", title: "录单时间", width: 160},
-                {field: "outWareHouseTime", title: "出库时间", width: 120},
+                {field: "xxxxx", title: "出库时间", width: 120},
                 {field: "operatorName", title: "录单人", width: 120},
-                {field: "auditPersonName", title: "审核人", width: 120},
+                {field: "xxxxx", title: "审核人", width: 120},
                 {
                     title: "出库站点", width: 200,
                     template: function (data) {
@@ -179,33 +180,33 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
     function audit(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        loadBillDetails('audit', dataItem.billCode);
-    }
-
-    // 加载出库单详情
-    function loadBillDetails(type, billCode) {
         // 设置状态为审核中
         ApiService.get('/api/bill/adjust/open?billCode=' + billCode).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                $uibModal.open({
-                    templateUrl: 'app/bill/adjust/modals/details.html',
-                    size: 'lg',
-                    scope: $scope,
-                    controller: 'AdjustDetailsCtrl',
-                    resolve: {
-                        params: {
-                            type: type,
-                            billCode: billCode,
-                            cargoUnit: cargoUnit,
-                            materialUnit: materialUnit
-                        }
-                    }
-                }).closed.then(function () {
-                    $scope.billGrid.kendoGrid.dataSource.read();
-                });
+                loadBillDetails('audit', dataItem.billCode);
             }
         }, apiServiceError);
+    }
+
+    // 加载出库单详情
+    function loadBillDetails(type, billCode) {
+        $uibModal.open({
+            templateUrl: 'app/bill/adjust/modals/details.html',
+            size: 'lg',
+            scope: $scope,
+            controller: 'AdjustDetailsCtrl',
+            resolve: {
+                params: {
+                    type: type,
+                    billCode: billCode,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
+                }
+            }
+        }).closed.then(function () {
+            $scope.billGrid.kendoGrid.dataSource.read();
+        });
     }
 });
