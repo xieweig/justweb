@@ -44,6 +44,9 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
                 if (!data['inStationCodes'] || (data['inStationCodes']).length === 0) {
                     data['inStationCodes'] = ['USER_ALL'];
                 }
+                if(!data['billAllotState'] || data['billAllotState'] === ''){
+                    data['billAllotState'] = null;
+                }
             }
         },
         kendoSetting: {
@@ -188,10 +191,4 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
     $scope.reset = function () {
         $state.reload($state.current.name)
     };
-
-    $scope.$watch('params.billAllotState', function (newVal) {
-        if (newVal === '' || newVal === undefined) {
-            $scope.params.billAllotState = null;
-        }
-    });
 });
