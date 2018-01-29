@@ -109,7 +109,10 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
                     type: 'view'
                 }
             }
-        })
+        });
+        $scope.transferModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read();
+        });
     }
 
     // 站点计划号跳转
@@ -133,7 +136,6 @@ angular.module('app').controller('RestockTransferSearchCtrl', function ($scope, 
 
     // 重置表格
     $scope.reset = function () {
-        $state.params = {}
         $state.reload($state.current.name)
     };
 

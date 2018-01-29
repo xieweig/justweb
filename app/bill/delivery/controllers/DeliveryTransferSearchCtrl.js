@@ -116,7 +116,10 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
                     type: 'view'
                 }
             }
-        })
+        });
+        $scope.transferModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read();
+        });
     }
 
     // 站点计划号跳转
