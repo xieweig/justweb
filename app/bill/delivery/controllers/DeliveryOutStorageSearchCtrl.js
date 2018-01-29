@@ -255,4 +255,10 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
             arr.push(status)
         }
     };
+
+    $scope.$watch('params.outStationCodes', function (newVal) {
+        if (newVal === [] || newVal === undefined) {
+            $scope.params.outStationCodes = ['USER_ALL'];
+        }
+    });
 });

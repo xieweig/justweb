@@ -161,4 +161,10 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
             }
         })
     }
+
+    $scope.$watch('params.inStationCodes', function (newVal) {
+        if (newVal === [] || newVal === undefined) {
+            $scope.params.inStationCodes = ['USER_ALL'];
+        }
+    });
 });

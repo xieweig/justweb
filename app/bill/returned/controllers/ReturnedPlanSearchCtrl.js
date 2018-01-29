@@ -176,4 +176,10 @@ angular.module('app').controller('ReturnedPlanSearchCtrl', function ($scope, $ro
             $scope.stationGrid.kendoGrid.dataSource.read();
         });
     }
+
+    $scope.$watch('params.outStationCodes', function (newVal) {
+        if (newVal === [] || newVal === undefined) {
+            $scope.params.outStationCodes = ['USER_ALL'];
+        }
+    });
 });

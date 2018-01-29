@@ -187,4 +187,10 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
             $scope.params.billAllotState = null;
         }
     });
+
+    $scope.$watch('params.inStationCodes', function (newVal) {
+        if (newVal === [] || newVal === undefined) {
+            $scope.params.inStationCodes = ['USER_ALL'];
+        }
+    });
 });

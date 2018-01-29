@@ -148,4 +148,10 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
             $scope.stationGrid.kendoGrid.dataSource.read();
         });
     }
+
+    $scope.$watch('params.outStationCodes', function (newVal) {
+        if (newVal === [] || newVal === undefined) {
+            $scope.params.outStationCodes = ['USER_ALL'];
+        }
+    });
 });
