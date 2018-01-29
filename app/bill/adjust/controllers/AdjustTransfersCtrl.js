@@ -48,10 +48,8 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, ApiSer
             }).siteType;
 
             if (stationType === 'LOGISTICS') {
-                $scope.bill.outStorageCode = 'STORAGE';
                 $('#inStorage').val('STORAGE').trigger('change');
             } else {
-                $scope.bill.outStorageCode = 'NORMAL';
                 $('#inStorage').val('NORMAL').trigger('change');
             }
         }
