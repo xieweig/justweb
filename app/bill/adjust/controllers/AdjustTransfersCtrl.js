@@ -73,9 +73,13 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, $timeo
 
         if ($scope.billDetails.inStorageBillInStationCode) {
             $scope.billDetails.inStorageBillInStationName = getTextByVal($scope.station, $scope.billDetails.inStorageBillInStationCode);
+        } else {
+            $scope.billDetails.inStorageBillInStationName = getTextByVal($scope.station, $scope.billDetails.inLocation.stationCode);
         }
         if ($scope.billDetails.inStorageBillOutStationCode) {
             $scope.billDetails.inStorageBillOutStationName = getTextByVal($scope.station, $scope.billDetails.inStorageBillOutStationCode);
+        } else {
+            $scope.billDetails.inStorageBillOutStationName = getTextByVal($scope.station, $scope.billDetails.outLocation.stationCode);
         }
 
         var cargoCodes = _.map($scope.billDetails.billDetails, function (item) {
