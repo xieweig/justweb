@@ -66,7 +66,7 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             $scope.params.billProperty = res.billProperty;
             $scope.specificBillType = res.specificBillType;
             $scope.params.sourceBillType = res.sourceBillType;
-            $scope.params.billType = getTextByVal($scope.specificType, res.sourceBillType) + '转';
+            $scope.params.billType = getTextByVal($scope.sourceBillType, res.sourceBillType) + '转';
             if($scope.show){
                 $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
                 $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
@@ -84,7 +84,6 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
                 });
             }
             var billDetails = res.billDetails;
-
             var cargoList = _.map(billDetails, function (item) {
                 return item.rawMaterial.cargo.cargoCode
             });
@@ -159,7 +158,6 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
             }
         };
 
-        // 默认出库是在途库
         bill.inStorageBillInStationCode = $scope.params.inLocation.stationCode;
         bill.inStorageBillOutStationCode = $scope.params.outLocation.stationCode;
 
@@ -188,7 +186,7 @@ angular.module('app').controller('DeliveryTransferModalCtrl', function ($scope, 
                 });
             }
         }, apiServiceError);
-    }
+    };
 
     // 警告库位修改
     $scope.$watch('params.inStationType', function (newVal, oldVal) {

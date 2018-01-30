@@ -1,9 +1,6 @@
 'use strict';
 
 angular.module('app').controller('InOutSelfInStorageModalCtrl', function ($scope, $timeout, $uibModal, ApiService, Common, data) {
-    /**
-     查看入库单弹窗
-     */
     $scope.params = {};
     $scope.cargoConfigure = data.cargoUnit;
     $scope.materialConfigure = data.materialUnit;
@@ -45,13 +42,13 @@ angular.module('app').controller('InOutSelfInStorageModalCtrl', function ($scope
         }
     };
 
-    // 查看单条计划详情
+    // 查看单条入库单详情
     var getURL = '/api/bill/inOutSelf/findInStorageByBillCode';
     ApiService.get(getURL + '?billCode=' + data.billCode).then(function (response) {
         if (response.code = '000') {
             var res = response.result.bill;
             _.each(['billCode', 'createTime', 'inWareHouseTime', 'inLocation', 'outLocation', 'planMemo', 'operatorName', 'totalVarietyAmount', 'totalAmount',
-                'auditMemo', 'outStorageMemo'], function (name) {
+                'auditMemo', 'outStorageMemo', 'sourceBillType'], function (name) {
                 $scope.params[name] = res[name]
             });
             $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';

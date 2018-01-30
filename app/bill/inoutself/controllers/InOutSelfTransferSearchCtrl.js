@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
-    // 查询站点退库计划
     $scope.params = {};
     $scope.count = 0;
 
@@ -24,6 +23,13 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
         primaryId: 'billCode',
         url: '/api/bill/inOutSelf/findAllotByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['inStorageBillInStationCode'] || (data['inStorageBillInStationCode']).length === 0) {
+                    data['inStorageBillInStationCode'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -36,23 +42,23 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
                         }
                     }],  locked: true, title: "操作", width: 80
                 },
-                {field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
+                {title: "来源单号", locked: true, width: 210, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
                     }},
                 {field: "billCode", title: "调拨单号", locked: true, width: 210},
                 {title: "单据属性", width: 100, template: function (item) {
-                        return getTextByVal($scope.billType, item.specificBillType) + '转'
+                        return getTextByVal($scope.sourceBillType, data.sourceBillType) + '转'
                     }},
                 {field: "createTime", title: "调拨时间", width: 150},
                 {field: "operatorName", title: "操作人", width: 60},
                 {
                     title: "入库单出库站点", width: 150, template: function (data) {
-                        return getTextByVal($scope.station, data.outLocation.stationCode)
+                        return getTextByVal($scope.station, data.inStorageBillOutStationCode)
                     }
                 },
                 {
                     title: "入库单入库站点", width: 150, template: function (item) {
-                        return getTextByVal($scope.station, item.inLocation.stationCode)
+                        return getTextByVal($scope.station, item.inStorageBillInStationCode)
                     }
                 },
                 {title: "调拨单调出库位", width: 120, template: function (data) {
@@ -61,16 +67,15 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
                 {title: "调拨单调入库位", width: 120, template: function (data) {
                         return getTextByVal($scope.storageType, data.inLocation.storage.storageCode)
                     }},
-                {field: "totalAmount", title: "调拨数量", width: 60},
+                {field: "totalAmount", title: "调拨数量", width: 100},
                 {field: "totalVarietyAmount", title: "调拨品种", width: 60},
-                {field: "totalPrice", title: "总进价", width: 60}
+                // {field: "totalPrice", title: "总进价", width: 60}
             ]
         }
     };
 
     // 选择站点
     $scope.inStationParams = {
-        type: 'LOGISTICS',
         callback: function (data) {
             $scope.params.inStorageBillInStationCode = _.map(data, function (item) {
                 return item.stationCode;
@@ -85,14 +90,6 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
             });
         }
     };
-
-    // 拣货跳转
-    function jumpToPick(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        console.log(dataItem);
-        $state.go('app.bill.restock.stationPick', {pickId: dataItem.billCode})
-    }
 
     function viewInStorageBill(e) {
         e.preventDefault();
@@ -118,9 +115,9 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
         e.preventDefault();
         var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
         $scope.inModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/restockInStorageModal.html',
+            templateUrl: 'app/bill/inoutself/modals/inStorageModal.html',
             size: 'lg',
-            controller: 'RestockInStorageModalCtrl',
+            controller: 'InOutSelfInStorageModalCtrl',
             resolve: {
                 data: {
                     billCode: dataItem.sourceCode,
@@ -133,22 +130,6 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
 
     // 重置表格
     $scope.reset = function () {
-        $state.params = {}
         $state.reload($state.current.name)
     };
-
-    function openModal(type, data) {
-        $scope.outModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/outBillModal.html',
-            size: 'lg',
-            controller: 'outBillModalCtrl',
-            resolve: {
-                data: {
-                    billCode: data.billCode,
-                    type: type,
-                    cargoUnit: cargoUnit
-                }
-            }
-        })
-    }
 });

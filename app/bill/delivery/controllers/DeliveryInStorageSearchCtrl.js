@@ -72,11 +72,6 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                     title: "操作",
                     width: 160
                 },
-                // {
-                //     field: "billCode", title: "站点计划号", template: function (data) {
-                //         return ;'<a href="#" class="plan-btn-group">' + data.billCode + '</a>'
-                //     }
-                // },
                 {
                     field: "createTime", title: "来源单号", width: 250, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode || '' + '</a>'
@@ -106,7 +101,7 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                         return getTextByVal($scope.station, data.inLocation.stationCode)
                     }
                 },
-                {field: "totalAmount", title: "入库数量", width: 60},
+                {field: "totalAmount", title: "入库数量", width: 100},
                 {field: "totalVarietyAmount", title: "入库品种", width: 100},
                 // {field: "totalPrice", title: "总进价", width: 100}
             ]
@@ -149,7 +144,10 @@ angular.module('app').controller('DeliveryInStorageSearchCtrl', function ($scope
                     type: 'transfer'
                 }
             }
-        })
+        });
+        $scope.transferModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read()
+        });
     }
 
     function viewInStorageBill(e) {

@@ -20,14 +20,8 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
         {value: 'OUT_STORAGING', text: '出库中'},
         {value: 'IN_STORAGING', text: '入库中'},
         {value: 'DONE', text: '完成'}
-    ]
+    ];
 
-    // $scope.billAttr = [
-    //     {value: 'DELIVERY', text: '配送计划转'},
-    //     {value: 'ADJUST', text: '调剂计划转'},
-    //     {value: 'RETURNED', text: '退货计划转'},
-    //     {value: 'NO_PLAN', text: '无计划计划转'}
-    // ];
     // 搜索
     $scope.search = function () {
         $scope.stationGrid.kendoGrid.dataSource.page(1);
@@ -38,6 +32,13 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
         primaryId: 'billCode',
         url: '/api/bill/inOutSelf/findInStorageByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['inStationCodes'] || (data['inStationCodes']).length === 0) {
+                    data['inStationCodes'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -60,17 +61,12 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
                     title: "操作",
                     width: 160
                 },
-                // {
-                //     field: "billCode", title: "站点计划号", template: function (data) {
-                //         return ;'<a href="#" class="plan-btn-group">' + data.billCode + '</a>'
-                //     }
-                // },
                 {
-                    field: "createTime", title: "来源单号", locked: true, width: 210, template: function (data) {
+                    field: "createTime", title: "来源单号", width: 250, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode || '' + '</a>'
                     }
                 },
-                {field: "billCode", title: "入库单号", locked: true, width: 210},
+                {field: "billCode", title: "入库单号", width: 250},
                 {
                     title: "单据状态", width: 100, template: function (data) {
                         return getTextByVal($scope.billStatus, data.allotStatus)
@@ -78,7 +74,7 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
                 },
                 {
                     title: "单据属性", width: 100, template: function (data) {
-                        return getTextByVal($scope.specificType, data.specificBillType) + '转'
+                        return getTextByVal($scope.sourceBillType, data.sourceBillType) + '转'
                     }
                 },
                 {field: "createTime", title: "录单时间", width: 150},
@@ -94,7 +90,7 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
                         return getTextByVal($scope.station, data.inLocation.stationCode)
                     }
                 },
-                {field: "totalAmount", title: "入库数量", width: 60},
+                {field: "totalAmount", title: "入库数量", width: 100},
                 {field: "totalVarietyAmount", title: "入库品种", width: 100},
                 // {field: "totalPrice", title: "总进价", width: 100}
             ]
@@ -103,7 +99,6 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
 
     // 选择站点
     $scope.inStationParams = {
-        type: 'LOGISTICS',
         callback: function (data) {
             $scope.params.inStationCodes = _.map(data, function (item) {
                 return item.stationCode;
@@ -123,7 +118,6 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
     function jumpToPick(e) {
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        // $state.go('app.bill.restock.stationPick', {pickId: dataItem.billCode})
         $scope.transferModal = $uibModal.open({
             templateUrl: 'app/bill/inoutself/modals/transferModal.html',
             size: 'lg',
@@ -136,7 +130,10 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
                     type: 'transfer'
                 }
             }
-        })
+        });
+        $scope.transferModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read()
+        });
     }
 
     function viewInStorageBill(e) {
@@ -156,25 +153,25 @@ angular.module('app').controller('InOutSelfInStorageSearchCtrl', function ($scop
         })
     }
 
-    // 来源单号跳转
-    var grid = $('#grid');
-    grid.on('click', '.plan-btn-group', function (e) {
-        e.preventDefault();
-        var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
-        $scope.addModal = $uibModal.open({
-            templateUrl: 'app/bill/restock/modals/outBillModal.html',
-            size: 'lg',
-            controller: 'outBillModalCtrl',
-            resolve: {
-                data: {
-                    type: 'view',
-                    billCode: dataItem.sourceCode,
-                    cargoUnit: cargoUnit,
-                    materialUnit: materialUnit
-                }
-            }
-        })
-    });
+    // // 来源单号跳转
+    // var grid = $('#grid');
+    // grid.on('click', '.plan-btn-group', function (e) {
+    //     e.preventDefault();
+    //     var dataItem = $scope.stationGrid.kendoGrid.dataItem($(e.currentTarget).closest("tr"));
+    //     $scope.addModal = $uibModal.open({
+    //         templateUrl: 'app/bill/restock/modals/outBillModal.html',
+    //         size: 'lg',
+    //         controller: 'outBillModalCtrl',
+    //         resolve: {
+    //             data: {
+    //                 type: 'view',
+    //                 billCode: dataItem.sourceCode,
+    //                 cargoUnit: cargoUnit,
+    //                 materialUnit: materialUnit
+    //             }
+    //         }
+    //     })
+    // });
 
     // 重置表格
     $scope.reset = function () {
