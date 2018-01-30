@@ -30,6 +30,12 @@ angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal
             parameterMap: function (data) {
                 data.inStorageCode = '';
                 data.outStorageCode = '';
+                if (!data.outStationCodes || data.outStationCodes.length === 0) {
+                    data.outStationCodes = ['USER_ALL'];
+                }
+                if (!data.inStationCodes || data.inStationCodes.length === 0) {
+                    data.inStationCodes = ['USER_ALL'];
+                }
             }
         },
         kendoSetting: {
