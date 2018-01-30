@@ -48,9 +48,10 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $state, $ui
         kendoSetting: {
             autoBind: false,
             pageable: true,
+            height: 500,
             columns: [
                 {
-                    title: "操作", width: 80,
+                    title: "操作", width: 80, locked: true,
                     command: [
                         {
                             name: 'picking', text: "拣货", click: picking,

@@ -123,8 +123,9 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
                 kendoGrid: {
                     kendoSetting: {
                         editable: true,
+                        height: 500,
                         columns: [
-                            {title: "操作", width: 85, command: [{name: 'del', text: "删除", click: delCargo}]},
+                            {locked: true, title: "操作", width: 85, command: [{name: 'del', text: "删除", click: delCargo}]},
                             {field: "cargoName", title: "货物名称", width: 120},
                             {field: "cargoCode", title: "货物编码", width: 120},
                             {field: "rawMaterialName", title: "所属原料", width: 120},

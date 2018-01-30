@@ -69,8 +69,9 @@ angular.module('app').controller('AdjustAddCargoCtrl', function ($scope, params)
         kendoSetting: {
             editable: true,
             dataSource: params.data,
+            height: 500,
             columns: [
-                {title: "操作", command: [{name: 'del', text: "删除", click: deleteCurrentCargo}], width: 80},
+                {locked: true, title: "操作", command: [{name: 'del', text: "删除", click: deleteCurrentCargo}], width: 80},
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},

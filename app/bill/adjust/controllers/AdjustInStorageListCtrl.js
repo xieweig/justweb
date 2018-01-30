@@ -54,9 +54,11 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
         kendoSetting: {
             autoBind: false,
             pageable: true,
+            height: 500,
             columns: [
                 {
                     title: '操作',
+                    locked: true,
                     command: [
                         {name: 'l', text: "查看", click: lookDetails},
                         {
