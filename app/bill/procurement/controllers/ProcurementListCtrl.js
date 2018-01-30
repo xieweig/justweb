@@ -95,11 +95,12 @@ angular.module('app').controller('ProcurementListCtrl', function ($scope, $state
             }
         },
         kendoSetting: {
-            // autoBind: false,
+            autoBind: false,
             pageable: true,
+            height: 500,
             columns: [
                 {
-                    title: "操作", width: 220,
+                    title: "操作", width: 220, locked: true,
                     command: [
                         {name: 't', text: "查看", click: openViewModal},
                         {

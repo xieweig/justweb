@@ -41,6 +41,11 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
         params: $scope.params,
         dataSource: {
             parameterMap: function (data) {
+                if (!data.outStationCodes || data.outStationCodes.length === 0) {
+                    data.outStationCodes = ['USER_ALL'];
+                }
+
+
                 data.submitStates = [];
                 _.each($scope.curSubmitStatus, function (item, key) {
                     if (item) {
@@ -64,10 +69,12 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
         kendoSetting: {
             autoBind: false,
             pageable: true,
+            height: 500,
             columns: [
                 {
                     title: '操作',
                     width: 220,
+                    locked: true,
                     command: [
                         {name: 'l', text: "查看", click: lookDetails},
                         {
@@ -117,9 +124,9 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
                 {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
                 {field: "billCode", title: "出库单号", width: 200},
                 {field: "createTime", title: "录单时间", width: 160},
-                {field: "xxxxx", title: "出库时间", width: 120},
+                {field: "outWareHouseTime", title: "出库时间", width: 120},
                 {field: "operatorName", title: "录单人", width: 120},
-                {field: "xxxxx", title: "审核人", width: 120},
+                {field: "auditPersonName", title: "审核人", width: 120},
                 {
                     title: "出库站点", width: 200,
                     template: function (data) {
@@ -181,7 +188,7 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         // 设置状态为审核中
-        ApiService.get('/api/bill/adjust/open?billCode=' + billCode).then(function (response) {
+        ApiService.get('/api/bill/adjust/open?billCode=' + dataItem.billCode).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {

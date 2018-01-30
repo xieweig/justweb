@@ -140,6 +140,7 @@ angular.module('app').controller('PlanAuditCtrl', function ($scope, ApiService, 
         _.each($scope.plan.planBillDetails, function (materialItem) {
             _.each(materialItem.resultPlanBillDetailDTOSet, function (stationItem) {
                 outStationCodes.push(stationItem.outLocation.stationCode);
+                outStationCodes.push(stationItem.inLocation.stationCode);
             });
         });
         var auditParams = {

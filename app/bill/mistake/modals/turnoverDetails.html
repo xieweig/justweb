@@ -9,39 +9,31 @@
         <div class="row">
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>调拨单号</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.billCode"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>调拨单调出库位</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.outLocation.storage.storageName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>调拨单调入库位</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.inLocation.storage.storageName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>入库单调出站点</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.outLocation.stationName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>入库单调入站点</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.inLocation.stationName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>调拨时间</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.createTime"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
                 <dt>调拨单调拨人</dt>
-                <dd>123213</dd>
-            </dl>
-            <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
-                <dt>审核人</dt>
-                <dd>123213</dd>
-            </dl>
-            <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
-                <dt>备注</dt>
-                <dd>123213</dd>
+                <dd data-ng-bind="billDetails.operatorName"></dd>
             </dl>
         </div>
     </div>

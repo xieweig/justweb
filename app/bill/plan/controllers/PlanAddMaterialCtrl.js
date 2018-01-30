@@ -22,8 +22,9 @@ angular.module('app').controller('PlanAddMaterialCtrl', function ($scope, $timeo
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/rawMaterial/findByConditionForApi',
         kendoSetting: {
             pageable: true,
+            height: 500,
             columns: [
-                {command: [{name: 'add', text: "选择", click: addMaterial}], title: "操作", width: 85},
+                {command: [{name: 'add', text: "选择", click: addMaterial}], locked: true, title: "操作", width: 85},
                 {field: "materialCode", title: "原料编码", width: 170},
                 {field: "materialName", title: "原料名称", width: 170},
                 {field: "materialTypeName", title: "原料分类", width: 170},

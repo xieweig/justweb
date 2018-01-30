@@ -55,8 +55,9 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
         kendoSetting: {
             autoBind: false,
             pageable: true,
+            height: 500,
             columns: [
-                {title: "操作", width: 80, command: [{name: 'look', text: "查看", click: lookDetails}]},
+                {title: "操作", width: 80, locked: true, command: [{name: 'look', text: "查看", click: lookDetails}]},
                 {field: "createTime", title: $stateParams.typeName + "时间", width: 160},
                 {
                     title: $stateParams.typeName + "目标", width: 120,

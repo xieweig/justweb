@@ -33,11 +33,19 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $st
     $scope.billGrid = {
         params: $scope.params,
         url: '/api/bill/adjust/findAllotByConditions',
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data.inStationCodes || data.inStationCodes.length === 0) {
+                    data.inStationCodes = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             pageable: true,
             autoBind: false,
+            height: 500,
             columns: [
-                {title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}], width: 80},
+                {locked: true, title: '操作', command: [{name: 'l', text: "查看", click: lookDetails}], width: 80},
                 {title: "来源单号", width: 250, template: '<a href="javascript:void(0);" class="sourceCode">#: data.sourceCode || "" #</a>'},
                 {field: "billCode", title: "调拨单号", width: 250},
                 {

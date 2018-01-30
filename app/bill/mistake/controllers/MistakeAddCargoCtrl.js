@@ -59,9 +59,10 @@ angular.module('app').controller('MistakeAddCargoCtrl', function ($scope, params
         persistSelection: true,
         kendoSetting: {
             editable: true,
+            height: 500,
             dataSource: params.data,
             columns: [
-                {title: "操作", command: [{name: 'del', text: "删除", click: deleteCurrentCargo}], width: 80},
+                {title: "操作", locked: true, command: [{name: 'del', text: "删除", click: deleteCurrentCargo}], width: 80},
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},

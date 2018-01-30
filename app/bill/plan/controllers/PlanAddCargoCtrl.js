@@ -23,8 +23,9 @@ angular.module('app').controller('PlanAddCargoCtrl', function ($scope, $timeout,
         url: COMMON_URL.baseInfo + '/api/v1/baseInfo/cargo/findByCondition',
         kendoSetting: {
             pageable: true,
+            height: 500,
             columns: [
-                {command: [{name: 'add', text: "选择", click: addCargo}], title: "操作", width: 85},
+                {command: [{name: 'add', text: "选择", click: addCargo}], locked: true, title: "操作", width: 85},
                 {field: "cargoCode", title: "货物编码", width: 150},
                 {field: "cargoName", title: "货物商品名称", width: 150},
                 {field: "originalName", title: "货物内部名称", width: 150},

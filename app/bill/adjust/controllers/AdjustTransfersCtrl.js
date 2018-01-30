@@ -123,8 +123,21 @@ angular.module('app').controller('AdjustTransfersCtrl', function ($scope, $timeo
             basicEnum: $scope.billDetails.basicEnum,
             sourceCode: $scope.billDetails.billCode,
             inStorageBillCode: $scope.billDetails.inStorageBillCode,
-            outLocation: $scope.billDetails.outLocation,
-            inLocation: $scope.billDetails.inLocation,
+            outLocation: {
+                stationCode: $scope.billDetails.inLocation.stationCode,
+                stationName: $scope.billDetails.inLocation.stationName,
+                storage: {
+                    storageCode: 'ON_STORAGE',
+                    storageName: '在途库'
+                }
+            },
+            inLocation: {
+                stationCode: $scope.billDetails.inLocation.stationCode,
+                stationName: $scope.billDetails.inLocation.stationName,
+                storage: {
+                    storageCode: $scope.billDetails.inLocation.storage.storageCode
+                }
+            },
             inStorageBillOutStationCode: $scope.billDetails.outLocation.stationCode,
             inStorageBillInStationCode: $scope.billDetails.inLocation.stationCode,
             billDetails: []

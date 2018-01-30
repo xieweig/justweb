@@ -60,9 +60,10 @@ angular.module('app').controller('PlanListCtrl', function ($scope, $uibModal, $s
         kendoSetting: {
             autoBind: false,
             pageable: true,
+            height: 500,
             columns: [
                 {
-                    title: "操作", width: 220,
+                    title: "操作", width: 220, locked: true,
                     command: [
                         {
                             name: 'e', text: "修改", click: editPlan,

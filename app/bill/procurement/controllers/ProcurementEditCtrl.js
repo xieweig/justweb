@@ -32,9 +32,10 @@ angular.module('app').controller('ProcurementEditCtrl', function ($scope, $uibMo
             editable: 'inline',
             persistSelection: true,
             dataSource: params.purchaseBill.billDetails,
+            height: 500,
             columns: [
                 {selectable: true},
-                {title: "操作", width: 160, command: [{name: 'edit', text: "编辑"}]},
+                {title: "操作", width: 160, locked: true, command: [{name: 'edit', text: "编辑"}]},
                 {field: "cargoName", title: "货物名称", width: 120},
                 {field: "cargoCode", title: "货物编码", width: 120},
                 {field: "rawMaterialName", title: "所属原料", width: 120},
