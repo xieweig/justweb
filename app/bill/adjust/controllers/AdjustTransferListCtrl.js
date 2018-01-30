@@ -35,9 +35,6 @@ angular.module('app').controller('AdjustTransferListCtrl', function ($scope, $st
         url: '/api/bill/adjust/findAllotByConditions',
         dataSource: {
             parameterMap: function (data) {
-                if (!data.outStationCodes || data.outStationCodes.length === 0) {
-                    data.outStationCodes = ['USER_ALL'];
-                }
                 if (!data.inStationCodes || data.inStationCodes.length === 0) {
                     data.inStationCodes = ['USER_ALL'];
                 }
