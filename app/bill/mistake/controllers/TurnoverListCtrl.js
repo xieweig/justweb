@@ -42,8 +42,9 @@ angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal
             autoBind: false,
             pageable: true,
             dataSource: [{billCode: 'TMCKHDQA0020180240I6K000001'}],
+            height: 500,
             columns: [
-                {title: "操作", width: 80, command: [{name: 'look', text: "查看", click: lookDetails}]},
+                {title: "操作", width: 80, locked: true, command: [{name: 'look', text: "查看", click: lookDetails}]},
                 {field: "xxxxx", title: "流转误差单号"},
                 {field: "xxxxx", title: "调拨单号"},
                 {field: "xxxxx", title: "调拨单调出库位"},

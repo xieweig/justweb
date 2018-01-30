@@ -57,8 +57,9 @@ angular.module('app').controller('MistakeAddMaterialCtrl', function ($scope, par
         kendoSetting: {
             editable: true,
             dataSource: params.data,
+            height: 500,
             columns: [
-                {title: "操作", command: [{name: 'del', text: "删除", click: deleteCurrentCargo}], width: 80},
+                {title: "操作", locked: true, command: [{name: 'del', text: "删除", click: deleteCurrentCargo}], width: 80},
                 {field: "materialName", title: "原料名称", width: 120},
                 {field: "materialCode", title: "原料编码", width: 120},
                 {field: "materialTypeName", title: "所属原料分类", width: 120},
