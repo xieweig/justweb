@@ -320,12 +320,11 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             auditMemo: $scope.bill.auditMemo,
             inLocation: {
                 stationCode: params.bill.inStationCode,
-                stationName: params.bill.inStationName
-                // stationType: params.bill.inStationType,
-                // storage: {
-                //     storageCode: params.bill.inStationCode,
-                //     storageName: params.bill.inStationCode
-                // }
+                stationName: params.bill.inStationName,
+                storage: {
+                    storageCode: 'ON_STORAGE',
+                    storageName: '在途库'
+                }
             },
             outLocation: {
                 stationCode: params.bill.outStationCode,
