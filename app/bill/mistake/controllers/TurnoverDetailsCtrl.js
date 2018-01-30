@@ -32,8 +32,9 @@ angular.module('app').controller('TurnoverDetailsCtrl', function ($scope, ApiSer
                 var cargo = cargoObject[item.rawMaterial.cargo.cargoCode];
                 cargo.measurementName = getTextByVal(params.cargoUnit, cargo.measurementCode);
                 cargo.standardUnitName = getTextByVal(params.materialUnit, cargo.standardUnitCode);
-                cargo.standardUnitNumber = cargo.number * cargo.amount;
-                cargo.amountMistake = cargo.amount - cargo.actualAmount;
+                cargo.standardUnitNumber = cargo.number * item.shippedAmount;
+                cargo.actualAmount = item.actualAmount;
+                cargo.amountMistake = item.shippedAmount - item.actualAmount;
                 cargo.materialMistake = cargo.amountMistake * cargo.number;
                 return cargo;
             });
