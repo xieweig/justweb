@@ -135,11 +135,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 material: item && item.material ? item.material : {},
                 stationGrid: {
                     kendoSetting: {
-                        height: 200,
+                        height: 240,
                         editable: true,
                         dataSource: item.resultPlanBillDetailDTOSet,
                         columns: [
-                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85},
+                            {command: [{name: 'destroy', text: "删除"}], locked: true, title: "操作", width: 85},
                             {
                                 title: "调出站点",
                                 template: function (data) {
@@ -167,11 +167,11 @@ angular.module('app').controller('PlanAddCtrl', function ($scope, $timeout, $sta
                 cargo: item && item.cargo ? item.cargo : {},
                 stationGrid: {
                     kendoSetting: {
-                        height: 200,
+                        height: 240,
                         editable: true,
                         dataSource: item.resultPlanBillDetailDTOSet,
                         columns: [
-                            {command: [{name: 'destroy', text: "删除"}], title: "操作", width: 85},
+                            {command: [{name: 'destroy', text: "删除"}], locked: true, title: "操作", width: 85},
                             {
                                 title: "调出站点",
                                 template: function (data) {
