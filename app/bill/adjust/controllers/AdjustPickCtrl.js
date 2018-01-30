@@ -178,10 +178,10 @@ angular.module('app').controller('AdjustPickCtrl', function ($scope, $state, $ui
             inLocation: {
                 stationCode: $scope.params.inStationCode,
                 stationName: $scope.params.inStationName,
-                storage: {
-                    storageCode: 'ON_STORAGE',
-                    storageName: '在途库'
-                }
+                // storage: {
+                //     storageCode: 'ON_STORAGE',
+                //     storageName: '在途库'
+                // }
             },
             outLocation: {
                 stationCode: $.cookie('currentStationCode'),
