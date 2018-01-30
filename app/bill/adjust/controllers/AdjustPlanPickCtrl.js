@@ -322,10 +322,10 @@ angular.module('app').controller('AdjustPlanPickCtrl', function ($scope, $uibMod
             inLocation: {
                 stationCode: params.bill.inStationCode,
                 stationName: params.bill.inStationName,
-                storage: {
-                    storageCode: 'ON_STORAGE',
-                    storageName: '在途库'
-                }
+                // storage: {
+                //     storageCode: 'ON_STORAGE',
+                //     storageName: '在途库'
+                // }
             },
             outLocation: {
                 stationCode: params.bill.outStationCode,
