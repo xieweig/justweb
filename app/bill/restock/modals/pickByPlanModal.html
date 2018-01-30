@@ -55,11 +55,11 @@
         <hr class="gray-line">
         <div class="tab-pane">
             <ul class="nav nav-tabs" id="tabs">
-                <li class="active" style="display: none">
-                    <a href="#tabs-1" tabType="cargo" data-toggle="tab">按货物拣货</a>
+                <li class="active">
+                    <a href="#tabs-1" tabType="cargo" data-toggle="tab" data-ng-click="change('cargo')">按货物拣货</a>
                 </li>
                 <li id="sec-li">
-                    <a href="#tabs-2" tabType="material" data-toggle="tab" data-ng-click="change()">按原料拣货</a>
+                    <a href="#tabs-2" tabType="material" data-toggle="tab" data-ng-click="change('material')">按原料拣货</a>
                 </li>
             </ul>
             <div class="tab-content padding-10">
