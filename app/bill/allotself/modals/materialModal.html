@@ -1,0 +1,46 @@
+<div class="uib-modal"  data-ng-init="initPage()">
+    <h1 class="uib-modal-title">
+        <span>实物点数</span>
+        <span class="option">
+            <input type="button" class="btn btn-default" value="添加" data-ng-click="$close();">
+            <input type="button" class="btn btn-default" value="下一条" data-ng-click="$close();">
+            <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
+        </span>
+    </h1>
+    <div class="uib-content">
+        <div class="row">
+            <div class="col-lg-6 col-sm-10 col-xs-10 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">原料编码</span>
+                    <input type="text" class="form-control" data-ng-model="params.billCode" disabled>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-10 col-xs-10 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">原料名称</span>
+                    <input type="text" class="form-control" data-ng-model="params.billCode" disabled>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-10 col-xs-10 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">数量</span>
+                    <input type="text" class="form-control" data-ng-model="params.billCode">
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-10 col-xs-10 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">标准单位</span>
+                    <input type="text" class="form-control" data-ng-model="params.billCode" disabled>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-10 col-xs-10 margin-bottom-10">
+                <div class="input-group">
+                    <span class="input-group-addon">备注</span>
+                    <textarea type="text" rows="3" class="form-control custom-scroll"
+                              data-ng-model="params.planMemo" disabled></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
