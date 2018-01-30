@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('app').controller('BillDetailsCtrl', function ($scope, ApiService, $uibModal, Common, params) {
+    $scope.typeName = params.typeName;
     (function () {
         var searchUrl = '';
         switch (params.type) {

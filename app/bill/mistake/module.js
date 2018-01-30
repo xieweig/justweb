@@ -154,6 +154,14 @@ angular.module('app.bill.mistake', ['ui.router']).config(function ($stateProvide
                     templateUrl: 'app/bill/mistake/views/turnoverList.html',
                     controller: 'TurnoverListCtrl'
                 }
+            },
+            resolve: {
+                cargoUnit: function (Common) {
+                    return Common.getConfigure('CARGO_UNIT');
+                },
+                materialUnit: function (Common) {
+                    return Common.getConfigure('MATERIAL_UNIT');
+                }
             }
         });
 });
