@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal) {
+angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal, cargoUnit, materialUnit) {
     $scope.params = {inStorageCode: [], outStorageCode: []};
 
     // 出库站点选择
@@ -24,17 +24,18 @@ angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal
         $scope.billGrid.kendoGrid.dataSource.page(1);
     };
     $scope.billGrid = {
-        url: '/api/bill/mistake/findMistakeByConditions',
-        params: $scope.params,
-        dataSource: {
-            parameterMap: function (data) {
-                data.inStorageCode = '';
-                data.outStorageCode = '';
-            }
-        },
+        // url: '/api/bill/mistake/findMistakeByConditions',
+        // params: $scope.params,
+        // dataSource: {
+        //     parameterMap: function (data) {
+        //         data.inStorageCode = '';
+        //         data.outStorageCode = '';
+        //     }
+        // },
         kendoSetting: {
-            autoBind: false,
+            // autoBind: false,
             pageable: true,
+            dataSource: [{billCode: 'TMCKHDQA0020180240I6K000001'}],
             columns: [
                 {title: "操作", width: 80, command: [{name: 'look', text: "查看", click: lookDetails}]},
                 {field: "xxxxx", title: "流转误差单号"},
@@ -56,10 +57,12 @@ angular.module('app').controller('TurnoverListCtrl', function ($scope, $uibModal
         $uibModal.open({
             templateUrl: 'app/bill/mistake/modals/turnoverDetails.html',
             size: 'lg',
-            controller: 'BillDetailsCtrl',
+            controller: 'TurnoverDetailsCtrl',
             resolve: {
                 params: {
-                    type: dataItem.type
+                    billCode: dataItem.billCode,
+                    cargoUnit: cargoUnit,
+                    materialUnit: materialUnit
                 }
             }
         });
