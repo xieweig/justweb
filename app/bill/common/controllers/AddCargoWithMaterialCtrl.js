@@ -145,6 +145,7 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
                         // 添加货物预置数量
                         if ($scope.material.shippedAmount > $scope.material.actualAmount) {
                             item.actualAmount = parseInt((parseInt($scope.material.shippedAmount) - parseInt($scope.material.actualAmount)) / parseInt(item.number));
+                            $scope.material.progress = parseFloat(($scope.material.actualAmount + item.actualAmount * item.number) / $scope.material.shippedAmount * 100).toFixed(2) + '%';
                         } else {
                             item.actualAmount = 0;
                         }
