@@ -44,18 +44,18 @@ angular.module('app').controller('RestockPlanSearchCtrl', function ($scope, $roo
                 {field: "createTime", title: "录单时间", width: 150},
                 {field: "operatorName", title: "录单人", width: 80},
                 {
-                    field: "outStationCode", title: "调出站点", width: 150, template: function (data) {
+                    field: "outStationCode", title: "调出站点", width: 200, template: function (data) {
                         return getTextByVal($scope.station, data.outStationCode)
                     }
                 },
                 {
-                    field: "inStationCode", title: "调入站点", width: 150, template: function (data) {
+                    field: "inStationCode", title: "调入站点", width: 200, template: function (data) {
                         return getTextByVal($scope.station, data.inStationCode)
                     }
                 },
-                {field: "totalAmount", title: "数量", width: 60},
-                {field: "typeAmount", title: "规格品种", width: 80},
-                {field: "memo", title: "备注"}
+                {field: "totalAmount", title: "数量", width: 100},
+                {field: "typeAmount", title: "规格品种", width: 100},
+                {field: "planMemo", title: "备注", width: 120}
             ]
         }
     };

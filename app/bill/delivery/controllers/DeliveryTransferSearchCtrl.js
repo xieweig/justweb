@@ -25,8 +25,8 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
         params: $scope.params,
         dataSource: {
             parameterMap: function (data) {
-                if (!data['inStorageBillInStationCode'] || (data['inStorageBillInStationCode']).length === 0) {
-                    data['inStorageBillInStationCode'] = ['USER_ALL'];
+                if (!data['inStorageBillInStationCodes'] || (data['inStorageBillInStationCodes']).length === 0) {
+                    data['inStorageBillInStationCodes'] = ['USER_ALL'];
                 }
             }
         },
@@ -78,7 +78,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
     $scope.inStationParams = {
         type: 'BOOKSTORE,CAFE,WHOLESALE,STAPLE',
         callback: function (data) {
-            $scope.params.inStorageBillInStationCode = _.map(data, function (item) {
+            $scope.params.inStorageBillInStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -87,7 +87,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
     $scope.outStationParams = {
         type: 'LOGISTICS',
         callback: function (data) {
-            $scope.params.inStorageBillOutStationCode = _.map(data, function (item) {
+            $scope.params.inStorageBillOutStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }

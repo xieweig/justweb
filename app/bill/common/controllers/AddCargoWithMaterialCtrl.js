@@ -121,6 +121,8 @@ angular.module('app').controller('AddCargoWithMaterialCtrl', function ($scope, $
             $scope.material.rawMaterialCode = data.m.rawMaterialCode;
             $scope.material.rawMaterialId = data.m.rawMaterialId;
             $scope.material.progress = data.m.progress;
+            $scope.material.standardUnitCode = data.m.standardUnitCode;
+            $scope.material.standardUnitName = getTextByVal($scope.materialConfigure, data.m.standardUnitCode);
             $scope.params.rawMaterialId = data.m.rawMaterialId;
         }
     }, 100);

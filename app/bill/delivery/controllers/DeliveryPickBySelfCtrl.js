@@ -141,16 +141,23 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
                 storageName: getTextByVal($scope.storageType, 'ON_STORAGE')
             }
         };
+        if($scope.cargoListGrid.kendoGrid.dataSource.data().length === 0){
+            swal('参数错误', '货物不能为空', 'error');
+            return
+        }
         bill.billDetails = _.map($scope.cargoListGrid.kendoGrid.dataSource.data(), function (item) {
-            if (item.actualAmount === undefined) {
-                swal('参数错误', '货物数量不能为空', 'error');
-                flag = false;
-                return
-            }
-            if (!checkNumber(item.actualAmount)) {
-                swal('参数错误', '货物数量错误', 'error');
-                flag = false;
-                return
+            if(type==='save'){
+                if (!checkNumber(item.actualAmount, {min:0, max:99999999})) {
+                    swal('参数错误', '货物数量错误', 'error');
+                    flag = false;
+                    return
+                }
+            }else{
+                if (!checkNumber(item.actualAmount)) {
+                    swal('参数错误', '货物数量错误', 'error');
+                    flag = false;
+                    return
+                }
             }
             return {
                 rawMaterial: {
@@ -254,23 +261,37 @@ angular.module('app').controller('DeliveryPickBySelfCtrl', function ($scope, $st
     }
 
     $scope.delCargo = function () {
-        var grid = $scope.cargoListGrid.kendoGrid;
-        var selectId = grid.selectedKeyNames();
-        var dataSource = grid.dataSource;
-        for (var j in selectId) {
-            for (var i = 0; i < dataSource._total; i++) {
-                if (dataSource.at(i).cargoCode.toString() === selectId[j]) {
-                    dataSource.remove(dataSource.at(i));
-                }
+        var selectIds = $scope.cargoListGrid.kendoGrid.selectedKeyNames();
+        if (selectIds.length === 0) {
+            swal('请选择需要删除的项', '', 'warning');
+            return;
+        }
+        var cargoNames = [];
+        var dataSource = $scope.cargoListGrid.kendoGrid.dataSource;
+        var indexPos = _.chain(dataSource.data()).map(function (item, index) {
+            if (_.indexOf(selectIds, '' + item.cargoCode) > -1) {
+                cargoNames.push(item.cargoName);
+                return index;
             }
-        }
-        grid._selectedIds = {};
-        grid.clearSelection();
-        if (selectId.length !== 0) {
-            swal('删除成功', '', 'success')
-        } else {
-            swal('请选择要批量删除的货物', '', 'warning')
-        }
-        grid.refresh();
+        }).reverse().value();
+        swal({
+            title: '确定要删除' + cargoNames.join() + '吗',
+            type: 'warning',
+            confirmButtonText: '是的',
+            showCancelButton: true
+        }).then(function (res) {
+            if (res.value) {
+                // 根据反序  从最后一条开始删除
+                _.each(indexPos, function (item) {
+                    if (_.isNumber(item) && item >= 0) {
+                        dataSource.remove(dataSource.at(item));
+                    }
+                });
+                var grid = $scope.cargoListGrid.kendoGrid;
+                grid._selectedIds = {};
+                grid.clearSelection();
+            }
+        });
     };
+
 });

@@ -168,6 +168,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                                         }
                                     }
                                     materialResult[item.material.materialCode].rawMaterialCode = item.material.materialCode;
+                                    materialResult[item.material.materialCode].standardUnitCode = item.material.standardUnitCode;
                                     materialResult[item.material.materialCode].materialName = item.material.materialName;
                                     materialResult[item.material.materialCode].shippedAmount += parseInt(item.amount) * parseInt(item.cargo.number)
                                 });
@@ -175,7 +176,8 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                                     $scope.addItem({
                                         materialName: item.materialName,
                                         rawMaterialCode: item.rawMaterialCode,
-                                        shippedAmount: item.shippedAmount
+                                        shippedAmount: item.shippedAmount,
+                                        standardUnitCode: item.standardUnitCode
                                     })
                                 })
                             } else {
@@ -201,7 +203,8 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                             $scope.addItem({
                                 materialName: materialObject[item.rawMaterial.rawMaterialCode].materialName,
                                 rawMaterialCode: item.rawMaterial.rawMaterialCode,
-                                shippedAmount: item.amount
+                                shippedAmount: item.amount,
+                                standardUnitCode: materialObject[item.rawMaterial.rawMaterialCode].standardUnitCode
                             })
                         })
                     })
@@ -218,7 +221,6 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
     $scope.cargoGrid = {
         primaryId: 'cargoCode',
         kendoSetting: {
-            editable: true,
             columns: [
                 {field: "cargoName", title: "货物名称"},
                 {field: "cargoCode", title: "货物编码"},
@@ -229,8 +231,7 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                     }
                 },
                 {field: "shippedAmount", title: "应拣数量"},
-                {field: "actualAmount", title: "实拣数量"},
-                {field: "memo", title: "备注(点击修改)", editable: true}
+                {field: "actualAmount", title: "实拣数量"}
             ]
         }
     };
@@ -273,7 +274,9 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                 shippedAmount: data.shippedAmount,
                 actualAmount: 0,
                 rawMaterialCode: data.rawMaterialCode,
-                progress: '0%'
+                rawMaterialId: data.rawMaterialId,
+                standardUnitCode: data.standardUnitCode,
+                progress: '0%',
             },
             cargoGrid: {
                 primaryId: 'cargoCode',
@@ -288,7 +291,6 @@ angular.module('app').controller('DeliveryPickByPlanModalCtrl', function ($scope
                             }
                         },
                         {field: "actualAmount", title: "实拣数量"},
-                        {field: "memo", title: "备注"},
                         {command: [{name: 'delete', text: "删除", click: delCargo}], title: "操作"}
                     ]
                 }

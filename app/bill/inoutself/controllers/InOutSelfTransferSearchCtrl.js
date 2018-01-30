@@ -25,8 +25,8 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
         params: $scope.params,
         dataSource: {
             parameterMap: function (data) {
-                if (!data['inStorageBillInStationCode'] || (data['inStorageBillInStationCode']).length === 0) {
-                    data['inStorageBillInStationCode'] = ['USER_ALL'];
+                if (!data['inStorageBillInStationCodes'] || (data['inStorageBillInStationCodes']).length === 0) {
+                    data['inStorageBillInStationCodes'] = ['USER_ALL'];
                 }
             }
         },
@@ -77,7 +77,7 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
     // 选择站点
     $scope.inStationParams = {
         callback: function (data) {
-            $scope.params.inStorageBillInStationCode = _.map(data, function (item) {
+            $scope.params.inStorageBillInStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }
@@ -85,7 +85,7 @@ angular.module('app').controller('InOutSelfTransferSearchCtrl', function ($scope
 
     $scope.outStationParams = {
         callback: function (data) {
-            $scope.params.inStorageBillOutStationCode = _.map(data, function (item) {
+            $scope.params.inStorageBillOutStationCodes = _.map(data, function (item) {
                 return item.stationCode;
             });
         }

@@ -88,11 +88,10 @@ angular.module('app').controller('DeliveryOutStorageSearchCtrl', function ($scop
                         },
                         {
                             name: 'e', text: "修改", click: edit, visible: function (dataItem) {
-                                var state = dataItem.billState === 'AUDIT_FAILURE'; // 已提交，审核不通过
-                                state = state || dataItem.billState === "SUBMITTED";
-                                state = state || (dataItem.submitState === 'SUBMITTED' && dataItem.inOrOutState === "OUT_FAILURE");
-                                state = state || dataItem.submitState === 'UNCOMMITTED';
-                                return state
+                                return dataItem.billState === 'AUDIT_FAILURE' // 已提交，审核不通过
+                                || dataItem.billState === "SUBMITTED"
+                                || (dataItem.submitState === 'SUBMITTED' && dataItem.inOrOutState === "OUT_FAILURE")
+                                || dataItem.submitState === 'UNCOMMITTED';
                             }
                         }, {
                             name: 't', text: "审核", click: audit, visible: function (dataItem) {
