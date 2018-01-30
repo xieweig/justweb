@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope, $rootScope, $state, $uibModal, ApiService, Common, cargoUnit, materialUnit) {
-    // 查询站点退库计划
     $scope.params = {};
     $scope.count = 0;
 
@@ -24,13 +23,13 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
         primaryId: 'billCode',
         url: '/api/bill/delivery/findAllotByConditions',
         params: $scope.params,
-        // dataSource: {
-        //     parameterMap: function (data) {
-        //         if (!data['inStationCodes'] || (data['inStationCodes']).length === 0) {
-        //             data['inStationCodes'] = ['USER_ALL'];
-        //         }
-        //     }
-        // },
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data['inStorageBillInStationCode'] || (data['inStorageBillInStationCode']).length === 0) {
+                    data['inStorageBillInStationCode'] = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,
@@ -43,7 +42,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
                         }
                     }],  locked: true, title: "操作", width: 80
                 },
-                {field: "createTime", title: "来源单号", width: 250, template: function (data) {
+                {title: "来源单号", width: 250, template: function (data) {
                         return '<a href="#" class="plan-btn-group">' + data.sourceCode + '</a>'
                     }},
                 {field: "billCode", title: "调拨单号", width: 250},
@@ -68,7 +67,7 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
                 {field: "inStorageName", title: "调拨单调入库位", width: 100, template: function (data) {
                         return getTextByVal($scope.storageType, data.inLocation.storage.storageCode)
                     }},
-                {field: "totalAmount", title: "调拨数量", width: 60},
+                {field: "totalAmount", title: "调拨数量", width: 100},
                 {field: "totalVarietyAmount", title: "调拨品种", width: 60},
                 // {field: "totalPrice", title: "总进价", width: 60}
             ]
@@ -93,14 +92,6 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
             });
         }
     };
-
-    // 拣货跳转
-    function jumpToPick(e) {
-        e.preventDefault();
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        console.log(dataItem);
-        $state.go('app.bill.delivery.stationPick', {pickId: dataItem.billCode})
-    }
 
     function viewInStorageBill(e) {
         e.preventDefault();
@@ -144,22 +135,6 @@ angular.module('app').controller('DeliveryTransferSearchCtrl', function ($scope,
 
     // 重置表格
     $scope.reset = function () {
-        // $state.params = {};
         $state.reload($state.current.name)
     };
-
-    function openModal(type, data) {
-        $scope.outModal = $uibModal.open({
-            templateUrl: 'app/bill/delivery/modals/outBillModal.html',
-            size: 'lg',
-            controller: 'outBillModalCtrl',
-            resolve: {
-                data: {
-                    billCode: data.billCode,
-                    type: type,
-                    cargoUnit: cargoUnit
-                }
-            }
-        })
-    }
 });

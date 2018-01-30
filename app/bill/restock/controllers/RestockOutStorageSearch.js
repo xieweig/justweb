@@ -216,7 +216,7 @@ angular.module('app').controller('RestockOutSearchCtrl', function ($scope, $stat
             }
         });
         $scope.addModal.closed.then(function () {
-            $scope.search();
+            $scope.outBillGrid.kendoGrid.dataSource.read()
         });
     });
 

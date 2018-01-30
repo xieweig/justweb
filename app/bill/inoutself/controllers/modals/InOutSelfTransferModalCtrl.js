@@ -65,14 +65,17 @@ angular.module('app').controller('InOutSelfTransferModalCtrl', function ($scope,
             $scope.params.outLocation = res.outLocation;
             $scope.params.billProperty = res.billProperty;
             $scope.specificBillType = res.specificBillType;
-            $scope.params.billType = getTextByVal($scope.specificType, res.specificBillType) + '转';
-            $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
-            $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
-            $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
-
+            $scope.params.sourceBillType = res.sourceBillType;
+            $scope.params.billType = getTextByVal($scope.sourceBillType, res.sourceBillType) + '转';
+            // $scope.params.outStorageName = getTextByVal($scope.storageType, res.outLocation.storage.storageCode);
+            $scope.params.outStorageName = '在途库';
             if (!$scope.show) {
-                $scope.params.inStorageName = getTextByVal($scope.storageType, res.inLocation.storage.storageCode)
+                $scope.params.outStationName = getTextByVal($scope.station, res.inStorageBillOutStationCode);
+                $scope.params.inStationName = getTextByVal($scope.station, res.inStorageBillInStationCode);
+                $scope.params.inStorageName = getTextByVal($scope.storageType, res.inLocation.storage.storageCode);
             } else {
+                $scope.params.outStationName = getTextByVal($scope.station, res.outLocation.stationCode);
+                $scope.params.inStationName = getTextByVal($scope.station, res.inLocation.stationCode);
                 $timeout(function () {
                     $('#select-in').val($scope.storageType[0].value).trigger('change');
                 });
@@ -97,6 +100,12 @@ angular.module('app').controller('InOutSelfTransferModalCtrl', function ($scope,
                     }), materialList);
                     _.each(billDetails, function (item) {
                         item.material = materialObject[item.rawMaterial.rawMaterialCode];
+                        var actualAmount = 0;
+                        if($scope.show){
+                            actualAmount = item.actualAmount
+                        }else{
+                            actualAmount = item.shippedAmount
+                        }
                         $scope.cargoGrid.kendoGrid.dataSource.add({
                             cargoName: item.cargo.cargoName,
                             cargoCode: item.cargo.cargoCode,
@@ -105,7 +114,7 @@ angular.module('app').controller('InOutSelfTransferModalCtrl', function ($scope,
                             number: item.cargo.number,
                             standardUnitCode: item.cargo.standardUnitCode,
                             measurementCode: item.cargo.measurementCode,
-                            actualAmount: item.actualAmount,
+                            actualAmount: actualAmount,
                             realAmount: item.actualAmount
                         })
                     });
@@ -122,9 +131,10 @@ angular.module('app').controller('InOutSelfTransferModalCtrl', function ($scope,
         var url = '/api/bill/inOutSelf/allotSave';
         var bill = _.cloneDeep($scope.bill);
 
-        bill.self = $scope.specificBillType === 'NO_PLAN';
+        bill.self = $scope.sourceBillType === 'NO_PLAN';
         bill.billPurpose = 'MOVE_STORAGE';
         bill.specificBillType = $scope.specificBillType;
+        bill.sourceBillType = $scope.params.sourceBillType;
         bill.allotMemo = '';
         bill.basicEnum = $scope.params.basicEnum;
         bill.sourceCode = $scope.params.billCode;
@@ -132,20 +142,20 @@ angular.module('app').controller('InOutSelfTransferModalCtrl', function ($scope,
         bill.inStorageBillType = $scope.params.billProperty;
 
         bill.outLocation = {
-            stationCode: $scope.params.outLocation.stationCode,
+            stationCode: $scope.params.inLocation.stationCode,
             storage: {
-                storageCode: $scope.params.outLocation.storage.storageCode
+                storageCode: 'ON_STORAGE'
             }
         };
         bill.inLocation = {
             stationCode: $scope.params.inLocation.stationCode,
             storage: {
-                storageCode: $scope.params.inLocation.storage.storageCode
+                storageCode: $scope.params.inStationType
             }
         };
 
-        bill.inStorageBillInStationCode = $scope.params.inStationType;
-        bill.inStorageBillOutStationCode = 'ON_STORAGE';
+        bill.inStorageBillInStationCode = $scope.params.inLocation.stationCode;
+        bill.inStorageBillOutStationCode = $scope.params.outLocation.stationCode;
 
         bill.billDetails = _.map($scope.cargoGrid.kendoGrid.dataSource.data(), function (item) {
             return {
@@ -166,11 +176,12 @@ angular.module('app').controller('InOutSelfTransferModalCtrl', function ($scope,
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
-                // alert('success')
-                $state.go('app.bill.inoutself.transferList');
+                $scope.cargoGrid.kendoGrid.refresh();
+                swal('调拨成功!', '', 'success').then(function () {
+                    $scope.$close();
+                });
+                // $state.go('app.bill.inoutself.transferList');
             }
         }, apiServiceError);
-        $scope.cargoGrid.kendoGrid.refresh();
-        $scope.$close();
     }
 });

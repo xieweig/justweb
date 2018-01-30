@@ -147,7 +147,10 @@ angular.module('app').controller('RestockInStorageSearchCtrl', function ($scope,
                     type: 'transfer'
                 }
             }
-        })
+        });
+        $scope.transferModal.closed.then(function () {
+            $scope.stationGrid.kendoGrid.dataSource.read()
+        });
     }
 
     function viewInStorageBill(e) {
