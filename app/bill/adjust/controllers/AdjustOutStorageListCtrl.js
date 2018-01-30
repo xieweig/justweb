@@ -181,7 +181,7 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
         e.preventDefault();
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         // 设置状态为审核中
-        ApiService.get('/api/bill/adjust/open?billCode=' + billCode).then(function (response) {
+        ApiService.get('/api/bill/adjust/open?billCode=' + dataItem.billCode).then(function (response) {
             if (response.code !== '000') {
                 swal('', response.message, 'error');
             } else {
