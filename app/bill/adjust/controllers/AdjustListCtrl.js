@@ -35,6 +35,16 @@ angular.module('app').controller('AdjustListCtrl', function ($scope, $state, $ui
     $scope.planGrid = {
         url: '/api/bill/adjust/findPlanByConditions',
         params: $scope.params,
+        dataSource: {
+            parameterMap: function (data) {
+                if (!data.outStationCodes || data.outStationCodes.length === 0) {
+                    data.outStationCodes = ['USER_ALL'];
+                }
+                if (!data.inStationCodes || data.inStationCodes.length === 0) {
+                    data.inStationCodes = ['USER_ALL'];
+                }
+            }
+        },
         kendoSetting: {
             autoBind: false,
             pageable: true,

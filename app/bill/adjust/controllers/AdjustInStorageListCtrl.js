@@ -42,6 +42,13 @@ angular.module('app').controller('AdjustInStorageListCtrl', function ($scope, $s
                 if (!data.billAllotState) {
                     data.billAllotState = null;
                 }
+
+                if (!data.outStationCodes || data.outStationCodes.length === 0) {
+                    data.outStationCodes = ['USER_ALL'];
+                }
+                if (!data.inStationCodes || data.inStationCodes.length === 0) {
+                    data.inStationCodes = ['USER_ALL'];
+                }
             }
         },
         kendoSetting: {

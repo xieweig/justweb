@@ -41,6 +41,14 @@ angular.module('app').controller('AdjustOutStorageListCtrl', function ($scope, $
         params: $scope.params,
         dataSource: {
             parameterMap: function (data) {
+                if (!data.outStationCodes || data.outStationCodes.length === 0) {
+                    data.outStationCodes = ['USER_ALL'];
+                }
+                if (!data.inStationCodes || data.inStationCodes.length === 0) {
+                    data.inStationCodes = ['USER_ALL'];
+                }
+
+
                 data.submitStates = [];
                 _.each($scope.curSubmitStatus, function (item, key) {
                     if (item) {
