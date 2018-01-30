@@ -1,6 +1,6 @@
 <div class="uib-modal" data-ng-init="initPage()">
     <h1 class="uib-modal-title">
-        <span>站点配送计划拣货</span>
+        <span>查看{{typeName}}单</span>
         <span class="option">
             <input type="button" class="btn btn-default" value="取消" data-ng-click="$close();">
         </span>
@@ -8,19 +8,19 @@
     <div class="uib-content">
         <div class="row">
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
-                <dt>报溢时间</dt>
+                <dt>{{typeName}}时间</dt>
                 <dd data-ng-bind="billDetails.createTime"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
-                <dt>报溢目标</dt>
+                <dt>{{typeName}}目标</dt>
                 <dd data-ng-bind="billDetails.basicEnumName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
-                <dt>报溢站点</dt>
+                <dt>{{typeName}}站点</dt>
                 <dd data-ng-bind="billDetails.inLocation.stationName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">
-                <dt>报溢库位</dt>
+                <dt>{{typeName}}库位</dt>
                 <dd data-ng-bind="billDetails.inLocation.storage.storageName"></dd>
             </dl>
             <dl class="col-sm-6 col-xs-12 margin-bottom-10 dl-horizontal">

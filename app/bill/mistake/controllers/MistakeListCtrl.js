@@ -102,6 +102,7 @@ angular.module('app').controller('MistakeListCtrl', function ($scope, $uibModal,
             resolve: {
                 params: {
                     type: $stateParams.type,
+                    typeName: $stateParams.typeName,
                     billCode: dataItem.billCode,
                     cargoUnit: cargoUnit
                 }
